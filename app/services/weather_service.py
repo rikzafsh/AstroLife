@@ -56,48 +56,61 @@ def get_weather_forecast(lat: float, lon: float):
         'condition': 'Cerah Berawan'
     }
 
-def calculate_observation_feasibility(weather_data: dict) -> dict:
+def calculate_observation_feasibility(weather_data: dict, difficulty: str = 'naked_eye', event_type: str = 'General') -> dict:
     """
     Computes an astronomical observation feasibility score (0 - 100)
-    based on cloud cover, precipitation, humidity, and visibility.
+    adjusted for weather parameters AND event difficulty / instrument requirements.
     """
     cloud_cover = weather_data.get('cloud_cover_pct', 50)
     precipitation = weather_data.get('precipitation_prob', 0)
     humidity = weather_data.get('humidity_pct', 70)
 
-    # Cloud cover penalty (max 50 points penalty)
-    cloud_penalty = (cloud_cover / 100.0) * 50
+    # Base cloud penalty
+    if difficulty == 'telescope':
+        # Telescopes require very clear sky: harsher cloud penalty
+        cloud_factor = 0.65
+        humidity_factor = 0.25
+    elif 'meteor' in event_type.lower():
+        # Meteors are naked eye but require very dark and clear skies
+        cloud_factor = 0.60
+        humidity_factor = 0.15
+    elif difficulty == 'binoculars':
+        cloud_factor = 0.50
+        humidity_factor = 0.20
+    else:
+        # Standard naked eye (e.g. Moon, bright conjunctions) is more forgiving
+        cloud_factor = 0.40
+        humidity_factor = 0.10
 
-    # Precipitation penalty (max 30 points penalty)
-    rain_penalty = (precipitation / 100.0) * 30
-
-    # High humidity penalty (max 20 points penalty for condensation/fog risk above 80%)
-    humidity_penalty = max(0, (humidity - 70) / 30.0) * 20 if humidity > 70 else 0
+    cloud_penalty = (cloud_cover / 100.0) * (cloud_factor * 100)
+    rain_penalty = (precipitation / 100.0) * 35
+    humidity_penalty = max(0, (humidity - 70) / 30.0) * (humidity_factor * 100) if humidity > 70 else 0
 
     score = max(0, min(100, round(100 - (cloud_penalty + rain_penalty + humidity_penalty), 1)))
 
     if score >= 80:
         status = "Sangat Baik"
         color = "emerald"
-        recommendation = "Kondisi langit sangat mendukung! Minim awan dan potensi hujan rendah. Ideal untuk pengamatan teleskop atau astrofotografi."
+        recommendation = f"Kondisi langit sangat mendukung untuk instrumen {difficulty.replace('_', ' ')}! Minim tutupan awan dan risiko hujan rendah."
     elif score >= 60:
         status = "Baik"
         color = "blue"
-        recommendation = "Kondisi pengamatan cukup cerah. Disarankan tetap memantau pergerakan awan lokal."
+        recommendation = "Kondisi pengamatan cukup cerah. Masih memungkinkan untuk observasi target."
     elif score >= 40:
         status = "Cukup / Terbatas"
         color = "amber"
-        recommendation = "Tutupan awan cukup tebal atau kelembapan tinggi. Pengamatan objek redup (deep-sky) mungkin terganggu."
+        recommendation = "Tutupan awan cukup tebal atau kelembapan tinggi. Objek redup mungkin sulit diamati."
     else:
         status = "Buruk / Tidak Layak"
         color = "rose"
-        recommendation = "Risiko hujan atau tutupan awan tinggi. Tidak direkomendasikan untuk pengamatan luar ruangan."
+        recommendation = "Tutupan awan tinggi atau potensi presipitasi tinggi. Kurang disarankan untuk pengamatan luar ruangan."
 
     return {
         'score': score,
         'status': status,
         'color': color,
         'recommendation': recommendation,
+        'equipment_considered': difficulty,
         'metrics': {
             'cloud_penalty': round(cloud_penalty, 1),
             'rain_penalty': round(rain_penalty, 1),

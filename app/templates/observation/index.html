@@ -12,25 +12,51 @@
                 Astronomy Explorer &amp; Observation Planner
             </h1>
             <p class="text-sm text-slate-400 mt-1">
-                Data peristiwa langit hasil scraping dari <span class="text-cyan-300 font-semibold">in-the-sky.org</span> &amp; kalkulator kelayakan observasi berdasarkan kondisi cuaca.
+                Data peristiwa langit dari <span class="text-cyan-300 font-semibold">in-the-sky.org</span> lengkap dengan <span class="text-white font-medium">jam</span>, <span class="text-white font-medium">posisi langit</span>, dan <span class="text-amber-300 font-medium">tingkat kesulitan alat pengamatan</span>.
             </p>
         </div>
         
         <!-- Action Buttons -->
-        <div class="flex items-center gap-3">
-            <button id="refresh-events-btn" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm font-semibold border border-slate-700 transition-colors flex items-center gap-2">
-                <i data-lucide="refresh-cw" class="w-4 h-4"></i> Muat Ulang Event
+        <div class="flex flex-wrap items-center gap-3">
+            <!-- Normal Fast Reload (Instant Cache) -->
+            <button id="refresh-events-btn" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs sm:text-sm font-semibold border border-slate-700 transition-colors flex items-center gap-1.5" title="Memuat ulang dari data tersimpan (Cepat)">
+                <i data-lucide="rotate-cw" class="w-4 h-4 text-cyan-400"></i> Muat Ulang
+            </button>
+
+            <!-- Background Live Scraper Sync -->
+            <button id="sync-live-btn" class="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-600 hover:opacity-95 text-white text-xs sm:text-sm font-semibold shadow-lg shadow-indigo-600/20 transition-all flex items-center gap-2">
+                <i data-lucide="cloud-download" class="w-4 h-4"></i>
+                <span id="sync-btn-label">Sinkronisasi Live (in-the-sky)</span>
             </button>
         </div>
     </div>
 
+    <!-- Live Sync Progress Banner (Hidden by default) -->
+    <div id="sync-banner" class="hidden rounded-2xl bg-indigo-950/60 border border-indigo-500/30 p-4 flex items-center justify-between gap-4 transition-all">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center animate-spin flex-shrink-0">
+                <i data-lucide="loader-2" class="w-5 h-5"></i>
+            </div>
+            <div>
+                <h4 class="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
+                    <span>Sinkronisasi Latar Belakang Sedang Berjalan</span>
+                    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+                </h4>
+                <p id="sync-banner-msg" class="text-xs text-slate-300 mt-0.5">
+                    Peramban sedang mengekstrak data terbaru dari in-the-sky.org tanpa mengganggu navigasi Anda...
+                </p>
+            </div>
+        </div>
+        <span class="text-xs text-slate-400 hidden sm:inline-block">Auto-refresh aktif</span>
+    </div>
+
     <!-- Top Grid: Weather & Feasibility Calculator -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Location & Weather Card -->
+        <!-- Location & Instrument Card -->
         <div class="glass-panel rounded-2xl p-6 space-y-4">
             <div class="flex items-center justify-between">
                 <h3 class="font-bold text-white text-base flex items-center gap-2">
-                    <i data-lucide="map-pin" class="w-5 h-5 text-cyan-400"></i> Lokasi Pengamatan
+                    <i data-lucide="map-pin" class="w-5 h-5 text-cyan-400"></i> Lokasi &amp; Alat
                 </h3>
                 <span id="weather-source-badge" class="text-xs px-2 py-0.5 rounded bg-slate-800 text-slate-300">Deteksi...</span>
             </div>
@@ -46,7 +72,17 @@
                 </div>
             </div>
 
-            <button id="check-weather-btn" class="w-full py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-sm transition-colors flex items-center justify-center gap-2">
+            <!-- Instrument Selection for Feasibility Testing -->
+            <div>
+                <label class="text-xs text-slate-400 block mb-1">Pilihan Alat Pengamatan</label>
+                <select id="input-instrument" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-cyan-500">
+                    <option value="naked_eye">Mata Telanjang (Naked Eye)</option>
+                    <option value="binoculars">Binokular (7x50 / 10x50)</option>
+                    <option value="telescope">Teleskop (Optik > 70mm)</option>
+                </select>
+            </div>
+
+            <button id="check-weather-btn" class="w-full py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-sm transition-colors flex items-center justify-center gap-2 shadow-lg shadow-cyan-600/20">
                 <i data-lucide="cloud-sun" class="w-4 h-4"></i> Cek Cuaca &amp; Kelayakan
             </button>
 
@@ -95,9 +131,9 @@
             </div>
 
             <div class="bg-slate-900/80 rounded-xl p-4 border border-slate-800/80">
-                <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 block mb-1">Rekomendasi Pengamatan:</span>
+                <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 block mb-1">Rekomendasi Berdasarkan Alat:</span>
                 <p id="recommendation-text" class="text-sm text-slate-300 leading-relaxed">
-                    Sistem akan menghitung penalti tutupan awan, risiko presipitasi hujan, dan kelembapan untuk memberikan estimasi visibilitas pengamatan astronomi.
+                    Sistem mengevaluasi tutupan awan, presipitasi, dan sensitivitas alat (mata telanjang vs teleskop) untuk memberikan estimasi pengamatan yang presisi.
                 </p>
             </div>
         </div>
@@ -109,28 +145,41 @@
             <div>
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">
                     <i data-lucide="calendar-days" class="w-5 h-5 text-cyan-400"></i>
-                    Kalender Fenomena Langit Bulan Ini
+                    Daftar Fenomena Langit, Waktu &amp; Posisi
                 </h3>
-                <p class="text-xs text-slate-400 mt-0.5">Sumber: in-the-sky.org (dengan cache lokal &amp; parsing otomatis)</p>
+                <p class="text-xs text-slate-400 mt-0.5">Data terverifikasi in-the-sky.org: Jam kenampakan, orientasi arah mata angin, serta instrumen.</p>
             </div>
 
-            <div class="flex items-center gap-2">
-                <span class="text-xs text-slate-400">Filter:</span>
-                <select id="event-type-filter" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-3 py-1.5 focus:outline-none">
-                    <option value="ALL">Semua Fenomena</option>
-                    <option value="Fase Bulan">Fase Bulan</option>
-                    <option value="Hujan Meteor">Hujan Meteor</option>
-                    <option value="Gerhana">Gerhana</option>
-                    <option value="Konjungsi Planet">Konjungsi Planet</option>
-                </select>
+            <!-- Double Filter: Category & Difficulty -->
+            <div class="flex flex-wrap items-center gap-3">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs text-slate-400">Alat:</span>
+                    <select id="event-difficulty-filter" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none">
+                        <option value="ALL">Semua Alat</option>
+                        <option value="naked_eye">Mata Telanjang</option>
+                        <option value="binoculars">Binokular</option>
+                        <option value="telescope">Teleskop</option>
+                    </select>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <span class="text-xs text-slate-400">Kategori:</span>
+                    <select id="event-type-filter" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none">
+                        <option value="ALL">Semua Kategori</option>
+                        <option value="Fase Bulan">Fase Bulan</option>
+                        <option value="Hujan Meteor">Hujan Meteor</option>
+                        <option value="Konjungsi Planet">Konjungsi Planet</option>
+                        <option value="Planet">Planet</option>
+                    </select>
+                </div>
             </div>
         </div>
 
         <!-- Event Cards Container -->
-        <div id="events-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div id="events-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             <div class="col-span-full text-center py-12 text-slate-400">
                 <i data-lucide="loader" class="w-8 h-8 animate-spin mx-auto mb-2 text-cyan-400"></i>
-                <p class="text-sm">Memuat data fenomena astronomi dari in-the-sky.org...</p>
+                <p class="text-sm">Memuat data fenomena astronomi...</p>
             </div>
         </div>
     </div>
@@ -140,25 +189,24 @@
 {% block scripts %}
 <script>
     let allEvents = [];
+    let pollInterval = null;
 
     async function loadEvents() {
         const container = document.getElementById('events-container');
-        container.innerHTML = `
-            <div class="col-span-full text-center py-12 text-slate-400">
-                <div class="inline-block animate-spin w-8 h-8 border-4 border-cyan-400 border-t-transparent rounded-full mb-2"></div>
-                <p class="text-sm">Mengambil data peristiwa astronomi...</p>
-            </div>
-        `;
-        
         try {
             const res = await fetch("{{ url_for('observation.api_events') }}");
             const data = await res.json();
             allEvents = data.events || [];
             renderEvents(allEvents);
+
+            // Periksa apakah sedang ada sinkronisasi di latar belakang
+            if (data.sync_state && data.sync_state.is_running) {
+                startPollingSyncStatus();
+            }
         } catch (err) {
             container.innerHTML = `
                 <div class="col-span-full text-center py-8 text-rose-400">
-                    <p class="text-sm">Gagal memuat data fenomena astronomi. Pastikan koneksi atau periksa cache scraper.</p>
+                    <p class="text-sm">Gagal memuat data fenomena astronomi.</p>
                 </div>
             `;
         }
@@ -166,63 +214,180 @@
 
     function renderEvents(events) {
         const container = document.getElementById('events-container');
-        const filter = document.getElementById('event-type-filter').value;
-        const filtered = filter === 'ALL' ? events : events.filter(e => e.type === filter);
+        const catFilter = document.getElementById('event-type-filter').value;
+        const diffFilter = document.getElementById('event-difficulty-filter').value;
+
+        const filtered = events.filter(e => {
+            const matchCat = catFilter === 'ALL' || e.type === catFilter;
+            const matchDiff = diffFilter === 'ALL' || e.difficulty === diffFilter;
+            return matchCat && matchDiff;
+        });
 
         if (!filtered || filtered.length === 0) {
             container.innerHTML = `
-                <div class="col-span-full text-center py-8 text-slate-400">
-                    <p class="text-sm">Tidak ada fenomena yang cocok untuk kategori ini.</p>
+                <div class="col-span-full text-center py-12 text-slate-400 bg-slate-900/40 rounded-xl border border-slate-800">
+                    <i data-lucide="telescope" class="w-8 h-8 mx-auto mb-2 text-slate-600"></i>
+                    <p class="text-sm">Tidak ada fenomena langit yang cocok dengan filter yang dipilih.</p>
                 </div>
             `;
+            lucide.createIcons();
             return;
         }
 
-        container.innerHTML = filtered.map(item => `
-            <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4 flex flex-col justify-between hover:border-cyan-500/30 transition-colors">
-                <div class="space-y-2">
-                    <div class="flex items-center justify-between text-xs">
-                        <span class="text-cyan-400 font-semibold">${item.date}</span>
-                        <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 text-[10px] uppercase font-bold">${item.type}</span>
+        container.innerHTML = filtered.map(item => {
+            let diffColor = 'emerald';
+            let diffIcon = 'eye';
+            if (item.difficulty === 'binoculars') {
+                diffColor = 'cyan';
+                diffIcon = 'glasses';
+            } else if (item.difficulty === 'telescope') {
+                diffColor = 'amber';
+                diffIcon = 'telescope';
+            }
+
+            const sky = item.sky_position || {};
+
+            return `
+                <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between hover:border-cyan-500/40 transition-all space-y-4">
+                    <div class="space-y-3">
+                        <!-- Top Badges -->
+                        <div class="flex items-center justify-between gap-2 text-xs">
+                            <span class="text-cyan-400 font-bold flex items-center gap-1">
+                                <i data-lucide="calendar" class="w-3.5 h-3.5"></i> ${item.date}
+                            </span>
+                            <span class="px-2.5 py-0.5 rounded-full bg-${diffColor}-500/10 text-${diffColor}-300 border border-${diffColor}-500/30 text-[11px] font-semibold flex items-center gap-1" title="${item.difficulty_alt || ''}">
+                                <i data-lucide="${diffIcon}" class="w-3 h-3"></i> ${item.difficulty_label || item.difficulty || 'Mata Telanjang'}
+                            </span>
+                        </div>
+
+                        <!-- Title & Category -->
+                        <div>
+                            <div class="text-[11px] text-indigo-400 uppercase font-semibold tracking-wider">${item.type}</div>
+                            <h4 class="text-base font-bold text-white mt-0.5 leading-snug">${item.title}</h4>
+                        </div>
+
+                        <!-- Time & Sky Box -->
+                        <div class="bg-slate-950/70 rounded-xl p-2.5 border border-slate-800/80 space-y-1.5 text-xs">
+                            <div class="flex items-center gap-1.5 text-amber-300 font-medium">
+                                <i data-lucide="clock" class="w-3.5 h-3.5 flex-shrink-0"></i>
+                                <span>${item.time || 'Malam hari'}</span>
+                            </div>
+
+                            <div class="flex items-start gap-1.5 text-slate-300 text-[11px] pt-1 border-t border-slate-800/60">
+                                <i data-lucide="compass" class="w-3.5 h-3.5 flex-shrink-0 text-cyan-400 mt-0.5"></i>
+                                <div>
+                                    <span class="font-semibold text-white">${sky.direction || 'Langit Malam'}</span>
+                                    ${sky.altitude ? ` • <span class="text-slate-400">${sky.altitude}</span>` : ''}
+                                    ${sky.constellation ? ` • <span class="text-indigo-300 font-medium">${sky.constellation}</span>` : ''}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <p class="text-xs text-slate-400 leading-relaxed">${item.description}</p>
                     </div>
-                    <h4 class="text-sm font-bold text-white">${item.title}</h4>
-                    <p class="text-xs text-slate-400 line-clamp-3">${item.description}</p>
+
+                    <!-- Source & Test Action -->
+                    <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-500">
+                        <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="hover:text-cyan-400 flex items-center gap-1 transition-colors">
+                            <span>in-the-sky.org</span>
+                            <i data-lucide="external-link" class="w-3 h-3"></i>
+                        </a>
+                        <button onclick="testFeasibilityForEvent('${item.difficulty || 'naked_eye'}', '${item.type}')" class="text-cyan-400 hover:text-cyan-300 font-medium flex items-center gap-1">
+                            Uji Cuaca <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                        </button>
+                    </div>
                 </div>
-                ${item.link ? `
-                    <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="mt-3 text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1 font-medium">
-                        Detail di in-the-sky.org <i data-lucide="external-link" class="w-3 h-3"></i>
-                    </a>
-                ` : ''}
-            </div>
-        `).join('');
+            `;
+        }).join('');
 
         lucide.createIcons();
     }
 
-    async function checkFeasibility() {
+    // Trigger Asynchronous Background Live Sync
+    async function triggerLiveSync() {
+        const btn = document.getElementById('sync-live-btn');
+        const label = document.getElementById('sync-btn-label');
+        
+        try {
+            const res = await fetch("{{ url_for('observation.api_sync') }}", { method: 'POST' });
+            const data = await res.json();
+
+            if (res.ok) {
+                startPollingSyncStatus();
+            } else {
+                alert(data.message || 'Gagal memulai sinkronisasi.');
+            }
+        } catch (err) {
+            alert('Kendala koneksi saat menghubungi endpoint sinkronisasi.');
+        }
+    }
+
+    function startPollingSyncStatus() {
+        const banner = document.getElementById('sync-banner');
+        const bannerMsg = document.getElementById('sync-banner-msg');
+        const btn = document.getElementById('sync-live-btn');
+        const label = document.getElementById('sync-btn-label');
+
+        banner.classList.remove('hidden');
+        btn.disabled = true;
+        btn.classList.add('opacity-50', 'cursor-not-allowed');
+        label.innerText = 'Sinkronisasi Berjalan...';
+
+        if (pollInterval) clearInterval(pollInterval);
+
+        pollInterval = setInterval(async () => {
+            try {
+                const res = await fetch("{{ url_for('observation.api_sync_status') }}");
+                const data = await res.json();
+                const state = data.sync_state;
+
+                if (state.message) {
+                    bannerMsg.innerText = state.message;
+                }
+
+                if (!state.is_running) {
+                    clearInterval(pollInterval);
+                    pollInterval = null;
+
+                    // Pulihkan tombol & sembunyikan banner
+                    setTimeout(() => {
+                        banner.classList.add('hidden');
+                        btn.disabled = false;
+                        btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                        label.innerText = 'Sinkronisasi Live (in-the-sky)';
+                        loadEvents(); // Muat data terbaru yang baru selesai di-scrape
+                    }, 2500);
+                }
+            } catch (err) {
+                clearInterval(pollInterval);
+            }
+        }, 3000);
+    }
+
+    async function checkFeasibility(forcedDifficulty = null, forcedType = 'General') {
         const lat = parseFloat(document.getElementById('input-lat').value) || -6.2088;
         const lon = parseFloat(document.getElementById('input-lon').value) || 106.8456;
+        const difficulty = forcedDifficulty || document.getElementById('input-instrument').value;
         
         try {
             const res = await fetch("{{ url_for('observation.api_feasibility') }}", {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({lat, lon})
+                body: JSON.stringify({lat, lon, difficulty, event_type: forcedType})
             });
             const data = await res.json();
             const w = data.weather;
             const f = data.feasibility;
 
-            // Update Weather Details
             document.getElementById('weather-source-badge').innerText = w.source || 'Online';
             document.getElementById('val-temp').innerText = (w.temp_c || '--') + ' °C';
             document.getElementById('val-clouds').innerText = (w.cloud_cover_pct || '--') + ' %';
             document.getElementById('val-humidity').innerText = (w.humidity_pct || '--') + ' %';
             document.getElementById('val-rain').innerText = (w.precipitation_prob || '0') + ' %';
 
-            // Update Feasibility Score
             document.getElementById('score-number').innerText = f.score;
-            document.getElementById('status-text').innerText = f.status;
+            document.getElementById('status-text').innerText = f.status + ` (${f.equipment_considered.replace('_', ' ')})`;
             document.getElementById('score-bar').style.width = f.score + '%';
             document.getElementById('recommendation-text').innerText = f.recommendation;
 
@@ -234,11 +399,18 @@
         }
     }
 
-    document.getElementById('event-type-filter').addEventListener('change', () => renderEvents(allEvents));
-    document.getElementById('refresh-events-btn').addEventListener('click', loadEvents);
-    document.getElementById('check-weather-btn').addEventListener('click', checkFeasibility);
+    function testFeasibilityForEvent(diff, type) {
+        document.getElementById('input-instrument').value = diff;
+        checkFeasibility(diff, type);
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
 
-    // Initial triggers
+    document.getElementById('event-type-filter').addEventListener('change', () => renderEvents(allEvents));
+    document.getElementById('event-difficulty-filter').addEventListener('change', () => renderEvents(allEvents));
+    document.getElementById('refresh-events-btn').addEventListener('click', loadEvents);
+    document.getElementById('sync-live-btn').addEventListener('click', triggerLiveSync);
+    document.getElementById('check-weather-btn').addEventListener('click', () => checkFeasibility());
+
     document.addEventListener('DOMContentLoaded', () => {
         loadEvents();
         checkFeasibility();
