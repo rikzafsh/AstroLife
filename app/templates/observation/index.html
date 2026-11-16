@@ -1,40 +1,45 @@
 {% extends "base.html" %}
 
-{% block title %}Observasi & Cuaca - AstroLife{% endblock %}
+{% block title %}Rencana Pengamatan & Cuaca Langit - AstroLife{% endblock %}
 
 {% block content %}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-    <!-- Header -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    
+    <!-- Breadcrumb & Header Title -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-800/80 pb-6">
         <div>
-            <h1 class="text-3xl font-bold text-white flex items-center gap-3">
-                <i data-lucide="sparkles" class="w-8 h-8 text-cyan-400"></i>
-                Astronomy Explorer &amp; Observation Planner
+            <div class="flex items-center gap-2 text-xs text-slate-400 mb-1.5">
+                <a href="{{ url_for('main.index') }}" class="hover:text-cyan-400 transition-colors">Beranda</a>
+                <span>/</span>
+                <span class="text-cyan-400 font-semibold">Observasi Langit</span>
+            </div>
+            <h1 class="font-display text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-3">
+                <span class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+                    <i data-lucide="sparkles" class="w-5 h-5"></i>
+                </span>
+                Rencana Pengamatan &amp; Kondisi Langit
             </h1>
-            <p class="text-sm text-slate-400 mt-1">
-                Data peristiwa langit dari <span class="text-cyan-300 font-semibold">in-the-sky.org</span> lengkap dengan <span class="text-white font-medium">jam</span>, <span class="text-white font-medium">posisi langit</span>, dan <span class="text-amber-300 font-medium">tingkat kesulitan alat pengamatan</span>.
+            <p class="text-xs sm:text-sm text-slate-400 mt-1 max-w-2xl leading-relaxed">
+                Pantau peristiwa langit malam, jam visibilitas optimal, arah pengamatan mata angin, dan prakiraan kondisi awan lokal agar momen observasi Anda tidak terhalang cuaca.
             </p>
         </div>
-        
-        <!-- Action Buttons -->
-        <div class="flex flex-wrap items-center gap-3">
-            <!-- Normal Fast Reload (Instant Cache) -->
-            <button id="refresh-events-btn" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs sm:text-sm font-semibold border border-slate-700 transition-colors flex items-center gap-1.5" title="Memuat ulang dari data tersimpan (Cepat)">
-                <i data-lucide="rotate-cw" class="w-4 h-4 text-cyan-400"></i> Muat Ulang
-            </button>
 
-            <!-- Background Live Scraper Sync -->
-            <button id="sync-live-btn" class="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-600 hover:opacity-95 text-white text-xs sm:text-sm font-semibold shadow-lg shadow-indigo-600/20 transition-all flex items-center gap-2">
+        <!-- Sync & Refresh Controls -->
+        <div class="flex flex-wrap items-center gap-2.5">
+            <button id="refresh-events-btn" class="px-3.5 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors flex items-center gap-1.5">
+                <i data-lucide="rotate-cw" class="w-3.5 h-3.5 text-cyan-400"></i> Muat Ulang Data
+            </button>
+            <button id="sync-live-btn" class="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-600 hover:opacity-95 text-white text-xs font-semibold shadow-lg shadow-indigo-600/20 transition-all flex items-center gap-2">
                 <i data-lucide="cloud-download" class="w-4 h-4"></i>
                 <span id="sync-btn-label">Sinkronisasi Live (in-the-sky)</span>
             </button>
         </div>
     </div>
 
-    <!-- Live Sync Progress Banner (Hidden by default) -->
-    <div id="sync-banner" class="hidden rounded-2xl bg-indigo-950/60 border border-indigo-500/30 p-4 flex items-center justify-between gap-4 transition-all">
-        <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center animate-spin flex-shrink-0">
+    <!-- Live Sync Progress Notification (Human-friendly banner) -->
+    <div id="sync-banner" class="hidden rounded-2xl bg-indigo-950/70 border border-indigo-500/30 p-4 flex items-center justify-between gap-4 transition-all shadow-xl">
+        <div class="flex items-center gap-3.5">
+            <div class="w-9 h-9 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center animate-spin flex-shrink-0">
                 <i data-lucide="loader-2" class="w-5 h-5"></i>
             </div>
             <div>
@@ -43,144 +48,253 @@
                     <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
                 </h4>
                 <p id="sync-banner-msg" class="text-xs text-slate-300 mt-0.5">
-                    Peramban sedang mengekstrak data terbaru dari in-the-sky.org tanpa mengganggu navigasi Anda...
+                    Sistem sedang memperbarui data peristiwa resmi dari in-the-sky.org secara otomatis di balik layar...
                 </p>
             </div>
         </div>
-        <span class="text-xs text-slate-400 hidden sm:inline-block">Auto-refresh aktif</span>
+        <span class="text-xs px-2.5 py-1 rounded bg-indigo-900/60 text-indigo-300 font-medium hidden sm:inline-block">Anda tetap bisa bernavigasi</span>
     </div>
 
-    <!-- Top Grid: Weather & Feasibility Calculator -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Location & Instrument Card -->
-        <div class="glass-panel rounded-2xl p-6 space-y-4">
-            <div class="flex items-center justify-between">
-                <h3 class="font-bold text-white text-base flex items-center gap-2">
-                    <i data-lucide="map-pin" class="w-5 h-5 text-cyan-400"></i> Lokasi &amp; Alat
-                </h3>
-                <span id="weather-source-badge" class="text-xs px-2 py-0.5 rounded bg-slate-800 text-slate-300">Deteksi...</span>
-            </div>
-            
-            <div class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="text-xs text-slate-400">Latitude</label>
-                    <input id="input-lat" type="number" step="0.0001" value="-6.2088" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-cyan-500">
-                </div>
-                <div>
-                    <label class="text-xs text-slate-400">Longitude</label>
-                    <input id="input-lon" type="number" step="0.0001" value="106.8456" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-cyan-500">
-                </div>
-            </div>
-
-            <!-- Instrument Selection for Feasibility Testing -->
-            <div>
-                <label class="text-xs text-slate-400 block mb-1">Pilihan Alat Pengamatan</label>
-                <select id="input-instrument" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-cyan-500">
-                    <option value="naked_eye">Mata Telanjang (Naked Eye)</option>
-                    <option value="binoculars">Binokular (7x50 / 10x50)</option>
-                    <option value="telescope">Teleskop (Optik > 70mm)</option>
-                </select>
-            </div>
-
-            <button id="check-weather-btn" class="w-full py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-sm transition-colors flex items-center justify-center gap-2 shadow-lg shadow-cyan-600/20">
-                <i data-lucide="cloud-sun" class="w-4 h-4"></i> Cek Cuaca &amp; Kelayakan
-            </button>
-
-            <!-- Weather Details Grid -->
-            <div id="weather-details" class="grid grid-cols-2 gap-2 pt-2 text-xs text-slate-300">
-                <div class="bg-slate-900/60 p-2.5 rounded-lg border border-slate-800">
-                    <span class="text-slate-400 block">Suhu Udara</span>
-                    <span id="val-temp" class="text-base font-semibold text-white">-- °C</span>
-                </div>
-                <div class="bg-slate-900/60 p-2.5 rounded-lg border border-slate-800">
-                    <span class="text-slate-400 block">Tutupan Awan</span>
-                    <span id="val-clouds" class="text-base font-semibold text-white">-- %</span>
-                </div>
-                <div class="bg-slate-900/60 p-2.5 rounded-lg border border-slate-800">
-                    <span class="text-slate-400 block">Kelembapan</span>
-                    <span id="val-humidity" class="text-base font-semibold text-white">-- %</span>
-                </div>
-                <div class="bg-slate-900/60 p-2.5 rounded-lg border border-slate-800">
-                    <span class="text-slate-400 block">Peluang Hujan</span>
-                    <span id="val-rain" class="text-base font-semibold text-white">-- %</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Feasibility Result Card -->
-        <div class="glass-panel rounded-2xl p-6 lg:col-span-2 flex flex-col justify-between space-y-4">
-            <div>
+    <!-- Top Section: Location Selector, Weather & Sky Quality Index (Proportional Two-Column Layout) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+        
+        <!-- Left: Location & Quick City Presets (5 Cols) -->
+        <div class="lg:col-span-5 glass-card rounded-2xl p-5 sm:p-6 space-y-4 flex flex-col justify-between">
+            <div class="space-y-4">
                 <div class="flex items-center justify-between">
-                    <h3 class="font-bold text-white text-base flex items-center gap-2">
-                        <i data-lucide="gauge" class="w-5 h-5 text-indigo-400"></i> Skor Kelayakan Observasi Langit
+                    <h3 class="font-bold text-white text-sm sm:text-base flex items-center gap-2">
+                        <i data-lucide="map-pin" class="w-4 h-4 text-cyan-400"></i> Lokasi Pengamatan Anda
                     </h3>
-                    <span id="feasibility-badge" class="px-3 py-1 rounded-full text-xs font-bold uppercase bg-slate-800 text-slate-400">Belum dihitung</span>
+                    <span id="weather-source-badge" class="text-[11px] px-2 py-0.5 rounded bg-slate-900 text-slate-400 border border-slate-800">Mendeteksi...</span>
                 </div>
 
-                <div class="flex items-center gap-6 my-4">
-                    <div class="text-5xl font-black text-white tracking-tight" id="score-number">--</div>
-                    <div class="space-y-1">
-                        <div class="text-xs uppercase tracking-wider text-slate-400">Status Langit</div>
-                        <div class="text-lg font-semibold text-indigo-300" id="status-text">Klik tombol "Cek Cuaca" untuk menganalisis</div>
+                <!-- Quick City Selector (Very human-friendly, no need to memorize coordinates!) -->
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1.5 font-medium">Pilih Kota Cepat (Indonesia):</label>
+                    <select id="quick-city-select" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400">
+                        <option value="-6.2088,106.8456" selected>Jakarta (-6.21°S, 106.85°E)</option>
+                        <option value="-6.9175,107.6191">Bandung (-6.92°S, 107.62°E)</option>
+                        <option value="-7.7956,110.3695">Yogyakarta (-7.80°S, 110.37°E)</option>
+                        <option value="-7.2575,112.7521">Surabaya (-7.26°S, 112.75°E)</option>
+                        <option value="3.5952,98.6722">Medan (3.60°N, 98.67°E)</option>
+                        <option value="-5.1477,119.4327">Makassar (-5.15°S, 119.43°E)</option>
+                        <option value="-8.3405,115.0920">Denpasar / Bali (-8.34°S, 115.09°E)</option>
+                    </select>
+                </div>
+
+                <!-- Coordinate Detail Grid -->
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                    <div>
+                        <label class="text-slate-400 text-[11px]">Latitude</label>
+                        <input id="input-lat" type="number" step="0.0001" value="-6.2088" class="w-full bg-slate-900 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-white text-xs focus:outline-none focus:border-cyan-500">
+                    </div>
+                    <div>
+                        <label class="text-slate-400 text-[11px]">Longitude</label>
+                        <input id="input-lon" type="number" step="0.0001" value="106.8456" class="w-full bg-slate-900 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-white text-xs focus:outline-none focus:border-cyan-500">
                     </div>
                 </div>
 
-                <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden">
-                    <div id="score-bar" class="h-full bg-gradient-to-r from-cyan-500 to-indigo-500 rounded-full transition-all duration-700" style="width: 0%;"></div>
+                <!-- Instrument Setting -->
+                <div>
+                    <label class="text-slate-400 text-[11px] block mb-1">Alat yang Anda Siapkan:</label>
+                    <select id="input-instrument" class="w-full bg-slate-900 border border-slate-700/80 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-500">
+                        <option value="naked_eye">Mata Telanjang (Naked Eye)</option>
+                        <option value="binoculars">Binokular (7x50 / 10x50)</option>
+                        <option value="telescope">Teleskop (Optik > 70mm)</option>
+                    </select>
                 </div>
             </div>
 
-            <div class="bg-slate-900/80 rounded-xl p-4 border border-slate-800/80">
-                <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 block mb-1">Rekomendasi Berdasarkan Alat:</span>
-                <p id="recommendation-text" class="text-sm text-slate-300 leading-relaxed">
-                    Sistem mengevaluasi tutupan awan, presipitasi, dan sensitivitas alat (mata telanjang vs teleskop) untuk memberikan estimasi pengamatan yang presisi.
-                </p>
+            <button id="check-weather-btn" class="w-full mt-4 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs transition-colors flex items-center justify-center gap-2 shadow-lg shadow-cyan-600/20">
+                <i data-lucide="cloud-sun" class="w-4 h-4"></i> Cek Prakiraan Langit &amp; Cuaca
+            </button>
+        </div>
+
+        <!-- Right: Sky Quality Score & Weather Metrics (7 Cols) -->
+        <div class="lg:col-span-7 glass-card rounded-2xl p-5 sm:p-6 flex flex-col justify-between space-y-4">
+            <div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="text-[11px] text-indigo-400 uppercase font-bold tracking-wider">Analisis Kondisi Pengamatan</span>
+                        <h3 class="font-bold text-white text-base mt-0.5 flex items-center gap-2">
+                            <i data-lucide="gauge" class="w-4 h-4 text-cyan-400"></i> Indeks Kelayakan Langit
+                        </h3>
+                    </div>
+                    <span id="feasibility-badge" class="px-3 py-1 rounded-full text-xs font-bold uppercase bg-slate-800 text-slate-400 border border-slate-700">Memeriksa...</span>
+                </div>
+
+                <!-- Score Meter & Status -->
+                <div class="flex items-center gap-6 my-4">
+                    <div class="text-5xl font-black font-display text-white tracking-tight" id="score-number">--</div>
+                    <div class="space-y-0.5">
+                        <div class="text-[11px] uppercase tracking-wider text-slate-400">Status Langit</div>
+                        <div class="text-base sm:text-lg font-bold text-cyan-300" id="status-text">Memuat analisis kondisi cuaca...</div>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="w-full bg-slate-900/90 rounded-full h-2.5 overflow-hidden border border-slate-800">
+                    <div id="score-bar" class="h-full bg-gradient-to-r from-indigo-500 via-cyan-400 to-emerald-400 rounded-full transition-all duration-700" style="width: 0%;"></div>
+                </div>
+            </div>
+
+            <!-- 4 Weather Parameters Pills -->
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 text-xs">
+                <div class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80">
+                    <span class="text-slate-400 text-[11px] block">Suhu Udara</span>
+                    <span id="val-temp" class="text-sm font-bold text-white">-- °C</span>
+                </div>
+                <div class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80">
+                    <span class="text-slate-400 text-[11px] block">Tutupan Awan</span>
+                    <span id="val-clouds" class="text-sm font-bold text-white">-- %</span>
+                </div>
+                <div class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80">
+                    <span class="text-slate-400 text-[11px] block">Kelembapan</span>
+                    <span id="val-humidity" class="text-sm font-bold text-white">-- %</span>
+                </div>
+                <div class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80">
+                    <span class="text-slate-400 text-[11px] block">Peluang Hujan</span>
+                    <span id="val-rain" class="text-sm font-bold text-white">-- %</span>
+                </div>
+                <div class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80">
+                    <span class="text-slate-400 text-[11px] block">Jarak Pandang</span>
+                    <span id="val-visibility" class="text-sm font-bold text-white">-- km</span>
+                </div>
+            </div>
+
+            <!-- Konteks prakiraan: waktu, kepercayaan, Bulan -->
+            <div id="forecast-context" class="text-[11px] text-slate-400 leading-relaxed bg-slate-950/40 rounded-xl px-3 py-2 border border-slate-800/60">
+                Memuat konteks prakiraan...
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div>
+                    <span class="text-[11px] text-slate-400 block mb-1.5">Tutupan awan per jam (sekitar waktu pengamatan)</span>
+                    <div id="hourly-bars" class="flex items-end gap-1.5 h-16"></div>
+                </div>
+                <div>
+                    <span class="text-[11px] text-slate-400 block mb-1.5">Pengurang skor</span>
+                    <div id="penalty-list" class="space-y-1"></div>
+                </div>
+            </div>
+
+            <!-- Human Practical Recommendation -->
+            <div class="bg-slate-950/80 rounded-xl p-3.5 border border-slate-800/80 flex items-start gap-3">
+                <div class="p-1.5 rounded-lg bg-indigo-500/10 text-indigo-400 mt-0.5 flex-shrink-0">
+                    <i data-lucide="lightbulb" class="w-4 h-4"></i>
+                </div>
+                <div class="text-xs text-slate-300 leading-relaxed" id="recommendation-text">
+                    Sistem sedang memadukan data tutupan awan, potensi hujan, dan sensitivitas alat untuk memberikan tips pengamatan praktis.
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Scraped Astronomy Events Section -->
-    <div class="glass-panel rounded-2xl p-6 space-y-6">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-                <h3 class="text-xl font-bold text-white flex items-center gap-2">
-                    <i data-lucide="calendar-days" class="w-5 h-5 text-cyan-400"></i>
-                    Daftar Fenomena Langit, Waktu &amp; Posisi
+    <!-- Search, Filters, and Astronomical Events Section -->
+    <div class="space-y-6">
+        
+        <!-- Rekomendasi Terbaik -->
+        <div class="glass-card rounded-2xl p-5 sm:p-6 space-y-4">
+            <div class="flex items-center justify-between gap-3">
+                <h3 class="font-bold text-white text-sm sm:text-base flex items-center gap-2">
+                    <i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i> Rekomendasi Fenomena Terbaik untuk Lokasi Anda
                 </h3>
-                <p class="text-xs text-slate-400 mt-0.5">Data terverifikasi in-the-sky.org: Jam kenampakan, orientasi arah mata angin, serta instrumen.</p>
+                <span id="plan-meta" class="text-[11px] text-slate-500"></span>
+            </div>
+            <div id="top-recs" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="col-span-full text-xs text-slate-500">Menghitung rekomendasi...</div>
+            </div>
+        </div>
+
+        <!-- Filter & Search Toolbar (Ergonomic, user-friendly) -->
+        <div class="glass-card rounded-2xl p-4 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+            
+            <!-- Search Bar -->
+            <div class="relative flex-grow max-w-md">
+                <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                <input id="event-search-input" type="text" placeholder="Cari fenomena (misal: Leonid, Jupiter, Moon, Mars)..." class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 transition-colors">
             </div>
 
-            <!-- Double Filter: Category & Difficulty -->
-            <div class="flex flex-wrap items-center gap-3">
-                <div class="flex items-center gap-2">
-                    <span class="text-xs text-slate-400">Alat:</span>
-                    <select id="event-difficulty-filter" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none">
-                        <option value="ALL">Semua Alat</option>
-                        <option value="naked_eye">Mata Telanjang</option>
-                        <option value="binoculars">Binokular</option>
-                        <option value="telescope">Teleskop</option>
-                    </select>
-                </div>
+            <!-- Pill Filter Buttons: Instrument / Difficulty -->
+            <div class="flex flex-wrap items-center gap-1.5 text-xs font-semibold">
+                <button class="filter-diff-btn px-3 py-1.5 rounded-xl bg-cyan-600 text-white transition-all" data-diff="ALL">Semua Alat</button>
+                <button class="filter-diff-btn px-3 py-1.5 rounded-xl bg-slate-800/80 text-slate-300 hover:text-white transition-all" data-diff="naked_eye">👁️ Mata Telanjang</button>
+                <button class="filter-diff-btn px-3 py-1.5 rounded-xl bg-slate-800/80 text-slate-300 hover:text-white transition-all" data-diff="binoculars">🔭 Binokular</button>
+                <button class="filter-diff-btn px-3 py-1.5 rounded-xl bg-slate-800/80 text-slate-300 hover:text-white transition-all" data-diff="telescope">🔬 Teleskop</button>
+            </div>
 
-                <div class="flex items-center gap-2">
-                    <span class="text-xs text-slate-400">Kategori:</span>
-                    <select id="event-type-filter" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none">
-                        <option value="ALL">Semua Kategori</option>
-                        <option value="Fase Bulan">Fase Bulan</option>
-                        <option value="Hujan Meteor">Hujan Meteor</option>
-                        <option value="Konjungsi Planet">Konjungsi Planet</option>
-                        <option value="Planet">Planet</option>
-                    </select>
-                </div>
+            <!-- Category Selector Dropdown -->
+            <div class="flex items-center gap-2">
+                <span class="text-xs text-slate-400 hidden sm:inline">Kategori:</span>
+                <select id="event-type-filter" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-xl px-3 py-2 focus:outline-none focus:border-cyan-400">
+                    <option value="ALL">Semua Kategori</option>
+                    <option value="Hujan Meteor">Hujan Meteor</option>
+                    <option value="Fase Bulan">Fase Bulan</option>
+                    <option value="Konjungsi Planet">Konjungsi Planet</option>
+                    <option value="Planet">Planet &amp; Komet</option>
+                    <option value="Gugus Bintang">Gugus Bintang</option>
+                    <option value="Gerhana">Gerhana</option>
+                </select>
             </div>
         </div>
 
         <!-- Event Cards Container -->
         <div id="events-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            <div class="col-span-full text-center py-12 text-slate-400">
+            <div class="col-span-full text-center py-16 text-slate-400">
                 <i data-lucide="loader" class="w-8 h-8 animate-spin mx-auto mb-2 text-cyan-400"></i>
-                <p class="text-sm">Memuat data fenomena astronomi...</p>
+                <p class="text-xs sm:text-sm">Memuat daftar fenomena astronomi...</p>
             </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Modal Dialog: Full Event Details (Clean & Readable) -->
+<div id="event-modal" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="glass-panel-elevated rounded-3xl max-w-xl w-full p-6 sm:p-7 space-y-5 relative border border-slate-700 shadow-2xl">
+        <button id="modal-close-btn" class="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+            <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+
+        <div class="space-y-2">
+            <span id="modal-category" class="text-[11px] font-bold text-indigo-400 uppercase tracking-wider">Kategori</span>
+            <h3 id="modal-title" class="text-xl font-display font-bold text-white pr-8">Nama Peristiwa</h3>
+            <div id="modal-date-badge" class="text-xs text-cyan-300 font-semibold">Tanggal</div>
+        </div>
+
+        <div class="bg-space-950/80 rounded-2xl p-4 border border-slate-800 space-y-3 text-xs">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+                <span class="text-slate-400">Alat Pengamatan:</span>
+                <span id="modal-difficulty" class="font-bold text-emerald-400">Mata Telanjang</span>
+            </div>
+            <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+                <span class="text-slate-400">Jam Visibilitas Optimal:</span>
+                <span id="modal-time" class="font-bold text-amber-300">00:00 - 05:00 WIB</span>
+            </div>
+            <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+                <span class="text-slate-400">Orientasi Arah &amp; Elevasi:</span>
+                <span id="modal-sky" class="font-bold text-slate-200">Ufuk Timur (58°)</span>
+            </div>
+            <div class="flex items-center justify-between">
+                <span class="text-slate-400">Rasi Bintang Titik Temu:</span>
+                <span id="modal-constellation" class="font-bold text-indigo-300">Rasi Leo</span>
+            </div>
+        </div>
+
+        <div class="space-y-1.5">
+            <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Deskripsi Lengkap (in-the-sky.org):</h4>
+            <p id="modal-desc" class="text-xs sm:text-sm text-slate-300 leading-relaxed bg-slate-900/40 p-3.5 rounded-xl border border-slate-800/80">
+                Deskripsi detail fenomena langit...
+            </p>
+        </div>
+
+        <div class="pt-2 flex items-center justify-between">
+            <a id="modal-link" href="#" target="_blank" rel="noopener noreferrer" class="text-xs text-cyan-400 hover:text-cyan-300 font-semibold flex items-center gap-1">
+                Buka Artikel Resmi in-the-sky.org <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+            </a>
+            <button id="modal-close-action" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition-colors">
+                Tutup
+            </button>
         </div>
     </div>
 </div>
@@ -189,7 +303,38 @@
 {% block scripts %}
 <script>
     let allEvents = [];
+    let currentDiffFilter = 'ALL';
     let pollInterval = null;
+
+    // Quick City Presets Selector
+    document.getElementById('quick-city-select').addEventListener('change', (e) => {
+        const [lat, lon] = e.target.value.split(',');
+        document.getElementById('input-lat').value = lat;
+        document.getElementById('input-lon').value = lon;
+        checkFeasibility();
+        loadPlan();
+    });
+
+    // Difficulty Filter Button Toggle
+    document.querySelectorAll('.filter-diff-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            document.querySelectorAll('.filter-diff-btn').forEach(b => {
+                b.className = 'filter-diff-btn px-3 py-1.5 rounded-xl bg-slate-800/80 text-slate-300 hover:text-white transition-all';
+            });
+            const clicked = e.currentTarget;
+            clicked.className = 'filter-diff-btn px-3 py-1.5 rounded-xl bg-cyan-600 text-white font-bold shadow-md shadow-cyan-600/20 transition-all';
+            currentDiffFilter = clicked.dataset.diff;
+            renderEvents();
+        });
+    });
+
+    // Search and Category Filters
+    document.getElementById('event-search-input').addEventListener('input', () => renderEvents());
+    document.getElementById('event-type-filter').addEventListener('change', () => renderEvents());
+    document.getElementById('refresh-events-btn').addEventListener('click', loadEvents);
+    document.getElementById('sync-live-btn').addEventListener('click', triggerLiveSync);
+    document.getElementById('check-weather-btn').addEventListener('click', () => { checkFeasibility(); loadPlan(); });
+    document.getElementById('input-instrument').addEventListener('change', () => { checkFeasibility(); loadPlan(); });
 
     async function loadEvents() {
         const container = document.getElementById('events-container');
@@ -197,37 +342,39 @@
             const res = await fetch("{{ url_for('observation.api_events') }}");
             const data = await res.json();
             allEvents = data.events || [];
-            renderEvents(allEvents);
+            renderEvents();
 
-            // Periksa apakah sedang ada sinkronisasi di latar belakang
             if (data.sync_state && data.sync_state.is_running) {
                 startPollingSyncStatus();
             }
         } catch (err) {
             container.innerHTML = `
-                <div class="col-span-full text-center py-8 text-rose-400">
-                    <p class="text-sm">Gagal memuat data fenomena astronomi.</p>
+                <div class="col-span-full text-center py-12 text-rose-400 bg-slate-900/40 rounded-2xl border border-rose-500/20 p-6">
+                    <p class="text-sm font-semibold">Gagal memuat data fenomena astronomi.</p>
+                    <p class="text-xs text-slate-400 mt-1">Periksa koneksi atau klik "Muat Ulang Data".</p>
                 </div>
             `;
         }
     }
 
-    function renderEvents(events) {
+    function renderEvents() {
         const container = document.getElementById('events-container');
+        const searchQuery = document.getElementById('event-search-input').value.toLowerCase().trim();
         const catFilter = document.getElementById('event-type-filter').value;
-        const diffFilter = document.getElementById('event-difficulty-filter').value;
 
-        const filtered = events.filter(e => {
+        const filtered = allEvents.filter(e => {
+            const matchSearch = !searchQuery || e.title.toLowerCase().includes(searchQuery) || (e.description && e.description.toLowerCase().includes(searchQuery));
             const matchCat = catFilter === 'ALL' || e.type === catFilter;
-            const matchDiff = diffFilter === 'ALL' || e.difficulty === diffFilter;
-            return matchCat && matchDiff;
+            const matchDiff = currentDiffFilter === 'ALL' || e.difficulty === currentDiffFilter;
+            return matchSearch && matchCat && matchDiff;
         });
 
         if (!filtered || filtered.length === 0) {
             container.innerHTML = `
-                <div class="col-span-full text-center py-12 text-slate-400 bg-slate-900/40 rounded-xl border border-slate-800">
-                    <i data-lucide="telescope" class="w-8 h-8 mx-auto mb-2 text-slate-600"></i>
-                    <p class="text-sm">Tidak ada fenomena langit yang cocok dengan filter yang dipilih.</p>
+                <div class="col-span-full text-center py-16 text-slate-400 bg-space-900/40 rounded-2xl border border-slate-800 p-8 space-y-2">
+                    <i data-lucide="telescope" class="w-8 h-8 mx-auto text-slate-600 mb-2"></i>
+                    <p class="text-sm font-semibold text-slate-300">Tidak ada peristiwa astronomi yang cocok dengan filter Anda.</p>
+                    <p class="text-xs text-slate-500">Coba ubah kata kunci pencarian atau pilih tombol "Semua Alat".</p>
                 </div>
             `;
             lucide.createIcons();
@@ -237,64 +384,72 @@
         container.innerHTML = filtered.map(item => {
             let diffColor = 'emerald';
             let diffIcon = 'eye';
+            let diffBadge = 'Mata Telanjang';
+            
             if (item.difficulty === 'binoculars') {
                 diffColor = 'cyan';
                 diffIcon = 'glasses';
+                diffBadge = 'Binokular';
             } else if (item.difficulty === 'telescope') {
                 diffColor = 'amber';
                 diffIcon = 'telescope';
+                diffBadge = 'Teleskop';
             }
 
             const sky = item.sky_position || {};
+            const cleanTitle = item.title.replace(/"/g, '&quot;');
 
             return `
-                <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between hover:border-cyan-500/40 transition-all space-y-4">
+                <div class="glass-card rounded-2xl p-5 flex flex-col justify-between hover:border-cyan-500/40 transition-all space-y-4 group">
                     <div class="space-y-3">
-                        <!-- Top Badges -->
+                        <!-- Top Row: Date & Instrument Badge -->
                         <div class="flex items-center justify-between gap-2 text-xs">
-                            <span class="text-cyan-400 font-bold flex items-center gap-1">
+                            <span class="text-cyan-400 font-bold flex items-center gap-1 font-mono">
                                 <i data-lucide="calendar" class="w-3.5 h-3.5"></i> ${item.date}
                             </span>
-                            <span class="px-2.5 py-0.5 rounded-full bg-${diffColor}-500/10 text-${diffColor}-300 border border-${diffColor}-500/30 text-[11px] font-semibold flex items-center gap-1" title="${item.difficulty_alt || ''}">
-                                <i data-lucide="${diffIcon}" class="w-3 h-3"></i> ${item.difficulty_label || item.difficulty || 'Mata Telanjang'}
+                            ${scoreBadge(item.id)}
+                            <span class="px-2.5 py-0.5 rounded-full bg-${diffColor}-500/10 text-${diffColor}-300 border border-${diffColor}-500/30 text-[11px] font-semibold flex items-center gap-1">
+                                <i data-lucide="${diffIcon}" class="w-3 h-3"></i> ${item.difficulty_label || diffBadge}
                             </span>
                         </div>
 
                         <!-- Title & Category -->
                         <div>
-                            <div class="text-[11px] text-indigo-400 uppercase font-semibold tracking-wider">${item.type}</div>
-                            <h4 class="text-base font-bold text-white mt-0.5 leading-snug">${item.title}</h4>
+                            <span class="text-[10px] text-indigo-400 font-bold uppercase tracking-wider">${item.type}</span>
+                            <h4 class="text-sm sm:text-base font-bold text-white group-hover:text-cyan-300 transition-colors leading-snug mt-0.5">
+                                ${cleanTitle}
+                            </h4>
                         </div>
 
-                        <!-- Time & Sky Box -->
-                        <div class="bg-slate-950/70 rounded-xl p-2.5 border border-slate-800/80 space-y-1.5 text-xs">
-                            <div class="flex items-center gap-1.5 text-amber-300 font-medium">
+                        <!-- Timing & Sky Direction Card -->
+                        <div class="bg-space-950/70 rounded-xl p-3 border border-slate-800/80 space-y-1.5 text-xs">
+                            <div class="flex items-center gap-1.5 text-amber-300 font-semibold">
                                 <i data-lucide="clock" class="w-3.5 h-3.5 flex-shrink-0"></i>
                                 <span>${item.time || 'Malam hari'}</span>
                             </div>
 
-                            <div class="flex items-start gap-1.5 text-slate-300 text-[11px] pt-1 border-t border-slate-800/60">
+                            <div class="flex items-start gap-1.5 text-slate-300 text-[11px] pt-1.5 border-t border-slate-800/70">
                                 <i data-lucide="compass" class="w-3.5 h-3.5 flex-shrink-0 text-cyan-400 mt-0.5"></i>
                                 <div>
-                                    <span class="font-semibold text-white">${sky.direction || 'Langit Malam'}</span>
+                                    <span class="font-semibold text-white">${sky.direction || 'Langit Umum'}</span>
                                     ${sky.altitude ? ` • <span class="text-slate-400">${sky.altitude}</span>` : ''}
-                                    ${sky.constellation ? ` • <span class="text-indigo-300 font-medium">${sky.constellation}</span>` : ''}
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Description -->
-                        <p class="text-xs text-slate-400 leading-relaxed">${item.description}</p>
+                        <!-- Description Snippet -->
+                        <p class="text-xs text-slate-400 leading-relaxed line-clamp-2">
+                            ${item.description}
+                        </p>
                     </div>
 
-                    <!-- Source & Test Action -->
-                    <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-500">
-                        <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="hover:text-cyan-400 flex items-center gap-1 transition-colors">
-                            <span>in-the-sky.org</span>
-                            <i data-lucide="external-link" class="w-3 h-3"></i>
-                        </a>
-                        <button onclick="testFeasibilityForEvent('${item.difficulty || 'naked_eye'}', '${item.type}')" class="text-cyan-400 hover:text-cyan-300 font-medium flex items-center gap-1">
-                            Uji Cuaca <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <!-- Actions: Detail Modal & Quick Weather -->
+                    <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
+                        <button onclick='openEventModal(${JSON.stringify(item)})' class="text-slate-300 hover:text-white font-semibold flex items-center gap-1 transition-colors">
+                            <i data-lucide="info" class="w-3.5 h-3.5 text-indigo-400"></i> Detail Lengkap
+                        </button>
+                        <button onclick="testEventWeather('${item.id}')" class="px-2.5 py-1 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 font-semibold flex items-center gap-1 transition-colors">
+                            Prakiraan Cuaca <i data-lucide="arrow-right" class="w-3 h-3"></i>
                         </button>
                     </div>
                 </div>
@@ -304,22 +459,201 @@
         lucide.createIcons();
     }
 
-    // Trigger Asynchronous Background Live Sync
-    async function triggerLiveSync() {
-        const btn = document.getElementById('sync-live-btn');
-        const label = document.getElementById('sync-btn-label');
+    // Modal Details Handler
+    function openEventModal(event) {
+        document.getElementById('modal-title').innerText = event.title;
+        document.getElementById('modal-category').innerText = event.type;
+        document.getElementById('modal-date-badge').innerText = event.date;
+        document.getElementById('modal-difficulty').innerText = event.difficulty_label || event.difficulty;
+        document.getElementById('modal-time').innerText = event.time || 'Malam hari';
         
+        const sky = event.sky_position || {};
+        document.getElementById('modal-sky').innerText = `${sky.direction || 'Langit Umum'} (${sky.altitude || 'Di atas cakrawala'})`;
+        document.getElementById('modal-constellation').innerText = sky.constellation || 'Sesuai rasi bintang';
+        document.getElementById('modal-desc').innerText = event.description || 'Tidak ada deskripsi tambahan.';
+        
+        const linkEl = document.getElementById('modal-link');
+        if (event.link) {
+            linkEl.href = event.link;
+            linkEl.classList.remove('hidden');
+        } else {
+            linkEl.classList.add('hidden');
+        }
+
+        document.getElementById('event-modal').classList.remove('hidden');
+        lucide.createIcons();
+    }
+
+    function closeModal() {
+        document.getElementById('event-modal').classList.add('hidden');
+    }
+    document.getElementById('modal-close-btn').addEventListener('click', closeModal);
+    document.getElementById('modal-close-action').addEventListener('click', closeModal);
+
+    // ------------------------------------------------------------------
+    // Prakiraan cuaca & kelayakan
+    // ------------------------------------------------------------------
+    const URL_PLAN = "{{ url_for('observation.api_plan') }}";
+    const URL_EVENT_FC = "{{ url_for('observation.api_event_forecast') }}";
+    let planItems = {};
+
+    const esc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const fmt = (v, unit = '') => (v === null || v === undefined) ? '--' : Math.round(v) + unit;
+
+    function getLoc() {
+        const lat = parseFloat(document.getElementById('input-lat').value);
+        const lon = parseFloat(document.getElementById('input-lon').value);
+        return { lat: isNaN(lat) ? -6.2088 : lat, lon: isNaN(lon) ? 106.8456 : lon };
+    }
+
+    function scoreBadge(id) {
+        const p = planItems[id];
+        if (!p) return '';
+        if (p.is_past) return '<span class="px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 text-[11px] font-semibold">Telah lewat</span>';
+        if (p.score === null) return '<span class="px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 text-[11px] font-semibold" title="Prakiraan cuaca tidak tersedia">Cuaca n/a</span>';
+        const need = p.needs_better_instrument ? ` • butuh ${esc(p.required_instrument)}` : '';
+        return `<span class="px-2 py-0.5 rounded-full bg-${p.color}-500/15 text-${p.color}-300 border border-${p.color}-500/30 text-[11px] font-bold">${p.score} • ${esc(p.status)}${need}</span>`;
+    }
+
+    function paintPanel(w, f, contextHtml) {
+        const ok = w && w.available;
+        document.getElementById('weather-source-badge').innerText = ok ? (w.kind === 'forecast' ? 'Prakiraan' : 'Klimatologi') : 'Tidak tersedia';
+        document.getElementById('val-temp').innerText = ok ? fmt(w.temp_c, ' °C') : '-- °C';
+        document.getElementById('val-clouds').innerText = ok ? fmt(w.cloud_cover_pct, ' %') : '-- %';
+        document.getElementById('val-humidity').innerText = ok ? fmt(w.humidity_pct, ' %') : '-- %';
+        document.getElementById('val-rain').innerText = ok ? fmt(w.precipitation_prob, ' %') : '-- %';
+        document.getElementById('val-visibility').innerText = (ok && w.visibility_m != null) ? (w.visibility_m / 1000).toFixed(1) + ' km' : '-- km';
+
+        const hasScore = f.score !== null && f.score !== undefined;
+        document.getElementById('score-number').innerText = hasScore ? f.score : '--';
+        document.getElementById('status-text').innerText = hasScore ? `${f.status} (${String(f.equipment_considered).replace('_', ' ')})` : f.status;
+        document.getElementById('score-bar').style.width = (hasScore ? f.score : 0) + '%';
+        document.getElementById('recommendation-text').innerText = f.recommendation;
+        document.getElementById('forecast-context').innerHTML = contextHtml;
+
+        const badge = document.getElementById('feasibility-badge');
+        badge.innerText = f.status;
+        badge.className = `px-3 py-1 rounded-full text-xs font-bold uppercase bg-${f.color}-500/20 text-${f.color}-400 border border-${f.color}-500/30`;
+
+        // Grafik awan per jam
+        const bars = document.getElementById('hourly-bars');
+        const win = (ok && w.window) ? w.window : [];
+        bars.innerHTML = win.length ? win.map(h => {
+            const pct = Math.max(4, h.awan ?? 0);
+            return `<div class="flex-1 flex flex-col items-center gap-1" title="${esc(h.jam)}: awan ${fmt(h.awan, '%')}, hujan ${fmt(h.hujan, '%')}">
+                <div class="w-full rounded-t ${h.sekarang ? 'bg-cyan-400' : 'bg-slate-600'}" style="height:${pct * 0.5}px"></div>
+                <span class="text-[9px] ${h.sekarang ? 'text-cyan-300 font-bold' : 'text-slate-500'}">${esc(h.jam.slice(0, 2))}</span></div>`;
+        }).join('') : '<span class="text-[11px] text-slate-500">Data per jam tidak tersedia.</span>';
+
+        // Rincian pengurang skor
+        const pl = document.getElementById('penalty-list');
+        const bd = (f.breakdown || []).filter(b => b.penalti > 0.5).sort((a, b) => b.penalti - a.penalti);
+        pl.innerHTML = bd.length ? bd.map(b => `<div class="flex items-center gap-2 text-[11px]">
+                <span class="w-28 text-slate-400 truncate">${esc(b.label)}</span>
+                <div class="flex-1 h-1.5 bg-slate-800 rounded-full overflow-hidden"><div class="h-full bg-rose-400/80" style="width:${Math.min(100, b.penalti * 2.5)}%"></div></div>
+                <span class="w-9 text-right text-slate-300 font-mono">-${b.penalti}</span></div>`).join('')
+            : `<span class="text-[11px] text-slate-500">${hasScore ? 'Tidak ada pengurang signifikan.' : '-'}</span>`;
+    }
+
+    function contextLine(w, f, extra) {
+        if (!w || !w.available) return esc((w && w.reason) || 'Prakiraan cuaca tidak tersedia.');
+        const parts = [`<span class="text-slate-300 font-semibold">${esc(w.source)}</span>`,
+            `waktu lokal lokasi ${esc(w.valid_local)}`, `kepercayaan: <b>${esc(f.confidence)}</b>`];
+        if (extra.moon !== undefined) parts.push(`Bulan ${extra.moon}% terang` + (extra.moonAlt !== undefined ? (extra.moonAlt > 0 ? `, tinggi ${extra.moonAlt}°` : ', di bawah ufuk') : ''));
+        return parts.join(' • ') + (extra.note ? `<br><span class="text-amber-300/80">${esc(extra.note)}</span>` : '');
+    }
+
+    // Cek umum (tanpa fenomena): kondisi langit malam ini / terdekat untuk alat terpilih
+    async function checkFeasibility(forcedDifficulty = null, forcedType = 'General') {
+        const { lat, lon } = getLoc();
+        const difficulty = forcedDifficulty || document.getElementById('input-instrument').value;
+        try {
+            const res = await fetch("{{ url_for('observation.api_feasibility') }}", {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({lat, lon, difficulty, event_type: forcedType})
+            });
+            const data = await res.json();
+            if (!res.ok) { document.getElementById('forecast-context').innerText = data.message || 'Permintaan tidak valid.'; return; }
+            paintPanel(data.weather, data.feasibility,
+                contextLine(data.weather, data.feasibility, {moon: data.moon_illumination_pct}));
+        } catch (err) {
+            console.error(err);
+            document.getElementById('forecast-context').innerText = 'Gagal menghubungi server.';
+        }
+    }
+
+    // Prakiraan untuk satu fenomena pada waktu fenomena itu sendiri
+    async function testEventWeather(id) {
+        const { lat, lon } = getLoc();
+        const ev = allEvents.find(e => e.id === id);
+        if (!ev) return;
+        const [y, m] = ev.date.split('-').map(Number);
+        try {
+            const res = await fetch(URL_EVENT_FC, {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({event_id: id, lat, lon, year: y, month: m,
+                                      instrument: document.getElementById('input-instrument').value})
+            });
+            const data = await res.json();
+            if (!res.ok) { alert(data.message || 'Gagal memuat prakiraan.'); return; }
+            const f = data.feasibility, w = data.weather;
+            const note = [ev.title + ' (' + data.obs_time_wib.replace('T', ' ') + ' WIB)', data.event.obs_note].filter(Boolean).join(' - ');
+            let ctx = contextLine(w, f, {moon: data.moon_illumination_pct, moonAlt: data.moon_altitude_deg, note});
+            if (!w || !w.available) ctx = `<b>${esc(ev.title)}</b>: ` + ctx;
+            paintPanel(w, f, ctx);
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        } catch (err) {
+            alert('Kendala koneksi saat memuat prakiraan.');
+        }
+    }
+
+    // Skor semua fenomena + rekomendasi terbaik
+    async function loadPlan() {
+        const { lat, lon } = getLoc();
+        const inst = document.getElementById('input-instrument').value;
+        const box = document.getElementById('top-recs');
+        try {
+            const res = await fetch(`${URL_PLAN}?lat=${lat}&lon=${lon}&instrument=${inst}`);
+            const data = await res.json();
+            if (!res.ok) { box.innerHTML = `<div class="col-span-full text-xs text-rose-400">${esc(data.message)}</div>`; return; }
+            planItems = Object.fromEntries(data.items.map(i => [i.id, i]));
+            renderEvents();
+            document.getElementById('plan-meta').innerText = `Alat: ${inst.replace('_', ' ')} • ${lat.toFixed(2)}, ${lon.toFixed(2)}`;
+            if (!data.weather_available) {
+                box.innerHTML = '<div class="col-span-full text-xs text-amber-300/90">Prakiraan cuaca belum dapat dimuat (periksa koneksi internet). Daftar fenomena tetap tersedia di bawah, namun skor kelayakan tidak ditampilkan agar tidak menyesatkan.</div>';
+            } else if (!data.top.length) {
+                box.innerHTML = '<div class="col-span-full text-xs text-slate-400">Tidak ada fenomena mendatang yang sesuai dengan alat Anda dan memiliki prakiraan.</div>';
+            } else {
+                box.innerHTML = data.top.map((id, idx) => {
+                    const p = planItems[id];
+                    const why = p.reasons.length ? p.reasons.join('; ') : 'Tidak ada hambatan cuaca signifikan.';
+                    return `<div class="rounded-xl bg-slate-950/60 border border-slate-800 p-4 space-y-2">
+                        <div class="flex items-center justify-between text-[11px]">
+                            <span class="text-amber-400 font-bold">#${idx + 1}</span>${scoreBadge(id)}</div>
+                        <div class="text-sm font-bold text-white leading-snug">${esc(p.title)}</div>
+                        <div class="text-[11px] text-cyan-300 font-mono">${esc((p.obs_time_wib || '').replace('T', ' '))} WIB</div>
+                        <p class="text-[11px] text-slate-400">${esc(why)}</p>
+                        <button onclick="testEventWeather('${esc(id)}')" class="text-[11px] text-cyan-300 hover:text-cyan-200 font-semibold">Lihat prakiraan rinci &rarr;</button></div>`;
+                }).join('');
+            }
+            lucide.createIcons();
+        } catch (err) {
+            box.innerHTML = '<div class="col-span-full text-xs text-rose-400">Gagal menghitung rekomendasi.</div>';
+        }
+    }
+
+    // Background Live Sync Trigger
+    async function triggerLiveSync() {
         try {
             const res = await fetch("{{ url_for('observation.api_sync') }}", { method: 'POST' });
             const data = await res.json();
-
             if (res.ok) {
                 startPollingSyncStatus();
             } else {
                 alert(data.message || 'Gagal memulai sinkronisasi.');
             }
         } catch (err) {
-            alert('Kendala koneksi saat menghubungi endpoint sinkronisasi.');
+            alert('Kendala koneksi saat menghubungi server.');
         }
     }
 
@@ -342,21 +676,17 @@
                 const data = await res.json();
                 const state = data.sync_state;
 
-                if (state.message) {
-                    bannerMsg.innerText = state.message;
-                }
+                if (state.message) bannerMsg.innerText = state.message;
 
                 if (!state.is_running) {
                     clearInterval(pollInterval);
                     pollInterval = null;
-
-                    // Pulihkan tombol & sembunyikan banner
                     setTimeout(() => {
                         banner.classList.add('hidden');
                         btn.disabled = false;
                         btn.classList.remove('opacity-50', 'cursor-not-allowed');
                         label.innerText = 'Sinkronisasi Live (in-the-sky)';
-                        loadEvents(); // Muat data terbaru yang baru selesai di-scrape
+                        loadEvents();
                     }, 2500);
                 }
             } catch (err) {
@@ -365,54 +695,9 @@
         }, 3000);
     }
 
-    async function checkFeasibility(forcedDifficulty = null, forcedType = 'General') {
-        const lat = parseFloat(document.getElementById('input-lat').value) || -6.2088;
-        const lon = parseFloat(document.getElementById('input-lon').value) || 106.8456;
-        const difficulty = forcedDifficulty || document.getElementById('input-instrument').value;
-        
-        try {
-            const res = await fetch("{{ url_for('observation.api_feasibility') }}", {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({lat, lon, difficulty, event_type: forcedType})
-            });
-            const data = await res.json();
-            const w = data.weather;
-            const f = data.feasibility;
-
-            document.getElementById('weather-source-badge').innerText = w.source || 'Online';
-            document.getElementById('val-temp').innerText = (w.temp_c || '--') + ' °C';
-            document.getElementById('val-clouds').innerText = (w.cloud_cover_pct || '--') + ' %';
-            document.getElementById('val-humidity').innerText = (w.humidity_pct || '--') + ' %';
-            document.getElementById('val-rain').innerText = (w.precipitation_prob || '0') + ' %';
-
-            document.getElementById('score-number').innerText = f.score;
-            document.getElementById('status-text').innerText = f.status + ` (${f.equipment_considered.replace('_', ' ')})`;
-            document.getElementById('score-bar').style.width = f.score + '%';
-            document.getElementById('recommendation-text').innerText = f.recommendation;
-
-            const badge = document.getElementById('feasibility-badge');
-            badge.innerText = f.status;
-            badge.className = `px-3 py-1 rounded-full text-xs font-bold uppercase bg-${f.color}-500/20 text-${f.color}-400 border border-${f.color}-500/30`;
-        } catch (err) {
-            alert('Gagal mengecek cuaca & kelayakan.');
-        }
-    }
-
-    function testFeasibilityForEvent(diff, type) {
-        document.getElementById('input-instrument').value = diff;
-        checkFeasibility(diff, type);
-        window.scrollTo({top: 0, behavior: 'smooth'});
-    }
-
-    document.getElementById('event-type-filter').addEventListener('change', () => renderEvents(allEvents));
-    document.getElementById('event-difficulty-filter').addEventListener('change', () => renderEvents(allEvents));
-    document.getElementById('refresh-events-btn').addEventListener('click', loadEvents);
-    document.getElementById('sync-live-btn').addEventListener('click', triggerLiveSync);
-    document.getElementById('check-weather-btn').addEventListener('click', () => checkFeasibility());
-
+    // Init
     document.addEventListener('DOMContentLoaded', () => {
-        loadEvents();
+        loadEvents().then(loadPlan);
         checkFeasibility();
     });
 </script>

@@ -1,9 +1,10 @@
 import threading
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask import Blueprint, render_template, request, jsonify
 from app.services.scraper_service import scrape_in_the_sky_events
-from app.services.weather_service import get_weather_forecast, calculate_observation_feasibility
+from app.services.weather_service import get_weather_at
+from app.services import planner_service as planner
 
 observation_bp = Blueprint('observation', __name__)
 
@@ -35,28 +36,82 @@ def api_events():
         'sync_state': sync_state
     })
 
+def _coords(data):
+    """Validasi lat/lon dari request (JSON atau query)."""
+    try:
+        lat = float(data.get('lat', -6.2088))
+        lon = float(data.get('lon', 106.8456))
+    except (TypeError, ValueError):
+        raise ValueError('Koordinat harus berupa angka.')
+    if not (-90 <= lat <= 90 and -180 <= lon <= 180):
+        raise ValueError('Koordinat di luar rentang yang valid.')
+    return lat, lon
+
+
 @observation_bp.route('/api/feasibility', methods=['POST'])
 def api_feasibility():
-    """Evaluate observation feasibility given lat, lon, event difficulty, and type."""
-    data = request.get_json() or {}
-    lat = data.get('lat', -6.2088)
-    lon = data.get('lon', 106.8456)
+    """Kelayakan pengamatan di lokasi untuk waktu tertentu (default: malam ini 20:00 WIB / waktu terdekat)."""
+    data = request.get_json(silent=True) or {}
+    try:
+        lat, lon = _coords(data)
+    except ValueError as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 400
     difficulty = data.get('difficulty', 'naked_eye')
     event_type = data.get('event_type', 'General')
-    
-    weather = get_weather_forecast(lat, lon)
-    score = calculate_observation_feasibility(weather, difficulty=difficulty, event_type=event_type)
-    
-    return jsonify({
-        'status': 'success',
-        'weather': weather,
-        'feasibility': score
-    })
+
+    now = datetime.utcnow()
+    when = now + timedelta(minutes=5)
+    if data.get('datetime_wib'):           # contoh: 2026-11-18T20:00
+        try:
+            when = planner.wib_to_utc(data['datetime_wib'])
+        except ValueError:
+            return jsonify({'status': 'error', 'message': 'Format waktu harus YYYY-MM-DDTHH:MM (WIB).'}), 400
+
+    weather = get_weather_at(lat, lon, when, now)
+    illum = planner.moon_illumination(when)
+    malt = planner.moon_altitude_at(when, lat, lon)
+    score = planner.calculate_observation_feasibility(weather, difficulty, event_type, illum, False, malt)
+    return jsonify({'status': 'success', 'weather': weather, 'feasibility': score,
+                    'moon_illumination_pct': round(illum * 100)})
+
+
+@observation_bp.route('/api/event-forecast', methods=['POST'])
+def api_event_forecast():
+    """Prakiraan cuaca + skor untuk SATU fenomena (waktu dari fenomena itu sendiri)."""
+    data = request.get_json(silent=True) or {}
+    try:
+        lat, lon = _coords(data)
+    except ValueError as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 400
+    events = scrape_in_the_sky_events(year=data.get('year'), month=data.get('month'))
+    event = next((e for e in events if e['id'] == data.get('event_id')), None)
+    if not event:
+        return jsonify({'status': 'error', 'message': 'Fenomena tidak ditemukan.'}), 404
+    result = planner.evaluate_event(event, lat, lon, data.get('instrument'))
+    result['event'] = {k: event[k] for k in ('id', 'title', 'type', 'date', 'obs_note', 'peak_time')}
+    return jsonify({'status': 'success', **result})
+
+
+@observation_bp.route('/api/plan')
+def api_plan():
+    """Skor semua fenomena untuk lokasi + rekomendasi terbaik."""
+    try:
+        lat, lon = _coords(request.args)
+    except ValueError as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 400
+    result = planner.plan(lat, lon, request.args.get('instrument'),
+                          request.args.get('year', type=int), request.args.get('month', type=int))
+    return jsonify({'status': 'success', **result})
+
 
 @observation_bp.route('/api/sync', methods=['POST'])
 def api_sync():
     """Triggers background scraping from in-the-sky.org without freezing the web app."""
     global sync_state
+    body = request.get_json(silent=True) or {}
+    now = datetime.now()
+    sync_year = int(body.get('year') or now.year)
+    sync_month = int(body.get('month') or now.month)
 
     with sync_lock:
         if sync_state['is_running']:
@@ -86,7 +141,7 @@ def api_sync():
         try:
             from scripts.scrape_playwright import run_multi_level_scraper
             # Jalankan multi-level scraper dengan Edge di background
-            run_multi_level_scraper(year=2026, month=11, max_details=25, headless=False)
+            run_multi_level_scraper(year=sync_year, month=sync_month, max_details=25, headless=False)
             with sync_lock:
                 sync_state['last_status'] = 'success'
                 sync_state['message'] = 'Sinkronisasi berhasil! Data astronomi telah diperbarui.'

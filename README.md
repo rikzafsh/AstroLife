@@ -66,3 +66,12 @@ GOOGLE_WEATHER_API_KEY=your_key_here
 python run.py
 ```
 Buka browser di `http://127.0.0.1:5000`.
+
+## Observation Planner (fenomena + prakiraan cuaca)
+
+- `app/services/weather_service.py`: prakiraan per jam Open-Meteo (awan rendah/menengah/tinggi, kelembapan, peluang hujan, jarak pandang). Di luar 16 hari memakai klimatologi (ditandai "indikatif"). Jika semua gagal: skor tidak dihitung (tidak ada data mock).
+- `app/services/planner_service.py`: skor kelayakan 0-100 + rincian pengurang (awan, hujan, kelembapan, jarak pandang, cahaya Bulan bila Bulan di atas ufuk, siang hari) dan rekomendasi terbaik.
+- Endpoint: `POST /observation/api/feasibility`, `POST /observation/api/event-forecast`, `GET /observation/api/plan?lat=&lon=&instrument=`.
+- Uji: `python -m unittest discover -s tests -v` (cuaca ditiru, tidak butuh internet).
+
+Catatan: `calendar_service.py`, `islamic_service.py`, `astro_core.py` sudah berisi mesin perhitungan (teruji terhadap tanggal acuan) tetapi rute/UI-nya belum disambungkan.
