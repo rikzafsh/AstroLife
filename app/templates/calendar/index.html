@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Calendar Laboratory - AstroLife{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <!-- Header -->
+    <div>
+        <h1 class="text-3xl font-bold text-white flex items-center gap-3">
+            <i data-lucide="calendar" class="w-8 h-8 text-amber-400"></i>
+            Calendar Laboratory
+        </h1>
+        <p class="text-sm text-slate-400 mt-1">
+            Eksplorasi dan konversi komparatif berbagai sistem penanggalan: Masehi, Hijriah Aritmetis, Jawa Mataraman (Pasaran, Wuku, Windu), dan Jyotiṣa / Jawa Kuno.
+        </p>
+    </div>
+
+    <!-- Notice Card: Waiting for user JS module -->
+    <div class="rounded-2xl bg-amber-500/10 border border-amber-500/30 p-5 flex items-start gap-4">
+        <div class="p-2 rounded-xl bg-amber-500/20 text-amber-400">
+            <i data-lucide="code-2" class="w-6 h-6"></i>
+        </div>
+        <div>
+            <h4 class="text-sm font-bold text-amber-300 uppercase tracking-wide">Penyelarasan Modul Falak &amp; Penanggalan</h4>
+            <p class="text-xs sm:text-sm text-slate-300 mt-1">
+                Antarmuka Lab Kalender siap menerima engine perhitungan dari modul JavaScript yang Anda miliki. Begitu file JS dibagikan, logika konversi kalender Masehi, Hijriah, Jawa Mataraman, dan Jyotiṣa akan langsung ditranspilasi ke Python service dan dihubungkan ke form berikut.
+            </p>
+        </div>
+    </div>
+
+    <!-- Conversion Playground Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Input Form -->
+        <div class="glass-panel rounded-2xl p-6 space-y-5">
+            <h3 class="font-bold text-white text-lg flex items-center gap-2">
+                <i data-lucide="arrow-left-right" class="w-5 h-5 text-amber-400"></i> Konverter Antar-Kalender
+            </h3>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Pilih Tanggal Acuan (Masehi)</label>
+                    <input type="date" id="input-date" value="2026-11-16" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-amber-400 text-sm">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Dari Sistem</label>
+                        <select class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-amber-400">
+                            <option>Masehi (Gregorian)</option>
+                            <option>Hijriah Aritmetis</option>
+                            <option>Jawa Mataraman</option>
+                            <option>Jawa Kuno / Jyotisa</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Ke Sistem</label>
+                        <select class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-amber-400">
+                            <option>Semua Sistem (Komparasi)</option>
+                            <option>Hijriah Aritmetis</option>
+                            <option>Jawa Mataraman</option>
+                            <option>Jawa Kuno / Jyotisa</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button id="convert-btn" class="w-full py-3 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-semibold text-sm transition-colors flex items-center justify-center gap-2 shadow-lg shadow-amber-600/20">
+                    <i data-lucide="calculator" class="w-4 h-4"></i> Konversi &amp; Tampilkan Unsur
+                </button>
+            </div>
+        </div>
+
+        <!-- Result Preview -->
+        <div class="glass-panel rounded-2xl p-6 space-y-4 flex flex-col justify-between">
+            <div>
+                <h3 class="font-bold text-white text-lg flex items-center gap-2">
+                    <i data-lucide="layers" class="w-5 h-5 text-amber-400"></i> Hasil Perbandingan Unsur
+                </h3>
+
+                <div class="space-y-3 mt-4 text-sm">
+                    <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800 flex justify-between items-center">
+                        <span class="text-slate-400">Julian Day Number (JDN)</span>
+                        <span class="font-mono font-bold text-amber-300" id="res-jdn">2461361.5</span>
+                    </div>
+                    <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800 flex justify-between items-center">
+                        <span class="text-slate-400">Hijriah Aritmetis</span>
+                        <span class="font-semibold text-white" id="res-hijri">6 Jumadil Awwal 1448 H</span>
+                    </div>
+                    <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800 flex justify-between items-center">
+                        <span class="text-slate-400">Jawa Mataraman</span>
+                        <span class="font-semibold text-white" id="res-jawa">Senin Wage, Wuku Julungwangi</span>
+                    </div>
+                    <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800 flex justify-between items-center">
+                        <span class="text-slate-400">Jyotiṣa / Jawa Kuno</span>
+                        <span class="font-semibold text-white" id="res-jyotisa">Saka 1948 (Tithi Shukla Paksha)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-xs text-slate-500 text-center">
+                *Rumus perhitungan detail akan diisi oleh engine JS yang ditranspilasi ke Python.
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

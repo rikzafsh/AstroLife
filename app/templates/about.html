@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Tentang AstroLife{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-12 space-y-8">
+    <div class="glass-panel rounded-3xl p-8 sm:p-10 border border-slate-800 space-y-6">
+        <h1 class="text-3xl font-extrabold text-white">Tentang Platform AstroLife</h1>
+        
+        <p class="text-slate-300 leading-relaxed">
+            <strong>AstroLife</strong> adalah platform web integratif yang dikembangkan untuk mengenalkan, mengeksplorasi, dan mengaplikasikan konsep-konsep astronomi modern dan etno-astronomi ke dalam kehidupan sehari-hari.
+        </p>
+
+        <div class="space-y-4">
+            <h3 class="text-lg font-bold text-indigo-400">Teknologi &amp; Metodologi yang Digunakan:</h3>
+            <ul class="list-disc list-inside space-y-2 text-sm text-slate-300">
+                <li><strong class="text-white">Backend Web:</strong> Python dengan Flask (Modular Blueprint Architecture).</li>
+                <li><strong class="text-white">Web Scraping:</strong> BeautifulSoup4 &amp; Requests untuk kalender fenomena langit dari in-the-sky.org dengan mekanisme caching.</li>
+                <li><strong class="text-white">Prakiraan Cuaca:</strong> Integrasi Weather API untuk penghitungan Sky Quality Feasibility Score.</li>
+                <li><strong class="text-white">Machine Learning &amp; Analisis Data:</strong> Scikit-learn (Linear Regression tren cuaca, K-Means Clustering, Lexicon Sentiment Analysis).</li>
+                <li><strong class="text-white">Komputasi Kalender &amp; Falak:</strong> Penyatuan kalender Masehi, Hijriah Aritmetis, Jawa Mataraman, Jyotiṣa, serta hisab waktu salat dan Rasydulqiblat.</li>
+                <li><strong class="text-white">Antarmuka Modern:</strong> HTML5, Tailwind CSS, Lucide Icons, dan Chart.js.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

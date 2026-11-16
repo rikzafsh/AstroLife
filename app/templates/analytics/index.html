@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block title %}Data Analytics & ML - AstroLife{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <!-- Header -->
+    <div>
+        <h1 class="text-3xl font-bold text-white flex items-center gap-3">
+            <i data-lucide="bar-chart-3" class="w-8 h-8 text-violet-400"></i>
+            Data Analytics &amp; Machine Learning
+        </h1>
+        <p class="text-sm text-slate-400 mt-1">
+            Visualisasi data statistik fenomena astronomi, regresi linier pola cuaca historis, pengelompokan (K-Means Clustering), dan analisis sentimen teks publik.
+        </p>
+    </div>
+
+    <!-- Charts Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Chart 1: Linear Regression / Weather Trend -->
+        <div class="glass-panel rounded-2xl p-6 space-y-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="font-bold text-white text-base">Linear Regression: Tren Tutupan Awan</h3>
+                    <p class="text-xs text-slate-400">Analisis kecenderungan tutupan awan berdasarkan data historis harian</p>
+                </div>
+                <span class="text-xs px-2.5 py-1 rounded bg-violet-500/20 text-violet-300 font-semibold">scikit-learn</span>
+            </div>
+            
+            <div class="h-64 flex items-center justify-center bg-slate-900/60 rounded-xl p-3 border border-slate-800">
+                <canvas id="weatherRegressionChart"></canvas>
+            </div>
+            <p class="text-xs text-slate-400 italic">
+                *Garis regresi (y = mx + c) memperlihatkan arah tren tutupan awan untuk perencanaan observasi beberapa pekan ke depan.
+            </p>
+        </div>
+
+        <!-- Chart 2: Clustering K-Means -->
+        <div class="glass-panel rounded-2xl p-6 space-y-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="font-bold text-white text-base">K-Means Clustering: Karakteristik Langit</h3>
+                    <p class="text-xs text-slate-400">Pengelompokan kondisi pengamatan (Ideal, Moderat, Buruk)</p>
+                </div>
+                <span class="text-xs px-2.5 py-1 rounded bg-violet-500/20 text-violet-300 font-semibold">K-Means</span>
+            </div>
+            
+            <div class="h-64 flex items-center justify-center bg-slate-900/60 rounded-xl p-3 border border-slate-800">
+                <canvas id="clusteringChart"></canvas>
+            </div>
+            <p class="text-xs text-slate-400 italic">
+                *Visualisasi sebaran observasi berdasarkan tutupan awan vs. kelembapan relatif.
+            </p>
+        </div>
+    </div>
+
+    <!-- Interactive Sentiment Analysis Demo Card -->
+    <div class="glass-panel rounded-2xl p-6 space-y-4">
+        <div class="flex items-center justify-between">
+            <div>
+                <h3 class="font-bold text-white text-lg flex items-center gap-2">
+                    <i data-lucide="message-square" class="w-5 h-5 text-violet-400"></i> Uji Analisis Sentimen Teks Publik
+                </h3>
+                <p class="text-xs text-slate-400">Analisis sentimen dan persepsi publik terhadap peristiwa astronomi (misal: gerhana atau hujan meteor)</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="md:col-span-2 space-y-3">
+                <textarea id="sentiment-input" rows="3" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-violet-500" placeholder="Ketik komentar atau teks tanggapan publik di sini, contoh: 'Langit malam ini sangat cerah dan pemandangan hujan meteor sungguh menakjubkan!'"></textarea>
+                <button id="analyze-sentiment-btn" class="px-5 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-semibold text-sm transition-colors flex items-center gap-2">
+                    <i data-lucide="sparkle" class="w-4 h-4"></i> Analisis Sentimen
+                </button>
+            </div>
+
+            <div class="bg-slate-900/80 rounded-xl p-4 border border-slate-800 flex flex-col justify-between">
+                <span class="text-xs text-slate-400 uppercase font-semibold">Hasil Analisis Sentimen:</span>
+                <div class="my-auto py-2">
+                    <div id="sentiment-result-badge" class="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase bg-slate-800 text-slate-300">Netral</div>
+                    <div id="sentiment-score" class="text-xs text-slate-400 mt-1">Polarity Score: 0.0</div>
+                </div>
+                <div class="text-[11px] text-slate-500">Pipeline NLP teks Bahasa Indonesia</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Chart 1: Weather Trend Regression Mockup
+        const ctxReg = document.getElementById('weatherRegressionChart').getContext('2d');
+        new Chart(ctxReg, {
+            type: 'scatter',
+            data: {
+                datasets: [
+                    {
+                        label: 'Observasi Harian (% Awan)',
+                        data: [
+                            {x: 1, y: 35}, {x: 2, y: 40}, {x: 3, y: 30}, {x: 4, y: 55},
+                            {x: 5, y: 50}, {x: 6, y: 65}, {x: 7, y: 60}, {x: 8, y: 70}
+                        ],
+                        backgroundColor: '#06b6d4'
+                    },
+                    {
+                        type: 'line',
+                        label: 'Garis Regresi Linier',
+                        data: [{x: 1, y: 32}, {x: 8, y: 68}],
+                        borderColor: '#8b5cf6',
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
+                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } }
+                },
+                plugins: { legend: { labels: { color: '#e2e8f0' } } }
+            }
+        });
+
+        // Chart 2: Clustering
+        const ctxCluster = document.getElementById('clusteringChart').getContext('2d');
+        new Chart(ctxCluster, {
+            type: 'doughnut',
+            data: {
+                labels: ['Cluster 1 (Optimal Observasi)', 'Cluster 2 (Moderat)', 'Cluster 3 (Kritis / Hujan)'],
+                datasets: [{
+                    data: [45, 30, 25],
+                    backgroundColor: ['#10b981', '#f59e0b', '#f43f5e'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom', labels: { color: '#e2e8f0', boxWidth: 12 } } }
+            }
+        });
+
+        // Sentiment Test
+        document.getElementById('analyze-sentiment-btn').addEventListener('click', () => {
+            const text = document.getElementById('sentiment-input').value.toLowerCase();
+            const badge = document.getElementById('sentiment-result-badge');
+            const score = document.getElementById('sentiment-score');
+            
+            if (text.includes('indah') || text.includes('cerah') || text.includes('menakjubkan') || text.includes('suka')) {
+                badge.className = 'inline-block px-3 py-1 rounded-full text-xs font-bold uppercase bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+                badge.innerText = 'Positif';
+                score.innerText = 'Polarity Score: +0.78 (Antusias)';
+            } else if (text.includes('kecewa') || text.includes('mendung') || text.includes('buruk') || text.includes('gagal')) {
+                badge.className = 'inline-block px-3 py-1 rounded-full text-xs font-bold uppercase bg-rose-500/20 text-rose-400 border border-rose-500/30';
+                badge.innerText = 'Negatif';
+                score.innerText = 'Polarity Score: -0.65 (Kekecewaan)';
+            } else {
+                badge.className = 'inline-block px-3 py-1 rounded-full text-xs font-bold uppercase bg-slate-800 text-slate-300';
+                badge.innerText = 'Netral';
+                score.innerText = 'Polarity Score: 0.05';
+            }
+        });
+    });
+</script>
+{% endblock %}

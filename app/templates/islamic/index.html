@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}Astronomi Islam & Falak - AstroLife{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <!-- Header -->
+    <div>
+        <h1 class="text-3xl font-bold text-white flex items-center gap-3">
+            <i data-lucide="compass" class="w-8 h-8 text-emerald-400"></i>
+            Islamic Astronomy &amp; Timekeeping (Ilmu Falak)
+        </h1>
+        <p class="text-sm text-slate-400 mt-1">
+            Jadwal salat berbasis astronomi, rekomendasi hari puasa sunah, dan perhitungan presisi waktu Rasydulqiblat (penentuan arah kiblat menggunakan bayang-bayang Matahari).
+        </p>
+    </div>
+
+    <!-- Rasydulqiblat Special Section -->
+    <div class="glass-panel rounded-2xl p-6 border-emerald-500/30 space-y-4">
+        <div class="flex items-center justify-between">
+            <h3 class="font-bold text-white text-lg flex items-center gap-2">
+                <i data-lucide="sun" class="w-6 h-6 text-amber-400"></i>
+                Fenomena Rasydulqiblat (Istiwa A'zham)
+            </h3>
+            <span class="text-xs px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-semibold border border-emerald-500/30">
+                Akurasi Astronomis
+            </span>
+        </div>
+        
+        <p class="text-sm text-slate-300">
+            Ketika deklinasi Matahari bernilai sama dengan lintang geografis Ka'bah di Makkah (21° 25' LU), posisi Matahari tepat berada di atas Ka'bah saat tengah hari di Makkah. Bayangan semua benda tegak di belahan bumi yang tersinari matahari akan menunjuk langsung ke arah kiblat.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+            <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 space-y-1">
+                <div class="flex justify-between items-center text-xs text-amber-400 font-bold uppercase">
+                    <span>Peristiwa Tahunan I</span>
+                    <span>27 - 28 Mei</span>
+                </div>
+                <div class="text-lg font-bold text-white">16:18 WIB (09:18 UTC)</div>
+                <p class="text-xs text-slate-400">Matahari bergerak ke arah utara menuju titik balik utara.</p>
+            </div>
+            
+            <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 space-y-1">
+                <div class="flex justify-between items-center text-xs text-amber-400 font-bold uppercase">
+                    <span>Peristiwa Tahunan II</span>
+                    <span>15 - 16 Juli</span>
+                </div>
+                <div class="text-lg font-bold text-white">16:27 WIB (09:27 UTC)</div>
+                <p class="text-xs text-slate-400">Matahari bergerak kembali ke arah khatulistiwa dari titik balik utara.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grid: Jadwal Salat & Rekomendasi Puasa -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Jadwal Salat -->
+        <div class="glass-panel rounded-2xl p-6 space-y-4">
+            <div class="flex items-center justify-between">
+                <h3 class="font-bold text-white text-lg flex items-center gap-2">
+                    <i data-lucide="clock" class="w-5 h-5 text-emerald-400"></i> Jadwal Salat Berdasarkan Posisi
+                </h3>
+                <span class="text-xs text-slate-400">Hari ini: 16 Nov 2026</span>
+            </div>
+
+            <div class="space-y-2.5">
+                <div class="flex justify-between items-center p-3 rounded-xl bg-slate-900/60 border border-slate-800">
+                    <span class="text-slate-300 font-medium">Subuh (Fajar Shadiq)</span>
+                    <span class="text-white font-mono font-bold">04:12 WIB</span>
+                </div>
+                <div class="flex justify-between items-center p-3 rounded-xl bg-slate-900/60 border border-slate-800">
+                    <span class="text-slate-300 font-medium">Terbit (Syuruq)</span>
+                    <span class="text-white font-mono font-bold">05:28 WIB</span>
+                </div>
+                <div class="flex justify-between items-center p-3 rounded-xl bg-slate-900/60 border border-slate-800">
+                    <span class="text-slate-300 font-medium">Dzuhur (Zawal)</span>
+                    <span class="text-white font-mono font-bold">11:42 WIB</span>
+                </div>
+                <div class="flex justify-between items-center p-3 rounded-xl bg-slate-900/60 border border-slate-800">
+                    <span class="text-slate-300 font-medium">Ashar</span>
+                    <span class="text-white font-mono font-bold">15:04 WIB</span>
+                </div>
+                <div class="flex justify-between items-center p-3 rounded-xl bg-slate-900/60 border border-slate-800">
+                    <span class="text-slate-300 font-medium">Maghrib (Ghurub)</span>
+                    <span class="text-white font-mono font-bold">17:53 WIB</span>
+                </div>
+                <div class="flex justify-between items-center p-3 rounded-xl bg-slate-900/60 border border-slate-800">
+                    <span class="text-slate-300 font-medium">Isya (Syafaq Ahmar Hilang)</span>
+                    <span class="text-white font-mono font-bold">19:05 WIB</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rekomendasi Puasa Sunah -->
+        <div class="glass-panel rounded-2xl p-6 space-y-4">
+            <h3 class="font-bold text-white text-lg flex items-center gap-2">
+                <i data-lucide="moon" class="w-5 h-5 text-emerald-400"></i> Rekomendasi Puasa Sunah Terdekat
+            </h3>
+            
+            <div class="space-y-3">
+                <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
+                    <div class="flex justify-between text-xs">
+                        <span class="text-emerald-400 font-bold uppercase">Senin - Kamis</span>
+                        <span class="text-slate-400">Rutin Mingguan</span>
+                    </div>
+                    <div class="text-sm font-semibold text-white">Puasa Hari Senin &amp; Kamis</div>
+                    <p class="text-xs text-slate-400">Waktu di mana amalan manusia diangkat dan diperiksa.</p>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
+                    <div class="flex justify-between text-xs">
+                        <span class="text-cyan-400 font-bold uppercase">Ayyamul Bidh</span>
+                        <span class="text-slate-400">13, 14, 15 Hijriah</span>
+                    </div>
+                    <div class="text-sm font-semibold text-white">Puasa Hari-hari Terang (Purnama)</div>
+                    <p class="text-xs text-slate-400">Berkaitan erat dengan posisi bulan purnama pada kalender Hijriah.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

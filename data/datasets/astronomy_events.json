@@ -1,0 +1,82 @@
+[
+  {
+    "id": "evt-2026-11-17-leonid",
+    "date": "2026-11-17",
+    "time": "01:30 - 05:00 WIB (Puncak 03:00 WIB)",
+    "title": "Puncak Hujan Meteor Leonid",
+    "type": "Hujan Meteor",
+    "difficulty": "naked_eye",
+    "difficulty_label": "Mata Telanjang",
+    "sky_position": {
+      "direction": "Timur Laut (Northeast)",
+      "altitude": "35° - 60° di atas ufuk",
+      "constellation": "Rasi Leo"
+    },
+    "description": "Hujan meteor tahunan yang berasal dari sisa komet Tempel-Tuttle. Terlihat terbaik menjelang dini hari ketika rasi Leo telah terbit cukup tinggi di langit timur.",
+    "source": "in-the-sky.org / IMO"
+  },
+  {
+    "id": "evt-2026-11-24-fullmoon",
+    "date": "2026-11-24",
+    "time": "18:15 - 05:30 WIB (Sepanjang Malam)",
+    "title": "Bulan Purnama (Full Beaver Moon)",
+    "type": "Fase Bulan",
+    "difficulty": "naked_eye",
+    "difficulty_label": "Mata Telanjang",
+    "sky_position": {
+      "direction": "Timur (terbit) menuju Barat (terbenam)",
+      "altitude": "Hingga 85° (melintas zenit)",
+      "constellation": "Rasi Taurus"
+    },
+    "description": "Piringan Bulan tersinari 100%. Terbit tepat saat Matahari terbenam dan dapat dinikmati langsung tanpa alat bantu.",
+    "source": "in-the-sky.org"
+  },
+  {
+    "id": "evt-2026-12-04-conj-jup",
+    "date": "2026-12-04",
+    "time": "19:00 - 22:30 WIB",
+    "title": "Konjungsi Bulan Sabit & Planet Jupiter",
+    "type": "Konjungsi Planet",
+    "difficulty": "binoculars",
+    "difficulty_label": "Binokular / Teleskop Kecil",
+    "sky_position": {
+      "direction": "Barat Daya (Southwest)",
+      "altitude": "45° di atas ufuk barat daya",
+      "constellation": "Rasi Gemini"
+    },
+    "description": "Bulan dan Jupiter tampak berdampingan dengan jarak sudut ~2.5°. Dengan binokular 7x50 atau 10x50, 4 satelit Galilean Jupiter (Io, Europa, Ganymede, Callisto) terlihat jelas.",
+    "source": "in-the-sky.org"
+  },
+  {
+    "id": "evt-2026-12-14-geminids",
+    "date": "2026-12-14",
+    "time": "21:00 - 04:30 WIB (Puncak 02:00 WIB)",
+    "title": "Puncak Hujan Meteor Geminid",
+    "type": "Hujan Meteor",
+    "difficulty": "naked_eye",
+    "difficulty_label": "Mata Telanjang",
+    "sky_position": {
+      "direction": "Timur Laut (East-Northeast)",
+      "altitude": "40° - 75° di atas cakrawala",
+      "constellation": "Rasi Gemini"
+    },
+    "description": "Raja hujan meteor tahunan dengan potensi hingga 120 meteor per jam. Meteor bergerak lambat dan sering meninggalkan jejak bercahaya indah di langit.",
+    "source": "in-the-sky.org / IMO"
+  },
+  {
+    "id": "evt-2026-12-18-saturn-rings",
+    "date": "2026-12-18",
+    "time": "18:45 - 21:30 WIB",
+    "title": "Pengamatan Cincin & Satelit Titan Saturnus",
+    "type": "Planet",
+    "difficulty": "telescope",
+    "difficulty_label": "Teleskop Minimal 70mm",
+    "sky_position": {
+      "direction": "Barat (West)",
+      "altitude": "30° di atas ufuk barat",
+      "constellation": "Rasi Aquarius"
+    },
+    "description": "Posisi ideal pengamatan Saturnus di langit barat selepas senja. Membutuhkan teleskop pembesaran minimal 40x untuk melihat celah Cassini dan cincinnya.",
+    "source": "in-the-sky.org"
+  }
+]

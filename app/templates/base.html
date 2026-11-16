@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AstroLife - Platform Eksplorasi Astronomi & Kalender{% endblock %}</title>
+    
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        space: {
+                            950: '#070913',
+                            900: '#0c1021',
+                            800: '#141b36',
+                            700: '#1e2952',
+                            600: '#2d3c73',
+                            accent: '#6366f1',
+                            gold: '#f59e0b',
+                            teal: '#06b6d4'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Chart.js / Plotly for Data Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        body {
+            background-color: #070913;
+            color: #e2e8f0;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(6, 182, 212, 0.06) 0%, transparent 40%);
+        }
+        .glass-panel {
+            background: rgba(18, 24, 48, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+    </style>
+    {% block head %}{% endblock %}
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-indigo-500 selection:text-white">
+
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-50 glass-panel border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Brand / Logo -->
+                <a href="{{ url_for('main.index') }}" class="flex items-center space-x-3 group">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-cyan-400 flex items-center justify-center shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform">
+                        <i data-lucide="telescope" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-indigo-200 to-cyan-300">AstroLife</span>
+                        <span class="text-xs text-indigo-400 block -mt-1 tracking-wider uppercase">Astronomy & Calendars</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex items-center space-x-1 text-sm font-medium">
+                    <a href="{{ url_for('main.index') }}" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition-colors flex items-center gap-1.5 text-slate-300">
+                        <i data-lucide="home" class="w-4 h-4"></i> Beranda
+                    </a>
+                    <a href="{{ url_for('observation.index') }}" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition-colors flex items-center gap-1.5 text-slate-300">
+                        <i data-lucide="sparkles" class="w-4 h-4 text-cyan-400"></i> Observasi & Cuaca
+                    </a>
+                    <a href="{{ url_for('calendar.index') }}" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition-colors flex items-center gap-1.5 text-slate-300">
+                        <i data-lucide="calendar" class="w-4 h-4 text-amber-400"></i> Lab Kalender
+                    </a>
+                    <a href="{{ url_for('islamic.index') }}" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition-colors flex items-center gap-1.5 text-slate-300">
+                        <i data-lucide="compass" class="w-4 h-4 text-emerald-400"></i> Astronomi Islam & Kiblat
+                    </a>
+                    <a href="{{ url_for('analytics.index') }}" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition-colors flex items-center gap-1.5 text-slate-300">
+                        <i data-lucide="bar-chart-3" class="w-4 h-4 text-violet-400"></i> Analisis & ML
+                    </a>
+                    <a href="{{ url_for('bot.index') }}" class="px-3 py-2 rounded-lg hover:text-white hover:bg-slate-800/60 transition-colors flex items-center gap-1.5 text-slate-300">
+                        <i data-lucide="bot" class="w-4 h-4 text-pink-400"></i> AstroBot
+                    </a>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 focus:outline-none">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-4 pt-2 pb-4 space-y-1 bg-space-900 border-b border-slate-800">
+            <a href="{{ url_for('main.index') }}" class="block px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800">Beranda</a>
+            <a href="{{ url_for('observation.index') }}" class="block px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800">Observasi & Cuaca</a>
+            <a href="{{ url_for('calendar.index') }}" class="block px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800">Lab Kalender</a>
+            <a href="{{ url_for('islamic.index') }}" class="block px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800">Astronomi Islam & Kiblat</a>
+            <a href="{{ url_for('analytics.index') }}" class="block px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800">Analisis & ML</a>
+            <a href="{{ url_for('bot.index') }}" class="block px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800">AstroBot</a>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/80 bg-space-950/80 py-8 mt-12 text-center text-sm text-slate-500">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center space-x-2">
+                <i data-lucide="moon-star" class="w-4 h-4 text-indigo-400"></i>
+                <span class="font-semibold text-slate-400">AstroLife Platform</span>
+                <span>— Eksplorasi Fenomena Langit, Falak & Sistem Penanggalan</span>
+            </div>
+            <div>
+                <span>Dikembangkan dengan Python Flask & Machine Learning</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Initialize Lucide Icons & UI Handlers -->
+    <script>
+        lucide.createIcons();
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

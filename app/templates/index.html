@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+
+{% block title %}AstroLife - Platform Eksplorasi Astronomi & Kalender{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
+
+    <!-- Hero Section -->
+    <section class="relative rounded-3xl glass-panel p-8 sm:p-12 overflow-hidden border border-indigo-500/20 shadow-2xl shadow-indigo-950/50">
+        <div class="absolute -right-16 -top-16 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -left-16 -bottom-16 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        
+        <div class="relative z-10 max-w-3xl space-y-6">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-400/30 text-indigo-300 text-xs font-semibold tracking-wide uppercase">
+                <span class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
+                Platform Astronomi Terintegrasi
+            </div>
+            
+            <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                Eksplorasi Langit Modern, Kalender Historis, dan Perhitungan Falak.
+            </h1>
+            
+            <p class="text-base sm:text-lg text-slate-300 leading-relaxed">
+                AstroLife memadukan informasi fenomena langit dari <span class="text-cyan-400 font-medium">in-the-sky.org</span>, prakiraan cuaca, konversi kalender lintas tradisi (Masehi, Hijriah, Jawa Mataraman, Jyotiṣa), perhitungan hisab waktu ibadah &amp; Rasydulqiblat, serta analisis data berbasis Machine Learning.
+            </p>
+            
+            <div class="flex flex-wrap gap-4 pt-2">
+                <a href="{{ url_for('observation.index') }}" class="px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-500 text-white font-semibold shadow-lg shadow-indigo-600/30 hover:opacity-95 transition-opacity flex items-center gap-2">
+                    <i data-lucide="sparkles" class="w-5 h-5"></i> Rencana Pengamatan
+                </a>
+                <a href="{{ url_for('calendar.index') }}" class="px-6 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold border border-slate-700 transition-colors flex items-center gap-2">
+                    <i data-lucide="calendar" class="w-5 h-5 text-amber-400"></i> Buka Lab Kalender
+                </a>
+                <a href="{{ url_for('bot.index') }}" class="px-6 py-3 rounded-xl bg-slate-800/60 hover:bg-slate-700/60 text-slate-300 font-medium border border-slate-700/60 transition-colors flex items-center gap-2">
+                    <i data-lucide="bot" class="w-5 h-5 text-pink-400"></i> Tanya AstroBot
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5 Core Pillars Grid -->
+    <section class="space-y-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <h2 class="text-2xl font-bold text-white tracking-tight">Pilar Fitur Utama AstroLife</h2>
+                <p class="text-sm text-slate-400">Arsitektur terintegrasi yang menggabungkan web scraping, falak, dan data science.</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <!-- Card 1: Observation Planner -->
+            <div class="glass-panel rounded-2xl p-6 hover:border-cyan-500/40 transition-all group flex flex-col justify-between">
+                <div class="space-y-4">
+                    <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform">
+                        <i data-lucide="sparkles" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-white group-hover:text-cyan-300 transition-colors">Astronomy Explorer &amp; Observation</h3>
+                        <p class="text-sm text-slate-400 mt-1">
+                            Scraping peristiwa astronomi (fase bulan, meteor shower, gerhana) dari in-the-sky.org dipadukan dengan prakiraan cuaca &amp; skor kelayakan observasi.
+                        </p>
+                    </div>
+                    <div class="flex flex-wrap gap-1.5 pt-1">
+                        <span class="text-xs px-2.5 py-1 rounded-md bg-slate-800 text-slate-300">in-the-sky.org</span>
+                        <span class="text-xs px-2.5 py-1 rounded-md bg-slate-800 text-slate-300">Weather API</span>
+                        <span class="text-xs px-2.5 py-1 rounded-md bg-cyan-900/40 text-cyan-300">Sky Quality Index</span>
+                    </div>
+                </div>
+                <a href="{{ url_for('observation.index') }}" class="mt-6 inline-flex items-center text-sm font-semibold text-cyan-400 hover:text-cyan-300 gap-1">
+                    Jelajahi Pengamatan <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
+            </div>
+
+            <!-- Card 2: Calendar Laboratory -->
+            <div class="glass-panel rounded-2xl p-6 hover:border-amber-500/40 transition-all group flex flex-col justify-between">
+                <div class="space-y-4">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform">
+                        <i data-lucide="calendar" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-white group-hover:text-amber-300 transition-colors">Calendar Laboratory</h3>
+                        <p class="text-sm text-slate-400 mt-1">
+                            Laboratorium penanggalan komparatif: Masehi, Hijriah Aritmetis, Jawa Mataraman (Pasaran, Wuku, Windu), dan unsur astronomi Jyotiṣa / Jawa Kuno.
+                        </p>
+                    </div>
+                    <div class="flex flex-wrap gap-1.5 pt-1">
+                        <span class="text-xs px-2.5 py-1 rounded-md bg-slate-800 text-slate-300">JDN Engine</span>
+                        <span class="text-xs px-2.5 py-1 rounded-md bg-slate-800 text-slate-300">Jawa Mataraman</span>
+                        <span class="text-xs px-2.5 py-1 rounded-md bg-amber-900/40 text-amber-300">Jyotiṣa</span>
+                    </div>
+                </div>
+                <a href="{{ url_for('calendar.index') }}" class="mt-6 inline-flex items-center text-sm font-semibold text-amber-400 hover:text-amber-300 gap-1">
+                    Buka Laboratorium <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
+            </div>
+
+            <!-- Card 3: Islamic Astronomy & Timekeeping -->
+            <div class="glass-panel rounded-2xl p-6 hover:border-emerald-500/40 transition-all group flex flex-col justify-between">
+                <div class="space-y-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
+                        <i data-lucide="compass" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-white group-hover:text-emerald-300 transition-colors">Islamic Astronomy &amp; Falak</h3>
+                        <p class="text-sm text-slate-400 mt-1">
+                            Hisab jadwal waktu salat, rekomendasi puasa sunah (Senin-Kamis &amp; Ayyamul Bidh), serta perhitungan presisi Rasydulqiblat tahunan &amp; harian.
+                        </p>
+                    </div>
+                    <div class="flex flex-wrap gap-1.5 pt-1">
+                        <span class="text-xs px-2.5 py-1 rounded-md bg-slate-800 text-slate-300">Waktu Salat</span>
+                        <span class="text-xs px-2.5 py-1 rounded-md bg-slate-800 text-slate-300">Rasydulqiblat</span>
+                        <span class="text-xs px-2.5 py-1 rounded-md bg-emerald-900/40 text-emerald-300">Puasa Sunah</span>
+                    </div>
+                </div>
+                <a href="{{ url_for('islamic.index') }}" class="mt-6 inline-flex items-center text-sm font-semibold text-emerald-400 hover:text-emerald-300 gap-1">
+                    Cek Waktu &amp; Kiblat <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
+            </div>
+
+            <!-- Card 4: Data Analytics & ML -->
+            <div class="glass-panel rounded-2xl p-6 hover:border-violet-500/40 transition-all group flex flex-col justify-between">
+                <div class="space-y-4">
+                    <div class="w-12 h-12 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center text-violet-400 group-hover:scale-110 transition-transform">
+                        <i data-lucide="bar-chart-3" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-white group-hover:text-violet-300 transition-colors">Data Analytics &amp; Machine Learning</h3>
+                        <p class="text-sm text-slate-400 mt-1">
+                            Penerapan Linear Regression untuk tren cuaca, K-Means Clustering kondisi pengamatan, dan Sentiment Analysis opini publik seputar peristiwa langit.
+                        </p>
+                    </div>
+                    <div class="flex flex-wrap gap-1.5 pt-1">
+                        <span class="text-xs px-2.5 py-1 rounded-md bg-slate-800 text-slate-300">Linear Regression</span>
+                        <span class="text-xs px-2.5 py-1 rounded-md bg-slate-800 text-slate-300">Clustering</span>
+                        <span class="text-xs px-2.5 py-1 rounded-md bg-violet-900/40 text-violet-300">Sentiment NLP</span>
+                    </div>
+                </div>
+                <a href="{{ url_for('analytics.index') }}" class="mt-6 inline-flex items-center text-sm font-semibold text-violet-400 hover:text-violet-300 gap-1">
+                    Lihat Analitik <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
+            </div>
+
+            <!-- Card 5: AstroBot Knowledge Center -->
+            <div class="glass-panel rounded-2xl p-6 hover:border-pink-500/40 transition-all group flex flex-col justify-between">
+                <div class="space-y-4">
+                    <div class="w-12 h-12 rounded-xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-400 group-hover:scale-110 transition-transform">
+                        <i data-lucide="bot" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-white group-hover:text-pink-300 transition-colors">AstroBot Knowledge Center</h3>
+                        <p class="text-sm text-slate-400 mt-1">
+                            Chatbot asisten interaktif berbasis retrieval dan aturan pengetahuan astronomi, glosarium istilah, dan artikel edukasi budaya.
+                        </p>
+                    </div>
+                    <div class="flex flex-wrap gap-1.5 pt-1">
+                        <span class="text-xs px-2.5 py-1 rounded-md bg-slate-800 text-slate-300">Interactive Bot</span>
+                        <span class="text-xs px-2.5 py-1 rounded-md bg-slate-800 text-slate-300">Knowledge Base</span>
+                        <span class="text-xs px-2.5 py-1 rounded-md bg-pink-900/40 text-pink-300">Retrieval</span>
+                    </div>
+                </div>
+                <a href="{{ url_for('bot.index') }}" class="mt-6 inline-flex items-center text-sm font-semibold text-pink-400 hover:text-pink-300 gap-1">
+                    Mulai Chat <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
+            </div>
+
+            <!-- Card 6: Project Info & Course Meta -->
+            <div class="glass-panel rounded-2xl p-6 border-dashed border-slate-700/80 flex flex-col justify-between">
+                <div class="space-y-4">
+                    <div class="w-12 h-12 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-indigo-400">
+                        <i data-lucide="layers" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-white">Status Arsitektur Sistem</h3>
+                        <p class="text-sm text-slate-400 mt-1">
+                            Inisialisasi arsitektur Flask modular selesai. Modul komputasi siap menerima logika JavaScript untuk dikonversikan ke Python.
+                        </p>
+                    </div>
+                    <div class="space-y-1.5 text-xs text-slate-400">
+                        <div class="flex items-center justify-between">
+                            <span>Flask Blueprints</span>
+                            <span class="text-emerald-400 font-semibold">Tersedia (6 Modul)</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span>Scraper in-the-sky</span>
+                            <span class="text-emerald-400 font-semibold">Siap Uji</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span>Modul Falak &amp; Kalender</span>
+                            <span class="text-amber-400 font-semibold">Menunggu Modul JS</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-6 text-xs text-slate-500">
+                    AstroLife &copy; 2026 - Mata Kuliah Aplikasi Web
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+</div>
+{% endblock %}
