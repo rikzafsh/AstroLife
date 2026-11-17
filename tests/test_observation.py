@@ -16,11 +16,15 @@ EVENTS = {e['id']: e for e in scrape_in_the_sky_events(2026, 11)}
 LEONID = next(e for e in EVENTS.values() if 'Leonid' in e['title'])
 
 
-def payload(cloud, rain=5, off=25200, start=datetime(2026, 11, 15)):
+def by_title(part, peak_prefix=None):
+    return next(e for e in EVENTS.values() if part in e['title'] and (peak_prefix is None or (e['peak_time'] or '').startswith(peak_prefix)))
+
+
+def payload(cloud, rain=5, off=25200, start=datetime(2026, 11, 15), days=17):
     cols = {k: [] for k in ['temperature_2m', 'relative_humidity_2m', 'precipitation_probability', 'precipitation',
                             'cloud_cover', 'cloud_cover_low', 'cloud_cover_mid', 'cloud_cover_high', 'visibility']}
     times = []
-    for i in range(17 * 24):
+    for i in range(days * 24):
         t = start + timedelta(hours=i)
         c = cloud(t) if callable(cloud) else cloud
         times.append(t.strftime('%Y-%m-%dT%H:00'))
@@ -67,8 +71,68 @@ class Categories(unittest.TestCase):
 
     def test_observation_time_rules(self):
         self.assertEqual(LEONID['obs_time'], '2026-11-18T02:00')                       # meteor tanpa jam: 02:00
-        self.assertEqual(EVENTS['evt-20261102-2']['obs_time'], '2026-11-02T20:39')     # puncak malam hari
-        self.assertTrue(EVENTS['evt-20261102-4']['obs_time'].startswith('2026-11-03T04'))  # puncak setelah fajar
+        self.assertEqual(by_title('Close approach of the Moon and Mars', '2026-11-02')['obs_time'], '2026-11-02T20:39')     # puncak malam hari
+        self.assertTrue(by_title('Close approach of the Moon and Jupiter', '2026-11-03')['obs_time'].startswith('2026-11-03T04'))  # puncak setelah fajar
+
+
+class DataIntegrity(unittest.TestCase):
+    """Menjawab: apakah data tampilan benar-benar dari sumber, tanpa isian karangan?"""
+    RAW = None
+
+    def test_no_invented_placeholders(self):
+        import json
+        banned = ['Langit Malam', 'Jalur Ekliptika', 'Sesuai peta bintang', 'Di atas cakrawala',
+                  'Di atas ufuk', 'Malam hari', 'Astronomical event:']
+        blob = json.dumps(list(EVENTS.values()), ensure_ascii=False)
+        for b in banned:
+            self.assertNotIn(b, blob)
+
+    def test_missing_fields_are_marked_not_filled(self):
+        e = by_title('Moon at Last Quarter')       # sumber tidak memuat ketinggian/arah
+        self.assertEqual(e['sky_position']['altitude'], 'Tidak dirilis')
+        self.assertEqual(e['sky_position']['direction'], 'Tidak dirilis')
+
+    def test_parser_takes_timezone_only_from_page(self):
+        from app.services.detail_parser import parse_in_the_sky_detail_html as P
+        h = ('<p class="widetitle">X - In-The-Sky.org</p><div class="link_green">Mon, 02 Nov 2026 at 20:39 WIB</div>'
+             '<div class="newsbody"><p>x</p><p>From Jakarta, rising at 00:55 (WIB), altitude of 58° above the '
+             'north-eastern horizon, dawn breaks at around 05:12</p></div>')
+        r = P(h)
+        self.assertEqual((r['rising_time'], r['fading_time']), ('00:55 (WIB)', '05:12 (WIB)'))
+        r = P(h.replace('(WIB)', '(UTC)').replace('20:39 WIB', '20:39 UTC'))
+        self.assertEqual((r['rising_time'], r['fading_time']), ('00:55 (UTC)', '05:12 (UTC)'))   # tidak dipaksa WIB
+        r = P(h.replace(' (WIB)', '').replace('20:39 WIB', '20:39'))
+        self.assertEqual((r['rising_time'], r['fading_time']), ('00:55', '05:12'))               # tanpa zona -> tanpa label
+        self.assertIsNone(r['difficulty_level'])                                                 # tanpa default level 1
+
+    def test_morning_events_not_scored_in_the_evening(self):
+        for part in ['Mercury at dichotomy', 'Mercury at greatest elongation west', 'Mercury at highest altitude in morning']:
+            e = by_title(part)
+            self.assertTrue(e['obs_time'][11:13] in ('04', '05'), (part, e['obs_time']))
+
+    def test_assumed_hours_are_flagged(self):
+        for e in EVENTS.values():
+            if not e['peak_time'] and e['obs_basis'] != 'transit':
+                self.assertTrue(e['obs_assumed'], e['title'])
+            if e['obs_basis'] in ('peak', 'transit'):
+                self.assertFalse(e['obs_assumed'])
+        self.assertEqual(by_title('Pleiades')['obs_time'], '2026-11-18T23:50')                  # kulminasi dari sumber
+
+
+class SameMomentAsEvent(unittest.TestCase):
+    def test_forecast_hour_equals_displayed_hour_for_every_event(self):
+        """Untuk KEDUA-PULUH-LIMA event: jam prakiraan (waktu lokal WIB) == jam yang ditampilkan di kartu."""
+        checked = 0
+        for e in EVENTS.values():
+            obs = datetime.strptime(e['obs_time'], '%Y-%m-%dT%H:%M')
+            now = obs - timedelta(days=1)                 # selalu di dalam jangkauan prakiraan
+            with net(payload(30, start=datetime(2026, 10, 31), days=36)):
+                w = pl.evaluate_event(e, -6.2088, 106.8456, None, now - timedelta(hours=7))['weather']   # now dalam UTC
+            self.assertTrue(w['available'], e['title'])
+            expect = (obs + timedelta(minutes=30)).replace(minute=0)     # jam terdekat
+            self.assertEqual(w['valid_local'], expect.strftime('%Y-%m-%d %H:%M'), e['title'])
+            checked += 1
+        self.assertEqual(checked, len(EVENTS))
 
 
 class Moon(unittest.TestCase):
@@ -123,7 +187,7 @@ class Weather(unittest.TestCase):
 
     def test_past_event_unavailable(self):
         with net(payload(10)):
-            r = pl.evaluate_event(EVENTS['evt-20261102-2'], -6.2, 106.8, None, NOW)
+            r = pl.evaluate_event(by_title('Close approach of the Moon and Mars', '2026-11-02'), -6.2, 106.8, None, NOW)
         self.assertTrue(r['is_past'])
         self.assertIsNone(r['feasibility']['score'])
 

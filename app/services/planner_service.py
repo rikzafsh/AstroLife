@@ -72,20 +72,20 @@ def calculate_observation_feasibility(weather: dict, difficulty: str = 'naked_ey
 
     meteor = 'meteor' in event_type.lower()
     if difficulty == 'telescope':
-        cloud_w, hum_w = 0.65, 0.25
+        cloud_w, hum_w = 0.90, 0.25
     elif meteor:
-        cloud_w, hum_w = 0.60, 0.15
+        cloud_w, hum_w = 0.85, 0.15
     elif difficulty == 'binoculars':
-        cloud_w, hum_w = 0.50, 0.20
+        cloud_w, hum_w = 0.75, 0.20
     else:
-        cloud_w, hum_w = 0.40, 0.10
+        cloud_w, hum_w = 0.65, 0.10
 
     total = weather.get('cloud_cover_pct')
     total = 50.0 if total is None else float(total)
     low, mid, high = weather.get('cloud_low'), weather.get('cloud_mid'), weather.get('cloud_high')
     if None not in (low, mid, high):
         layered = 0.55 * low + 0.30 * mid + 0.15 * high
-        eff_cloud = 0.5 * total + 0.5 * layered
+        eff_cloud = 0.75 * total + 0.25 * layered
     else:
         eff_cloud = total
     p_rain = weather.get('precipitation_prob') or 0
@@ -186,7 +186,7 @@ def plan(lat: float, lon: float, instrument: str = None, year: int = None, month
         f = r['feasibility']
         items.append({
             'id': ev['id'], 'title': ev['title'], 'type': ev['type'], 'date': ev['date'],
-            'obs_time_wib': r.get('obs_time_wib'), 'is_past': r.get('is_past', False),
+            'obs_time_wib': r.get('obs_time_wib'), 'obs_assumed': ev.get('obs_assumed', False), 'is_past': r.get('is_past', False),
             'needs_better_instrument': r.get('needs_better_instrument', False),
             'required_instrument': r.get('required_instrument'),
             'score': f['score'], 'status': f['status'], 'color': f['color'], 'confidence': f['confidence'],

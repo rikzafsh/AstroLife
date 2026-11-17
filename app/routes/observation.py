@@ -88,7 +88,7 @@ def api_event_forecast():
     if not event:
         return jsonify({'status': 'error', 'message': 'Fenomena tidak ditemukan.'}), 404
     result = planner.evaluate_event(event, lat, lon, data.get('instrument'))
-    result['event'] = {k: event[k] for k in ('id', 'title', 'type', 'date', 'obs_note', 'peak_time')}
+    result['event'] = {k: event[k] for k in ('id', 'title', 'type', 'date', 'date_wib', 'obs_note', 'peak_time', 'obs_basis', 'obs_assumed')}
     return jsonify({'status': 'success', **result})
 
 
@@ -141,7 +141,7 @@ def api_sync():
         try:
             from scripts.scrape_playwright import run_multi_level_scraper
             # Jalankan multi-level scraper dengan Edge di background
-            run_multi_level_scraper(year=sync_year, month=sync_month, max_details=25, headless=False)
+            run_multi_level_scraper(year=sync_year, month=sync_month, max_details=None, headless=False)
             with sync_lock:
                 sync_state['last_status'] = 'success'
                 sync_state['message'] = 'Sinkronisasi berhasil! Data astronomi telah diperbarui.'

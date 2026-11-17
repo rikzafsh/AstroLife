@@ -405,7 +405,7 @@
                         <!-- Top Row: Date & Instrument Badge -->
                         <div class="flex items-center justify-between gap-2 text-xs">
                             <span class="text-cyan-400 font-bold flex items-center gap-1 font-mono">
-                                <i data-lucide="calendar" class="w-3.5 h-3.5"></i> ${item.date}
+                                <i data-lucide="calendar" class="w-3.5 h-3.5"></i> ${item.date_wib || item.date}
                             </span>
                             ${scoreBadge(item.id)}
                             <span class="px-2.5 py-0.5 rounded-full bg-${diffColor}-500/10 text-${diffColor}-300 border border-${diffColor}-500/30 text-[11px] font-semibold flex items-center gap-1">
@@ -425,7 +425,12 @@
                         <div class="bg-space-950/70 rounded-xl p-3 border border-slate-800/80 space-y-1.5 text-xs">
                             <div class="flex items-center gap-1.5 text-amber-300 font-semibold">
                                 <i data-lucide="clock" class="w-3.5 h-3.5 flex-shrink-0"></i>
-                                <span>${item.time || 'Malam hari'}</span>
+                                <span>${esc(item.time || 'Jam terbit tidak dirilis sumber')}</span>
+                            </div>
+                            <div class="text-[11px] text-slate-300 space-y-0.5 pt-1.5 border-t border-slate-800/70">
+                                <div><span class="text-slate-500">Puncak:</span> ${item.peak_time ? esc(item.peak_time.replace('T', ' ')) + ' WIB' : '<span class="text-slate-500">jam puncak tidak dirilis</span>'}</div>
+                                <div title="${esc(item.obs_note)}"><span class="text-slate-500">Cuaca dinilai:</span> ${item.obs_time ? esc(item.obs_time.replace('T', ' ')) + ' WIB' : '-'}
+                                    ${item.obs_assumed ? '<span class="ml-1 px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-300 text-[10px] font-semibold">jam asumsi</span>' : (item.obs_basis && item.obs_basis !== 'peak' && item.obs_basis !== 'transit' ? '<span class="ml-1 px-1.5 py-0.5 rounded bg-slate-700 text-slate-300 text-[10px] font-semibold">disesuaikan</span>' : '')}</div>
                             </div>
 
                             <div class="flex items-start gap-1.5 text-slate-300 text-[11px] pt-1.5 border-t border-slate-800/70">

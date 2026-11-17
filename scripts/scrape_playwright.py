@@ -59,8 +59,11 @@ DIFF_LABELS = {
 }
 
 
-def run_multi_level_scraper(year: int = 2026, month: int = 11, max_details: int = 25, headless: bool = False):
-    all_events_dict = {}  # key: url -> { 'url', 'date', 'title', 'diff_level', 'diff_key', 'diff_label' }
+def run_multi_level_scraper(year: int = 2026, month: int = 11, max_details: int = None, headless: bool = False):
+    """max_details=None -> ambil SEMUA event (tidak ada pemotongan diam-diam)."""
+    all_events_dict = {}
+    final_records = []
+    completed = False  # key: url -> { 'url', 'date', 'title', 'diff_level', 'diff_key', 'diff_label' }
 
     print("\n" + "="*70)
     print(f" ASTROLIFE MULTI-LEVEL SCRAPER: in-the-sky.org")
@@ -150,13 +153,18 @@ def run_multi_level_scraper(year: int = 2026, month: int = 11, max_details: int 
             # -------------------------------------------------------------
             # TAHAP 2: Buka masing-masing URL detail (news.php?id=...)
             # -------------------------------------------------------------
-            target_list = list(all_events_dict.values())[:max_details]
-            print(f"\n[Tahap 2/2] Membuka halaman detail untuk {len(target_list)} peristiwa teratas...")
-            
-            final_records = []
+            # Urut kronologis agar ID stabil; pemotongan (jika diminta) dilaporkan, tidak diam-diam.
+            target_list = sorted(all_events_dict.values(), key=lambda x: (x['date'], x['url']))
+            if max_details is not None and len(target_list) > max_details:
+                print(f"[PERINGATAN] {len(target_list) - max_details} event DIBUANG karena max_details={max_details}.")
+                target_list = target_list[:max_details]
+            print(f"\n[Tahap 2/2] Membuka halaman detail untuk {len(target_list)} peristiwa...")
+            per_date = {}
 
             for idx, item in enumerate(target_list, start=1):
                 print(f"  [{idx:02d}/{len(target_list):02d}] {item['date']} - {item['title'][:40]}...")
+                per_date[item['date']] = per_date.get(item['date'], 0) + 1
+                evt_id = f"evt-{item['date'].replace('-', '')}-{per_date[item['date']]}"
                 
                 try:
                     page.goto(item['url'], timeout=30000, wait_until="commit")
@@ -168,7 +176,7 @@ def run_multi_level_scraper(year: int = 2026, month: int = 11, max_details: int 
 
                     # Gabungkan seluruh atribut riil
                     record = {
-                        'id': f"evt-{item['date'].replace('-', '')}-{idx}",
+                        'id': evt_id,
                         'date': item['date'],
                         'title': details['title'] or item['title'],
                         'difficulty_level': item['difficulty_level'],
@@ -192,38 +200,56 @@ def run_multi_level_scraper(year: int = 2026, month: int = 11, max_details: int 
                 except Exception as err:
                     print(f"     [!] Terjadi kendala pada event ini, menyimpan data dasar: {err}")
                     final_records.append({
-                        'id': f"evt-{item['date'].replace('-', '')}-{idx}",
+                        'id': evt_id,
                         'date': item['date'],
                         'title': item['title'],
                         'difficulty_level': item['difficulty_level'],
                         'difficulty_key': item['difficulty_key'],
                         'difficulty_label': item['difficulty_label'],
                         'url': item['url'],
-                        'source': 'in-the-sky.org'
+                        'source': 'in-the-sky.org',
+                        'detail_failed': True
                     })
 
                 time.sleep(0.5)
+
+            completed = True
 
         except Exception as e:
             print(f"[!] Terjadi kesalahan fatal: {e}")
         finally:
             browser.close()
 
-    # Simpan hasil akhir
-    if final_records:
-        print("\n" + "="*70)
-        print(f"[SUKSES] Menyimpan {len(final_records)} data peristiwa astronomi LENGKAP ke:")
-        print(f"         {OUTPUT_FILE}")
-        
-        with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
-            json.dump(final_records, f, ensure_ascii=False, indent=2)
+    # Simpan hasil akhir: hanya jika SELURUH proses selesai, digabung dengan bulan lain, ditulis atomik.
+    if not completed or not final_records:
+        print("\n[!] Proses tidak selesai penuh. File data TIDAK diubah agar data lama tidak rusak.")
+        return
 
-        cache_file = CACHE_DIR / f"events_{year}_{month:02d}.json"
-        with open(cache_file, "w", encoding="utf-8") as f:
-            json.dump({'timestamp': datetime.now().timestamp(), 'events': final_records}, f, ensure_ascii=False, indent=2)
+    prefix = f"{year}-{month:02d}"
+    scraped_at = datetime.now().isoformat(timespec='seconds')
+    for r in final_records:
+        r['scraped_at'] = scraped_at
 
-        print("Data astronomi resmi in-the-sky.org telah terpasang di sistem AstroLife!\n")
+    existing = []
+    if OUTPUT_FILE.exists():
+        try:
+            existing = json.loads(OUTPUT_FILE.read_text(encoding='utf-8'))
+        except Exception:
+            existing = []
+    kept = [e for e in existing if not str(e.get('date', '')).startswith(prefix)]
+    merged = sorted(kept + final_records, key=lambda e: (e.get('date', ''), e.get('id', '')))
+
+    tmp = OUTPUT_FILE.with_suffix('.json.tmp')
+    tmp.write_text(json.dumps(merged, ensure_ascii=False, indent=2), encoding='utf-8')
+    tmp.replace(OUTPUT_FILE)
+
+    cache_file = CACHE_DIR / f"events_{year}_{month:02d}.json"
+    cache_file.write_text(json.dumps({'timestamp': datetime.now().timestamp(), 'events': final_records},
+                                     ensure_ascii=False, indent=2), encoding='utf-8')
+    failed = sum(1 for r in final_records if r.get('detail_failed'))
+    print("\n" + "=" * 70)
+    print(f"[SUKSES] {len(final_records)} event bulan {prefix} disimpan ({failed} tanpa detail) ke {OUTPUT_FILE}")
 
 
 if __name__ == "__main__":
-    run_multi_level_scraper(year=2026, month=11, max_details=25)
+    run_multi_level_scraper(year=2026, month=11)
