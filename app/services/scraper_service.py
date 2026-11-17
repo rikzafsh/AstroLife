@@ -46,8 +46,29 @@ def determine_event_difficulty(title: str) -> tuple:
 
 
 _MONTHS = {m: i + 1 for i, m in enumerate(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])}
-_PEAK_RE = re.compile(r'(\d{1,2}) ([A-Z][a-z]{2}) (\d{4}) at (\d{1,2}):(\d{2}) WIB')
-_HHMM_RE = re.compile(r'(\d{1,2}):(\d{2})')
+# Toleran terhadap: huruf besar/kecil, ada/tidaknya spasi, "at" / "from", nama bulan penuh.
+_TIME_RE = re.compile(r'(\d{1,2})\s*([A-Za-z]{3})[A-Za-z]*\.?\s*(\d{4})\s*(?:at|from|@)?\s*(\d{1,2}):(\d{2})\s*(WIB|WITA|WIT|UTC|GMT)?', re.I)
+_END_RE = re.compile(r'\bto\s*(\d{1,2}):(\d{2})\s*(WIB|WITA|WIT|UTC|GMT)?', re.I)
+
+
+def parse_event_time(text: str):
+    """
+    Membaca tanggal/jam dari teks halaman in-the-sky, mis.
+      'Mon, 02 Nov 2026 at 20:39 WIB'  atau  'TUE, 03 NOV 2026 FROM 03:45 WIB (20:45 UTC) TO 07:45 WIB'.
+    Mengembalikan {'start','end','tz','mid'} (datetime naive, zona sesuai 'tz') atau None bila tidak terbaca.
+    """
+    m = _TIME_RE.search(text or '')
+    if not m or m.group(2).title() not in _MONTHS:
+        return None
+    start = datetime(int(m.group(3)), _MONTHS[m.group(2).title()], int(m.group(1)), int(m.group(4)), int(m.group(5)))
+    tz = (m.group(6) or '').upper()
+    end = None
+    e = _END_RE.search(text, m.end())
+    if e and (e.group(3) or tz).upper() == tz:
+        end = start.replace(hour=int(e.group(1)), minute=int(e.group(2)))
+        if end < start:
+            end += timedelta(days=1)
+    return {'start': start, 'end': end, 'tz': tz, 'mid': start + (end - start) / 2 if end else start}
 
 
 def _hhmm(text: str):
@@ -89,11 +110,8 @@ def compute_observation_time(raw: dict, title: str, category: str) -> dict:
     morning = ('morning' in text or 'at sunrise' in text or 'before sunrise' in text) and 'evening' not in text
     morning = morning or bool(raw.get('rising_time') and raw.get('fading_time'))
 
-    peak = _PEAK_RE.search(raw.get('peak_event_time', '') or '')
-    peak_dt = None
-    if peak:
-        peak_dt = datetime(int(peak.group(3)), _MONTHS[peak.group(2)], int(peak.group(1)),
-                           int(peak.group(4)), int(peak.group(5)))
+    parsed = parse_event_time(raw.get('peak_event_time', '') or '')
+    peak_dt = parsed['mid'] if parsed and parsed['tz'] == 'WIB' else None   # hanya WIB yang dipakai apa adanya
     try:
         base = datetime(peak_dt.year, peak_dt.month, peak_dt.day) if peak_dt else datetime.strptime(date_str, '%Y-%m-%d')
     except ValueError:

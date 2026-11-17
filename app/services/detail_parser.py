@@ -11,7 +11,7 @@ def parse_in_the_sky_detail_html(html_content: str, url: str = "") -> dict:
     
     # 2. Tanggal & Jam Puncak Event
     link_green = soup.find('div', class_='link_green')
-    peak_time_str = link_green.get_text(strip=True) if link_green else ""
+    peak_time_str = link_green.get_text(' ', strip=True) if link_green else ""   # ' ' menjaga pemisah antar node
     
     # 3. Ikon & Tingkat Kesulitan Resmi (level1_icon.png, dst.)
     # Tidak ada nilai bawaan: bila ikon level tidak ditemukan, field dibiarkan kosong (None)
@@ -45,9 +45,12 @@ def parse_in_the_sky_detail_html(html_content: str, url: str = "") -> dict:
     azimuth_dir = ""
     
     if newsbody:
-        for p in newsbody.find_all('p'):
-            text = p.get_text(strip=True)
-            if 'From Jakarta' in text or 'visible in the' in text:
+        # Prioritas: paragraf yang menyebut Jakarta; cadangan: paragraf visibilitas umum.
+        paras = [p.get_text(' ', strip=True) for p in newsbody.find_all('p')]
+        generic = re.compile(r'(from|in|over) (jakarta|indonesia)|visible (from|in)', re.I)
+        ordered = [t for t in paras if re.search(r'jakarta', t, re.I)] + [t for t in paras if generic.search(t)]
+        for text in ordered[:1]:
+            if True:
                 visibility_p = text
                 
                 # Zona waktu HANYA diambil dari teks halaman (mis. "(WIB)" atau jam puncak); tidak diasumsikan.
@@ -61,9 +64,9 @@ def parse_in_the_sky_detail_html(html_content: str, url: str = "") -> dict:
                     rising_time = r_match.group(1) + (f" ({tz_text})" if tz_text else "")
 
                 # Ketinggian & Arah: "reaching an altitude of 58° above the north-eastern horizon"
-                alt_match = re.search(r'altitude of\s*([0-9]+&deg;|[0-9]+°)\s*above the\s*([a-zA-Z\s-]+?horizon)', text, re.I)
+                alt_match = re.search(r'altitude of\s*([0-9.]+\s*(?:&deg;|°|degrees))\s*above the\s*([a-zA-Z\s-]+?horizon)', text, re.I)
                 if alt_match:
-                    altitude = alt_match.group(1).replace('&deg;', '°')
+                    altitude = re.sub(r'\s*(&deg;|degrees)', '°', alt_match.group(1))
                     azimuth_dir = alt_match.group(2).strip()
 
                 # Jam Fajar: "dawn breaks at around 05:12" (zona waktu mengikuti paragraf yang sama)
@@ -85,12 +88,20 @@ def parse_in_the_sky_detail_html(html_content: str, url: str = "") -> dict:
         if obj_link:
             objects.append(obj_link.get_text(strip=True))
 
-    # 7. Deskripsi Ilmiah Utama
+    # 7. Deskripsi Ilmiah Utama: paragraf bermakna pertama (bukan keterangan gambar/baris kosong)
     summary_desc = ""
+    all_text = ""
     if newsbody:
-        first_p = newsbody.find('p')
-        if first_p:
-            summary_desc = first_p.get_text(strip=True)
+        paras = [p.get_text(' ', strip=True) for p in newsbody.find_all('p')]
+        summary_desc = next((t for t in paras if len(t) > 40), "")
+        all_text = ' '.join(paras)
+
+    # 8. Okultasi: jam hilang (ingress) & muncul kembali (egress) sebagaimana tertulis di halaman
+    tzp = r'(?:\s*(WIB|WITA|WIT|UTC|GMT))?'
+    ing = re.search(r'disappearance[^.]{0,120}?\bat\s*(\d{1,2}:\d{2})' + tzp, all_text, re.I)
+    egr = re.search(r'reappearance[^.]{0,120}?\bat\s*(\d{1,2}:\d{2})' + tzp, all_text, re.I)
+    occ_alt = re.search(r'disappearance[^.]{0,160}?altitude of\s*([0-9.]+)', all_text, re.I)
+    fmt = lambda m: (m.group(1) + (f" ({m.group(2).upper()})" if m.group(2) else "")) if m else ""
 
     return {
         'title': title,
@@ -105,6 +116,9 @@ def parse_in_the_sky_detail_html(html_content: str, url: str = "") -> dict:
         'constellation': constellation,
         'objects': objects,
         'visibility_summary': visibility_p,
+        'occultation_ingress': fmt(ing),
+        'occultation_egress': fmt(egr),
+        'occultation_altitude': occ_alt.group(1) if occ_alt else "",
         'description': summary_desc,
         'url': url
     }

@@ -6,7 +6,7 @@
     "difficulty_level": 5,
     "difficulty_key": "large_telescope",
     "difficulty_label": "Teleskop Besar",
-    "difficulty_alt": "This event is visible through a large telescope from Jakarta.",
+    "difficulty_alt": "This event is visible through a large telescope from New Delhi.",
     "peak_event_time": "Thu, 12 Nov 20265 days ago",
     "rising_time": "",
     "fading_time": "",
@@ -16,11 +16,11 @@
     "objects": [
       "69P/Taylor"
     ],
-    "visibility_summary": "From Jakartaon the day of perihelion it will be visible in the morning sky, becoming accessible around 23:38, when it reaches an altitude of 21° above your eastern horizon. It will then reach its highest point in the sky at 04:01, 70° above your northern horizon. It will be lost to dawn twilight around 04:33, 69° above your north-western horizon.",
+    "visibility_summary": "From New Delhion the day of perihelion it will be visible in the morning sky, becoming accessible around 23:41, when it reaches an altitude of 21° above your eastern horizon. It will then reach its highest point in the sky at 04:29, 74° above your southern horizon. It will be lost to dawn twilight around 05:43, 66° above your south-western horizon.",
     "description": "Comet 69P/Taylor will make its closest approach to the Sun on\n    12 November, at a distance of\n     2.27AU.",
     "url": "https://in-the-sky.org/news.php?id=2026_19_0069P_100",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261101-1",
@@ -29,8 +29,8 @@
     "difficulty_level": 1,
     "difficulty_key": "naked_eye",
     "difficulty_label": "Mata Telanjang (Naked Eye)",
-    "difficulty_alt": "This event is visible to the naked eye from Jakarta.",
-    "peak_event_time": "Mon, 02 Nov 2026 at 03:28 WIB (20:28 UTC)15 days ago",
+    "difficulty_alt": "This event is visible to the naked eye from New Delhi.",
+    "peak_event_time": "Mon, 02 Nov 2026 at 01:58 IST (20:28 UTC)15 days ago",
     "rising_time": "",
     "fading_time": "",
     "altitude": "",
@@ -39,11 +39,11 @@
     "objects": [
       "The Moon"
     ],
-    "visibility_summary": "From Jakarta, it\n\nwill be visible from soon after it rises, at 00:03, until soon before it sets at 11:50.",
+    "visibility_summary": "At sunrise, the ecliptic makes its steepest angle to the horizon at the autumn equinox – in September\n    in the northern hemisphere, and in March in the southern hemisphere. Conversely, it meets the horizon at its\n    shallowest angle at the spring equinox. And so, very thin crescent moons are most visible in the dawn sky\n    in the autumn.",
     "description": "TheMoonwill pass last quarter phase,\n    rising in the middle of the night and appearing prominent in the pre-dawn sky.",
     "url": "https://in-the-sky.org/news.php?id=20261101_08_100",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261101-2",
@@ -52,22 +52,22 @@
     "difficulty_level": 2,
     "difficulty_key": "binoculars",
     "difficulty_label": "Binokular",
-    "difficulty_alt": "This event is easily visible through standard binoculars from Jakarta.",
-    "peak_event_time": "Mon, 02 Nov 2026 at 00:34 WIB (17:34 UTC)15 days ago",
-    "rising_time": "23:56 (WIB)",
-    "fading_time": "04:38 (WIB)",
-    "altitude": "58°",
-    "azimuth_direction": "north-eastern horizon",
+    "difficulty_alt": "This event is easily visible through standard binoculars from New Delhi.",
+    "peak_event_time": "Sun, 01 Nov 2026 at 23:04 IST (17:34 UTC)16 days ago",
+    "rising_time": "23:34 (IST)",
+    "fading_time": "05:39 (IST)",
+    "altitude": "76°",
+    "azimuth_direction": "south-eastern horizon",
     "constellation": "Cancer",
     "objects": [
       "M44",
       "The Moon"
     ],
-    "visibility_summary": "From Jakarta, the\n     pair     will be visible in the dawn sky, rising at 23:56 (WIB) and reaching an altitude of 58° above the north-eastern horizon before fading from view as dawn breaks at around 04:38.",
+    "visibility_summary": "From New Delhi, the\n     pair     will be visible in the dawn sky, rising at 23:34 (IST) and reaching an altitude of 76° above the south-eastern horizon before fading from view as dawn breaks at around 05:39.",
     "description": "The Moon and M44 will make a close approach, passing within a mere 23.1 arcminutes of each other. The Moon will be 22 days old.",
     "url": "https://in-the-sky.org/news.php?id=20261101_15_100",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261102-1",
@@ -76,22 +76,22 @@
     "difficulty_level": 1,
     "difficulty_key": "naked_eye",
     "difficulty_label": "Mata Telanjang (Naked Eye)",
-    "difficulty_alt": "This event is visible to the naked eye from Jakarta.",
-    "peak_event_time": "Mon, 02 Nov 2026 at 20:39 WIB (13:39 UTC)15 days ago",
-    "rising_time": "00:42 (WIB)",
-    "fading_time": "04:57 (WIB)",
-    "altitude": "56°",
-    "azimuth_direction": "north-eastern horizon",
+    "difficulty_alt": "This event is visible to the naked eye from New Delhi.",
+    "peak_event_time": "Mon, 02 Nov 2026 at 19:09 IST (13:39 UTC)15 days ago",
+    "rising_time": "00:25 (IST)",
+    "fading_time": "06:00 (IST)",
+    "altitude": "70°",
+    "azimuth_direction": "south-eastern horizon",
     "constellation": "Leo",
     "objects": [
       "Mars",
       "The Moon"
     ],
-    "visibility_summary": "From Jakarta, the\n     pair     will be visible in the dawn sky, rising at 00:42 (WIB) and reaching an altitude of 56° above the north-eastern horizon before fading from view as dawn breaks at around 04:57.",
-    "description": "The Moon and Mars will make a close approach, passing within a mere 58.0 arcminutes of each other. From some parts of the world, the Moon will pass in front of Mars, creating alunar occultation. The Moon will be 23 days old.",
+    "visibility_summary": "From New Delhi, the\n     pair     will be visible in the dawn sky, rising at 00:25 (IST) and reaching an altitude of 70° above the south-eastern horizon before fading from view as dawn breaks at around 06:00.",
+    "description": "The Moon and Mars will make a close approach, passing within a mere 58.0 arcminutes of each other. From some parts of the world, the Moon will pass in front of Mars, creating alunar occultation. The Moon will be 23 days old.Moon phase calendar",
     "url": "https://in-the-sky.org/news.php?id=20261102_15_100",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261102-2",
@@ -100,22 +100,22 @@
     "difficulty_level": 1,
     "difficulty_key": "naked_eye",
     "difficulty_label": "Mata Telanjang (Naked Eye)",
-    "difficulty_alt": "This event is visible to the naked eye from Jakarta.",
-    "peak_event_time": "Tue, 03 Nov 2026 at 05:45 WIB (22:45 UTC)14 days ago",
-    "rising_time": "00:55 (WIB)",
-    "fading_time": "05:12 (WIB)",
-    "altitude": "58°",
-    "azimuth_direction": "north-eastern horizon",
+    "difficulty_alt": "This event is visible to the naked eye from New Delhi.",
+    "peak_event_time": "Tue, 03 Nov 2026 at 04:15 IST (22:45 UTC)14 days ago",
+    "rising_time": "00:46 (IST)",
+    "fading_time": "06:19 (IST)",
+    "altitude": "69°",
+    "azimuth_direction": "south-eastern horizon",
     "constellation": "Leo",
     "objects": [
       "Jupiter",
       "The Moon"
     ],
-    "visibility_summary": "From Jakarta, the\n     pair     will be visible in the dawn sky, rising at 00:55 (WIB) and reaching an altitude of 58° above the north-eastern horizon before fading from view as dawn breaks at around 05:12.",
-    "description": "The Moon and Jupiter will make a close approach, passing within a mere 29.1 arcminutes of each other. From some parts of the world, the Moon will pass in front of Jupiter, creating alunar occultation. The Moon will be 23 days old.",
+    "visibility_summary": "From New Delhi, the\n     pair     will be visible in the dawn sky, rising at 00:46 (IST) and reaching an altitude of 69° above the south-eastern horizon before fading from view as dawn breaks at around 06:19.",
+    "description": "The Moon and Jupiter will make a close approach, passing within a mere 29.1 arcminutes of each other. From some parts of the world, the Moon will pass in front of Jupiter, creating alunar occultation. The Moon will be 23 days old.Moon phase calendar",
     "url": "https://in-the-sky.org/news.php?id=20261102_15_101",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261102-3",
@@ -124,8 +124,8 @@
     "difficulty_level": 2,
     "difficulty_key": "binoculars",
     "difficulty_label": "Binokular",
-    "difficulty_alt": "This event is easily visible through standard binoculars from Jakarta.",
-    "peak_event_time": "Mon, 02 Nov 2026from19:15 WIB(12:15 UTC)to22:02 WIB(15:02 UTC)15 days ago",
+    "difficulty_alt": "This event is easily visible through standard binoculars from New Delhi.",
+    "peak_event_time": "Mon, 02 Nov 2026from17:45 IST(12:15 UTC)to20:32 IST(15:02 UTC)15 days ago",
     "rising_time": "",
     "fading_time": "",
     "altitude": "",
@@ -138,7 +138,7 @@
     "description": "",
     "url": "https://in-the-sky.org/news.php?id=20261102_16_100",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261102-4",
@@ -147,8 +147,8 @@
     "difficulty_level": 2,
     "difficulty_key": "binoculars",
     "difficulty_label": "Binokular",
-    "difficulty_alt": "This event is easily visible through standard binoculars from Jakarta.",
-    "peak_event_time": "Tue, 03 Nov 2026from03:45 WIB(20:45 UTC)to07:45 WIB(00:45 UTC)14 days ago",
+    "difficulty_alt": "This event is easily visible through standard binoculars from New Delhi.",
+    "peak_event_time": "Tue, 03 Nov 2026from02:15 IST(20:45 UTC)to06:15 IST(00:45 UTC)14 days ago",
     "rising_time": "",
     "fading_time": "",
     "altitude": "",
@@ -161,7 +161,7 @@
     "description": "",
     "url": "https://in-the-sky.org/news.php?id=20261102_16_101",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261102-5",
@@ -170,22 +170,22 @@
     "difficulty_level": 1,
     "difficulty_key": "naked_eye",
     "difficulty_label": "Mata Telanjang (Naked Eye)",
-    "difficulty_alt": "This event is visible to the naked eye from Jakarta.",
-    "peak_event_time": "Mon, 02 Nov 2026 at 21:24 WIB (14:24 UTC)15 days ago",
-    "rising_time": "00:42 (WIB)",
-    "fading_time": "04:57 (WIB)",
-    "altitude": "56°",
-    "azimuth_direction": "north-eastern horizon",
+    "difficulty_alt": "This event is visible to the naked eye from New Delhi.",
+    "peak_event_time": "Mon, 02 Nov 2026 at 19:54 IST (14:24 UTC)15 days ago",
+    "rising_time": "00:25 (IST)",
+    "fading_time": "06:00 (IST)",
+    "altitude": "70°",
+    "azimuth_direction": "south-eastern horizon",
     "constellation": "Leo",
     "objects": [
       "Mars",
       "The Moon"
     ],
-    "visibility_summary": "From Jakarta, the pair will be visible in the dawn sky, rising at 00:42 (WIB) and reaching an altitude of 56° above the north-eastern horizon before fading from view as dawn breaks at around 04:57.",
-    "description": "The Moon and Mars will share the same right ascension, with the Moon passing 1°03' to the south of Mars. The Moon will be 23 days old.",
+    "visibility_summary": "From New Delhi, the pair will be visible in the dawn sky, rising at 00:25 (IST) and reaching an altitude of 70° above the south-eastern horizon before fading from view as dawn breaks at around 06:00.",
+    "description": "The Moon and Mars will share the same right ascension, with the Moon passing 1°03' to the south of Mars. The Moon will be 23 days old.Moon phase calendar",
     "url": "https://in-the-sky.org/news.php?id=20261102_20_100",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261102-6",
@@ -194,22 +194,22 @@
     "difficulty_level": 1,
     "difficulty_key": "naked_eye",
     "difficulty_label": "Mata Telanjang (Naked Eye)",
-    "difficulty_alt": "This event is visible to the naked eye from Jakarta.",
-    "peak_event_time": "Tue, 03 Nov 2026 at 06:09 WIB (23:09 UTC)14 days ago",
-    "rising_time": "00:55 (WIB)",
-    "fading_time": "05:12 (WIB)",
-    "altitude": "58°",
-    "azimuth_direction": "north-eastern horizon",
+    "difficulty_alt": "This event is visible to the naked eye from New Delhi.",
+    "peak_event_time": "Tue, 03 Nov 2026 at 04:39 IST (23:09 UTC)14 days ago",
+    "rising_time": "00:46 (IST)",
+    "fading_time": "06:19 (IST)",
+    "altitude": "69°",
+    "azimuth_direction": "south-eastern horizon",
     "constellation": "Leo",
     "objects": [
       "Jupiter",
       "The Moon"
     ],
-    "visibility_summary": "From Jakarta, the pair will be visible in the dawn sky, rising at 00:55 (WIB) and reaching an altitude of 58° above the north-eastern horizon before fading from view as dawn breaks at around 05:12.",
-    "description": "The Moon and Jupiter will share the same right ascension, with the Moon passing 31' to the south of Jupiter. The Moon will be 23 days old.",
+    "visibility_summary": "From New Delhi, the pair will be visible in the dawn sky, rising at 00:46 (IST) and reaching an altitude of 69° above the south-eastern horizon before fading from view as dawn breaks at around 06:19.",
+    "description": "The Moon and Jupiter will share the same right ascension, with the Moon passing 31' to the south of Jupiter. The Moon will be 23 days old.Go Stargazing",
     "url": "https://in-the-sky.org/news.php?id=20261102_20_101",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261103-1",
@@ -218,8 +218,8 @@
     "difficulty_level": 2,
     "difficulty_key": "binoculars",
     "difficulty_label": "Binokular",
-    "difficulty_alt": "This event is easily visible through standard binoculars from Jakarta.",
-    "peak_event_time": "Tue, 03 Nov 2026from13:59 WIB(06:59 UTC)to17:24 WIB(10:24 UTC)14 days ago",
+    "difficulty_alt": "This event is easily visible through standard binoculars from New Delhi.",
+    "peak_event_time": "Tue, 03 Nov 2026from12:29 IST(06:59 UTC)to15:54 IST(10:24 UTC)14 days ago",
     "rising_time": "",
     "fading_time": "",
     "altitude": "",
@@ -232,7 +232,7 @@
     "description": "",
     "url": "https://in-the-sky.org/news.php?id=20261103_16_100",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261107-1",
@@ -241,8 +241,8 @@
     "difficulty_level": 2,
     "difficulty_key": "binoculars",
     "difficulty_label": "Binokular",
-    "difficulty_alt": "This event is easily visible through standard binoculars from Jakarta.",
-    "peak_event_time": "Sat, 07 Nov 2026from16:26 WIB(09:26 UTC)to18:59 WIB(11:59 UTC)10 days ago",
+    "difficulty_alt": "This event is easily visible through standard binoculars from New Delhi.",
+    "peak_event_time": "Sat, 07 Nov 2026from14:56 IST(09:26 UTC)to17:29 IST(11:59 UTC)10 days ago",
     "rising_time": "",
     "fading_time": "",
     "altitude": "",
@@ -255,7 +255,7 @@
     "description": "",
     "url": "https://in-the-sky.org/news.php?id=20261107_16_100",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261111-1",
@@ -264,8 +264,8 @@
     "difficulty_level": 2,
     "difficulty_key": "binoculars",
     "difficulty_label": "Binokular",
-    "difficulty_alt": "This event is easily visible through standard binoculars from Jakarta.",
-    "peak_event_time": "Wed, 11 Nov 2026from09:24 WIB(02:24 UTC)to13:52 WIB(06:52 UTC)6 days ago",
+    "difficulty_alt": "This event is easily visible through standard binoculars from New Delhi.",
+    "peak_event_time": "Wed, 11 Nov 2026from07:54 IST(02:24 UTC)to12:22 IST(06:52 UTC)6 days ago",
     "rising_time": "",
     "fading_time": "",
     "altitude": "",
@@ -278,7 +278,7 @@
     "description": "",
     "url": "https://in-the-sky.org/news.php?id=20261111_16_100",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261112-1",
@@ -287,7 +287,7 @@
     "difficulty_level": 1,
     "difficulty_key": "naked_eye",
     "difficulty_label": "Mata Telanjang (Naked Eye)",
-    "difficulty_alt": "This event is visible to the naked eye from Jakarta.",
+    "difficulty_alt": "This event is visible to the naked eye from New Delhi.",
     "peak_event_time": "Thu, 12 Nov 20265 days ago",
     "rising_time": "",
     "fading_time": "",
@@ -295,11 +295,11 @@
     "azimuth_direction": "",
     "constellation": "Taurus",
     "objects": [],
-    "visibility_summary": "From Jakarta, the radiant of the shower will appear at a peak altitude of 61° above your horizon, and on the basis of this, we estimate that you may be able to see up to 4 meteors per hour at the shower's peak.",
+    "visibility_summary": "",
     "description": "The Northern Taurid meteor shower will be active from 20 October to 10 December, producing its peak rate\n        of\n        meteors around 12 November.",
     "url": "https://in-the-sky.org/news.php?id=20261112_10_100",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261113-1",
@@ -308,8 +308,8 @@
     "difficulty_level": 2,
     "difficulty_key": "binoculars",
     "difficulty_label": "Binokular",
-    "difficulty_alt": "This event is easily visible through standard binoculars from Jakarta.",
-    "peak_event_time": "Sat, 14 Nov 2026from03:01 WIB(20:01 UTC)to07:39 WIB(00:39 UTC)3 days ago",
+    "difficulty_alt": "This event is easily visible through standard binoculars from New Delhi.",
+    "peak_event_time": "Sat, 14 Nov 2026from01:31 IST(20:01 UTC)to06:09 IST(00:39 UTC)3 days ago",
     "rising_time": "",
     "fading_time": "",
     "altitude": "",
@@ -322,7 +322,7 @@
     "description": "",
     "url": "https://in-the-sky.org/news.php?id=20261113_16_100",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261115-1",
@@ -331,22 +331,22 @@
     "difficulty_level": 1,
     "difficulty_key": "naked_eye",
     "difficulty_label": "Mata Telanjang (Naked Eye)",
-    "difficulty_alt": "This event is visible to the naked eye from Jakarta.",
-    "peak_event_time": "Sun, 15 Nov 2026 at 09:42 WIB (02:42 UTC)2 days ago",
-    "rising_time": "00:13 (WIB)",
-    "fading_time": "04:57 (WIB)",
-    "altitude": "63°",
-    "azimuth_direction": "north-eastern horizon",
+    "difficulty_alt": "This event is visible to the naked eye from New Delhi.",
+    "peak_event_time": "Sun, 15 Nov 2026 at 08:12 IST (02:42 UTC)2 days ago",
+    "rising_time": "00:04 (IST)",
+    "fading_time": "06:11 (IST)",
+    "altitude": "73°",
+    "azimuth_direction": "south-eastern horizon",
     "constellation": "Leo",
     "objects": [
       "Jupiter",
       "Mars"
     ],
-    "visibility_summary": "From Jakarta, the pair will be visible in the dawn sky, rising at 00:13 (WIB) and reaching an altitude of 63° above the north-eastern horizon before fading from view as dawn breaks at around 04:57.",
-    "description": "Jupiter and Mars will share the same right ascension, with Jupiter passing 1°14' to the south of Mars.",
+    "visibility_summary": "From New Delhi, the pair will be visible in the dawn sky, rising at 00:04 (IST) and reaching an altitude of 73° above the south-eastern horizon before fading from view as dawn breaks at around 06:11.",
+    "description": "Jupiter and Mars will share the same right ascension, with Jupiter passing 1°14' to the south of Mars.Go Stargazing",
     "url": "https://in-the-sky.org/news.php?id=20261115_20_100",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261116-1",
@@ -355,22 +355,22 @@
     "difficulty_level": 1,
     "difficulty_key": "naked_eye",
     "difficulty_label": "Mata Telanjang (Naked Eye)",
-    "difficulty_alt": "This event is visible to the naked eye from Jakarta.",
-    "peak_event_time": "Mon, 16 Nov 2026 at 09:04 WIB (02:04 UTC)21 hours ago",
-    "rising_time": "00:09 (WIB)",
-    "fading_time": "04:57 (WIB)",
-    "altitude": "63°",
-    "azimuth_direction": "north-eastern horizon",
+    "difficulty_alt": "This event is visible to the naked eye from New Delhi.",
+    "peak_event_time": "Mon, 16 Nov 2026 at 07:34 IST (02:04 UTC)Yesterday",
+    "rising_time": "00:01 (IST)",
+    "fading_time": "06:12 (IST)",
+    "altitude": "74°",
+    "azimuth_direction": "southern horizon",
     "constellation": "Leo",
     "objects": [
       "Jupiter",
       "Mars"
     ],
-    "visibility_summary": "From Jakarta, the\n     pair     will be visible in the dawn sky, rising at 00:09 (WIB) and reaching an altitude of 63° above the north-eastern horizon before fading from view as dawn breaks at around 04:57.",
-    "description": "The planets Jupiter and Mars will make a close approach, passing within 1°11' of each other.",
+    "visibility_summary": "From New Delhi, the\n     pair     will be visible in the dawn sky, rising at 00:01 (IST) and reaching an altitude of 74° above the southern horizon before fading from view as dawn breaks at around 06:12.",
+    "description": "The planets Jupiter and Mars will make a close approach, passing within 1°11' of each other.Go Stargazing",
     "url": "https://in-the-sky.org/news.php?id=20261116_15_100",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261117-1",
@@ -379,8 +379,8 @@
     "difficulty_level": 1,
     "difficulty_key": "naked_eye",
     "difficulty_label": "Mata Telanjang (Naked Eye)",
-    "difficulty_alt": "This event is visible to the naked eye from Jakarta.",
-    "peak_event_time": "Tue, 17 Nov 2026 at 18:48 WIB (11:48 UTC)12 hours away",
+    "difficulty_alt": "This event is visible to the naked eye from New Delhi.",
+    "peak_event_time": "Tue, 17 Nov 2026 at 17:18 IST (11:48 UTC)5 hours away",
     "rising_time": "",
     "fading_time": "",
     "altitude": "",
@@ -389,11 +389,11 @@
     "objects": [
       "The Moon"
     ],
-    "visibility_summary": "From Jakarta, it\n\nwill be visible from soon after it rises, at 11:48, until soon before it sets at 00:04.",
+    "visibility_summary": "",
     "description": "TheMoonwill pass first quarter phase,\n    appearing prominent in the evening sky and setting in the middle of the night.",
     "url": "https://in-the-sky.org/news.php?id=20261117_08_100",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261118-1",
@@ -402,7 +402,7 @@
     "difficulty_level": 1,
     "difficulty_key": "naked_eye",
     "difficulty_label": "Mata Telanjang (Naked Eye)",
-    "difficulty_alt": "This event is visible to the naked eye from Jakarta.",
+    "difficulty_alt": "This event is visible to the naked eye from New Delhi.",
     "peak_event_time": "Wed, 18 Nov 2026Tomorrow",
     "rising_time": "",
     "fading_time": "",
@@ -410,11 +410,11 @@
     "azimuth_direction": "",
     "constellation": "Leo",
     "objects": [],
-    "visibility_summary": "From Jakarta, the radiant of the shower will appear at a peak altitude of 56° above your horizon, and on the basis of this, we estimate that you may be able to see up to 12 meteors per hour at the shower's peak.",
-    "description": "The Leonid meteor shower will be active from 6 November to 30 November, producing its peak rate\n        of\n        meteors around 18 November.",
+    "visibility_summary": "",
+    "description": "The Leonid meteor shower will be active from 6 November to 30 November, producing its peak rate\n        of\n        meteors around 18 November.Order Calendars",
     "url": "https://in-the-sky.org/news.php?id=20261118_10_100",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261118-2",
@@ -423,21 +423,21 @@
     "difficulty_level": 1,
     "difficulty_key": "naked_eye",
     "difficulty_label": "Mata Telanjang (Naked Eye)",
-    "difficulty_alt": "This event is visible to the naked eye from Jakarta.",
-    "peak_event_time": "Wed, 18 Nov 2026 at 15:55 WIB (08:55 UTC)Tomorrow",
+    "difficulty_alt": "This event is visible to the naked eye from New Delhi.",
+    "peak_event_time": "Wed, 18 Nov 2026 at 14:25 IST (08:55 UTC)Tomorrow",
     "rising_time": "",
     "fading_time": "",
-    "altitude": "17°",
-    "azimuth_direction": "horizon",
+    "altitude": "",
+    "azimuth_direction": "",
     "constellation": "Virgo",
     "objects": [
       "Mercury"
     ],
-    "visibility_summary": "From Jakarta, this apparition will not be one of the most prominent and tricky to observe, reaching a peak altitude of\n\n    17° above the horizon at\n\n    sunrise on\n\n    23 Nov 2026.",
+    "visibility_summary": "",
     "description": "Mercurywill reach half phase in its Nov–Dec 2026\n    morning\n    apparition. It will be shining brightly at mag -0.4.",
     "url": "https://in-the-sky.org/news.php?id=20261118_11_100",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261118-3",
@@ -446,7 +446,7 @@
     "difficulty_level": 1,
     "difficulty_key": "naked_eye",
     "difficulty_label": "Mata Telanjang (Naked Eye)",
-    "difficulty_alt": "This event is visible to the naked eye from Jakarta.",
+    "difficulty_alt": "This event is visible to the naked eye from New Delhi.",
     "peak_event_time": "Wed, 18 Nov 2026Tomorrow",
     "rising_time": "",
     "fading_time": "",
@@ -456,11 +456,11 @@
     "objects": [
       "M45"
     ],
-    "visibility_summary": "From Jakarta, it is visible between 18:58 and 04:43. It will become accessible at around 18:58, when it rises to an altitude of 12° above your north-eastern horizon. It will reach its highest point in the sky at 23:50, 59° above your northern horizon. It will become inaccessible at around 04:43 when it sinks below 12° above your north-western horizon.",
-    "description": "The Pleiades open star cluster(M45; mag 1.3) inTauruswill be well placed in the evening sky in coming weeks.\n\nOn 18 November it\nwillreach its highest point in the skyat around midnight\nlocal time, and on subsequent evenings it will culminate four minutes earlier each day.",
+    "visibility_summary": "From New Delhi, it is visible in the morning sky, becoming accessible around 18:29, when it reaches an altitude of 12° above your eastern horizon. It will then reach its highest point in the sky at 00:22, 85° above your southern horizon. It will be lost to dawn twilight around 06:08, 14° above your western horizon.",
+    "description": "The Pleiades open star cluster(M45; mag 1.3) inTauruswill be well placed in the evening sky in coming weeks.\n\nOn 18 November it\nwillreach its highest point in the skyat around midnight\nlocal time, and on subsequent evenings it will culminate four minutes earlier each day.Go Stargazing",
     "url": "https://in-the-sky.org/news.php?id=20261118_17_100",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261120-1",
@@ -469,8 +469,8 @@
     "difficulty_level": 1,
     "difficulty_key": "naked_eye",
     "difficulty_label": "Mata Telanjang (Naked Eye)",
-    "difficulty_alt": "This event is visible to the naked eye from Jakarta.",
-    "peak_event_time": "Sat, 21 Nov 2026 at 03:02 WIB (20:02 UTC)4 days away",
+    "difficulty_alt": "This event is visible to the naked eye from New Delhi.",
+    "peak_event_time": "Sat, 21 Nov 2026 at 01:32 IST (20:02 UTC)4 days away",
     "rising_time": "",
     "fading_time": "",
     "altitude": "",
@@ -480,11 +480,11 @@
       "Saturn",
       "The Moon"
     ],
-    "visibility_summary": "From Jakarta, the\n     pair     will be visible in the evening sky, becoming accessible around 18:17 (WIB), 57° above your eastern horizon, as dusk fades to darkness. They will then reach their highest point in the sky at 20:24, 82° above your northern horizon. They will continue to be observable until around 01:40, when they sink below 10° above your western horizon.",
-    "description": "The Moon and Saturn will make a close approach, passing within 6°03' of each other. The Moon will be 11 days old.",
+    "visibility_summary": "From New Delhi, the\n     pair     will be visible in the evening sky, becoming accessible around 17:55 (IST), 39° above your south-eastern horizon, as dusk fades to darkness. They will then reach their highest point in the sky at 20:53, 62° above your southern horizon. They will continue to be observable until around 02:04, when they sink below 10° above your western horizon.",
+    "description": "The Moon and Saturn will make a close approach, passing within 6°03' of each other. The Moon will be 11 days old.Go Stargazing",
     "url": "https://in-the-sky.org/news.php?id=20261120_15_100",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261121-1",
@@ -493,7 +493,7 @@
     "difficulty_level": 1,
     "difficulty_key": "naked_eye",
     "difficulty_label": "Mata Telanjang (Naked Eye)",
-    "difficulty_alt": "This event is visible to the naked eye from Jakarta.",
+    "difficulty_alt": "This event is visible to the naked eye from New Delhi.",
     "peak_event_time": "Sat, 21 Nov 20264 days away",
     "rising_time": "",
     "fading_time": "",
@@ -505,7 +505,7 @@
     "description": "The α-Monocerotid meteor shower will be active from 15 November to 25 November, producing its peak rate\n        of\n        meteors around 21 November.",
     "url": "https://in-the-sky.org/news.php?id=20261121_10_100",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261121-2",
@@ -514,21 +514,21 @@
     "difficulty_level": 1,
     "difficulty_key": "naked_eye",
     "difficulty_label": "Mata Telanjang (Naked Eye)",
-    "difficulty_alt": "This event is visible to the naked eye from Jakarta.",
-    "peak_event_time": "Sun, 22 Nov 20265 days away",
+    "difficulty_alt": "This event is visible to the naked eye from New Delhi.",
+    "peak_event_time": "Fri, 20 Nov 20263 days away",
     "rising_time": "",
     "fading_time": "",
-    "altitude": "17°",
-    "azimuth_direction": "horizon",
+    "altitude": "",
+    "azimuth_direction": "",
     "constellation": "",
     "objects": [
       "Mercury"
     ],
-    "visibility_summary": "From Jakarta, this apparition will not be one of the most prominent and tricky to observe, reaching a peak altitude of\n\n    17° above the horizon at\n\n    sunrise on\n\n    23 Nov 2026.",
-    "description": "As seen from Jakarta,Mercurywill reach its highest point in the sky in\n    its Nov–Dec 2026\n    morning\n    apparition. It will be shining brightly at mag -0.6.",
+    "visibility_summary": "",
+    "description": "As seen from New Delhi,Mercurywill reach its highest point in the sky in\n    its Nov–Dec 2026\n    morning\n    apparition. It will be shining brightly at mag -0.6.Go Stargazing",
     "url": "https://in-the-sky.org/news.php?id=20261121_11_100",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261121-3",
@@ -537,21 +537,21 @@
     "difficulty_level": 1,
     "difficulty_key": "naked_eye",
     "difficulty_label": "Mata Telanjang (Naked Eye)",
-    "difficulty_alt": "This event is visible to the naked eye from Jakarta.",
-    "peak_event_time": "Sat, 21 Nov 2026 at 07:33 WIB (00:33 UTC)4 days away",
+    "difficulty_alt": "This event is visible to the naked eye from New Delhi.",
+    "peak_event_time": "Sat, 21 Nov 2026 at 06:03 IST (00:33 UTC)4 days away",
     "rising_time": "",
     "fading_time": "",
-    "altitude": "17°",
-    "azimuth_direction": "horizon",
+    "altitude": "",
+    "azimuth_direction": "",
     "constellation": "Libra",
     "objects": [
       "Mercury"
     ],
-    "visibility_summary": "From Jakarta, this apparition will not be one of the most prominent and tricky to observe, reaching a peak altitude of\n\n    17° above the horizon at\n\n    sunrise on\n\n    23 Nov 2026.",
+    "visibility_summary": "",
     "description": "Mercurywill reach its greatest separation from the Sun in\n    its Nov–Dec 2026\n    morning\n    apparition. It will be shining brightly at mag -0.6.",
     "url": "https://in-the-sky.org/news.php?id=20261121_11_101",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261121-4",
@@ -560,8 +560,8 @@
     "difficulty_level": 1,
     "difficulty_key": "naked_eye",
     "difficulty_label": "Mata Telanjang (Naked Eye)",
-    "difficulty_alt": "This event is visible to the naked eye from Jakarta.",
-    "peak_event_time": "Sat, 21 Nov 2026 at 08:26 WIB (01:26 UTC)4 days away",
+    "difficulty_alt": "This event is visible to the naked eye from New Delhi.",
+    "peak_event_time": "Sat, 21 Nov 2026 at 06:56 IST (01:26 UTC)4 days away",
     "rising_time": "",
     "fading_time": "",
     "altitude": "",
@@ -571,11 +571,11 @@
       "Saturn",
       "The Moon"
     ],
-    "visibility_summary": "From Jakarta, the pair will be visible in the evening sky, becoming accessible around 18:17 (WIB), 57° above your eastern horizon, as dusk fades to darkness. They will then reach their highest point in the sky at 20:24, 82° above your northern horizon. They will continue to be observable until around 01:40, when they sink below 10° above your western horizon.",
+    "visibility_summary": "From New Delhi, the pair will be visible in the evening sky, becoming accessible around 17:55 (IST), 39° above your south-eastern horizon, as dusk fades to darkness. They will then reach their highest point in the sky at 20:53, 62° above your southern horizon. They will continue to be observable until around 02:04, when they sink below 10° above your western horizon.",
     "description": "The Moon and Saturn will share the same right ascension, with the Moon passing 6°47' to the north of Saturn. The Moon will be 12 days old.",
     "url": "https://in-the-sky.org/news.php?id=20261121_20_100",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261124-1",
@@ -584,8 +584,8 @@
     "difficulty_level": 1,
     "difficulty_key": "naked_eye",
     "difficulty_label": "Mata Telanjang (Naked Eye)",
-    "difficulty_alt": "This event is visible to the naked eye from Jakarta.",
-    "peak_event_time": "Tue, 24 Nov 2026 at 21:53 WIB (14:53 UTC)7 days away",
+    "difficulty_alt": "This event is visible to the naked eye from New Delhi.",
+    "peak_event_time": "Tue, 24 Nov 2026 at 20:23 IST (14:53 UTC)7 days away",
     "rising_time": "",
     "fading_time": "",
     "altitude": "",
@@ -595,10 +595,10 @@
       "The Moon"
     ],
     "visibility_summary": "Over the nights following 24 November, the Moon will\n    rise around an hour later each day, becoming prominent later in the night.\n    Within a few days, it will only be visible in the pre-dawn and early-morning\n    sky. By the time it reaches last quarter, a week after full moon, it will rise\n    in the middle of the night and set at around noon.",
-    "description": "The Moon will reachfull phase.\n\n    At this time of the month, it is visible for much of the night, rising at\n    around dusk and setting at around dawn.",
+    "description": "The Moon will reachfull phase.\n\n    At this time of the month, it is visible for much of the night, rising at\n    around dusk and setting at around dawn.Moon phase calendar",
     "url": "https://in-the-sky.org/news.php?id=20261124_08_100",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261124-2",
@@ -607,8 +607,8 @@
     "difficulty_level": 1,
     "difficulty_key": "naked_eye",
     "difficulty_label": "Mata Telanjang (Naked Eye)",
-    "difficulty_alt": "This event is visible to the naked eye from Jakarta.",
-    "peak_event_time": "Tue, 24 Nov 2026 at 18:45 WIB (11:45 UTC)7 days away",
+    "difficulty_alt": "This event is visible to the naked eye from New Delhi.",
+    "peak_event_time": "Tue, 24 Nov 2026 at 17:15 IST (11:45 UTC)7 days away",
     "rising_time": "",
     "fading_time": "",
     "altitude": "",
@@ -618,11 +618,11 @@
       "M45",
       "The Moon"
     ],
-    "visibility_summary": "From Jakarta, the\n     pair     will be visible between 18:34 and 04:19. They will become accessible at around 18:34, when they rise to an altitude of 12° above your north-eastern horizon. They will reach their highest point in the sky at 23:27, 59° above your northern horizon. They will become inaccessible at around 04:19 when they sink below 12° above your north-western horizon.",
+    "visibility_summary": "",
     "description": "The Moon and M45 will make a close approach, passing within a mere 55.5 arcminutes of each other. The Moon will be 15 days old.",
     "url": "https://in-the-sky.org/news.php?id=20261124_15_100",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261125-1",
@@ -631,8 +631,8 @@
     "difficulty_level": 2,
     "difficulty_key": "binoculars",
     "difficulty_label": "Binokular",
-    "difficulty_alt": "This event is easily visible through standard binoculars from Jakarta.",
-    "peak_event_time": "Thu, 26 Nov 2026 at 05:33 WIB (22:33 UTC)9 days away",
+    "difficulty_alt": "This event is easily visible through standard binoculars from New Delhi.",
+    "peak_event_time": "Thu, 26 Nov 2026 at 04:03 IST (22:33 UTC)9 days away",
     "rising_time": "",
     "fading_time": "",
     "altitude": "",
@@ -641,11 +641,11 @@
     "objects": [
       "Uranus"
     ],
-    "visibility_summary": "From Jakarta, it will be visible between 19:18 and 03:54. It will become accessible at around 19:18, when it rises to an altitude of 21° above your north-eastern horizon. It will reach its highest point in the sky at 23:36, 63° above your northern horizon. It will become inaccessible at around 03:54 when it sinks below 21° above your north-western horizon.",
+    "visibility_summary": "Over the weeks following its opposition, Uranus will reach\n    its highest point in the sky around four minutes earlier each night, gradually\n    receding from the pre-dawn morning sky while remaining visible in the evening\n    sky for a few months.",
     "description": "Uranuswill reachopposition– the optimal time to observe it,\n    when it will be visible for much of the night in the constellationTaurus.",
     "url": "https://in-the-sky.org/news.php?id=20261125_12_100",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261125-2",
@@ -654,8 +654,8 @@
     "difficulty_level": 2,
     "difficulty_key": "binoculars",
     "difficulty_label": "Binokular",
-    "difficulty_alt": "This event is easily visible through standard binoculars from Jakarta.",
-    "peak_event_time": "Thu, 26 Nov 2026from05:15 WIB(22:15 UTC)to07:53 WIB(00:53 UTC)9 days away",
+    "difficulty_alt": "This event is easily visible through standard binoculars from New Delhi.",
+    "peak_event_time": "Thu, 26 Nov 2026from03:45 IST(22:15 UTC)to06:23 IST(00:53 UTC)9 days away",
     "rising_time": "",
     "fading_time": "",
     "altitude": "",
@@ -668,7 +668,7 @@
     "description": "",
     "url": "https://in-the-sky.org/news.php?id=20261125_16_100",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261127-1",
@@ -677,21 +677,21 @@
     "difficulty_level": 1,
     "difficulty_key": "naked_eye",
     "difficulty_label": "Mata Telanjang (Naked Eye)",
-    "difficulty_alt": "This event is visible to the naked eye from Jakarta.",
-    "peak_event_time": "Sat, 28 Nov 2026 at 01:37 WIB (18:37 UTC)11 days away",
+    "difficulty_alt": "This event is visible to the naked eye from New Delhi.",
+    "peak_event_time": "Sat, 28 Nov 2026 at 00:07 IST (18:37 UTC)11 days away",
     "rising_time": "",
     "fading_time": "",
-    "altitude": "46°",
-    "azimuth_direction": "horizon",
+    "altitude": "",
+    "azimuth_direction": "",
     "constellation": "Virgo",
     "objects": [
       "Venus"
     ],
-    "visibility_summary": "From Jakarta, this apparition will be exceptionally well placed and prominent, reaching a peak altitude of\n\n    46° above the horizon at\n\n    sunrise on\n\n    8 Jan 2027.",
+    "visibility_summary": "",
     "description": "Venuswill reach its greatest brightness in\n    its 2026–2027\n    morning\n    apparition. It will be shining brightly at mag -4.7.",
     "url": "https://in-the-sky.org/news.php?id=20261127_11_100",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261128-1",
@@ -700,7 +700,7 @@
     "difficulty_level": 1,
     "difficulty_key": "naked_eye",
     "difficulty_label": "Mata Telanjang (Naked Eye)",
-    "difficulty_alt": "This event is visible to the naked eye from Jakarta.",
+    "difficulty_alt": "This event is visible to the naked eye from New Delhi.",
     "peak_event_time": "Sat, 28 Nov 202611 days away",
     "rising_time": "",
     "fading_time": "",
@@ -708,11 +708,11 @@
     "azimuth_direction": "",
     "constellation": "Orion",
     "objects": [],
-    "visibility_summary": "From Jakarta, the radiant of the shower will appear at a peak altitude of 67° above your horizon, and on the basis of this, we estimate that you may be able to see up to 2 meteors per hour at the shower's peak.",
+    "visibility_summary": "",
     "description": "The November Orionid meteor shower will be active from 13 November to 6 December, producing its peak rate\n        of\n        meteors around 28 November.",
     "url": "https://in-the-sky.org/news.php?id=20261128_10_100",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261128-2",
@@ -721,7 +721,7 @@
     "difficulty_level": 1,
     "difficulty_key": "naked_eye",
     "difficulty_label": "Mata Telanjang (Naked Eye)",
-    "difficulty_alt": "This event is visible to the naked eye from Jakarta.",
+    "difficulty_alt": "This event is visible to the naked eye from New Delhi.",
     "peak_event_time": "Sat, 28 Nov 202611 days away",
     "rising_time": "",
     "fading_time": "",
@@ -731,11 +731,11 @@
     "objects": [
       "Collinder 50"
     ],
-    "visibility_summary": "From Jakarta, it is visible in the morning sky, becoming accessible around 18:48, when it reaches an altitude of 11° above your eastern horizon. It will then reach its highest point in the sky at 23:50, 67° above your northern horizon. It will be lost to dawn twilight around 04:55, 12° above your western horizon.",
-    "description": "The Hyades open star cluster(Collinder 50; mag 1.0) inTauruswill be well placed in the evening sky in coming weeks.\n\nOn 28 November it\nwillreach its highest point in the skyat around midnight\nlocal time, and on subsequent evenings it will culminate four minutes earlier each day.",
+    "visibility_summary": "",
+    "description": "The Hyades open star cluster(Collinder 50; mag 1.0) inTauruswill be well placed in the evening sky in coming weeks.\n\nOn 28 November it\nwillreach its highest point in the skyat around midnight\nlocal time, and on subsequent evenings it will culminate four minutes earlier each day.Go Stargazing",
     "url": "https://in-the-sky.org/news.php?id=20261128_17_100",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261129-1",
@@ -744,8 +744,8 @@
     "difficulty_level": 2,
     "difficulty_key": "binoculars",
     "difficulty_label": "Binokular",
-    "difficulty_alt": "This event is easily visible through standard binoculars from Jakarta.",
-    "peak_event_time": "Sun, 29 Nov 2026 at 07:10 WIB (00:10 UTC)12 days away",
+    "difficulty_alt": "This event is easily visible through standard binoculars from New Delhi.",
+    "peak_event_time": "Sun, 29 Nov 2026 at 05:40 IST (00:10 UTC)12 days away",
     "rising_time": "",
     "fading_time": "",
     "altitude": "",
@@ -755,11 +755,11 @@
       "M44",
       "The Moon"
     ],
-    "visibility_summary": "From Jakarta, the\n     pair     will be visible in the morning sky, becoming accessible around 23:22, when they reach an altitude of 16° above your north-eastern horizon. They will then reach their highest point in the sky at 04:03, 64° above your northern horizon. They will be lost to dawn twilight around 04:37, 62° above your northern horizon.",
+    "visibility_summary": "From New Delhi, the\n     pair     will be visible in the morning sky, becoming accessible around 23:04, when they reach an altitude of 16° above your eastern horizon. They will then reach their highest point in the sky at 04:31, 80° above your southern horizon. They will be lost to dawn twilight around 05:59, 68° above your western horizon.Go Stargazing",
     "description": "The Moon and M44 will make a close approach, passing within a mere  7.4 arcminutes of each other. The Moon will be 20 days old.",
     "url": "https://in-the-sky.org/news.php?id=20261129_15_100",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261130-1",
@@ -768,22 +768,22 @@
     "difficulty_level": 1,
     "difficulty_key": "naked_eye",
     "difficulty_label": "Mata Telanjang (Naked Eye)",
-    "difficulty_alt": "This event is visible to the naked eye from Jakarta.",
-    "peak_event_time": "Mon, 30 Nov 2026 at 15:24 WIB (08:24 UTC)13 days away",
-    "rising_time": "23:17 (WIB)",
-    "fading_time": "05:13 (WIB)",
-    "altitude": "70°",
-    "azimuth_direction": "northern horizon",
+    "difficulty_alt": "This event is visible to the naked eye from New Delhi.",
+    "peak_event_time": "Mon, 30 Nov 2026 at 13:54 IST (08:24 UTC)13 days away",
+    "rising_time": "",
+    "fading_time": "",
+    "altitude": "",
+    "azimuth_direction": "",
     "constellation": "Leo",
     "objects": [
       "Jupiter",
       "The Moon"
     ],
-    "visibility_summary": "From Jakarta, the\n     pair     will be visible in the dawn sky, rising at 23:17 (WIB) and reaching an altitude of 70° above the northern horizon before fading from view as dawn breaks at around 05:13.",
-    "description": "The Moon and Jupiter will make a close approach, passing within 1°03' of each other. From some parts of the world, the Moon will pass in front of Jupiter, creating alunar occultation. The Moon will be 21 days old.",
+    "visibility_summary": "From New Delhi, the\n     pair     will be visible in the morning sky, becoming accessible around 23:50, when they reach an altitude of 7° above your eastern horizon. They will then reach their highest point in the sky at 05:42, 74° above your southern horizon. They will be lost to dawn twilight around 06:39, 69° above your south-western horizon.",
+    "description": "The Moon and Jupiter will make a close approach, passing within 1°03' of each other. From some parts of the world, the Moon will pass in front of Jupiter, creating alunar occultation. The Moon will be 21 days old.Moon phase calendar",
     "url": "https://in-the-sky.org/news.php?id=20261130_15_100",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261130-2",
@@ -792,22 +792,22 @@
     "difficulty_level": 1,
     "difficulty_key": "naked_eye",
     "difficulty_label": "Mata Telanjang (Naked Eye)",
-    "difficulty_alt": "This event is visible to the naked eye from Jakarta.",
-    "peak_event_time": "Mon, 30 Nov 2026 at 23:54 WIB (16:54 UTC)13 days away",
-    "rising_time": "23:39 (WIB)",
-    "fading_time": "05:00 (WIB)",
-    "altitude": "68°",
-    "azimuth_direction": "north-eastern horizon",
+    "difficulty_alt": "This event is visible to the naked eye from New Delhi.",
+    "peak_event_time": "Mon, 30 Nov 2026 at 22:24 IST (16:54 UTC)13 days away",
+    "rising_time": "",
+    "fading_time": "",
+    "altitude": "",
+    "azimuth_direction": "",
     "constellation": "Leo",
     "objects": [
       "Mars",
       "The Moon"
     ],
-    "visibility_summary": "From Jakarta, the\n     pair     will be visible in the dawn sky, rising at 23:39 (WIB) and reaching an altitude of 68° above the north-eastern horizon before fading from view as dawn breaks at around 05:00.",
-    "description": "The Moon and Mars will make a close approach, passing within 2°59' of each other. The Moon will be 21 days old.",
+    "visibility_summary": "From New Delhi, the\n     pair     will be visible in the morning sky, becoming accessible around 00:26, when they reach an altitude of 10° above your eastern horizon. They will then reach their highest point in the sky at 06:04, 74° above your southern horizon. They will be lost to dawn twilight around 06:24, 73° above your southern horizon.",
+    "description": "The Moon and Mars will make a close approach, passing within 2°59' of each other. The Moon will be 21 days old.Go Stargazing",
     "url": "https://in-the-sky.org/news.php?id=20261130_15_101",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261130-3",
@@ -816,8 +816,8 @@
     "difficulty_level": 2,
     "difficulty_key": "binoculars",
     "difficulty_label": "Binokular",
-    "difficulty_alt": "This event is easily visible through standard binoculars from Jakarta.",
-    "peak_event_time": "Mon, 30 Nov 2026from14:15 WIB(07:15 UTC)to16:32 WIB(09:32 UTC)13 days away",
+    "difficulty_alt": "This event is easily visible through standard binoculars from New Delhi.",
+    "peak_event_time": "Mon, 30 Nov 2026from12:45 IST(07:15 UTC)to15:02 IST(09:32 UTC)13 days away",
     "rising_time": "",
     "fading_time": "",
     "altitude": "",
@@ -830,7 +830,7 @@
     "description": "",
     "url": "https://in-the-sky.org/news.php?id=20261130_16_100",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261130-4",
@@ -839,8 +839,8 @@
     "difficulty_level": 2,
     "difficulty_key": "binoculars",
     "difficulty_label": "Binokular",
-    "difficulty_alt": "This event is easily visible through standard binoculars from Jakarta.",
-    "peak_event_time": "Mon, 30 Nov 2026from20:11 WIB(13:11 UTC)to22:36 WIB(15:36 UTC)13 days away",
+    "difficulty_alt": "This event is easily visible through standard binoculars from New Delhi.",
+    "peak_event_time": "Mon, 30 Nov 2026from18:41 IST(13:11 UTC)to21:06 IST(15:36 UTC)13 days away",
     "rising_time": "",
     "fading_time": "",
     "altitude": "",
@@ -853,7 +853,7 @@
     "description": "",
     "url": "https://in-the-sky.org/news.php?id=20261130_16_101",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   },
   {
     "id": "evt-20261130-5",
@@ -862,21 +862,21 @@
     "difficulty_level": 1,
     "difficulty_key": "naked_eye",
     "difficulty_label": "Mata Telanjang (Naked Eye)",
-    "difficulty_alt": "This event is visible to the naked eye from Jakarta.",
-    "peak_event_time": "Mon, 30 Nov 2026 at 16:15 WIB (09:15 UTC)13 days away",
-    "rising_time": "23:18 (WIB)",
-    "fading_time": "05:13 (WIB)",
-    "altitude": "70°",
-    "azimuth_direction": "northern horizon",
+    "difficulty_alt": "This event is visible to the naked eye from New Delhi.",
+    "peak_event_time": "Mon, 30 Nov 2026 at 14:45 IST (09:15 UTC)13 days away",
+    "rising_time": "",
+    "fading_time": "",
+    "altitude": "",
+    "azimuth_direction": "",
     "constellation": "Leo",
     "objects": [
       "Jupiter",
       "The Moon"
     ],
-    "visibility_summary": "From Jakarta, the pair will be visible in the dawn sky, rising at 23:18 (WIB) and reaching an altitude of 70° above the northern horizon before fading from view as dawn breaks at around 05:13.",
-    "description": "The Moon and Jupiter will share the same right ascension, with the Moon passing 1°09' to the south of Jupiter. The Moon will be 21 days old.",
+    "visibility_summary": "From New Delhi, the pair will be visible in the morning sky, becoming accessible around 23:50, when they reach an altitude of 7° above your eastern horizon. They will then reach their highest point in the sky at 05:42, 74° above your southern horizon. They will be lost to dawn twilight around 06:39, 69° above your south-western horizon.",
+    "description": "The Moon and Jupiter will share the same right ascension, with the Moon passing 1°09' to the south of Jupiter. The Moon will be 21 days old.Moon phase calendar",
     "url": "https://in-the-sky.org/news.php?id=20261130_20_100",
     "source": "in-the-sky.org",
-    "scraped_at": "2026-11-17T06:40:58"
+    "scraped_at": "2026-11-17T12:50:53"
   }
 ]

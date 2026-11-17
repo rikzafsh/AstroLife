@@ -1,0 +1,3 @@
+# Dependensi opsional untuk prototipe berbasis Skyfield
+skyfield>=1.46
+numpy

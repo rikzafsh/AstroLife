@@ -191,6 +191,9 @@ def run_multi_level_scraper(year: int = 2026, month: int = 11, max_details: int 
                         'constellation': details['constellation'],
                         'objects': details['objects'],
                         'visibility_summary': details['visibility_summary'],
+                        'occultation_ingress': details['occultation_ingress'],
+                        'occultation_egress': details['occultation_egress'],
+                        'occultation_altitude': details['occultation_altitude'],
                         'description': details['description'],
                         'url': item['url'],
                         'source': 'in-the-sky.org'
