@@ -25,6 +25,9 @@ except Exception:                       # pragma: no cover
 from prototype.ephem_lite import FIXED, PLANETS, wrap180, separation, EARTH_RADIUS_KM  # noqa: F401
 
 NAME = 'skyfield + JPL DE440s'
+# False: rumus Astronomical Almanac (sepadan dengan in-the-sky.org; puncak 'paling terang' Venus jatuh pada tanggal yang sama).
+# True : model Mallama & Hilton bawaan Skyfield (lebih akurat secara fisik, tetapi puncak Venus bergeser ~3 hari).
+USE_MALLAMA = False
 _DIR = Path(__file__).resolve().parent.parent / 'data' / 'ephemeris'
 _DIR.mkdir(parents=True, exist_ok=True)
 _load = Loader(str(_DIR))
@@ -90,7 +93,7 @@ def phase_angle_and_mag(body: str, jd_ut: float):
     R = float(math.dist(e, s))          # Bumi - Matahari
     i = math.degrees(math.acos(max(-1.0, min(1.0, (r * r + delta * delta - R * R) / (2 * r * delta)))))
     mag = None
-    if planetary_magnitude is not None:
+    if USE_MALLAMA and planetary_magnitude is not None:
         try:
             mag = float(planetary_magnitude(_earth.at(t).observe(_eph[body])))
         except Exception:

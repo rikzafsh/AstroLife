@@ -2,6 +2,12 @@ from bs4 import BeautifulSoup
 import re
 import json
 
+def _tz_label(text: str) -> str:
+    """Label zona waktu lokal situs (mis. WIB, IST) dari teks jam puncak; kosong bila tidak ada."""
+    m = re.search(r'\d{1,2}:\d{2}\s*([A-Z]{2,4})\b', text or '')
+    return m.group(1) if m and m.group(1) != 'UTC' else ''
+
+
 def parse_in_the_sky_detail_html(html_content: str, url: str = "") -> dict:
     soup = BeautifulSoup(html_content, 'html.parser')
     
@@ -116,6 +122,7 @@ def parse_in_the_sky_detail_html(html_content: str, url: str = "") -> dict:
         'constellation': constellation,
         'objects': objects,
         'visibility_summary': visibility_p,
+        'source_tz': _tz_label(peak_time_str),
         'occultation_ingress': fmt(ing),
         'occultation_egress': fmt(egr),
         'occultation_altitude': occ_alt.group(1) if occ_alt else "",

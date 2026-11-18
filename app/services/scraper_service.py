@@ -47,28 +47,88 @@ def determine_event_difficulty(title: str) -> tuple:
 
 _MONTHS = {m: i + 1 for i, m in enumerate(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])}
 # Toleran terhadap: huruf besar/kecil, ada/tidaknya spasi, "at" / "from", nama bulan penuh.
-_TIME_RE = re.compile(r'(\d{1,2})\s*([A-Za-z]{3})[A-Za-z]*\.?\s*(\d{4})\s*(?:at|from|@)?\s*(\d{1,2}):(\d{2})\s*(WIB|WITA|WIT|UTC|GMT)?', re.I)
-_END_RE = re.compile(r'\bto\s*(\d{1,2}):(\d{2})\s*(WIB|WITA|WIT|UTC|GMT)?', re.I)
+_TZ = r'((?-i:[A-Z]{2,5}))?'          # label zona apa pun (WIB, IST, ...), huruf kapital
+_TIME_RE = re.compile(r'(\d{1,2})\s*([A-Za-z]{3})[A-Za-z]*\.?\s*(\d{4})\s*(?:at|from|@)?\s*(\d{1,2}):(\d{2})\s*' + _TZ, re.I)
+_NOT_TZ = {'TO', 'AT', 'AGO', 'AWAY', 'DAYS', 'DAY', 'HOUR', 'HOURS', 'FROM'}
+_END_RE = re.compile(r'\bto\s*(\d{1,2}):(\d{2})\s*' + _TZ, re.I)
+
+
+_DATE_RE = re.compile(r'(\d{1,2})\s*([A-Za-z]{3})[A-Za-z]*\.?\s*(\d{4})')
+
+
+def parse_event_date(text: str):
+    """Tanggal saja (tanpa jam) dari teks halaman, mis. 'Sun, 08 Nov 2026'; None bila tidak terbaca."""
+    m = _DATE_RE.search(text or '')
+    if not m or m.group(2).title() not in _MONTHS:
+        return None
+    try:
+        return datetime(int(m.group(3)), _MONTHS[m.group(2).title()], int(m.group(1)))
+    except ValueError:
+        return None
+
+
+_UTC_RE = re.compile(r'\(\s*(\d{1,2}):(\d{2})\s*UTC\s*\)', re.I)
+WIB_OFFSET_H = 7
+
+
+def _utc_candidate(local_dt: datetime, hh: int, mm: int):
+    """Tanggal UTC dari jam UTC (hh:mm) dan waktu lokal; offset zona lokal wajar: -12 s.d. +14 jam."""
+    best = None
+    for dd in (-1, 0, 1):
+        u = datetime(local_dt.year, local_dt.month, local_dt.day, hh, mm) + timedelta(days=dd)
+        diff = (local_dt - u).total_seconds() / 3600.0
+        if -12 <= diff <= 14 and (best is None or abs(diff) < abs(best[1])):
+            best = (u, diff)
+    return best[0] if best else None
 
 
 def parse_event_time(text: str):
     """
     Membaca tanggal/jam dari teks halaman in-the-sky, mis.
-      'Mon, 02 Nov 2026 at 20:39 WIB'  atau  'TUE, 03 NOV 2026 FROM 03:45 WIB (20:45 UTC) TO 07:45 WIB'.
-    Mengembalikan {'start','end','tz','mid'} (datetime naive, zona sesuai 'tz') atau None bila tidak terbaca.
+      'Mon, 02 Nov 2026 at 20:39 WIB'
+      'Mon, 02 Nov 2026 at 01:58 IST (20:28 UTC)'          <- lokasi situs bukan Jakarta
+      'TUE, 03 NOV 2026 FROM 03:45 WIB (20:45 UTC) TO 07:45 WIB (00:45 UTC)'
+    Hasil: {'tz': label zona lokal situs, 'start','end','mid': WIB (naive datetime), 'utc_start': ...} atau None.
+    Acuan utama = jam UTC dalam kurung (tidak bergantung pada lokasi yang dipilih situs); bila tidak ada,
+    jam lokal hanya dipakai jika zonanya WIB atau UTC. Selain itu waktu tidak dapat ditentukan (None).
     """
     m = _TIME_RE.search(text or '')
     if not m or m.group(2).title() not in _MONTHS:
         return None
-    start = datetime(int(m.group(3)), _MONTHS[m.group(2).title()], int(m.group(1)), int(m.group(4)), int(m.group(5)))
+    local = datetime(int(m.group(3)), _MONTHS[m.group(2).title()], int(m.group(1)), int(m.group(4)), int(m.group(5)))
     tz = (m.group(6) or '').upper()
-    end = None
-    e = _END_RE.search(text, m.end())
-    if e and (e.group(3) or tz).upper() == tz:
-        end = start.replace(hour=int(e.group(1)), minute=int(e.group(2)))
-        if end < start:
-            end += timedelta(days=1)
-    return {'start': start, 'end': end, 'tz': tz, 'mid': start + (end - start) / 2 if end else start}
+    tz = '' if tz in _NOT_TZ else tz
+
+    u = _UTC_RE.match(text, m.end()) or _UTC_RE.search(text, m.end(), m.end() + 20)
+    if u:
+        utc_start = _utc_candidate(local, int(u.group(1)), int(u.group(2)))
+    elif tz == 'WIB':
+        utc_start = local - timedelta(hours=WIB_OFFSET_H)
+    elif tz in ('UTC', 'GMT'):
+        utc_start = local
+    else:
+        return None
+    if utc_start is None:
+        return None
+
+    utc_end = None
+    e = _END_RE.search(text, u.end() if u else m.end())
+    if e:
+        u2 = _UTC_RE.search(text, e.end(), e.end() + 25)
+        if u2:
+            utc_end = utc_start.replace(hour=int(u2.group(1)), minute=int(u2.group(2)))
+        elif (e.group(3) or tz).upper() == tz and tz in ('WIB', 'UTC', 'GMT'):
+            utc_end = utc_start.replace(hour=int(e.group(1)), minute=int(e.group(2)))
+            if tz == 'WIB':
+                utc_end -= timedelta(hours=WIB_OFFSET_H)
+        if utc_end is not None and utc_end < utc_start:
+            utc_end += timedelta(days=1)
+
+    to_wib = lambda d: d + timedelta(hours=WIB_OFFSET_H)
+    start = to_wib(utc_start)
+    end = to_wib(utc_end) if utc_end else None
+    return {'tz': tz, 'start': start, 'end': end, 'mid': start + (end - start) / 2 if end else start,
+            'utc_start': utc_start}
 
 
 def _hhmm(text: str):
@@ -95,7 +155,7 @@ def _nearest(base: datetime, hour: float, peak_dt: datetime) -> datetime:
     return min(cands, key=lambda c: abs((c - peak_dt).total_seconds()))
 
 
-def compute_observation_time(raw: dict, title: str, category: str) -> dict:
+def compute_observation_time(raw: dict, title: str, category: str, loc_ok: bool = True) -> dict:
     """
     Menentukan KAPAN cuaca dinilai untuk sebuah fenomena (WIB, naive). Urutan prioritas:
       1. Puncak malam hari (17:30-05:30) dan berzona WIB      -> jam puncak.
@@ -111,9 +171,17 @@ def compute_observation_time(raw: dict, title: str, category: str) -> dict:
     morning = morning or bool(raw.get('rising_time') and raw.get('fading_time'))
 
     parsed = parse_event_time(raw.get('peak_event_time', '') or '')
-    peak_dt = parsed['mid'] if parsed and parsed['tz'] == 'WIB' else None   # hanya WIB yang dipakai apa adanya
+    peak_dt = parsed['mid'] if parsed else None   # sudah dalam WIB (dikonversi dari UTC)
     try:
-        base = datetime(peak_dt.year, peak_dt.month, peak_dt.day) if peak_dt else datetime.strptime(date_str, '%Y-%m-%d')
+        if peak_dt:
+            base = datetime(peak_dt.year, peak_dt.month, peak_dt.day)
+        else:
+            try:
+                base = datetime.strptime(date_str, '%Y-%m-%d')
+            except ValueError:                      # mis. '2026-11' (hari tidak terbaca dari ID): coba teks halaman
+                base = parse_event_date(raw.get('peak_event_time', '') or '')
+                if base is None:
+                    raise ValueError('tanggal tidak terbaca')
     except ValueError:
         return {'obs_time': None, 'peak_time': None, 'obs_basis': None, 'obs_assumed': False,
                 'obs_note': 'Tanggal fenomena tidak dapat dibaca.', 'date_wib': None}
@@ -127,7 +195,8 @@ def compute_observation_time(raw: dict, title: str, category: str) -> dict:
         else:
             obs, basis = _nearest(base, _EVENING_H, peak_dt), 'evening'
     else:
-        t = _TRANSIT_RE.search(raw.get('visibility_summary', '') or '')
+        # Jam kulminasi dari teks situs adalah jam LOKAL situs: hanya dipakai bila lokasinya Jakarta (WIB).
+        t = _TRANSIT_RE.search(raw.get('visibility_summary', '') or '') if loc_ok else None
         if t:
             obs, basis = base + timedelta(hours=int(t.group(1)), minutes=int(t.group(2))), 'transit'
         elif category == 'Hujan Meteor':
@@ -145,6 +214,17 @@ def compute_observation_time(raw: dict, title: str, category: str) -> dict:
         'obs_assumed': basis.startswith('assumed'),
         'obs_note': OBS_BASIS_LABEL[basis],
     }
+
+
+def _site_location_ok(raw: dict) -> bool:
+    """Data lokasi-spesifik (jam terbit, ketinggian, arah, jam hilang/muncul) valid untuk Jakarta hanya bila
+    situs saat itu memakai zona WIB. Rekaman lama tanpa label zona dianggap sah."""
+    tz = (raw.get('source_tz') or '').upper()
+    if not tz:
+        p = _TIME_RE.search(raw.get('peak_event_time', '') or '')
+        tz = (p.group(6) or '').upper() if p else ''
+        tz = '' if tz in _NOT_TZ else tz
+    return tz in ('', 'WIB')
 
 
 def enrich_raw_event(raw_item: dict) -> dict:
@@ -169,6 +249,10 @@ def enrich_raw_event(raw_item: dict) -> dict:
     altitude = raw_item.get('altitude', '')
     azimuth = raw_item.get('azimuth_direction', '')
     constellation = raw_item.get('constellation', '')
+    loc_ok = _site_location_ok(raw_item)
+    if not loc_ok:       # data situs untuk lokasi LAIN (bukan Jakarta): jangan ditampilkan sebagai data Jakarta
+        rising_time = fading_time = None
+        altitude = azimuth = ''
     if constellation and not constellation.startswith('Rasi '):
         constellation = 'Rasi ' + constellation
     
@@ -187,20 +271,26 @@ def enrich_raw_event(raw_item: dict) -> dict:
         sky_pos = {'direction': 'Tidak dirilis', 'altitude': 'Tidak dirilis',
                    'constellation': constellation or 'Tidak dirilis'}
 
-    description = raw_item.get('visibility_summary') or raw_item.get('description') or 'Deskripsi tidak tersedia dari sumber.'
+    description = (raw_item.get('visibility_summary') if loc_ok else '') or raw_item.get('description') or 'Deskripsi tidak tersedia dari sumber.'
 
-    timing = compute_observation_time(raw_item, title, cat)
+    # Adanya jam terbit & fajar (objek terlihat dini hari) bersifat kualitatif dan tetap sah walau lokasi situs
+    # bukan Jakarta; yang dibatasi hanya jam kulminasi yang bergantung zona (lihat compute_observation_time).
+    timing = compute_observation_time(raw_item, title, cat, loc_ok)
 
     return {
         'id': raw_item.get('id', ''),
         'date': raw_item.get('date', ''),
         'title': title,
         'type': cat,
-        'difficulty': diff_key,
+        'difficulty': 'telescope' if 'telescope' in str(diff_key) else diff_key,   # keluarga alat (filter & ikon UI)
+        'difficulty_detail': diff_key,                                       # kunci rinci dari sumber
+
         'difficulty_label': diff_label,
         'difficulty_alt': raw_item.get('difficulty_alt', ''),
         'difficulty_source': diff_source,
         'detail_failed': bool(raw_item.get('detail_failed')),
+        'location_ok': loc_ok,
+        'location_note': '' if loc_ok else 'Jam terbit, ketinggian, dan arah dari sumber berasal dari lokasi selain Jakarta, sehingga tidak ditampilkan.',
         'time': time_display,
         'sky_position': sky_pos,
         'objects': raw_item.get('objects', []),

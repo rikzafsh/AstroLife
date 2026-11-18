@@ -59,6 +59,11 @@ DIFF_LABELS = {
 }
 
 
+# Lokasi pengamat yang dikunci (situs memilih lokasinya sendiri bila tidak ditentukan -> hasil bergantung pada IP)
+LAT, LON, TZ_NAME = -6.2088, 106.8456, 'Asia/Jakarta'
+LOC_QS = f"&latitude={LAT}&longitude={LON}&timezone={TZ_NAME}"
+
+
 def run_multi_level_scraper(year: int = 2026, month: int = 11, max_details: int = None, headless: bool = False):
     """max_details=None -> ambil SEMUA event (tidak ada pemotongan diam-diam)."""
     all_events_dict = {}
@@ -86,6 +91,7 @@ def run_multi_level_scraper(year: int = 2026, month: int = 11, max_details: int 
             )
 
         context = browser.new_context(
+            timezone_id=TZ_NAME, locale='id-ID', geolocation={'latitude': LAT, 'longitude': LON}, permissions=['geolocation'],
             user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0"
         )
         page = context.new_page()
@@ -97,7 +103,7 @@ def run_multi_level_scraper(year: int = 2026, month: int = 11, max_details: int 
             print("\n[Tahap 1/2] Mengumpulkan peristiwa berdasarkan tingkat kesulitan (maxdiff 1-5)...")
             
             for level in range(1, 6):
-                url = f"https://in-the-sky.org/newscal.php?year={year}&month={month}&maxdiff={level}"
+                url = f"https://in-the-sky.org/newscal.php?year={year}&month={month}&maxdiff={level}{LOC_QS}"
                 diff_key = DIFF_NAMES[level]
                 diff_label = DIFF_LABELS[level]
 
@@ -167,7 +173,7 @@ def run_multi_level_scraper(year: int = 2026, month: int = 11, max_details: int 
                 evt_id = f"evt-{item['date'].replace('-', '')}-{per_date[item['date']]}"
                 
                 try:
-                    page.goto(item['url'], timeout=30000, wait_until="commit")
+                    page.goto(item['url'] + ('&' if '?' in item['url'] else '?') + LOC_QS.lstrip('&'), timeout=30000, wait_until="commit")
                     page.wait_for_timeout(1500)
                     detail_html = page.content()
 
@@ -250,6 +256,13 @@ def run_multi_level_scraper(year: int = 2026, month: int = 11, max_details: int 
     cache_file.write_text(json.dumps({'timestamp': datetime.now().timestamp(), 'events': final_records},
                                      ensure_ascii=False, indent=2), encoding='utf-8')
     failed = sum(1 for r in final_records if r.get('detail_failed'))
+    from collections import Counter
+    tzs = Counter(r.get('source_tz') or '(tanpa label)' for r in final_records)
+    print(f"[Zona waktu situs] {dict(tzs)}")
+    if set(tzs) - {'WIB'}:
+        print("[PERINGATAN] Sebagian/seluruh halaman TIDAK memakai WIB: situs mengabaikan lokasi yang dikunci. "
+              "Jam puncak tetap benar (dikonversi dari UTC), tetapi jam terbit, ketinggian, dan arah dari sumber "
+              "untuk lokasi lain dan akan disembunyikan oleh aplikasi.")
     print("\n" + "=" * 70)
     print(f"[SUKSES] {len(final_records)} event bulan {prefix} disimpan ({failed} tanpa detail) ke {OUTPUT_FILE}")
 

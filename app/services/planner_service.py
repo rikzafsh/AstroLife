@@ -20,8 +20,10 @@ from app.services.scraper_service import scrape_in_the_sky_events
 from app.services.weather_service import get_weather_at
 
 WIB_OFFSET = timedelta(hours=7)
-INSTRUMENT_RANK = {'naked_eye': 0, 'binoculars': 1, 'telescope': 2}
-INSTRUMENT_LABEL = {'naked_eye': 'Mata Telanjang', 'binoculars': 'Binokular', 'telescope': 'Teleskop'}
+# 'telescope' (pilihan pengguna: optik > 70 mm) dianggap setara teleskop 4-inci.
+INSTRUMENT_RANK = {'naked_eye': 0, 'binoculars': 1, 'small_telescope': 2, 'telescope': 3, 'telescope_4inch': 3, 'large_telescope': 4}
+INSTRUMENT_LABEL = {'naked_eye': 'Mata Telanjang', 'binoculars': 'Binokular', 'small_telescope': 'Teleskop Kecil',
+                    'telescope': 'Teleskop', 'telescope_4inch': 'Teleskop 4-Inci', 'large_telescope': 'Teleskop Besar'}
 
 
 def wib_to_utc(iso_wib: str) -> datetime:
@@ -63,6 +65,7 @@ def calculate_observation_feasibility(weather: dict, difficulty: str = 'naked_ey
                                       event_type: str = 'General', moon_illum: float = None,
                                       involves_moon: bool = False, moon_alt: float = None) -> dict:
     """Skor 0-100. Bila cuaca tidak tersedia, skor = None (tidak dikarang)."""
+    difficulty = 'telescope' if 'telescope' in str(difficulty) else difficulty
     if not weather.get('available'):
         return {
             'score': None, 'status': 'Data cuaca tidak tersedia', 'color': 'slate',
@@ -152,11 +155,14 @@ def calculate_observation_feasibility(weather: dict, difficulty: str = 'naked_ey
 def evaluate_event(event: dict, lat: float, lon: float, instrument: str = None, now_utc: datetime = None) -> dict:
     """Skor untuk satu fenomena memakai alat pengguna (atau alat yang dibutuhkan fenomena)."""
     now_utc = now_utc or datetime.utcnow()
-    needed = event.get('difficulty', 'naked_eye')
-    use = instrument if instrument in INSTRUMENT_RANK else needed
-    needs_more = INSTRUMENT_RANK[use] < INSTRUMENT_RANK.get(needed, 0)
-    # Skor memakai kebutuhan fenomena: pengamat dengan alat lebih sederhana tetap dinilai sesuai target.
-    scoring_diff = needed
+    needed_key = event.get('difficulty_detail') or event.get('difficulty') or 'naked_eye'
+    if needed_key not in INSTRUMENT_RANK:
+        needed_key = 'naked_eye'
+    use = instrument if instrument in INSTRUMENT_RANK else needed_key
+    needs_more = INSTRUMENT_RANK[use] < INSTRUMENT_RANK[needed_key]
+    # Skor memakai keluarga alat yang dibutuhkan fenomena; pengamat dengan alat lebih sederhana tetap dinilai sesuai target.
+    scoring_diff = 'telescope' if 'telescope' in needed_key else needed_key
+    needed = needed_key
 
     obs_iso = event.get('obs_time')
     if not obs_iso:

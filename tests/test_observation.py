@@ -12,7 +12,24 @@ from app.services import weather_service as ws
 from app.services.scraper_service import scrape_in_the_sky_events, determine_event_category
 
 NOW = datetime(2026, 11, 16, 3, 0)          # 10:00 WIB
-EVENTS = {e['id']: e for e in scrape_in_the_sky_events(2026, 11)}
+from pathlib import Path
+from app.services import scraper_service as _ss
+
+# Tes memakai FIXTURE BEKU (25 event berzona WIB), BUKAN data/datasets yang berubah setiap scraping ulang.
+FIX_DIR = Path(__file__).parent / 'fixtures' / 'wib25'
+_patch = mock.patch.object(_ss, 'DATASETS_DIR', FIX_DIR)
+
+
+def setUpModule():
+    _patch.start()
+
+
+def tearDownModule():
+    _patch.stop()
+
+
+with mock.patch.object(_ss, 'DATASETS_DIR', FIX_DIR):
+    EVENTS = {e['id']: e for e in scrape_in_the_sky_events(2026, 11)}
 LEONID = next(e for e in EVENTS.values() if 'Leonid' in e['title'])
 
 
@@ -112,6 +129,8 @@ class DataIntegrity(unittest.TestCase):
 
     def test_assumed_hours_are_flagged(self):
         for e in EVENTS.values():
+            if e['obs_time'] is None:
+                continue
             if not e['peak_time'] and e['obs_basis'] != 'transit':
                 self.assertTrue(e['obs_assumed'], e['title'])
             if e['obs_basis'] in ('peak', 'transit'):
@@ -124,6 +143,7 @@ class SameMomentAsEvent(unittest.TestCase):
         """Untuk KEDUA-PULUH-LIMA event: jam prakiraan (waktu lokal WIB) == jam yang ditampilkan di kartu."""
         checked = 0
         for e in EVENTS.values():
+            self.assertIsNotNone(e['obs_time'], e['title'])
             obs = datetime.strptime(e['obs_time'], '%Y-%m-%dT%H:%M')
             now = obs - timedelta(days=1)                 # selalu di dalam jangkauan prakiraan
             with net(payload(30, start=datetime(2026, 10, 31), days=36)):

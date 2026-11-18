@@ -54,11 +54,11 @@ def load_reference(path):
     rows = []
     for e in json.loads(Path(path).read_text(encoding='utf-8')):
         raw = e.get('peak_event_time', '') or ''
-        p = parse_event_time(raw)
-        ok = bool(p and p['tz'] == 'WIB')
-        r = {'title': e['title'], 'raw': raw, 'cls': classify(e['title']),
+        p = parse_event_time(raw)               # sudah dalam WIB (dikonversi dari UTC bila ada)
+        ok = p is not None
+        r = {'title': e['title'], 'raw': raw, 'cls': classify(e['title']), 'local_tz': p['tz'] if ok else '',
              'when': p['mid'] if ok else None, 'start': p['start'] if ok else None, 'end': p['end'] if ok else None}
-        if ok:
+        if ok and p['tz'] in ('WIB', ''):        # jam lokal hilang/muncul hanya sah untuk Jakarta (WIB)
             r['ingress'] = _clock(e.get('occultation_ingress'), p['mid'])
             r['egress'] = _clock(e.get('occultation_egress'), p['mid'])
         rows.append(r)
@@ -110,7 +110,7 @@ def run(path, year, month, out_dir):
                         add(r['title'] + ' [muncul, Jakarta]', r['egress'], F.jd_to_wib(loc[1]['egress']), 'occ_local_egress')
                 else:
                     add(r['title'] + ' [hilang, Jakarta]', r['ingress'], None, 'occ_local_ingress')
-            elif loc:
+            elif loc and r.get('local_tz') == 'WIB':
                 rows.append((r['title'] + ' [Jakarta]', r['when'], None, None, 'HITUNGAN: terlihat di Jakarta, SUMBER: tidak ada jam lokal'))
         else:
             used.add(i)
