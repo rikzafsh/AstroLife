@@ -15,6 +15,7 @@ class Config:
     DATA_DIR = BASE_DIR / 'data'
     CACHE_DIR = DATA_DIR / 'cache'
     DATASETS_DIR = DATA_DIR / 'datasets'
+    CATALOG_DIR = DATA_DIR / 'catalog'
     KNOWLEDGE_BASE_DIR = DATA_DIR / 'knowledge_base'
     MODELS_DIR = DATA_DIR / 'trained_models'
     

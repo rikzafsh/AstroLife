@@ -1,0 +1,13 @@
+{
+  "_catatan": "Hujan meteor tahunan utama. Bujur Matahari (lambda_sun) menurut Kalender Hujan Meteor IMO dengan ekuinoks J2000.0; ZHR = laju zenital per jam; posisi radian (RA, Dec) kira-kira. Nilai disusun dari ingatan penulis atas daftar kerja IMO dan WAJIB diverifikasi ke IMO sebelum dirilis. Tambahkan baris lain (mis. Taurid, alpha-Monocerotid) dengan format yang sama.",
+  "showers": [
+    {"code": "QUA", "name": "Quadrantid",   "lambda_sun_j2000": 283.15, "approx_md": [1, 3],   "zhr": 80,  "radiant_ra": 230.0, "radiant_dec": 49.0, "speed_kms": 41},
+    {"code": "LYR", "name": "Lyrid",        "lambda_sun_j2000": 32.32,  "approx_md": [4, 22],  "zhr": 18,  "radiant_ra": 271.0, "radiant_dec": 34.0, "speed_kms": 49},
+    {"code": "ETA", "name": "eta-Aquariid", "lambda_sun_j2000": 45.5,   "approx_md": [5, 6],   "zhr": 50,  "radiant_ra": 338.0, "radiant_dec": -1.0, "speed_kms": 66},
+    {"code": "PER", "name": "Perseid",      "lambda_sun_j2000": 140.0,  "approx_md": [8, 12],  "zhr": 100, "radiant_ra": 48.0,  "radiant_dec": 58.0, "speed_kms": 59},
+    {"code": "ORI", "name": "Orionid",      "lambda_sun_j2000": 208.0,  "approx_md": [10, 21], "zhr": 20,  "radiant_ra": 95.0,  "radiant_dec": 16.0, "speed_kms": 66},
+    {"code": "LEO", "name": "Leonid",       "lambda_sun_j2000": 235.27, "approx_md": [11, 17], "zhr": 15,  "radiant_ra": 152.0, "radiant_dec": 22.0, "speed_kms": 71},
+    {"code": "GEM", "name": "Geminid",      "lambda_sun_j2000": 262.2,  "approx_md": [12, 14], "zhr": 150, "radiant_ra": 112.0, "radiant_dec": 33.0, "speed_kms": 35},
+    {"code": "URS", "name": "Ursid",        "lambda_sun_j2000": 270.7,  "approx_md": [12, 22], "zhr": 10,  "radiant_ra": 217.0, "radiant_dec": 76.0, "speed_kms": 33}
+  ]
+}

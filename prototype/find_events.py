@@ -164,9 +164,8 @@ def occultation_windows(close_events):
     return out
 
 
-def find_all(year, month, lat=-6.2088, lon=106.8456):
-    nxt = (year + (month == 12), 1 if month == 12 else month + 1)
-    t0, t1 = wib_to_jd(year, month, 1), wib_to_jd(nxt[0], nxt[1], 1)
+def find_window(t0, t1, lat=-6.2088, lon=106.8456, include_local=True):
+    """Semua event dalam jendela JD [t0, t1). include_local=False melewatkan okultasi lokal (khusus satu lokasi)."""
     events = moon_phases(t0, t1)
     for b in E.PLANETS + CLUSTERS:
         events += pair_events('moon', b, t0, t1, 1 / 24, 8.0)
@@ -181,10 +180,16 @@ def find_all(year, month, lat=-6.2088, lon=106.8456):
     for p in ('mercury', 'venus'):
         events += inner_planet_events(p, t0 - 20, t1 + 20)
     events = [e for e in events if t0 <= e['jd'] < t1]
-    events += [o for o in occultations(events, lat, lon) if t0 <= o['jd'] < t1]
+    if include_local:
+        events += [o for o in occultations(events, lat, lon) if t0 <= o['jd'] < t1]
     events += [o for o in occultation_windows(events) if t0 <= o['jd'] < t1]
     events.sort(key=lambda e: e['jd'])
     return events
+
+
+def find_all(year, month, lat=-6.2088, lon=106.8456, include_local=True):
+    nxt = (year + (month == 12), 1 if month == 12 else month + 1)
+    return find_window(wib_to_jd(year, month, 1), wib_to_jd(nxt[0], nxt[1], 1), lat, lon, include_local)
 
 
 def describe(e):

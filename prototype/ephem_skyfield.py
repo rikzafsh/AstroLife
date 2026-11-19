@@ -22,7 +22,9 @@ except Exception:                       # pragma: no cover
     planetary_magnitude = None
 
 # Fungsi MURNI (bukan mesin posisi) dipakai bersama dengan ephem_lite
+from prototype import magnitudes as MG
 from prototype.ephem_lite import FIXED, PLANETS, wrap180, separation, EARTH_RADIUS_KM  # noqa: F401
+from prototype.ephem_lite import SUN_SD_1AU_DEG, SUN_PARALLAX_1AU_DEG  # noqa: F401
 
 NAME = 'skyfield + JPL DE440s'
 # False: rumus Astronomical Almanac (sepadan dengan in-the-sky.org; puncak 'paling terang' Venus jatuh pada tanggal yang sama).
@@ -104,3 +106,34 @@ def phase_angle_and_mag(body: str, jd_ut: float):
         else:
             mag = -0.42 + 5 * math.log10(r * delta) + 0.0380 * i - 0.000273 * i ** 2 + 0.000002 * i ** 3
     return i, mag
+
+
+_KM_PER_AU = 149597870.7
+
+
+def _sun_distance_au(jd_ut: float) -> float:
+    return _geo('sun', jd_ut)[4] / _KM_PER_AU
+
+
+def sun_semidiameter_deg(jd_ut: float) -> float:
+    return SUN_SD_1AU_DEG / _sun_distance_au(jd_ut)
+
+
+def sun_parallax_deg(jd_ut: float) -> float:
+    return SUN_PARALLAX_1AU_DEG / _sun_distance_au(jd_ut)
+
+
+def apparent_mag(body: str, jd_ut: float):
+    """Magnitudo tampak benda (planet, Bulan, bintang/gugus tetap). None untuk Matahari."""
+    if body in MG.FIXED_MAG:
+        return MG.FIXED_MAG[body]
+    if body == 'moon':
+        return MG.moon_mag((ecl('moon', jd_ut)[0] - ecl('sun', jd_ut)[0]) % 360.0)
+    if body in PLANETS:
+        t = _ts.ut1_jd(jd_ut)
+        p, e, s = (_BODY[body].at(t).position.au, _earth.at(t).position.au, _sun.at(t).position.au)
+        r, delta, R = float(math.dist(p, s)), float(math.dist(p, e)), float(math.dist(e, s))
+        i = math.degrees(math.acos(max(-1.0, min(1.0, (r * r + delta * delta - R * R) / (2 * r * delta)))))
+        ra, dec = eq(body, jd_ut)
+        return MG.planet_mag(body, r, delta, i, ra, dec)
+    return None

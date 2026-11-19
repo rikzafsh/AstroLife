@@ -11,6 +11,7 @@ def create_app(config_class=Config):
         app.config['DATA_DIR'],
         app.config['CACHE_DIR'],
         app.config['DATASETS_DIR'],
+        app.config['CATALOG_DIR'],
         app.config['KNOWLEDGE_BASE_DIR'],
         app.config['MODELS_DIR']
     ]:
@@ -19,6 +20,7 @@ def create_app(config_class=Config):
     # Register Blueprints
     from app.routes.main import main_bp
     from app.routes.observation import observation_bp
+    from app.routes.catalog import catalog_bp
     from app.routes.calendar import calendar_bp
     from app.routes.islamic import islamic_bp
     from app.routes.analytics import analytics_bp
@@ -26,6 +28,7 @@ def create_app(config_class=Config):
 
     app.register_blueprint(main_bp)
     app.register_blueprint(observation_bp, url_prefix='/observation')
+    app.register_blueprint(catalog_bp, url_prefix='/catalog')
     app.register_blueprint(calendar_bp, url_prefix='/calendar')
     app.register_blueprint(islamic_bp, url_prefix='/islamic')
     app.register_blueprint(analytics_bp, url_prefix='/analytics')

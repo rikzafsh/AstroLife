@@ -9,6 +9,7 @@ untuk semua benda agar mesin ini bisa diganti tanpa mengubah kode pencari event.
 """
 import math
 from app.services import astro_core as ac
+from prototype import magnitudes as MG
 
 NAME = 'ephem_lite (sementara: Meeus + elemen JPL Standish)'
 DELTA_T_DAYS = 69.2 / 86400.0      # TT - UT, kira-kira tahun 2026
@@ -198,3 +199,37 @@ def phase_angle_and_mag(body: str, jd_ut: float):
 
 def moon_horizontal_parallax_deg(jd_ut: float) -> float:
     return deg(math.asin(EARTH_RADIUS_KM / moon_distance_km(tt(jd_ut))))
+
+
+SUN_SD_1AU_DEG = 959.63 / 3600.0      # semidiameter Matahari pada 1 AU
+SUN_PARALLAX_1AU_DEG = 8.794 / 3600.0
+
+
+def _sun_distance_au(jd_ut: float) -> float:
+    return math.sqrt(sum(c * c for c in helio('earth', tt(jd_ut))))
+
+
+def sun_semidiameter_deg(jd_ut: float) -> float:
+    return SUN_SD_1AU_DEG / _sun_distance_au(jd_ut)
+
+
+def sun_parallax_deg(jd_ut: float) -> float:
+    return SUN_PARALLAX_1AU_DEG / _sun_distance_au(jd_ut)
+
+
+def apparent_mag(body: str, jd_ut: float):
+    """Magnitudo tampak benda (planet, Bulan, bintang/gugus tetap). None untuk Matahari."""
+    if body in MG.FIXED_MAG:
+        return MG.FIXED_MAG[body]
+    if body == 'moon':
+        return MG.moon_mag(wrap180(ecl('moon', jd_ut)[0] - ecl('sun', jd_ut)[0]) % 360.0)
+    if body in ELEMENTS and body != 'earth':
+        _, _, delta, r = _planet_geo(body, jd_ut)
+        R = _sun_distance_au(jd_ut)
+        i, _ = phase_angle_and_mag(body, jd_ut) if body in ('mercury', 'venus') else (None, None)
+        if i is None:
+            cos_i = (r * r + delta * delta - R * R) / (2 * r * delta)
+            i = deg(math.acos(max(-1.0, min(1.0, cos_i))))
+        ra, dec = eq(body, jd_ut)
+        return MG.planet_mag(body, r, delta, i, ra, dec)
+    return None

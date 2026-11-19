@@ -1,0 +1,252 @@
+{% extends "base.html" %}
+{% block title %}Katalog Event Astronomi - AstroLife{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+
+    <!-- Header -->
+    <div class="glass-card rounded-2xl p-5 sm:p-7 space-y-3">
+        <div class="flex flex-wrap items-start justify-between gap-3">
+            <div>
+                <h1 class="font-display text-2xl sm:text-3xl font-bold text-white flex items-center gap-2">
+                    <i data-lucide="telescope" class="w-7 h-7 text-violet-400"></i> Katalog Event Astronomi
+                </h1>
+                <p class="text-sm text-slate-400 mt-1 max-w-3xl">
+                    Seluruh peristiwa dihitung sendiri dari posisi Matahari, Bulan, dan planet. Keterlihatan (di atas/bawah ufuk,
+                    langit gelap, magnitudo tampak, cahaya Bulan) dihitung khusus untuk lokasi Anda.
+                </p>
+            </div>
+            <div id="meta-chip" class="text-[11px] text-slate-500 text-right leading-relaxed"></div>
+        </div>
+        <div id="engine-warning" class="hidden text-xs text-amber-300/90 bg-amber-500/10 border border-amber-500/30 rounded-xl px-3 py-2">
+            Katalog ini dibuat dengan mesin sementara (galat planet ~2 menit busur). Untuk hasil akhir buat ulang dengan
+            <code class="text-amber-200">ASTROLIFE_ENGINE=skyfield</code>.
+        </div>
+    </div>
+
+    <!-- Kontrol lokasi & periode -->
+    <div class="glass-card rounded-2xl p-5 grid grid-cols-1 md:grid-cols-6 gap-3 items-end text-xs">
+        <label class="md:col-span-2 space-y-1">
+            <span class="text-slate-400">Lokasi</span>
+            <select id="preset" class="w-full bg-slate-950/70 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-200">
+                <option value="-7.7956,110.3695">Yogyakarta</option>
+                <option value="-6.2088,106.8456">Jakarta</option>
+                <option value="-6.9175,107.6191">Bandung</option>
+                <option value="-7.2575,112.7521">Surabaya</option>
+                <option value="3.5952,98.6722">Medan</option>
+                <option value="-5.1477,119.4327">Makassar</option>
+                <option value="-8.65,115.2167">Denpasar</option>
+                <option value="-0.0263,109.3425">Pontianak</option>
+                <option value="-2.5337,140.7181">Jayapura</option>
+                <option value="custom">Koordinat sendiri...</option>
+            </select>
+        </label>
+        <label class="space-y-1"><span class="text-slate-400">Lintang</span>
+            <input id="lat" type="number" step="0.0001" value="-7.7956" class="w-full bg-slate-950/70 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-200"></label>
+        <label class="space-y-1"><span class="text-slate-400">Bujur</span>
+            <input id="lon" type="number" step="0.0001" value="110.3695" class="w-full bg-slate-950/70 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-200"></label>
+        <label class="space-y-1"><span class="text-slate-400">Bulan</span>
+            <input id="month" type="month" class="w-full bg-slate-950/70 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-200"></label>
+        <label class="space-y-1"><span class="text-slate-400">Kualitas langit</span>
+            <select id="sky" class="w-full bg-slate-950/70 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-200">
+                <option value="kota">Kota besar (mag 4,0)</option>
+                <option value="pinggiran" selected>Pinggiran kota (mag 5,0)</option>
+                <option value="gelap">Langit gelap (mag 6,0)</option>
+            </select></label>
+        <div class="md:col-span-6 flex flex-wrap items-center gap-3">
+            <button id="geo-btn" class="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 flex items-center gap-1.5">
+                <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> Pakai lokasi saya</button>
+            <span id="loc-note" class="text-slate-500"></span>
+        </div>
+    </div>
+
+    <!-- Ringkasan -->
+    <div id="summary" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+
+    <!-- Filter -->
+    <div class="glass-card rounded-2xl p-5 space-y-3 text-xs">
+        <div class="flex flex-wrap items-center gap-3">
+            <input id="q" type="search" placeholder="Cari event (mis. Jupiter, gerhana, Leonid)..." class="flex-1 min-w-[200px] bg-slate-950/70 border border-slate-700 rounded-lg px-3 py-2 text-slate-200">
+            <select id="sort" class="bg-slate-950/70 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-200">
+                <option value="time">Urut: waktu</option>
+                <option value="rarity">Urut: kelangkaan</option>
+                <option value="altitude">Urut: ketinggian terbaik</option>
+            </select>
+            <label class="flex items-center gap-1.5 text-slate-300"><input id="only-obs" type="checkbox" class="accent-violet-500"> Hanya yang dapat diamati</label>
+        </div>
+        <div id="f-cat" class="flex flex-wrap gap-1.5"></div>
+        <div id="f-inst" class="flex flex-wrap gap-1.5"></div>
+        <div id="f-state" class="flex flex-wrap gap-1.5"></div>
+        <div id="f-tier" class="flex flex-wrap gap-1.5"></div>
+    </div>
+
+    <!-- Daftar -->
+    <div id="list" class="space-y-3"></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+    const API = "{{ url_for('catalog.api_events') }}";
+    const $ = (id) => document.getElementById(id);
+    const esc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+    const TIER_CLS = {
+        common: 'bg-slate-700/40 text-slate-300 border-slate-600/50',
+        uncommon: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+        rare: 'bg-sky-500/15 text-sky-300 border-sky-500/30',
+        epic: 'bg-violet-500/15 text-violet-300 border-violet-500/30',
+        legendary: 'bg-amber-500/15 text-amber-300 border-amber-500/40'
+    };
+    const TIER_BAR = {common: 'bg-slate-600', uncommon: 'bg-emerald-500', rare: 'bg-sky-500', epic: 'bg-violet-500', legendary: 'bg-amber-400'};
+    const TIER_ORDER = ['common', 'uncommon', 'rare', 'epic', 'legendary'];
+    const STATE_CLS = {
+        visible: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+        twilight: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+        low: 'bg-orange-500/15 text-orange-300 border-orange-500/30',
+        daylight: 'bg-yellow-500/15 text-yellow-300 border-yellow-500/30',
+        below_horizon: 'bg-slate-700/40 text-slate-400 border-slate-600/50',
+        not_observable: 'bg-slate-700/40 text-slate-400 border-slate-600/50'
+    };
+    const OBSERVABLE = new Set(['visible', 'twilight']);
+
+    let data = null;
+    const sel = {cat: new Set(), inst: new Set(), state: new Set(), tier: new Set()};
+
+    function chip(group, key, label, count) {
+        const on = sel[group].has(key);
+        return `<button data-g="${group}" data-k="${esc(key)}" class="px-2.5 py-1 rounded-full border transition-colors ${on ? 'bg-violet-500/25 border-violet-400/60 text-violet-200' : 'bg-slate-900/60 border-slate-700 text-slate-400 hover:text-slate-200'}">${esc(label)} <span class="opacity-60">${count}</span></button>`;
+    }
+
+    function buildFilters() {
+        const ev = data.events;
+        const count = (fn) => { const m = {}; ev.forEach(e => { const k = fn(e); m[k] = (m[k] || 0) + 1; }); return m; };
+        const cat = count(e => e.category), ins = count(e => e.visibility.instrument || 'none'),
+              st = count(e => e.visibility.state), tr = count(e => e.rarity.tier);
+        $('f-cat').innerHTML = '<span class="text-slate-500 w-16">Kategori</span>' + Object.entries(cat).map(([k, n]) => chip('cat', k, (ev.find(e => e.category === k) || {}).kategori_label || k, n)).join('');
+        $('f-inst').innerHTML = '<span class="text-slate-500 w-16">Alat</span>' + Object.entries(ins).map(([k, n]) => chip('inst', k, data.instrument_label[k] || 'Tidak teramati', n)).join('');
+        $('f-state').innerHTML = '<span class="text-slate-500 w-16">Status</span>' + Object.entries(st).map(([k, n]) => chip('state', k, data.state_label[k] || k, n)).join('');
+        $('f-tier').innerHTML = '<span class="text-slate-500 w-16">Kelangkaan</span>' + TIER_ORDER.filter(k => tr[k]).map(k => chip('tier', k, data.tier_label[k], tr[k])).join('');
+    }
+
+    function visible(e) {
+        const q = $('q').value.trim().toLowerCase();
+        if (q && !(e.title.toLowerCase().includes(q) || e.kategori_label.toLowerCase().includes(q))) return false;
+        if ($('only-obs').checked && !OBSERVABLE.has(e.visibility.state)) return false;
+        if (sel.cat.size && !sel.cat.has(e.category)) return false;
+        if (sel.inst.size && !sel.inst.has(e.visibility.instrument || 'none')) return false;
+        if (sel.state.size && !sel.state.has(e.visibility.state)) return false;
+        if (sel.tier.size && !sel.tier.has(e.rarity.tier)) return false;
+        return true;
+    }
+
+    function card(e) {
+        const v = e.visibility, r = e.rarity;
+        const mags = Object.entries(v.bodies_mag || {}).map(([b, m]) => `${esc(data.body_names[b] || b)} ${m > 0 ? '+' : ''}${m.toFixed(1)}`).join(' · ');
+        const best = v.best_time_local ? `${esc(v.best_time_local.slice(11))} (tinggi ${v.min_altitude}°, Matahari ${v.sun_altitude}°)` : '-';
+        const lo = v.local_occultation, le = v.local_eclipse;
+        const extra = [];
+        if (e.separation_deg != null) extra.push(`jarak sudut ${e.separation_deg.toFixed(2)}°`);
+        if (mags) extra.push(`magnitudo: ${mags}`);
+        if (v.required_magnitude != null) extra.push(`batas mata telanjang efektif ${v.effective_naked_limit}`);
+        if (le) extra.push(le.terlihat ? `gerhana ${esc(le.jenis_lokal)} terlihat di lokasi (magnitudo ${le.magnitudo_lokal})` : 'gerhana tidak terlihat dari lokasi ini');
+        if (v.expected_rate_per_hour != null) extra.push(`±${v.expected_rate_per_hour} meteor/jam`);
+        const notes = (v.notes || []).map(n => `<li>${esc(n)}</li>`).join('');
+        const badge = (cls, t) => `<span class="px-2 py-0.5 rounded-full border text-[11px] font-semibold ${cls}">${esc(t)}</span>`;
+        const localBadge = lo && lo.terjadi ? badge('bg-rose-500/15 text-rose-300 border-rose-500/30', 'Terjadi di lokasi Anda') : '';
+        return `<div class="glass-card rounded-xl overflow-hidden flex">
+            <div class="w-1.5 ${TIER_BAR[r.tier]}"></div>
+            <div class="flex-1 p-4 space-y-2">
+                <div class="flex flex-wrap items-start justify-between gap-2">
+                    <div>
+                        <div class="text-[11px] uppercase tracking-wide text-slate-500">${esc(e.kategori_label)}</div>
+                        <h3 class="font-bold text-white leading-snug">${esc(e.title)}</h3>
+                        <div class="text-xs text-cyan-300 font-mono">${esc(e.time_local)} <span class="text-slate-500">(UTC ${esc(e.time_utc.slice(0, 16).replace('T', ' '))})</span></div>
+                    </div>
+                    <div class="flex flex-wrap gap-1.5 justify-end">
+                        ${badge(TIER_CLS[r.tier], r.label)}
+                        ${badge(STATE_CLS[v.state], v.state_label)}
+                        ${v.instrument ? badge('bg-indigo-500/15 text-indigo-300 border-indigo-500/30', v.instrument_label) : ''}
+                        ${localBadge}
+                    </div>
+                </div>
+                <p class="text-xs text-slate-300">${esc(v.reason)}</p>
+                <div class="text-[11px] text-slate-400 flex flex-wrap gap-x-4 gap-y-0.5">
+                    <span><span class="text-slate-500">Waktu terbaik:</span> ${best}</span>
+                    ${extra.map(x => `<span>${x}</span>`).join('')}
+                </div>
+                ${notes ? `<ul class="text-[11px] text-amber-200/80 list-disc pl-4 space-y-0.5">${notes}</ul>` : ''}
+                <div class="text-[11px] text-slate-500"><span class="${TIER_CLS[r.tier].split(' ')[1]} font-semibold">${esc(r.label)}</span> · ${esc(r.alasan)} (${esc(r.frekuensi)})</div>
+            </div></div>`;
+    }
+
+    function render() {
+        if (!data) return;
+        let items = data.events.filter(visible);
+        const s = $('sort').value;
+        if (s === 'rarity') items.sort((a, b) => TIER_ORDER.indexOf(b.rarity.tier) - TIER_ORDER.indexOf(a.rarity.tier) || a.time_utc.localeCompare(b.time_utc));
+        else if (s === 'altitude') items.sort((a, b) => (b.visibility.min_altitude ?? -99) - (a.visibility.min_altitude ?? -99));
+        $('list').innerHTML = items.length ? items.map(card).join('') : '<div class="glass-card rounded-xl p-6 text-sm text-slate-400">Tidak ada event yang cocok dengan filter pada periode ini.</div>';
+        if (window.lucide) lucide.createIcons();
+    }
+
+    function renderSummary() {
+        const s = data.summary;
+        const box = (label, val, cls) => `<div class="glass-card rounded-xl p-4"><div class="text-[11px] text-slate-500">${label}</div><div class="text-2xl font-display font-bold ${cls}">${val}</div></div>`;
+        $('summary').innerHTML = box('Event pada periode', s.total, 'text-white') + box('Dapat diamati dari lokasi', s.teramati, 'text-emerald-300') +
+            box('Cukup dengan mata telanjang', s.mata_telanjang, 'text-indigo-300') + box('Langka ke atas', s.langka_ke_atas, 'text-violet-300');
+        const m = data.meta;
+        $('meta-chip').innerHTML = `Mesin: ${esc(m.engine)}<br>Rentang: ${m.dari_tahun}–${m.sampai_tahun} · ${m.jumlah} event<br>Dibuat: ${esc(m.dibuat)}`;
+        $('engine-warning').classList.toggle('hidden', m.engine_key === 'skyfield');
+        $('loc-note').textContent = `Zona waktu UTC${data.lokasi.tz >= 0 ? '+' : ''}${data.lokasi.tz} · batas magnitudo langit ${data.lokasi.batas_magnitudo}`;
+    }
+
+    async function load(retry = true) {
+        const [y, m] = ($('month').value || '').split('-');
+        const p = new URLSearchParams({lat: $('lat').value, lon: $('lon').value, langit: $('sky').value});
+        if (y) { p.set('year', y); p.set('month', Number(m)); }
+        $('list').innerHTML = '<div class="glass-card rounded-xl p-6 text-sm text-slate-400">Menghitung keterlihatan...</div>';
+        try {
+            const res = await fetch(`${API}?${p}`);
+            const j = await res.json();
+            if (!res.ok) { $('list').innerHTML = `<div class="glass-card rounded-xl p-6 text-sm text-amber-300">${esc(j.message || 'Gagal memuat katalog.')}</div>`; return; }
+            data = j;
+            if (!j.events.length && retry && j.meta.dari_tahun) {      // bulan di luar rentang katalog: lompat ke awal rentang
+                $('month').value = `${j.meta.dari_tahun}-01`;
+                return load(false);
+            }
+            renderSummary(); buildFilters(); render();
+        } catch (err) {
+            $('list').innerHTML = '<div class="glass-card rounded-xl p-6 text-sm text-rose-300">Tidak dapat menghubungi server.</div>';
+        }
+    }
+
+    // --- interaksi ---
+    document.addEventListener('click', (ev) => {
+        const b = ev.target.closest('button[data-g]');
+        if (!b) return;
+        const set = sel[b.dataset.g];
+        set.has(b.dataset.k) ? set.delete(b.dataset.k) : set.add(b.dataset.k);
+        buildFilters(); render();
+    });
+    ['q', 'sort', 'only-obs'].forEach(id => $(id).addEventListener(id === 'q' ? 'input' : 'change', render));
+    ['month', 'sky', 'lat', 'lon'].forEach(id => $(id).addEventListener('change', () => { if (id === 'lat' || id === 'lon') $('preset').value = 'custom'; load(); }));
+    $('preset').addEventListener('change', () => {
+        if ($('preset').value === 'custom') return;
+        const [la, lo] = $('preset').value.split(',');
+        $('lat').value = la; $('lon').value = lo; load();
+    });
+    $('geo-btn').addEventListener('click', () => {
+        if (!navigator.geolocation) { $('loc-note').textContent = 'Peramban tidak mendukung geolokasi.'; return; }
+        navigator.geolocation.getCurrentPosition(
+            (pos) => { $('lat').value = pos.coords.latitude.toFixed(4); $('lon').value = pos.coords.longitude.toFixed(4); $('preset').value = 'custom'; load(); },
+            () => { $('loc-note').textContent = 'Izin lokasi ditolak; pilih kota atau isi koordinat.'; });
+    });
+
+    const now = new Date();
+    $('month').value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+    load();
+})();
+</script>
+{% endblock %}

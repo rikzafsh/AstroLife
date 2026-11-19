@@ -136,6 +136,11 @@
                         <i data-lucide="sparkles" class="w-4 h-4 text-cyan-400"></i> Observasi Langit
                     </a>
 
+                    <a href="{{ url_for('catalog.index') }}" 
+                       class="px-3 py-2 rounded-xl transition-all flex items-center gap-2 {{ 'bg-violet-500/20 text-violet-300 border border-violet-500/30 shadow-sm' if '/catalog' in current_path else 'text-slate-300 hover:text-white hover:bg-slate-800/50' }}">
+                        <i data-lucide="telescope" class="w-4 h-4 text-violet-400"></i> Katalog Event
+                    </a>
+
                     <a href="{{ url_for('calendar.index') }}" 
                        class="px-3 py-2 rounded-xl transition-all flex items-center gap-2 {{ 'bg-amber-500/20 text-amber-300 border border-amber-500/30 shadow-sm' if '/calendar' in current_path else 'text-slate-300 hover:text-white hover:bg-slate-800/50' }}">
                         <i data-lucide="calendar" class="w-4 h-4 text-amber-400"></i> Lab Kalender
@@ -178,6 +183,7 @@
         <div id="mobile-menu" class="hidden lg:hidden px-4 pt-2 pb-4 space-y-1.5 bg-space-900 border-b border-slate-800 shadow-2xl">
             <a href="{{ url_for('main.index') }}" class="block px-3 py-2 rounded-xl text-slate-200 hover:bg-slate-800 text-sm">Beranda</a>
             <a href="{{ url_for('observation.index') }}" class="block px-3 py-2 rounded-xl text-slate-200 hover:bg-slate-800 text-sm">Observasi &amp; Cuaca</a>
+            <a href="{{ url_for('catalog.index') }}" class="block px-3 py-2 rounded-xl text-slate-200 hover:bg-slate-800 text-sm">Katalog Event</a>
             <a href="{{ url_for('calendar.index') }}" class="block px-3 py-2 rounded-xl text-slate-200 hover:bg-slate-800 text-sm">Lab Kalender</a>
             <a href="{{ url_for('islamic.index') }}" class="block px-3 py-2 rounded-xl text-slate-200 hover:bg-slate-800 text-sm">Astronomi Islam &amp; Kiblat</a>
             <a href="{{ url_for('analytics.index') }}" class="block px-3 py-2 rounded-xl text-slate-200 hover:bg-slate-800 text-sm">Analitik Data &amp; ML</a>
