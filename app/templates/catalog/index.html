@@ -2,86 +2,188 @@
 {% block title %}Katalog Event Astronomi - AstroLife{% endblock %}
 
 {% block content %}
-<div class="space-y-6">
+<style>
+  /* Tata letak halaman katalog (CSS sendiri agar tidak bergantung pada kelas Tailwind dinamis) */
+  .cat { --muted:#94a3b8; --text:#e2e8f0; --line:rgba(148,163,184,.18); --field:#0b1324; --accent:#8b5cf6; color:var(--text); }
+  .cat * { box-sizing:border-box; }
+  .cat-layout { display:grid; grid-template-columns:320px minmax(0,1fr); gap:24px; align-items:start; }
+  .cat-side { position:sticky; top:92px; max-height:calc(100vh - 108px); overflow:auto; padding:18px; }
+  .cat-side h2 { font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin:18px 0 8px; font-weight:600; }
+  .cat-side h2:first-child { margin-top:0; }
+  .cat label.lbl { display:block; font-size:12px; color:var(--muted); margin-bottom:4px; }
+  .cat input[type=number], .cat input[type=month], .cat input[type=search], .cat select {
+      width:100%; background:var(--field); border:1px solid var(--line); border-radius:10px; color:var(--text);
+      padding:9px 11px; font-size:14px; }
+  .cat input:focus, .cat select:focus { outline:2px solid rgba(139,92,246,.55); outline-offset:0; }
+  .row2 { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .seg { display:flex; background:var(--field); border:1px solid var(--line); border-radius:10px; padding:3px; gap:3px; }
+  .seg button { flex:1; border:0; background:transparent; color:var(--muted); font-size:13px; padding:7px 4px; border-radius:7px; cursor:pointer; }
+  .seg button.on { background:rgba(139,92,246,.28); color:#ede9fe; font-weight:600; }
+  .btn { background:#1e293b; color:var(--text); border:1px solid var(--line); border-radius:10px; padding:8px 12px; font-size:13px; cursor:pointer; }
+  .btn:hover { background:#273449; }
+  .btn.ghost { background:transparent; }
+  .month-nav { display:grid; grid-template-columns:40px 1fr 40px; gap:6px; }
+  .checks label { display:flex; align-items:center; gap:8px; font-size:13.5px; padding:5px 2px; cursor:pointer; color:var(--text); }
+  .checks .n { margin-left:auto; color:var(--muted); font-size:12px; }
+  .checks input { accent-color:var(--accent); width:15px; height:15px; }
+  .hint { font-size:12px; color:var(--muted); line-height:1.5; margin-top:6px; }
 
-    <!-- Header -->
-    <div class="glass-card rounded-2xl p-5 sm:p-7 space-y-3">
-        <div class="flex flex-wrap items-start justify-between gap-3">
-            <div>
-                <h1 class="font-display text-2xl sm:text-3xl font-bold text-white flex items-center gap-2">
-                    <i data-lucide="telescope" class="w-7 h-7 text-violet-400"></i> Katalog Event Astronomi
-                </h1>
-                <p class="text-sm text-slate-400 mt-1 max-w-3xl">
-                    Seluruh peristiwa dihitung sendiri dari posisi Matahari, Bulan, dan planet. Keterlihatan (di atas/bawah ufuk,
-                    langit gelap, magnitudo tampak, cahaya Bulan) dihitung khusus untuk lokasi Anda.
-                </p>
-            </div>
-            <div id="meta-chip" class="text-[11px] text-slate-500 text-right leading-relaxed"></div>
+  .cat-head h1 { font-size:26px; font-weight:700; margin:0 0 4px; }
+  .cat-head p { color:var(--muted); font-size:14px; margin:0; max-width:760px; line-height:1.55; }
+  .warn { margin-top:10px; font-size:12.5px; color:#fcd34d; background:rgba(245,158,11,.1); border:1px solid rgba(245,158,11,.3);
+          border-radius:10px; padding:8px 12px; }
+  .hidden { display:none !important; }
+
+  .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:0 0 18px; }
+  .stat { padding:12px 14px; border-radius:12px; }
+  .stat .k { font-size:12px; color:var(--muted); }
+  .stat .v { font-size:24px; font-weight:700; line-height:1.2; }
+
+  .sec-title { font-size:12px; font-weight:600; color:var(--muted); margin:6px 0 10px; text-transform:uppercase; letter-spacing:.06em; }
+  .spot { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-bottom:22px; }
+  .spot-card { padding:14px 16px; border-radius:14px; border-top:3px solid var(--tc); cursor:pointer; }
+  .spot-card:hover { background:rgba(255,255,255,.04); }
+  .spot-card .t { font-weight:700; font-size:15px; margin:8px 0 4px; line-height:1.3; }
+  .spot-card .m { font-size:12.5px; color:var(--muted); line-height:1.5; }
+
+  .bar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:6px; }
+  .bar .grow { flex:1 1 220px; }
+  .bar select { width:auto; }
+  .count { font-size:13px; color:var(--muted); margin:8px 0 6px; }
+  .count a { color:#c4b5fd; cursor:pointer; text-decoration:underline; }
+
+  .day { display:flex; align-items:baseline; gap:10px; margin:22px 0 8px; padding-bottom:6px; border-bottom:1px solid var(--line); }
+  .day h3 { margin:0; font-size:15px; font-weight:700; }
+  .day span { font-size:12px; color:var(--muted); }
+
+  details.ev { border:1px solid var(--line); border-left:4px solid var(--tc); border-radius:12px; margin-bottom:8px; background:rgba(15,23,42,.55); }
+  details.ev[open] { background:rgba(30,41,59,.55); }
+  details.ev > summary { list-style:none; cursor:pointer; display:grid; grid-template-columns:54px minmax(0,1fr) auto 18px; gap:12px;
+          align-items:center; padding:11px 14px; }
+  details.ev > summary::-webkit-details-marker { display:none; }
+  .ev-time { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:14px; color:#67e8f9; }
+  .ev-title { font-weight:600; font-size:15px; line-height:1.3; }
+  .ev-sub { font-size:12.5px; color:var(--muted); margin-top:3px; display:flex; flex-wrap:wrap; gap:4px 12px; align-items:center; }
+  .dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:5px; background:var(--sc); }
+  .pill { font-size:11.5px; font-weight:600; padding:3px 9px; border-radius:999px; border:1px solid var(--tc); color:var(--tc);
+          background:rgba(148,163,184,.10); white-space:nowrap; }
+  .chev { color:var(--muted); transition:transform .15s; text-align:center; }
+  details[open] > summary .chev { transform:rotate(90deg); }
+  .ev-body { padding:4px 16px 16px 82px; font-size:13.5px; line-height:1.6; }
+  .ev-body p { margin:6px 0; }
+  .facts { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:8px 18px; margin:10px 0; }
+  .facts div { font-size:12.5px; } .facts b { display:block; font-weight:500; color:var(--muted); font-size:11.5px; }
+  .notes { margin:8px 0 0; padding-left:18px; color:#fde68a; font-size:12.5px; }
+  .why { margin-top:10px; font-size:12.5px; color:var(--muted); }
+  .why strong { color:var(--tc); }
+  .empty { padding:28px; border-radius:14px; text-align:center; color:var(--muted); font-size:14px; }
+
+  .rar-inline { display:none; font-weight:600; }
+  .only-mobile { display:none; }
+  @media (max-width:1023px) {
+    .cat-layout { grid-template-columns:minmax(0,1fr); }
+    .cat-side { position:static; max-height:none; }
+    .cat-side.collapsed .side-body { display:none; }
+    .only-mobile { display:block; }
+    .stats { grid-template-columns:repeat(2,1fr); }
+    .spot { grid-template-columns:minmax(0,1fr); }
+  }
+  @media (max-width:640px) {
+    details.ev > summary { grid-template-columns:46px minmax(0,1fr) 16px; }
+    details.ev > summary .pill { display:none; }
+    .rar-inline { display:inline; }
+    .ev-body { padding-left:16px; }
+  }
+</style>
+
+<div class="cat">
+  <div class="cat-head glass-card" style="padding:20px 24px;border-radius:16px;margin-bottom:20px;">
+    <h1 class="font-display">Katalog Event Astronomi</h1>
+    <p>Semua peristiwa dihitung sendiri dari posisi Matahari, Bulan, dan planet. Keterlihatan (ufuk, langit gelap, magnitudo, cahaya Bulan) dihitung untuk lokasi Anda.</p>
+    <div id="engine-warning" class="warn hidden">Katalog ini dibuat dengan mesin sementara (galat planet ~2 menit busur). Untuk hasil akhir buat ulang dengan <code>ASTROLIFE_ENGINE=skyfield</code>.</div>
+  </div>
+
+  <div class="cat-layout">
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="cat-side glass-card" id="side" style="border-radius:16px;">
+      <button class="btn only-mobile" id="side-toggle" style="width:100%;margin-bottom:6px;">Pengaturan &amp; filter</button>
+      <div class="side-body">
+        <h2>Lokasi</h2>
+        <select id="preset" aria-label="Lokasi">
+          <option value="-7.7956,110.3695">Yogyakarta</option>
+          <option value="-6.2088,106.8456">Jakarta</option>
+          <option value="-6.9175,107.6191">Bandung</option>
+          <option value="-7.2575,112.7521">Surabaya</option>
+          <option value="3.5952,98.6722">Medan</option>
+          <option value="-5.1477,119.4327">Makassar</option>
+          <option value="-8.65,115.2167">Denpasar</option>
+          <option value="-0.0263,109.3425">Pontianak</option>
+          <option value="-2.5337,140.7181">Jayapura</option>
+          <option value="custom">Koordinat sendiri…</option>
+        </select>
+        <div class="row2" style="margin-top:8px;">
+          <div><label class="lbl" for="lat">Lintang</label><input id="lat" type="number" step="0.0001" value="-7.7956"></div>
+          <div><label class="lbl" for="lon">Bujur</label><input id="lon" type="number" step="0.0001" value="110.3695"></div>
         </div>
-        <div id="engine-warning" class="hidden text-xs text-amber-300/90 bg-amber-500/10 border border-amber-500/30 rounded-xl px-3 py-2">
-            Katalog ini dibuat dengan mesin sementara (galat planet ~2 menit busur). Untuk hasil akhir buat ulang dengan
-            <code class="text-amber-200">ASTROLIFE_ENGINE=skyfield</code>.
+        <button class="btn" id="geo-btn" style="margin-top:8px;width:100%;">Pakai lokasi saya</button>
+        <div class="hint" id="loc-note"></div>
+
+        <h2>Periode</h2>
+        <div class="month-nav">
+          <button class="btn" id="m-prev" aria-label="Bulan sebelumnya">‹</button>
+          <input id="month" type="month" aria-label="Bulan">
+          <button class="btn" id="m-next" aria-label="Bulan berikutnya">›</button>
         </div>
-    </div>
 
-    <!-- Kontrol lokasi & periode -->
-    <div class="glass-card rounded-2xl p-5 grid grid-cols-1 md:grid-cols-6 gap-3 items-end text-xs">
-        <label class="md:col-span-2 space-y-1">
-            <span class="text-slate-400">Lokasi</span>
-            <select id="preset" class="w-full bg-slate-950/70 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-200">
-                <option value="-7.7956,110.3695">Yogyakarta</option>
-                <option value="-6.2088,106.8456">Jakarta</option>
-                <option value="-6.9175,107.6191">Bandung</option>
-                <option value="-7.2575,112.7521">Surabaya</option>
-                <option value="3.5952,98.6722">Medan</option>
-                <option value="-5.1477,119.4327">Makassar</option>
-                <option value="-8.65,115.2167">Denpasar</option>
-                <option value="-0.0263,109.3425">Pontianak</option>
-                <option value="-2.5337,140.7181">Jayapura</option>
-                <option value="custom">Koordinat sendiri...</option>
-            </select>
-        </label>
-        <label class="space-y-1"><span class="text-slate-400">Lintang</span>
-            <input id="lat" type="number" step="0.0001" value="-7.7956" class="w-full bg-slate-950/70 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-200"></label>
-        <label class="space-y-1"><span class="text-slate-400">Bujur</span>
-            <input id="lon" type="number" step="0.0001" value="110.3695" class="w-full bg-slate-950/70 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-200"></label>
-        <label class="space-y-1"><span class="text-slate-400">Bulan</span>
-            <input id="month" type="month" class="w-full bg-slate-950/70 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-200"></label>
-        <label class="space-y-1"><span class="text-slate-400">Kualitas langit</span>
-            <select id="sky" class="w-full bg-slate-950/70 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-200">
-                <option value="kota">Kota besar (mag 4,0)</option>
-                <option value="pinggiran" selected>Pinggiran kota (mag 5,0)</option>
-                <option value="gelap">Langit gelap (mag 6,0)</option>
-            </select></label>
-        <div class="md:col-span-6 flex flex-wrap items-center gap-3">
-            <button id="geo-btn" class="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 flex items-center gap-1.5">
-                <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> Pakai lokasi saya</button>
-            <span id="loc-note" class="text-slate-500"></span>
+        <h2>Kualitas langit</h2>
+        <select id="sky" aria-label="Kualitas langit">
+          <option value="kota">Kota besar (bintang ±4,0)</option>
+          <option value="pinggiran" selected>Pinggiran kota (±5,0)</option>
+          <option value="gelap">Langit gelap (±6,0)</option>
+        </select>
+
+        <h2>Tampilkan</h2>
+        <div class="seg" id="seg-view">
+          <button data-v="obs" class="on">Dapat diamati</button><button data-v="all">Semua</button>
         </div>
-    </div>
 
-    <!-- Ringkasan -->
-    <div id="summary" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
-
-    <!-- Filter -->
-    <div class="glass-card rounded-2xl p-5 space-y-3 text-xs">
-        <div class="flex flex-wrap items-center gap-3">
-            <input id="q" type="search" placeholder="Cari event (mis. Jupiter, gerhana, Leonid)..." class="flex-1 min-w-[200px] bg-slate-950/70 border border-slate-700 rounded-lg px-3 py-2 text-slate-200">
-            <select id="sort" class="bg-slate-950/70 border border-slate-700 rounded-lg px-2.5 py-2 text-slate-200">
-                <option value="time">Urut: waktu</option>
-                <option value="rarity">Urut: kelangkaan</option>
-                <option value="altitude">Urut: ketinggian terbaik</option>
-            </select>
-            <label class="flex items-center gap-1.5 text-slate-300"><input id="only-obs" type="checkbox" class="accent-violet-500"> Hanya yang dapat diamati</label>
+        <h2>Alat yang saya punya</h2>
+        <div class="seg" id="seg-gear">
+          <button data-v="0">Mata</button><button data-v="1">Binokular</button><button data-v="3">Teleskop</button><button data-v="4" class="on">Semua</button>
         </div>
-        <div id="f-cat" class="flex flex-wrap gap-1.5"></div>
-        <div id="f-inst" class="flex flex-wrap gap-1.5"></div>
-        <div id="f-state" class="flex flex-wrap gap-1.5"></div>
-        <div id="f-tier" class="flex flex-wrap gap-1.5"></div>
-    </div>
+        <div class="hint">Menampilkan event yang cukup dilihat dengan alat tersebut.</div>
 
-    <!-- Daftar -->
-    <div id="list" class="space-y-3"></div>
+        <h2>Kelangkaan minimal</h2>
+        <select id="tier" aria-label="Kelangkaan minimal">
+          <option value="0">Semua</option><option value="1">Tidak Umum ke atas</option><option value="2">Langka ke atas</option>
+          <option value="3">Epik ke atas</option><option value="4">Hanya Legendaris</option>
+        </select>
+
+        <h2>Kategori</h2>
+        <div class="checks" id="cats"></div>
+
+        <button class="btn ghost" id="reset" style="margin-top:14px;width:100%;">Atur ulang filter</button>
+        <div class="hint" id="meta" style="margin-top:16px;"></div>
+      </div>
+    </aside>
+
+    <!-- ================= KONTEN ================= -->
+    <main>
+      <div class="stats" id="stats"></div>
+
+      <div id="spot-wrap" class="hidden">
+        <div class="sec-title">Sorotan periode ini</div>
+        <div class="spot" id="spot"></div>
+      </div>
+
+      <div class="bar">
+        <input id="q" type="search" class="grow" placeholder="Cari: Jupiter, gerhana, Leonid…">
+        <select id="sort" aria-label="Urutkan"><option value="time">Urut waktu</option><option value="rarity">Urut kelangkaan</option><option value="altitude">Urut ketinggian</option></select>
+      </div>
+      <div class="count" id="count"></div>
+      <div id="list"></div>
+    </main>
+  </div>
 </div>
 {% endblock %}
 
@@ -92,158 +194,220 @@
     const $ = (id) => document.getElementById(id);
     const esc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-    const TIER_CLS = {
-        common: 'bg-slate-700/40 text-slate-300 border-slate-600/50',
-        uncommon: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
-        rare: 'bg-sky-500/15 text-sky-300 border-sky-500/30',
-        epic: 'bg-violet-500/15 text-violet-300 border-violet-500/30',
-        legendary: 'bg-amber-500/15 text-amber-300 border-amber-500/40'
-    };
-    const TIER_BAR = {common: 'bg-slate-600', uncommon: 'bg-emerald-500', rare: 'bg-sky-500', epic: 'bg-violet-500', legendary: 'bg-amber-400'};
-    const TIER_ORDER = ['common', 'uncommon', 'rare', 'epic', 'legendary'];
-    const STATE_CLS = {
-        visible: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
-        twilight: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
-        low: 'bg-orange-500/15 text-orange-300 border-orange-500/30',
-        daylight: 'bg-yellow-500/15 text-yellow-300 border-yellow-500/30',
-        below_horizon: 'bg-slate-700/40 text-slate-400 border-slate-600/50',
-        not_observable: 'bg-slate-700/40 text-slate-400 border-slate-600/50'
-    };
-    const OBSERVABLE = new Set(['visible', 'twilight']);
+    const TIERS = ['common', 'uncommon', 'rare', 'epic', 'legendary'];
+    const TIER_COLOR = {common: '#94a3b8', uncommon: '#34d399', rare: '#38bdf8', epic: '#a78bfa', legendary: '#fbbf24'};
+    const STATE_COLOR = {visible: '#34d399', twilight: '#fbbf24', low: '#fb923c', daylight: '#facc15', below_horizon: '#64748b', not_observable: '#64748b'};
+    const RANK = {naked_eye: 0, binoculars: 1, small_telescope: 2, telescope_4inch: 3, large_telescope: 4};
+    const ICON = {fase_bulan: '🌙', konjungsi: '✨', okultasi: '🌑', gerhana_bulan: '🌘', gerhana_matahari: '☀️', elongasi: '⭐', oposisi: '🔭', fase_planet: '🪐', hujan_meteor: '☄️'};
+    const STORE = 'astrolife.catalog.v2';
 
+    const S = {view: 'obs', gear: 4, tier: 0, cats: new Set(), q: '', sort: 'time'};
     let data = null;
-    const sel = {cat: new Set(), inst: new Set(), state: new Set(), tier: new Set()};
 
-    function chip(group, key, label, count) {
-        const on = sel[group].has(key);
-        return `<button data-g="${group}" data-k="${esc(key)}" class="px-2.5 py-1 rounded-full border transition-colors ${on ? 'bg-violet-500/25 border-violet-400/60 text-violet-200' : 'bg-slate-900/60 border-slate-700 text-slate-400 hover:text-slate-200'}">${esc(label)} <span class="opacity-60">${count}</span></button>`;
+    // ---------- preferensi (hanya kenyamanan; bila penyimpanan gagal tidak masalah) ----------
+    function save() {
+        try { localStorage.setItem(STORE, JSON.stringify({preset: $('preset').value, lat: $('lat').value, lon: $('lon').value, sky: $('sky').value, view: S.view, gear: S.gear, tier: S.tier})); } catch (e) {}
+    }
+    function restore() {
+        try {
+            const p = JSON.parse(localStorage.getItem(STORE) || 'null');
+            if (!p) return;
+            if (p.preset) $('preset').value = p.preset;
+            if (p.lat) $('lat').value = p.lat;
+            if (p.lon) $('lon').value = p.lon;
+            if (p.sky) $('sky').value = p.sky;
+            S.view = p.view || S.view; S.gear = p.gear ?? S.gear; S.tier = p.tier ?? S.tier;
+        } catch (e) {}
     }
 
-    function buildFilters() {
-        const ev = data.events;
-        const count = (fn) => { const m = {}; ev.forEach(e => { const k = fn(e); m[k] = (m[k] || 0) + 1; }); return m; };
-        const cat = count(e => e.category), ins = count(e => e.visibility.instrument || 'none'),
-              st = count(e => e.visibility.state), tr = count(e => e.rarity.tier);
-        $('f-cat').innerHTML = '<span class="text-slate-500 w-16">Kategori</span>' + Object.entries(cat).map(([k, n]) => chip('cat', k, (ev.find(e => e.category === k) || {}).kategori_label || k, n)).join('');
-        $('f-inst').innerHTML = '<span class="text-slate-500 w-16">Alat</span>' + Object.entries(ins).map(([k, n]) => chip('inst', k, data.instrument_label[k] || 'Tidak teramati', n)).join('');
-        $('f-state').innerHTML = '<span class="text-slate-500 w-16">Status</span>' + Object.entries(st).map(([k, n]) => chip('state', k, data.state_label[k] || k, n)).join('');
-        $('f-tier').innerHTML = '<span class="text-slate-500 w-16">Kelangkaan</span>' + TIER_ORDER.filter(k => tr[k]).map(k => chip('tier', k, data.tier_label[k], tr[k])).join('');
-    }
+    // ---------- util ----------
+    const fmtDay = (ymd) => new Date(ymd + 'T12:00').toLocaleDateString('id-ID', {weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'});
+    const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+    const fmtShort = (tl) => `${Number(tl.slice(8, 10))} ${MON[Number(tl.slice(5, 7)) - 1]} ${tl.slice(11)}`;
+    const gearOK = (e) => e.visibility.instrument != null && RANK[e.visibility.instrument] <= S.gear;
 
-    function visible(e) {
-        const q = $('q').value.trim().toLowerCase();
+    function passes(e) {
+        const v = e.visibility;
+        if (S.view === 'obs' && !v.observable) return false;
+        if (S.gear < 4 && !gearOK(e)) return false;
+        if (TIERS.indexOf(e.rarity.tier) < S.tier) return false;
+        if (S.cats.size && !S.cats.has(e.category)) return false;
+        const q = S.q.trim().toLowerCase();
         if (q && !(e.title.toLowerCase().includes(q) || e.kategori_label.toLowerCase().includes(q))) return false;
-        if ($('only-obs').checked && !OBSERVABLE.has(e.visibility.state)) return false;
-        if (sel.cat.size && !sel.cat.has(e.category)) return false;
-        if (sel.inst.size && !sel.inst.has(e.visibility.instrument || 'none')) return false;
-        if (sel.state.size && !sel.state.has(e.visibility.state)) return false;
-        if (sel.tier.size && !sel.tier.has(e.rarity.tier)) return false;
         return true;
     }
 
-    function card(e) {
-        const v = e.visibility, r = e.rarity;
-        const mags = Object.entries(v.bodies_mag || {}).map(([b, m]) => `${esc(data.body_names[b] || b)} ${m > 0 ? '+' : ''}${m.toFixed(1)}`).join(' · ');
-        const best = v.best_time_local ? `${esc(v.best_time_local.slice(11))} (tinggi ${v.min_altitude}°, Matahari ${v.sun_altitude}°)` : '-';
-        const lo = v.local_occultation, le = v.local_eclipse;
-        const extra = [];
-        if (e.separation_deg != null) extra.push(`jarak sudut ${e.separation_deg.toFixed(2)}°`);
-        if (mags) extra.push(`magnitudo: ${mags}`);
-        if (v.required_magnitude != null) extra.push(`batas mata telanjang efektif ${v.effective_naked_limit}`);
-        if (le) extra.push(le.terlihat ? `gerhana ${esc(le.jenis_lokal)} terlihat di lokasi (magnitudo ${le.magnitudo_lokal})` : 'gerhana tidak terlihat dari lokasi ini');
-        if (v.expected_rate_per_hour != null) extra.push(`±${v.expected_rate_per_hour} meteor/jam`);
+    function fact(label, val) { return val == null || val === '' ? '' : `<div><b>${esc(label)}</b>${esc(val)}</div>`; }
+
+    function rowHTML(e) {
+        const v = e.visibility, r = e.rarity, tc = TIER_COLOR[r.tier];
+        const sc = v.observable ? (STATE_COLOR[v.state] || '#34d399') : '#64748b';
+        const names = data.body_names || {};
+        const mags = Object.entries(v.bodies_mag || {}).map(([b, m]) => `${names[b] || b} ${m > 0 ? '+' : ''}${m.toFixed(1)}`).join(' · ');
+        const lo = v.local_occultation, le = v.local_eclipse, d = e.details || {};
+        const facts = [
+            fact('Waktu (UTC)', e.time_utc.slice(0, 16).replace('T', ' ')),
+            fact('Waktu terbaik', v.best_time_local ? `${v.best_time_local} (tinggi ${v.min_altitude}°)` : ''),
+            fact('Matahari saat itu', v.sun_altitude != null ? `${v.sun_altitude}°` : ''),
+            fact('Bulan', v.moon_illumination_pct != null ? `${v.moon_illumination_pct}% terang, tinggi ${v.moon_altitude}°` : ''),
+            fact('Magnitudo', mags), fact('Jarak sudut', e.separation_deg != null ? `${e.separation_deg.toFixed(2)}°` : ''),
+            fact('Batas mata telanjang efektif', v.required_magnitude != null ? v.effective_naked_limit : ''),
+            fact('Jenis gerhana', d.jenis), fact('Magnitudo umbra', d.magnitudo_umbra), fact('ZHR', d.zhr),
+            fact('Perkiraan meteor/jam', v.expected_rate_per_hour),
+            fact('Okultasi di lokasi', lo ? (lo.terjadi ? `ya (jarak min ${lo.jarak_min_deg}°)` : `tidak (jarak min ${lo.jarak_min_deg}°)`) : ''),
+            fact('Gerhana di lokasi', le ? (le.terlihat ? `terlihat, magnitudo ${le.magnitudo_lokal}` : 'tidak terlihat') : ''),
+        ].join('');
         const notes = (v.notes || []).map(n => `<li>${esc(n)}</li>`).join('');
-        const badge = (cls, t) => `<span class="px-2 py-0.5 rounded-full border text-[11px] font-semibold ${cls}">${esc(t)}</span>`;
-        const localBadge = lo && lo.terjadi ? badge('bg-rose-500/15 text-rose-300 border-rose-500/30', 'Terjadi di lokasi Anda') : '';
-        return `<div class="glass-card rounded-xl overflow-hidden flex">
-            <div class="w-1.5 ${TIER_BAR[r.tier]}"></div>
-            <div class="flex-1 p-4 space-y-2">
-                <div class="flex flex-wrap items-start justify-between gap-2">
-                    <div>
-                        <div class="text-[11px] uppercase tracking-wide text-slate-500">${esc(e.kategori_label)}</div>
-                        <h3 class="font-bold text-white leading-snug">${esc(e.title)}</h3>
-                        <div class="text-xs text-cyan-300 font-mono">${esc(e.time_local)} <span class="text-slate-500">(UTC ${esc(e.time_utc.slice(0, 16).replace('T', ' '))})</span></div>
-                    </div>
-                    <div class="flex flex-wrap gap-1.5 justify-end">
-                        ${badge(TIER_CLS[r.tier], r.label)}
-                        ${badge(STATE_CLS[v.state], v.state_label)}
-                        ${v.instrument ? badge('bg-indigo-500/15 text-indigo-300 border-indigo-500/30', v.instrument_label) : ''}
-                        ${localBadge}
-                    </div>
-                </div>
-                <p class="text-xs text-slate-300">${esc(v.reason)}</p>
-                <div class="text-[11px] text-slate-400 flex flex-wrap gap-x-4 gap-y-0.5">
-                    <span><span class="text-slate-500">Waktu terbaik:</span> ${best}</span>
-                    ${extra.map(x => `<span>${x}</span>`).join('')}
-                </div>
-                ${notes ? `<ul class="text-[11px] text-amber-200/80 list-disc pl-4 space-y-0.5">${notes}</ul>` : ''}
-                <div class="text-[11px] text-slate-500"><span class="${TIER_CLS[r.tier].split(' ')[1]} font-semibold">${esc(r.label)}</span> · ${esc(r.alasan)} (${esc(r.frekuensi)})</div>
-            </div></div>`;
+        const stateTxt = v.observable ? v.state_label : (lo && !lo.terjadi ? 'Tidak terjadi di lokasi Anda' : v.state_label);
+        return `<details class="ev" style="--tc:${tc};--sc:${sc}">
+            <summary>
+              <div class="ev-time">${esc(e.time_local.slice(11))}</div>
+              <div>
+                <div class="ev-title">${ICON[e.category] || '•'} ${esc(e.title)}</div>
+                <div class="ev-sub"><span><i class="dot"></i>${esc(stateTxt)}</span><span>${esc(v.headline)}</span><span class="rar-inline" style="color:${tc}">${esc(r.label)}</span></div>
+              </div>
+              <span class="pill" style="--tc:${tc}">${esc(r.label)}</span>
+              <span class="chev">▸</span>
+            </summary>
+            <div class="ev-body">
+              <p>${esc(v.reason)}</p>
+              <div class="facts">${facts}</div>
+              ${notes ? `<ul class="notes">${notes}</ul>` : ''}
+              <div class="why" style="--tc:${tc}"><strong>${esc(r.label)}</strong> · ${esc(r.alasan)} <em>(${esc(r.frekuensi)})</em></div>
+            </div>
+          </details>`;
     }
 
-    function render() {
-        if (!data) return;
-        let items = data.events.filter(visible);
-        const s = $('sort').value;
-        if (s === 'rarity') items.sort((a, b) => TIER_ORDER.indexOf(b.rarity.tier) - TIER_ORDER.indexOf(a.rarity.tier) || a.time_utc.localeCompare(b.time_utc));
-        else if (s === 'altitude') items.sort((a, b) => (b.visibility.min_altitude ?? -99) - (a.visibility.min_altitude ?? -99));
-        $('list').innerHTML = items.length ? items.map(card).join('') : '<div class="glass-card rounded-xl p-6 text-sm text-slate-400">Tidak ada event yang cocok dengan filter pada periode ini.</div>';
-        if (window.lucide) lucide.createIcons();
+    function spotHTML(e) {
+        const r = e.rarity, v = e.visibility, tc = TIER_COLOR[r.tier];
+        return `<div class="spot-card glass-card" style="--tc:${tc}" data-id="${esc(e.id)}">
+            <span class="pill" style="--tc:${tc}">${esc(r.label)}</span>
+            <div class="t">${ICON[e.category] || ''} ${esc(e.title)}</div>
+            <div class="m">${esc(fmtShort(e.time_local))} · ${esc(v.headline)}</div></div>`;
     }
 
-    function renderSummary() {
-        const s = data.summary;
-        const box = (label, val, cls) => `<div class="glass-card rounded-xl p-4"><div class="text-[11px] text-slate-500">${label}</div><div class="text-2xl font-display font-bold ${cls}">${val}</div></div>`;
-        $('summary').innerHTML = box('Event pada periode', s.total, 'text-white') + box('Dapat diamati dari lokasi', s.teramati, 'text-emerald-300') +
-            box('Cukup dengan mata telanjang', s.mata_telanjang, 'text-indigo-300') + box('Langka ke atas', s.langka_ke_atas, 'text-violet-300');
+    // ---------- render ----------
+    function renderSide() {
+        const cnt = {}, lab = {};
+        data.events.forEach(e => { cnt[e.category] = (cnt[e.category] || 0) + 1; lab[e.category] = e.kategori_label; });
+        $('cats').innerHTML = Object.keys(cnt).sort().map(k =>
+            `<label><input type="checkbox" data-cat="${esc(k)}" ${S.cats.has(k) ? 'checked' : ''}> ${ICON[k] || ''} ${esc(lab[k])}<span class="n">${cnt[k]}</span></label>`).join('');
         const m = data.meta;
-        $('meta-chip').innerHTML = `Mesin: ${esc(m.engine)}<br>Rentang: ${m.dari_tahun}–${m.sampai_tahun} · ${m.jumlah} event<br>Dibuat: ${esc(m.dibuat)}`;
+        $('meta').innerHTML = `Mesin: ${esc(m.engine)}<br>Rentang katalog ${m.dari_tahun}–${m.sampai_tahun} · ${m.jumlah} event<br>Dibuat ${esc(m.dibuat)}`;
         $('engine-warning').classList.toggle('hidden', m.engine_key === 'skyfield');
-        $('loc-note').textContent = `Zona waktu UTC${data.lokasi.tz >= 0 ? '+' : ''}${data.lokasi.tz} · batas magnitudo langit ${data.lokasi.batas_magnitudo}`;
+        $('loc-note').textContent = `Zona waktu UTC${data.lokasi.tz >= 0 ? '+' : ''}${data.lokasi.tz}`;
+        document.querySelectorAll('#seg-view button').forEach(b => b.classList.toggle('on', b.dataset.v === S.view));
+        document.querySelectorAll('#seg-gear button').forEach(b => b.classList.toggle('on', Number(b.dataset.v) === S.gear));
+        $('tier').value = String(S.tier);
     }
 
+    function renderStats() {
+        const s = data.summary;
+        const box = (k, v, c) => `<div class="stat glass-card"><div class="k">${k}</div><div class="v" style="color:${c}">${v}</div></div>`;
+        $('stats').innerHTML = box('Event pada periode', s.total, '#f1f5f9') + box('Dapat diamati dari lokasi', s.teramati, '#34d399') +
+            box('Cukup mata telanjang', s.mata_telanjang, '#a5b4fc') + box('Langka ke atas', s.langka_ke_atas, '#c4b5fd');
+    }
+
+    function renderList() {
+        const all = data.events;
+        const items = all.filter(passes);
+        const rank = (e) => TIERS.indexOf(e.rarity.tier);
+        if (S.sort === 'rarity') items.sort((a, b) => rank(b) - rank(a) || a.time_utc.localeCompare(b.time_utc));
+        else if (S.sort === 'altitude') items.sort((a, b) => (b.visibility.min_altitude ?? -99) - (a.visibility.min_altitude ?? -99));
+        else items.sort((a, b) => a.time_utc.localeCompare(b.time_utc));
+
+        const hidden = all.length - items.length;
+        $('count').innerHTML = `Menampilkan <b>${items.length}</b> dari ${all.length} event` +
+            (hidden > 0 && S.view === 'obs' ? ` · ${hidden} disembunyikan (tidak dapat diamati atau di luar filter) — <a id="show-all">tampilkan semua</a>` : '');
+        const sa = $('show-all'); if (sa) sa.onclick = () => { S.view = 'all'; save(); renderSide(); renderList(); };
+
+        if (!items.length) {
+            $('list').innerHTML = '<div class="empty glass-card">Tidak ada event yang cocok. Coba longgarkan filter (mis. pilih <b>Semua</b> pada Tampilkan, atau ganti bulan).</div>';
+            return;
+        }
+        if (S.sort === 'time') {
+            const groups = {};
+            items.forEach(e => (groups[e.time_local.slice(0, 10)] ||= []).push(e));
+            $('list').innerHTML = Object.keys(groups).sort().map(day =>
+                `<div class="day"><h3>${esc(fmtDay(day))}</h3><span>${groups[day].length} event</span></div>` + groups[day].map(rowHTML).join('')).join('');
+        } else {
+            $('list').innerHTML = items.map(rowHTML).join('');
+        }
+    }
+
+    function renderSpot() {
+        const pool = data.events.filter(e => e.visibility.observable)
+            .sort((a, b) => TIERS.indexOf(b.rarity.tier) - TIERS.indexOf(a.rarity.tier) || a.time_utc.localeCompare(b.time_utc));
+        const top = pool.filter(e => TIERS.indexOf(e.rarity.tier) >= 1).slice(0, 3);
+        $('spot-wrap').classList.toggle('hidden', !top.length);
+        $('spot').innerHTML = top.map(spotHTML).join('');
+    }
+
+    function renderAll() { renderSide(); renderStats(); renderSpot(); renderList(); }
+
+    // ---------- pemuatan data ----------
     async function load(retry = true) {
         const [y, m] = ($('month').value || '').split('-');
         const p = new URLSearchParams({lat: $('lat').value, lon: $('lon').value, langit: $('sky').value});
         if (y) { p.set('year', y); p.set('month', Number(m)); }
-        $('list').innerHTML = '<div class="glass-card rounded-xl p-6 text-sm text-slate-400">Menghitung keterlihatan...</div>';
+        $('list').innerHTML = '<div class="empty glass-card">Menghitung keterlihatan…</div>';
         try {
             const res = await fetch(`${API}?${p}`);
             const j = await res.json();
-            if (!res.ok) { $('list').innerHTML = `<div class="glass-card rounded-xl p-6 text-sm text-amber-300">${esc(j.message || 'Gagal memuat katalog.')}</div>`; return; }
+            if (!res.ok) { $('list').innerHTML = `<div class="empty glass-card" style="color:#fcd34d">${esc(j.message || 'Gagal memuat katalog.')}</div>`; $('stats').innerHTML = ''; return; }
             data = j;
-            if (!j.events.length && retry && j.meta.dari_tahun) {      // bulan di luar rentang katalog: lompat ke awal rentang
-                $('month').value = `${j.meta.dari_tahun}-01`;
-                return load(false);
-            }
-            renderSummary(); buildFilters(); render();
+            if (!j.events.length && retry && j.meta.dari_tahun) { $('month').value = `${j.meta.dari_tahun}-01`; return load(false); }
+            renderAll();
         } catch (err) {
-            $('list').innerHTML = '<div class="glass-card rounded-xl p-6 text-sm text-rose-300">Tidak dapat menghubungi server.</div>';
+            $('list').innerHTML = '<div class="empty glass-card" style="color:#fda4af">Tidak dapat menghubungi server.</div>';
         }
     }
 
-    // --- interaksi ---
-    document.addEventListener('click', (ev) => {
-        const b = ev.target.closest('button[data-g]');
-        if (!b) return;
-        const set = sel[b.dataset.g];
-        set.has(b.dataset.k) ? set.delete(b.dataset.k) : set.add(b.dataset.k);
-        buildFilters(); render();
+    function shiftMonth(d) {
+        const [y, m] = $('month').value.split('-').map(Number);
+        const dt = new Date(y, m - 1 + d, 1);
+        $('month').value = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}`;
+        load();
+    }
+
+    // ---------- interaksi ----------
+    $('seg-view').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; S.view = b.dataset.v; save(); renderSide(); renderList(); });
+    $('seg-gear').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; S.gear = Number(b.dataset.v); save(); renderSide(); renderList(); });
+    $('tier').addEventListener('change', () => { S.tier = Number($('tier').value); save(); renderList(); });
+    $('cats').addEventListener('change', (e) => { const c = e.target.dataset.cat; if (!c) return; e.target.checked ? S.cats.add(c) : S.cats.delete(c); renderList(); });
+    $('q').addEventListener('input', () => { S.q = $('q').value; renderList(); });
+    $('sort').addEventListener('change', () => { S.sort = $('sort').value; renderList(); });
+    $('spot').addEventListener('click', (e) => {
+        const c = e.target.closest('.spot-card'); if (!c) return;
+        const ev = data.events.find(x => x.id === c.dataset.id); if (!ev) return;
+        S.q = ''; $('q').value = ''; S.sort = 'time'; $('sort').value = 'time'; S.view = 'all'; S.tier = 0; S.cats.clear();
+        renderSide(); renderList();
+        const t = [...document.querySelectorAll('details.ev')].find(d => d.querySelector('.ev-title').textContent.includes(ev.title) && d.querySelector('.ev-time').textContent === ev.time_local.slice(11));
+        if (t) { t.open = true; t.scrollIntoView({behavior: 'smooth', block: 'center'}); }
     });
-    ['q', 'sort', 'only-obs'].forEach(id => $(id).addEventListener(id === 'q' ? 'input' : 'change', render));
-    ['month', 'sky', 'lat', 'lon'].forEach(id => $(id).addEventListener('change', () => { if (id === 'lat' || id === 'lon') $('preset').value = 'custom'; load(); }));
+    $('reset').addEventListener('click', () => {
+        Object.assign(S, {view: 'obs', gear: 4, tier: 0, q: '', sort: 'time'}); S.cats.clear();
+        $('q').value = ''; $('sort').value = 'time'; save(); renderAll();
+    });
+    $('m-prev').addEventListener('click', () => shiftMonth(-1));
+    $('m-next').addEventListener('click', () => shiftMonth(1));
+    $('month').addEventListener('change', () => load());
+    $('sky').addEventListener('change', () => { save(); load(); });
+    ['lat', 'lon'].forEach(id => $(id).addEventListener('change', () => { $('preset').value = 'custom'; save(); load(); }));
     $('preset').addEventListener('change', () => {
         if ($('preset').value === 'custom') return;
-        const [la, lo] = $('preset').value.split(',');
-        $('lat').value = la; $('lon').value = lo; load();
+        const [la, lo] = $('preset').value.split(','); $('lat').value = la; $('lon').value = lo; save(); load();
     });
     $('geo-btn').addEventListener('click', () => {
         if (!navigator.geolocation) { $('loc-note').textContent = 'Peramban tidak mendukung geolokasi.'; return; }
         navigator.geolocation.getCurrentPosition(
-            (pos) => { $('lat').value = pos.coords.latitude.toFixed(4); $('lon').value = pos.coords.longitude.toFixed(4); $('preset').value = 'custom'; load(); },
+            (pos) => { $('lat').value = pos.coords.latitude.toFixed(4); $('lon').value = pos.coords.longitude.toFixed(4); $('preset').value = 'custom'; save(); load(); },
             () => { $('loc-note').textContent = 'Izin lokasi ditolak; pilih kota atau isi koordinat.'; });
     });
+    $('side-toggle').addEventListener('click', () => $('side').classList.toggle('collapsed'));
+    if (window.matchMedia('(max-width:1023px)').matches) $('side').classList.add('collapsed');
 
+    restore();
     const now = new Date();
     $('month').value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
     load();

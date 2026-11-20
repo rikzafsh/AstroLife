@@ -9,6 +9,13 @@
 Cache per bulan ada di `data/catalog/cache/` sehingga proses yang terhenti dapat dilanjutkan. Tanpa
 `ASTROLIFE_ENGINE=skyfield` generator memakai mesin sementara (cepat, tetapi galat planet ~2 menit busur) dan memberi peringatan.
 
+## Kecepatan
+Pencarian memakai panggilan VEKTOR ke mesin posisi (`eq_many`, `ecl_many`, `moon_radii_many`): satu panggilan Skyfield untuk
+ratusan waktu sekaligus, lalu penghalusan pada grid halus lokal. Pada Skyfield, pencarian sebulan turun dari ~40 detik
+(43.772 panggilan skalar) menjadi taksiran ~2 detik (392 skalar + 552 vektor). Angka itu TAKSIRAN dari jumlah panggilan;
+ukur sendiri dengan `python -m prototype.verify_engine` dan `tests.test_skyfield`.
+Jalur skalar lama tetap ada: `$env:ASTROLIFE_BATCH = "0"`.
+
 ## Isi katalog (global, UTC)
 fase Bulan, konjungsi & pendekatan terdekat (digabung), okultasi (jendela global), gerhana Bulan & Matahari,
 elongasi maksimum, oposisi, dikotomi/kecerahan maksimum planet dalam, hujan meteor (tabel `data/catalog/meteor_showers.json`).
@@ -27,3 +34,9 @@ Berbasis aturan kualitatif (common, uncommon, rare, epic, legendary), BUKAN stat
 - `meteor_showers.json`: bujur Matahari/ZHR ditulis dari ingatan atas daftar IMO; cocokkan dengan kalender IMO terbaru.
 - Ambang (batas magnitudo mata telanjang, 5 derajat ketinggian minimum, bobot cahaya Bulan) adalah parameter rancangan.
 - Magnitudo Saturnus (koreksi cincin) kasar, +-0,5 mag.
+
+## Halaman /catalog/
+Sidebar (lokasi, bulan dengan tombol sebelumnya/berikutnya, kualitas langit, "Dapat diamati/Semua", "alat yang saya punya",
+kelangkaan minimal, kategori), kartu Sorotan, dan daftar dikelompokkan per hari. Klik baris untuk detail. Pengaturan lokasi dan
+filter utama diingat di peramban (localStorage). Bendera `observable` pada API: di atas ufuk dan langit memadai, okultasi benar-benar
+terjadi di lokasi, atau gerhana Matahari benar-benar terlihat dari lokasi.

@@ -1,0 +1,7798 @@
+{
+ "meta": {
+  "engine": "ephem_lite (sementara: Meeus + elemen JPL Standish)",
+  "engine_key": "lite",
+  "dari_tahun": 2026,
+  "sampai_tahun": 2027,
+  "dibuat": "2026-11-20T12:39:03",
+  "jumlah": 520,
+  "per_kategori": {
+   "okultasi": 105,
+   "fase_bulan": 99,
+   "hujan_meteor": 16,
+   "konjungsi": 243,
+   "oposisi": 9,
+   "fase_planet": 25,
+   "gerhana_matahari": 4,
+   "elongasi": 14,
+   "gerhana_bulan": 5
+  },
+  "catatan": "Katalog global (geosentris). Waktu dalam UTC. Keterlihatan dihitung per lokasi saat dibuka."
+ },
+ "events": [
+  {
+   "id": "okultasi-occultation-202601020152-moon-beta_tauri",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Beta Tauri oleh Bulan",
+   "bodies": [
+    "moon",
+    "beta_tauri"
+   ],
+   "time_utc": "2026-01-02T01:52:00",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-01-02T01:52:00"
+   },
+   "start_utc": "2026-01-01T23:54:57",
+   "end_utc": "2026-01-02T03:49:02",
+   "separation_deg": 0.422
+  },
+  {
+   "id": "fase_bulan-full_moon-202601031002-moon",
+   "category": "fase_bulan",
+   "kind": "full_moon",
+   "title": "Bulan Purnama",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-01-03T10:02:58",
+   "details": {}
+  },
+  {
+   "id": "hujan_meteor-qua-202601032117",
+   "category": "hujan_meteor",
+   "kind": "qua",
+   "title": "Hujan Meteor Quadrantid",
+   "bodies": [],
+   "time_utc": "2026-01-03T21:17:27",
+   "details": {
+    "nama": "Quadrantid",
+    "zhr": 80,
+    "radian_ra": 230.0,
+    "radian_dec": 49.0,
+    "kecepatan_kms": 41,
+    "catatan": "Waktu puncak perkiraan (ketidakpastian beberapa jam hingga ~1 hari)."
+   }
+  },
+  {
+   "id": "konjungsi-conjunction-202601032313-moon-jupiter",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Jupiter",
+   "bodies": [
+    "moon",
+    "jupiter"
+   ],
+   "time_utc": "2026-01-03T23:13:37",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-01-03T23:13:37",
+    "konjungsi_asensio_rekta_utc": "2026-01-03T21:58:10"
+   },
+   "separation_deg": 3.637
+  },
+  {
+   "id": "konjungsi-conjunction-202601050245-moon-m44",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M44 (Praesepe)",
+   "bodies": [
+    "moon",
+    "m44"
+   ],
+   "time_utc": "2026-01-05T02:45:21",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-01-05T02:45:21",
+    "konjungsi_asensio_rekta_utc": "2026-01-05T01:52:57"
+   },
+   "separation_deg": 1.493
+  },
+  {
+   "id": "okultasi-occultation-202601061721-moon-regulus",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Regulus oleh Bulan",
+   "bodies": [
+    "moon",
+    "regulus"
+   ],
+   "time_utc": "2026-01-06T17:21:14",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-01-06T17:21:14"
+   },
+   "start_utc": "2026-01-06T15:19:45",
+   "end_utc": "2026-01-06T19:22:42",
+   "separation_deg": 0.444
+  },
+  {
+   "id": "konjungsi-conjunction-202601080259-mars-venus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Mars–Venus",
+   "bodies": [
+    "mars",
+    "venus"
+   ],
+   "time_utc": "2026-01-08T02:59:55",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-01-08T02:59:55",
+    "konjungsi_asensio_rekta_utc": "2026-01-08T03:39:44"
+   },
+   "separation_deg": 0.174
+  },
+  {
+   "id": "oposisi-opposition-202601100825-jupiter",
+   "category": "oposisi",
+   "kind": "opposition",
+   "title": "Jupiter oposisi",
+   "bodies": [
+    "jupiter"
+   ],
+   "time_utc": "2026-01-10T08:25:47",
+   "details": {}
+  },
+  {
+   "id": "fase_bulan-last_quarter-202601101550-moon",
+   "category": "fase_bulan",
+   "kind": "last_quarter",
+   "title": "Bulan Kuartal Akhir",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-01-10T15:50:18",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202601102309-moon-spica",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Spica",
+   "bodies": [
+    "moon",
+    "spica"
+   ],
+   "time_utc": "2026-01-10T23:09:58",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-01-10T23:09:58"
+   },
+   "separation_deg": 1.518
+  },
+  {
+   "id": "okultasi-occultation-202601142001-moon-antares",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Antares oleh Bulan",
+   "bodies": [
+    "moon",
+    "antares"
+   ],
+   "time_utc": "2026-01-14T20:01:52",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-01-14T20:01:52"
+   },
+   "start_utc": "2026-01-14T18:00:18",
+   "end_utc": "2026-01-14T22:03:25",
+   "separation_deg": 0.563
+  },
+  {
+   "id": "okultasi-occultation-202601171258-moon-sigma_sagittarii",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Sigma Sagittarii oleh Bulan",
+   "bodies": [
+    "moon",
+    "sigma_sagittarii"
+   ],
+   "time_utc": "2026-01-17T12:58:55",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-01-17T12:58:55"
+   },
+   "start_utc": "2026-01-17T11:26:20",
+   "end_utc": "2026-01-17T14:31:35",
+   "separation_deg": 0.857
+  },
+  {
+   "id": "konjungsi-conjunction-202601180625-mars-mercury",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Mars–Merkurius",
+   "bodies": [
+    "mars",
+    "mercury"
+   ],
+   "time_utc": "2026-01-18T06:25:47",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-01-18T06:25:47",
+    "konjungsi_asensio_rekta_utc": "2026-01-18T02:31:40"
+   },
+   "separation_deg": 0.961
+  },
+  {
+   "id": "konjungsi-conjunction-202601181533-moon-mars",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Mars",
+   "bodies": [
+    "moon",
+    "mars"
+   ],
+   "time_utc": "2026-01-18T15:33:43",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-01-18T15:33:43",
+    "konjungsi_asensio_rekta_utc": "2026-01-18T14:10:16"
+   },
+   "separation_deg": 2.535
+  },
+  {
+   "id": "konjungsi-conjunction-202601181605-moon-mercury",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Merkurius",
+   "bodies": [
+    "moon",
+    "mercury"
+   ],
+   "time_utc": "2026-01-18T16:05:08",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-01-18T16:05:08",
+    "konjungsi_asensio_rekta_utc": "2026-01-18T15:07:35"
+   },
+   "separation_deg": 1.541
+  },
+  {
+   "id": "fase_bulan-new_moon-202601181952-moon",
+   "category": "fase_bulan",
+   "kind": "new_moon",
+   "title": "Bulan Baru",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-01-18T19:52:44",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202601190224-moon-venus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Venus",
+   "bodies": [
+    "moon",
+    "venus"
+   ],
+   "time_utc": "2026-01-19T02:24:51",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-01-19T02:24:51",
+    "konjungsi_asensio_rekta_utc": "2026-01-19T01:02:01"
+   },
+   "separation_deg": 2.041
+  },
+  {
+   "id": "konjungsi-conjunction-202601230905-moon-saturn",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Saturnus",
+   "bodies": [
+    "moon",
+    "saturn"
+   ],
+   "time_utc": "2026-01-23T09:05:03",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-01-23T09:05:03",
+    "konjungsi_asensio_rekta_utc": "2026-01-23T12:48:23"
+   },
+   "separation_deg": 3.834
+  },
+  {
+   "id": "fase_planet-greatest_brightness-202601231113-mercury",
+   "category": "fase_planet",
+   "kind": "greatest_brightness",
+   "title": "Merkurius paling terang",
+   "bodies": [
+    "mercury"
+   ],
+   "time_utc": "2026-01-23T11:13:18",
+   "details": {
+    "magnitudo": -1.32
+   }
+  },
+  {
+   "id": "konjungsi-conjunction-202601231248-moon-neptune",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Neptunus",
+   "bodies": [
+    "moon",
+    "neptune"
+   ],
+   "time_utc": "2026-01-23T12:48:06",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-01-23T12:48:06",
+    "konjungsi_asensio_rekta_utc": "2026-01-23T15:48:50"
+   },
+   "separation_deg": 3.135
+  },
+  {
+   "id": "fase_bulan-first_quarter-202601260447-moon",
+   "category": "fase_bulan",
+   "kind": "first_quarter",
+   "title": "Bulan Kuartal Awal",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-01-26T04:47:47",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202601271632-moon-uranus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Uranus",
+   "bodies": [
+    "moon",
+    "uranus"
+   ],
+   "time_utc": "2026-01-27T16:32:38",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-01-27T16:32:38",
+    "konjungsi_asensio_rekta_utc": "2026-01-27T18:46:38"
+   },
+   "separation_deg": 5.284
+  },
+  {
+   "id": "konjungsi-conjunction-202601272118-moon-m45",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M45 (Pleiades)",
+   "bodies": [
+    "moon",
+    "m45"
+   ],
+   "time_utc": "2026-01-27T21:18:29",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-01-27T21:18:29",
+    "konjungsi_asensio_rekta_utc": "2026-01-27T21:43:27"
+   },
+   "separation_deg": 1.051
+  },
+  {
+   "id": "okultasi-occultation-202601291053-moon-beta_tauri",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Beta Tauri oleh Bulan",
+   "bodies": [
+    "moon",
+    "beta_tauri"
+   ],
+   "time_utc": "2026-01-29T10:53:13",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-01-29T10:53:13"
+   },
+   "start_utc": "2026-01-29T08:51:33",
+   "end_utc": "2026-01-29T12:54:52",
+   "separation_deg": 0.332
+  },
+  {
+   "id": "konjungsi-conjunction-202601291358-mercury-venus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Merkurius–Venus",
+   "bodies": [
+    "mercury",
+    "venus"
+   ],
+   "time_utc": "2026-01-29T13:58:55",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-01-29T13:58:55",
+    "konjungsi_asensio_rekta_utc": "2026-01-28T23:48:06"
+   },
+   "separation_deg": 0.682
+  },
+  {
+   "id": "konjungsi-conjunction-202601310337-moon-jupiter",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Jupiter",
+   "bodies": [
+    "moon",
+    "jupiter"
+   ],
+   "time_utc": "2026-01-31T03:37:47",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-01-31T03:37:47",
+    "konjungsi_asensio_rekta_utc": "2026-01-31T02:27:53"
+   },
+   "separation_deg": 3.783
+  },
+  {
+   "id": "konjungsi-conjunction-202602011316-moon-m44",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M44 (Praesepe)",
+   "bodies": [
+    "moon",
+    "m44"
+   ],
+   "time_utc": "2026-02-01T13:16:51",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-02-01T13:16:51",
+    "konjungsi_asensio_rekta_utc": "2026-02-01T12:25:30"
+   },
+   "separation_deg": 1.443
+  },
+  {
+   "id": "fase_bulan-full_moon-202602012209-moon",
+   "category": "fase_bulan",
+   "kind": "full_moon",
+   "title": "Bulan Purnama",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-02-01T22:09:00",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202602030344-moon-regulus",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Regulus oleh Bulan",
+   "bodies": [
+    "moon",
+    "regulus"
+   ],
+   "time_utc": "2026-02-03T03:44:10",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-02-03T03:44:10"
+   },
+   "start_utc": "2026-02-03T01:40:03",
+   "end_utc": "2026-02-03T05:48:17",
+   "separation_deg": 0.345
+  },
+  {
+   "id": "fase_bulan-last_quarter-202602091243-moon",
+   "category": "fase_bulan",
+   "kind": "last_quarter",
+   "title": "Bulan Kuartal Akhir",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-02-09T12:43:54",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202602110350-moon-antares",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Antares oleh Bulan",
+   "bodies": [
+    "moon",
+    "antares"
+   ],
+   "time_utc": "2026-02-11T03:50:17",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-02-11T03:50:17"
+   },
+   "start_utc": "2026-02-11T01:58:26",
+   "end_utc": "2026-02-11T05:42:08",
+   "separation_deg": 0.691
+  },
+  {
+   "id": "okultasi-occultation-202602132100-moon-sigma_sagittarii",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Sigma Sagittarii oleh Bulan",
+   "bodies": [
+    "moon",
+    "sigma_sagittarii"
+   ],
+   "time_utc": "2026-02-13T21:00:51",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-02-13T21:00:51"
+   },
+   "start_utc": "2026-02-13T19:37:47",
+   "end_utc": "2026-02-13T22:24:03",
+   "separation_deg": 0.928
+  },
+  {
+   "id": "okultasi-occultation-202602161816-moon-mars",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Mars oleh Bulan",
+   "bodies": [
+    "moon",
+    "mars"
+   ],
+   "time_utc": "2026-02-16T18:16:49",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-02-16T18:16:49",
+    "konjungsi_asensio_rekta_utc": "2026-02-16T17:41:10"
+   },
+   "start_utc": "2026-02-16T16:21:41",
+   "end_utc": "2026-02-16T20:12:02",
+   "separation_deg": 0.695
+  },
+  {
+   "id": "fase_bulan-new_moon-202602171202-moon",
+   "category": "fase_bulan",
+   "kind": "new_moon",
+   "title": "Bulan Baru",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-02-17T12:02:10",
+   "details": {}
+  },
+  {
+   "id": "gerhana_matahari-cincin-202602171212-sun-moon",
+   "category": "gerhana_matahari",
+   "kind": "cincin",
+   "title": "Gerhana Matahari cincin",
+   "bodies": [
+    "sun",
+    "moon"
+   ],
+   "time_utc": "2026-02-17T12:12:41",
+   "details": {
+    "jenis": "cincin",
+    "gamma_perkiraan": 0.954,
+    "sep_pusat_deg": 0.907,
+    "rasio_diameter_bulan_matahari": 0.9603
+   }
+  },
+  {
+   "id": "konjungsi-conjunction-202602180744-moon-venus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Venus",
+   "bodies": [
+    "moon",
+    "venus"
+   ],
+   "time_utc": "2026-02-18T07:44:21",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-02-18T07:44:21",
+    "konjungsi_asensio_rekta_utc": "2026-02-18T09:22:13"
+   },
+   "separation_deg": 1.556
+  },
+  {
+   "id": "okultasi-occultation-202602182310-moon-mercury",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Merkurius oleh Bulan",
+   "bodies": [
+    "moon",
+    "mercury"
+   ],
+   "time_utc": "2026-02-18T23:10:59",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-02-18T23:10:59",
+    "konjungsi_asensio_rekta_utc": "2026-02-18T23:04:44"
+   },
+   "start_utc": "2026-02-18T20:49:52",
+   "end_utc": "2026-02-19T01:31:59",
+   "separation_deg": 0.104
+  },
+  {
+   "id": "elongasi-greatest_elongation_east-202602191437-mercury",
+   "category": "elongasi",
+   "kind": "greatest_elongation_east",
+   "title": "Merkurius elongasi maksimum timur",
+   "bodies": [
+    "mercury"
+   ],
+   "time_utc": "2026-02-19T14:37:00",
+   "details": {
+    "elongasi_deg": 18.09,
+    "sisi": "timur"
+   }
+  },
+  {
+   "id": "fase_planet-dichotomy-202602191637-mercury",
+   "category": "fase_planet",
+   "kind": "dichotomy",
+   "title": "Merkurius dikotomi (fase 50%)",
+   "bodies": [
+    "mercury"
+   ],
+   "time_utc": "2026-02-19T16:37:44",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202602192018-moon-saturn",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Saturnus",
+   "bodies": [
+    "moon",
+    "saturn"
+   ],
+   "time_utc": "2026-02-19T20:18:44",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-02-19T20:18:44",
+    "konjungsi_asensio_rekta_utc": "2026-02-20T00:12:03"
+   },
+   "separation_deg": 4.101
+  },
+  {
+   "id": "konjungsi-conjunction-202602192025-moon-neptune",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Neptunus",
+   "bodies": [
+    "moon",
+    "neptune"
+   ],
+   "time_utc": "2026-02-19T20:25:34",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-02-19T20:25:34",
+    "konjungsi_asensio_rekta_utc": "2026-02-19T23:30:25"
+   },
+   "separation_deg": 3.27
+  },
+  {
+   "id": "konjungsi-conjunction-202602232218-moon-uranus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Uranus",
+   "bodies": [
+    "moon",
+    "uranus"
+   ],
+   "time_utc": "2026-02-23T22:18:46",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-02-23T22:18:46",
+    "konjungsi_asensio_rekta_utc": "2026-02-24T00:35:44"
+   },
+   "separation_deg": 5.36
+  },
+  {
+   "id": "konjungsi-conjunction-202602240252-moon-m45",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M45 (Pleiades)",
+   "bodies": [
+    "moon",
+    "m45"
+   ],
+   "time_utc": "2026-02-24T02:52:41",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-02-24T02:52:41",
+    "konjungsi_asensio_rekta_utc": "2026-02-24T03:19:55"
+   },
+   "separation_deg": 1.131
+  },
+  {
+   "id": "fase_bulan-first_quarter-202602241227-moon",
+   "category": "fase_bulan",
+   "kind": "first_quarter",
+   "title": "Bulan Kuartal Awal",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-02-24T12:27:50",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202602251713-moon-beta_tauri",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Beta Tauri oleh Bulan",
+   "bodies": [
+    "moon",
+    "beta_tauri"
+   ],
+   "time_utc": "2026-02-25T17:13:55",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-02-25T17:13:55"
+   },
+   "start_utc": "2026-02-25T15:08:57",
+   "end_utc": "2026-02-25T19:18:53",
+   "separation_deg": 0.264
+  },
+  {
+   "id": "konjungsi-conjunction-202602270731-moon-jupiter",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Jupiter",
+   "bodies": [
+    "moon",
+    "jupiter"
+   ],
+   "time_utc": "2026-02-27T07:31:41",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-02-27T07:31:41",
+    "konjungsi_asensio_rekta_utc": "2026-02-27T06:23:48"
+   },
+   "separation_deg": 3.906
+  },
+  {
+   "id": "konjungsi-conjunction-202602272146-mercury-venus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Merkurius–Venus",
+   "bodies": [
+    "mercury",
+    "venus"
+   ],
+   "time_utc": "2026-02-27T21:46:23",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-02-27T21:46:23",
+    "konjungsi_asensio_rekta_utc": "2026-02-26T23:11:29"
+   },
+   "separation_deg": 4.512
+  },
+  {
+   "id": "konjungsi-conjunction-202602282146-moon-m44",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M44 (Praesepe)",
+   "bodies": [
+    "moon",
+    "m44"
+   ],
+   "time_utc": "2026-02-28T21:46:33",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-02-28T21:46:33",
+    "konjungsi_asensio_rekta_utc": "2026-02-28T20:53:09"
+   },
+   "separation_deg": 1.459
+  },
+  {
+   "id": "okultasi-occultation-202603021257-moon-regulus",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Regulus oleh Bulan",
+   "bodies": [
+    "moon",
+    "regulus"
+   ],
+   "time_utc": "2026-03-02T12:57:40",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-03-02T12:57:40"
+   },
+   "start_utc": "2026-03-02T10:52:41",
+   "end_utc": "2026-03-02T15:02:37",
+   "separation_deg": 0.338
+  },
+  {
+   "id": "gerhana_bulan-total-202603031134-moon",
+   "category": "gerhana_bulan",
+   "kind": "total",
+   "title": "Gerhana Bulan total (1.15 umbra)",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-03-03T11:34:19",
+   "details": {
+    "jenis": "total",
+    "magnitudo_umbra": 1.149,
+    "magnitudo_penumbra": 2.203,
+    "jarak_ke_sumbu_deg": 0.365,
+    "umbra_mulai_utc": "2026-03-03T09:50:30",
+    "umbra_selesai_utc": "2026-03-03T13:18:18",
+    "total_mulai_utc": "2026-03-03T11:05:10",
+    "total_selesai_utc": "2026-03-03T12:03:30"
+   },
+   "start_utc": "2026-03-03T08:43:32",
+   "end_utc": "2026-03-03T14:25:33"
+  },
+  {
+   "id": "fase_bulan-full_moon-202603031138-moon",
+   "category": "fase_bulan",
+   "kind": "full_moon",
+   "title": "Bulan Purnama",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-03-03T11:38:34",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202603081436-saturn-venus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Saturnus–Venus",
+   "bodies": [
+    "saturn",
+    "venus"
+   ],
+   "time_utc": "2026-03-08T14:36:46",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-03-08T14:36:46",
+    "konjungsi_asensio_rekta_utc": "2026-03-08T23:32:44"
+   },
+   "separation_deg": 0.913
+  },
+  {
+   "id": "okultasi-occultation-202603101202-moon-antares",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Antares oleh Bulan",
+   "bodies": [
+    "moon",
+    "antares"
+   ],
+   "time_utc": "2026-03-10T12:02:43",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-03-10T12:02:43"
+   },
+   "start_utc": "2026-03-10T10:12:55",
+   "end_utc": "2026-03-10T13:52:32",
+   "separation_deg": 0.713
+  },
+  {
+   "id": "fase_bulan-last_quarter-202603110939-moon",
+   "category": "fase_bulan",
+   "kind": "last_quarter",
+   "title": "Bulan Kuartal Akhir",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-03-11T09:39:17",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202603130537-moon-sigma_sagittarii",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Sigma Sagittarii oleh Bulan",
+   "bodies": [
+    "moon",
+    "sigma_sagittarii"
+   ],
+   "time_utc": "2026-03-13T05:37:44",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-03-13T05:37:44"
+   },
+   "start_utc": "2026-03-13T04:16:53",
+   "end_utc": "2026-03-13T06:58:43",
+   "separation_deg": 0.943
+  },
+  {
+   "id": "konjungsi-conjunction-202603140702-mars-mercury",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Mars–Merkurius",
+   "bodies": [
+    "mars",
+    "mercury"
+   ],
+   "time_utc": "2026-03-14T07:02:33",
+   "details": {
+    "konjungsi_asensio_rekta_utc": "2026-03-14T07:02:33"
+   },
+   "separation_deg": 3.955
+  },
+  {
+   "id": "konjungsi-conjunction-202603151927-mars-mercury",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Mars–Merkurius",
+   "bodies": [
+    "mars",
+    "mercury"
+   ],
+   "time_utc": "2026-03-15T19:27:05",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-03-15T19:27:05"
+   },
+   "separation_deg": 3.364
+  },
+  {
+   "id": "konjungsi-conjunction-202603171545-moon-mercury",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Merkurius",
+   "bodies": [
+    "moon",
+    "mercury"
+   ],
+   "time_utc": "2026-03-17T15:45:56",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-03-17T15:45:56",
+    "konjungsi_asensio_rekta_utc": "2026-03-17T14:09:45"
+   },
+   "separation_deg": 1.737
+  },
+  {
+   "id": "konjungsi-conjunction-202603172031-moon-mars",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Mars",
+   "bodies": [
+    "moon",
+    "mars"
+   ],
+   "time_utc": "2026-03-17T20:31:15",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-03-17T20:31:15",
+    "konjungsi_asensio_rekta_utc": "2026-03-17T21:53:36"
+   },
+   "separation_deg": 1.38
+  },
+  {
+   "id": "fase_bulan-new_moon-202603190124-moon",
+   "category": "fase_bulan",
+   "kind": "new_moon",
+   "title": "Bulan Baru",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-03-19T01:24:32",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202603190630-moon-neptune",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Neptunus",
+   "bodies": [
+    "moon",
+    "neptune"
+   ],
+   "time_utc": "2026-03-19T06:30:33",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-03-19T06:30:33",
+    "konjungsi_asensio_rekta_utc": "2026-03-19T09:35:26"
+   },
+   "separation_deg": 3.356
+  },
+  {
+   "id": "konjungsi-conjunction-202603191021-moon-saturn",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Saturnus",
+   "bodies": [
+    "moon",
+    "saturn"
+   ],
+   "time_utc": "2026-03-19T10:21:26",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-03-19T10:21:26",
+    "konjungsi_asensio_rekta_utc": "2026-03-19T14:21:25"
+   },
+   "separation_deg": 4.367
+  },
+  {
+   "id": "konjungsi-conjunction-202603200849-moon-venus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Venus",
+   "bodies": [
+    "moon",
+    "venus"
+   ],
+   "time_utc": "2026-03-20T08:49:45",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-03-20T08:49:45",
+    "konjungsi_asensio_rekta_utc": "2026-03-20T12:39:44"
+   },
+   "separation_deg": 4.151
+  },
+  {
+   "id": "konjungsi-conjunction-202603230531-moon-uranus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Uranus",
+   "bodies": [
+    "moon",
+    "uranus"
+   ],
+   "time_utc": "2026-03-23T05:31:18",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-03-23T05:31:18",
+    "konjungsi_asensio_rekta_utc": "2026-03-23T07:41:26"
+   },
+   "separation_deg": 5.329
+  },
+  {
+   "id": "konjungsi-conjunction-202603230842-moon-m45",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M45 (Pleiades)",
+   "bodies": [
+    "moon",
+    "m45"
+   ],
+   "time_utc": "2026-03-23T08:42:26",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-03-23T08:42:26",
+    "konjungsi_asensio_rekta_utc": "2026-03-23T09:08:13"
+   },
+   "separation_deg": 1.094
+  },
+  {
+   "id": "okultasi-occultation-202603242236-moon-beta_tauri",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Beta Tauri oleh Bulan",
+   "bodies": [
+    "moon",
+    "beta_tauri"
+   ],
+   "time_utc": "2026-03-24T22:36:54",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-03-24T22:36:54"
+   },
+   "start_utc": "2026-03-24T20:33:11",
+   "end_utc": "2026-03-25T00:40:37",
+   "separation_deg": 0.308
+  },
+  {
+   "id": "fase_bulan-first_quarter-202603251918-moon",
+   "category": "fase_bulan",
+   "kind": "first_quarter",
+   "title": "Bulan Kuartal Awal",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-03-25T19:18:12",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202603261319-moon-jupiter",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Jupiter",
+   "bodies": [
+    "moon",
+    "jupiter"
+   ],
+   "time_utc": "2026-03-26T13:19:06",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-03-26T13:19:06",
+    "konjungsi_asensio_rekta_utc": "2026-03-26T12:10:48"
+   },
+   "separation_deg": 3.829
+  },
+  {
+   "id": "konjungsi-conjunction-202603280355-moon-m44",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M44 (Praesepe)",
+   "bodies": [
+    "moon",
+    "m44"
+   ],
+   "time_utc": "2026-03-28T03:55:22",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-03-28T03:55:22",
+    "konjungsi_asensio_rekta_utc": "2026-03-28T03:02:18"
+   },
+   "separation_deg": 1.423
+  },
+  {
+   "id": "okultasi-occultation-202603291957-moon-regulus",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Regulus oleh Bulan",
+   "bodies": [
+    "moon",
+    "regulus"
+   ],
+   "time_utc": "2026-03-29T19:57:58",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-03-29T19:57:58"
+   },
+   "start_utc": "2026-03-29T17:50:57",
+   "end_utc": "2026-03-29T22:04:57",
+   "separation_deg": 0.319
+  },
+  {
+   "id": "fase_bulan-full_moon-202604020213-moon",
+   "category": "fase_bulan",
+   "kind": "full_moon",
+   "title": "Bulan Purnama",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-04-02T02:13:17",
+   "details": {}
+  },
+  {
+   "id": "elongasi-greatest_elongation_west-202604031854-mercury",
+   "category": "elongasi",
+   "kind": "greatest_elongation_west",
+   "title": "Merkurius elongasi maksimum barat",
+   "bodies": [
+    "mercury"
+   ],
+   "time_utc": "2026-04-03T18:54:08",
+   "details": {
+    "elongasi_deg": 27.77,
+    "sisi": "barat"
+   }
+  },
+  {
+   "id": "fase_planet-dichotomy-202604032228-mercury",
+   "category": "fase_planet",
+   "kind": "dichotomy",
+   "title": "Merkurius dikotomi (fase 50%)",
+   "bodies": [
+    "mercury"
+   ],
+   "time_utc": "2026-04-03T22:28:09",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202604061954-moon-antares",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Antares oleh Bulan",
+   "bodies": [
+    "moon",
+    "antares"
+   ],
+   "time_utc": "2026-04-06T19:54:55",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-04-06T19:54:55"
+   },
+   "start_utc": "2026-04-06T17:56:32",
+   "end_utc": "2026-04-06T21:53:20",
+   "separation_deg": 0.61
+  },
+  {
+   "id": "okultasi-occultation-202604091349-moon-sigma_sagittarii",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Sigma Sagittarii oleh Bulan",
+   "bodies": [
+    "moon",
+    "sigma_sagittarii"
+   ],
+   "time_utc": "2026-04-09T13:49:24",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-04-09T13:49:24"
+   },
+   "start_utc": "2026-04-09T12:12:24",
+   "end_utc": "2026-04-09T15:26:29",
+   "separation_deg": 0.829
+  },
+  {
+   "id": "fase_bulan-last_quarter-202604100453-moon",
+   "category": "fase_bulan",
+   "kind": "last_quarter",
+   "title": "Bulan Kuartal Akhir",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-04-10T04:53:01",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202604151427-moon-mercury",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Merkurius",
+   "bodies": [
+    "moon",
+    "mercury"
+   ],
+   "time_utc": "2026-04-15T14:27:56",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-04-15T14:27:56",
+    "konjungsi_asensio_rekta_utc": "2026-04-15T19:14:05"
+   },
+   "separation_deg": 4.59
+  },
+  {
+   "id": "konjungsi-conjunction-202604151815-moon-neptune",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Neptunus",
+   "bodies": [
+    "moon",
+    "neptune"
+   ],
+   "time_utc": "2026-04-15T18:15:38",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-04-15T18:15:38",
+    "konjungsi_asensio_rekta_utc": "2026-04-15T21:24:26"
+   },
+   "separation_deg": 3.473
+  },
+  {
+   "id": "konjungsi-conjunction-202604152138-moon-mars",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Mars",
+   "bodies": [
+    "moon",
+    "mars"
+   ],
+   "time_utc": "2026-04-15T21:38:17",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-04-15T21:38:17",
+    "konjungsi_asensio_rekta_utc": "2026-04-16T00:47:36"
+   },
+   "separation_deg": 3.302
+  },
+  {
+   "id": "konjungsi-conjunction-202604160207-moon-saturn",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Saturnus",
+   "bodies": [
+    "moon",
+    "saturn"
+   ],
+   "time_utc": "2026-04-16T02:07:38",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-04-16T02:07:38",
+    "konjungsi_asensio_rekta_utc": "2026-04-16T06:17:24"
+   },
+   "separation_deg": 4.683
+  },
+  {
+   "id": "fase_bulan-new_moon-202604171152-moon",
+   "category": "fase_bulan",
+   "kind": "new_moon",
+   "title": "Bulan Baru",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-04-17T11:52:36",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202604190635-moon-venus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Venus",
+   "bodies": [
+    "moon",
+    "venus"
+   ],
+   "time_utc": "2026-04-19T06:35:35",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-04-19T06:35:35",
+    "konjungsi_asensio_rekta_utc": "2026-04-19T08:48:54"
+   },
+   "separation_deg": 4.61
+  },
+  {
+   "id": "konjungsi-conjunction-202604191539-moon-uranus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Uranus",
+   "bodies": [
+    "moon",
+    "uranus"
+   ],
+   "time_utc": "2026-04-19T15:39:26",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-04-19T15:39:26",
+    "konjungsi_asensio_rekta_utc": "2026-04-19T17:37:03"
+   },
+   "separation_deg": 5.237
+  },
+  {
+   "id": "konjungsi-conjunction-202604191641-moon-m45",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M45 (Pleiades)",
+   "bodies": [
+    "moon",
+    "m45"
+   ],
+   "time_utc": "2026-04-19T16:41:26",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-04-19T16:41:26",
+    "konjungsi_asensio_rekta_utc": "2026-04-19T17:03:45"
+   },
+   "separation_deg": 0.988
+  },
+  {
+   "id": "konjungsi-conjunction-202604200105-mars-saturn",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Mars–Saturnus",
+   "bodies": [
+    "mars",
+    "saturn"
+   ],
+   "time_utc": "2026-04-20T01:05:28",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-04-20T01:05:28",
+    "konjungsi_asensio_rekta_utc": "2026-04-20T20:27:34"
+   },
+   "separation_deg": 1.195
+  },
+  {
+   "id": "konjungsi-conjunction-202604201233-mercury-saturn",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Merkurius–Saturnus",
+   "bodies": [
+    "mercury",
+    "saturn"
+   ],
+   "time_utc": "2026-04-20T12:33:52",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-04-20T12:33:52",
+    "konjungsi_asensio_rekta_utc": "2026-04-20T09:09:16"
+   },
+   "separation_deg": 0.459
+  },
+  {
+   "id": "konjungsi-conjunction-202604202228-mars-mercury",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Mars–Merkurius",
+   "bodies": [
+    "mars",
+    "mercury"
+   ],
+   "time_utc": "2026-04-20T22:28:46",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-04-20T22:28:46",
+    "konjungsi_asensio_rekta_utc": "2026-04-19T23:38:38"
+   },
+   "separation_deg": 1.651
+  },
+  {
+   "id": "okultasi-occultation-202604210524-moon-beta_tauri",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Beta Tauri oleh Bulan",
+   "bodies": [
+    "moon",
+    "beta_tauri"
+   ],
+   "time_utc": "2026-04-21T05:24:37",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-04-21T05:24:37"
+   },
+   "start_utc": "2026-04-21T03:27:09",
+   "end_utc": "2026-04-21T07:22:05",
+   "separation_deg": 0.453
+  },
+  {
+   "id": "hujan_meteor-lyr-202604221934",
+   "category": "hujan_meteor",
+   "kind": "lyr",
+   "title": "Hujan Meteor Lyrid",
+   "bodies": [],
+   "time_utc": "2026-04-22T19:34:06",
+   "details": {
+    "nama": "Lyrid",
+    "zhr": 18,
+    "radian_ra": 271.0,
+    "radian_dec": 34.0,
+    "kecepatan_kms": 49,
+    "catatan": "Waktu puncak perkiraan (ketidakpastian beberapa jam hingga ~1 hari)."
+   }
+  },
+  {
+   "id": "konjungsi-conjunction-202604222314-moon-jupiter",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Jupiter",
+   "bodies": [
+    "moon",
+    "jupiter"
+   ],
+   "time_utc": "2026-04-22T23:14:02",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-04-22T23:14:02",
+    "konjungsi_asensio_rekta_utc": "2026-04-22T22:04:17"
+   },
+   "separation_deg": 3.51
+  },
+  {
+   "id": "fase_bulan-first_quarter-202604240232-moon",
+   "category": "fase_bulan",
+   "kind": "first_quarter",
+   "title": "Bulan Kuartal Awal",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-04-24T02:32:44",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202604240919-moon-m44",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M44 (Praesepe)",
+   "bodies": [
+    "moon",
+    "m44"
+   ],
+   "time_utc": "2026-04-24T09:19:28",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-04-24T09:19:28",
+    "konjungsi_asensio_rekta_utc": "2026-04-24T08:32:50"
+   },
+   "separation_deg": 1.258
+  },
+  {
+   "id": "okultasi-occultation-202604260127-moon-regulus",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Regulus oleh Bulan",
+   "bodies": [
+    "moon",
+    "regulus"
+   ],
+   "time_utc": "2026-04-26T01:27:57",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-04-26T01:27:57"
+   },
+   "start_utc": "2026-04-25T23:16:57",
+   "end_utc": "2026-04-26T03:38:57",
+   "separation_deg": 0.177
+  },
+  {
+   "id": "fase_bulan-full_moon-202605011724-moon",
+   "category": "fase_bulan",
+   "kind": "full_moon",
+   "title": "Bulan Purnama",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-05-01T17:24:08",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202605040256-moon-antares",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Antares oleh Bulan",
+   "bodies": [
+    "moon",
+    "antares"
+   ],
+   "time_utc": "2026-05-04T02:56:08",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-05-04T02:56:08"
+   },
+   "start_utc": "2026-05-04T00:48:44",
+   "end_utc": "2026-05-04T05:03:32",
+   "separation_deg": 0.464
+  },
+  {
+   "id": "hujan_meteor-eta-202605060905",
+   "category": "hujan_meteor",
+   "kind": "eta",
+   "title": "Hujan Meteor eta-Aquariid",
+   "bodies": [],
+   "time_utc": "2026-05-06T09:05:31",
+   "details": {
+    "nama": "eta-Aquariid",
+    "zhr": 50,
+    "radian_ra": 338.0,
+    "radian_dec": -1.0,
+    "kecepatan_kms": 66,
+    "catatan": "Waktu puncak perkiraan (ketidakpastian beberapa jam hingga ~1 hari)."
+   }
+  },
+  {
+   "id": "okultasi-occultation-202605062057-moon-sigma_sagittarii",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Sigma Sagittarii oleh Bulan",
+   "bodies": [
+    "moon",
+    "sigma_sagittarii"
+   ],
+   "time_utc": "2026-05-06T20:57:33",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-05-06T20:57:33"
+   },
+   "start_utc": "2026-05-06T18:59:50",
+   "end_utc": "2026-05-06T22:55:18",
+   "separation_deg": 0.617
+  },
+  {
+   "id": "fase_bulan-last_quarter-202605092112-moon",
+   "category": "fase_bulan",
+   "kind": "last_quarter",
+   "title": "Bulan Kuartal Akhir",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-05-09T21:12:10",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202605130551-moon-neptune",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Neptunus",
+   "bodies": [
+    "moon",
+    "neptune"
+   ],
+   "time_utc": "2026-05-13T05:51:10",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-05-13T05:51:10",
+    "konjungsi_asensio_rekta_utc": "2026-05-13T09:12:23"
+   },
+   "separation_deg": 3.676
+  },
+  {
+   "id": "konjungsi-conjunction-202605131740-moon-saturn",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Saturnus",
+   "bodies": [
+    "moon",
+    "saturn"
+   ],
+   "time_utc": "2026-05-13T17:40:11",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-05-13T17:40:11",
+    "konjungsi_asensio_rekta_utc": "2026-05-13T22:07:12"
+   },
+   "separation_deg": 5.081
+  },
+  {
+   "id": "fase_planet-greatest_brightness-202605141425-mercury",
+   "category": "fase_planet",
+   "kind": "greatest_brightness",
+   "title": "Merkurius paling terang",
+   "bodies": [
+    "mercury"
+   ],
+   "time_utc": "2026-05-14T14:25:06",
+   "details": {
+    "magnitudo": -2.32
+   }
+  },
+  {
+   "id": "konjungsi-conjunction-202605142104-moon-mars",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Mars",
+   "bodies": [
+    "moon",
+    "mars"
+   ],
+   "time_utc": "2026-05-14T21:04:26",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-05-14T21:04:26",
+    "konjungsi_asensio_rekta_utc": "2026-05-15T00:44:59"
+   },
+   "separation_deg": 4.716
+  },
+  {
+   "id": "fase_bulan-new_moon-202605162001-moon",
+   "category": "fase_bulan",
+   "kind": "new_moon",
+   "title": "Bulan Baru",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-05-16T20:01:59",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202605170104-moon-mercury",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Merkurius",
+   "bodies": [
+    "moon",
+    "mercury"
+   ],
+   "time_utc": "2026-05-17T01:04:20",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-05-17T01:04:20",
+    "konjungsi_asensio_rekta_utc": "2026-05-17T02:51:50"
+   },
+   "separation_deg": 4.424
+  },
+  {
+   "id": "konjungsi-conjunction-202605170246-moon-m45",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M45 (Pleiades)",
+   "bodies": [
+    "moon",
+    "m45"
+   ],
+   "time_utc": "2026-05-17T02:46:43",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-05-17T02:46:43",
+    "konjungsi_asensio_rekta_utc": "2026-05-17T03:06:42"
+   },
+   "separation_deg": 0.918
+  },
+  {
+   "id": "konjungsi-conjunction-202605170414-moon-uranus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Uranus",
+   "bodies": [
+    "moon",
+    "uranus"
+   ],
+   "time_utc": "2026-05-17T04:14:11",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-05-17T04:14:11",
+    "konjungsi_asensio_rekta_utc": "2026-05-17T05:59:56"
+   },
+   "separation_deg": 5.175
+  },
+  {
+   "id": "okultasi-occultation-202605181432-moon-beta_tauri",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Beta Tauri oleh Bulan",
+   "bodies": [
+    "moon",
+    "beta_tauri"
+   ],
+   "time_utc": "2026-05-18T14:32:13",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-05-18T14:32:13"
+   },
+   "start_utc": "2026-05-18T12:42:46",
+   "end_utc": "2026-05-18T16:21:39",
+   "separation_deg": 0.601
+  },
+  {
+   "id": "konjungsi-conjunction-202605190204-moon-venus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Venus",
+   "bodies": [
+    "moon",
+    "venus"
+   ],
+   "time_utc": "2026-05-19T02:04:29",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-05-19T02:04:29",
+    "konjungsi_asensio_rekta_utc": "2026-05-19T01:51:13"
+   },
+   "separation_deg": 2.959
+  },
+  {
+   "id": "konjungsi-conjunction-202605201348-moon-jupiter",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Jupiter",
+   "bodies": [
+    "moon",
+    "jupiter"
+   ],
+   "time_utc": "2026-05-20T13:48:29",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-05-20T13:48:29",
+    "konjungsi_asensio_rekta_utc": "2026-05-20T12:38:28"
+   },
+   "separation_deg": 3.024
+  },
+  {
+   "id": "konjungsi-conjunction-202605211601-moon-m44",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M44 (Praesepe)",
+   "bodies": [
+    "moon",
+    "m44"
+   ],
+   "time_utc": "2026-05-21T16:01:53",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-05-21T16:01:53",
+    "konjungsi_asensio_rekta_utc": "2026-05-21T15:25:05"
+   },
+   "separation_deg": 1.017
+  },
+  {
+   "id": "okultasi-occultation-202605230718-moon-regulus",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Regulus oleh Bulan",
+   "bodies": [
+    "moon",
+    "regulus"
+   ],
+   "time_utc": "2026-05-23T07:18:33",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-05-23T07:18:33"
+   },
+   "start_utc": "2026-05-23T05:07:13",
+   "end_utc": "2026-05-23T09:29:53",
+   "separation_deg": 0.074
+  },
+  {
+   "id": "fase_bulan-first_quarter-202605231112-moon",
+   "category": "fase_bulan",
+   "kind": "first_quarter",
+   "title": "Bulan Kuartal Awal",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-05-23T11:12:33",
+   "details": {}
+  },
+  {
+   "id": "fase_bulan-full_moon-202605310846-moon",
+   "category": "fase_bulan",
+   "kind": "full_moon",
+   "title": "Bulan Purnama",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-05-31T08:46:15",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202605310910-moon-antares",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Antares oleh Bulan",
+   "bodies": [
+    "moon",
+    "antares"
+   ],
+   "time_utc": "2026-05-31T09:10:14",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-05-31T09:10:14"
+   },
+   "start_utc": "2026-05-31T06:59:38",
+   "end_utc": "2026-05-31T11:20:50",
+   "separation_deg": 0.395
+  },
+  {
+   "id": "okultasi-occultation-202606030308-moon-sigma_sagittarii",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Sigma Sagittarii oleh Bulan",
+   "bodies": [
+    "moon",
+    "sigma_sagittarii"
+   ],
+   "time_utc": "2026-06-03T03:08:53",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-06-03T03:08:53"
+   },
+   "start_utc": "2026-06-03T00:59:36",
+   "end_utc": "2026-06-03T05:18:12",
+   "separation_deg": 0.424
+  },
+  {
+   "id": "fase_bulan-last_quarter-202606081001-moon",
+   "category": "fase_bulan",
+   "kind": "last_quarter",
+   "title": "Bulan Kuartal Akhir",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-06-08T10:01:57",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202606091532-moon-neptune",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Neptunus",
+   "bodies": [
+    "moon",
+    "neptune"
+   ],
+   "time_utc": "2026-06-09T15:32:05",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-06-09T15:32:05",
+    "konjungsi_asensio_rekta_utc": "2026-06-09T19:12:58"
+   },
+   "separation_deg": 3.951
+  },
+  {
+   "id": "konjungsi-conjunction-202606091957-jupiter-venus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Jupiter–Venus",
+   "bodies": [
+    "jupiter",
+    "venus"
+   ],
+   "time_utc": "2026-06-09T19:57:50",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-06-09T19:57:50",
+    "konjungsi_asensio_rekta_utc": "2026-06-09T12:39:22"
+   },
+   "separation_deg": 1.608
+  },
+  {
+   "id": "fase_planet-dichotomy-202606092026-mercury",
+   "category": "fase_planet",
+   "kind": "dichotomy",
+   "title": "Merkurius dikotomi (fase 50%)",
+   "bodies": [
+    "mercury"
+   ],
+   "time_utc": "2026-06-09T20:26:14",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202606100657-moon-saturn",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Saturnus",
+   "bodies": [
+    "moon",
+    "saturn"
+   ],
+   "time_utc": "2026-06-10T06:57:44",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-06-10T06:57:44",
+    "konjungsi_asensio_rekta_utc": "2026-06-10T11:49:09"
+   },
+   "separation_deg": 5.538
+  },
+  {
+   "id": "konjungsi-conjunction-202606121824-moon-mars",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Mars",
+   "bodies": [
+    "moon",
+    "mars"
+   ],
+   "time_utc": "2026-06-12T18:24:56",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-06-12T18:24:56",
+    "konjungsi_asensio_rekta_utc": "2026-06-12T21:15:11"
+   },
+   "separation_deg": 5.398
+  },
+  {
+   "id": "konjungsi-conjunction-202606131330-moon-m45",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M45 (Pleiades)",
+   "bodies": [
+    "moon",
+    "m45"
+   ],
+   "time_utc": "2026-06-13T13:30:08",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-06-13T13:30:08",
+    "konjungsi_asensio_rekta_utc": "2026-06-13T13:50:38"
+   },
+   "separation_deg": 0.953
+  },
+  {
+   "id": "konjungsi-conjunction-202606131731-moon-uranus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Uranus",
+   "bodies": [
+    "moon",
+    "uranus"
+   ],
+   "time_utc": "2026-06-13T17:31:39",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-06-13T17:31:39",
+    "konjungsi_asensio_rekta_utc": "2026-06-13T19:09:40"
+   },
+   "separation_deg": 5.205
+  },
+  {
+   "id": "okultasi-occultation-202606150108-moon-beta_tauri",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Beta Tauri oleh Bulan",
+   "bodies": [
+    "moon",
+    "beta_tauri"
+   ],
+   "time_utc": "2026-06-15T01:08:53",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-06-15T01:08:53"
+   },
+   "start_utc": "2026-06-14T23:22:53",
+   "end_utc": "2026-06-15T02:54:53",
+   "separation_deg": 0.657
+  },
+  {
+   "id": "fase_bulan-new_moon-202606150255-moon",
+   "category": "fase_bulan",
+   "kind": "new_moon",
+   "title": "Bulan Baru",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-06-15T02:55:24",
+   "details": {}
+  },
+  {
+   "id": "elongasi-greatest_elongation_east-202606152239-mercury",
+   "category": "elongasi",
+   "kind": "greatest_elongation_east",
+   "title": "Merkurius elongasi maksimum timur",
+   "bodies": [
+    "mercury"
+   ],
+   "time_utc": "2026-06-15T22:39:41",
+   "details": {
+    "elongasi_deg": 24.5,
+    "sisi": "timur"
+   }
+  },
+  {
+   "id": "konjungsi-conjunction-202606162028-moon-mercury",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Merkurius",
+   "bodies": [
+    "moon",
+    "mercury"
+   ],
+   "time_utc": "2026-06-16T20:28:11",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-06-16T20:28:11",
+    "konjungsi_asensio_rekta_utc": "2026-06-16T19:33:20"
+   },
+   "separation_deg": 2.561
+  },
+  {
+   "id": "konjungsi-conjunction-202606170800-moon-jupiter",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Jupiter",
+   "bodies": [
+    "moon",
+    "jupiter"
+   ],
+   "time_utc": "2026-06-17T08:00:37",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-06-17T08:00:37",
+    "konjungsi_asensio_rekta_utc": "2026-06-17T06:53:02"
+   },
+   "separation_deg": 2.473
+  },
+  {
+   "id": "okultasi-occultation-202606172031-moon-venus",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Venus oleh Bulan",
+   "bodies": [
+    "moon",
+    "venus"
+   ],
+   "time_utc": "2026-06-17T20:31:44",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-06-17T20:31:44",
+    "konjungsi_asensio_rekta_utc": "2026-06-17T20:21:03"
+   },
+   "start_utc": "2026-06-17T18:18:50",
+   "end_utc": "2026-06-17T22:44:39",
+   "separation_deg": 0.289
+  },
+  {
+   "id": "konjungsi-conjunction-202606180053-moon-m44",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M44 (Praesepe)",
+   "bodies": [
+    "moon",
+    "m44"
+   ],
+   "time_utc": "2026-06-18T00:53:21",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-06-18T00:53:21",
+    "konjungsi_asensio_rekta_utc": "2026-06-18T00:24:25"
+   },
+   "separation_deg": 0.82
+  },
+  {
+   "id": "okultasi-occultation-202606191455-moon-regulus",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Regulus oleh Bulan",
+   "bodies": [
+    "moon",
+    "regulus"
+   ],
+   "time_utc": "2026-06-19T14:55:14",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-06-19T14:55:14"
+   },
+   "start_utc": "2026-06-19T12:49:58",
+   "end_utc": "2026-06-19T17:00:29",
+   "separation_deg": 0.315
+  },
+  {
+   "id": "fase_bulan-first_quarter-202606212157-moon",
+   "category": "fase_bulan",
+   "kind": "first_quarter",
+   "title": "Bulan Kuartal Awal",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-06-21T21:57:01",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202606251216-jupiter-mercury",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Jupiter–Merkurius",
+   "bodies": [
+    "jupiter",
+    "mercury"
+   ],
+   "time_utc": "2026-06-25T12:16:22",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-06-25T12:16:22"
+   },
+   "separation_deg": 3.744
+  },
+  {
+   "id": "okultasi-occultation-202606271510-moon-antares",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Antares oleh Bulan",
+   "bodies": [
+    "moon",
+    "antares"
+   ],
+   "time_utc": "2026-06-27T15:10:05",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-06-27T15:10:05"
+   },
+   "start_utc": "2026-06-27T13:02:07",
+   "end_utc": "2026-06-27T17:18:01",
+   "separation_deg": 0.455
+  },
+  {
+   "id": "fase_bulan-full_moon-202606292358-moon",
+   "category": "fase_bulan",
+   "kind": "full_moon",
+   "title": "Bulan Purnama",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-06-29T23:58:09",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202606300904-moon-sigma_sagittarii",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Sigma Sagittarii oleh Bulan",
+   "bodies": [
+    "moon",
+    "sigma_sagittarii"
+   ],
+   "time_utc": "2026-06-30T09:04:25",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-06-30T09:04:25"
+   },
+   "start_utc": "2026-06-30T06:52:27",
+   "end_utc": "2026-06-30T11:16:23",
+   "separation_deg": 0.352
+  },
+  {
+   "id": "konjungsi-conjunction-202607062235-moon-neptune",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Neptunus",
+   "bodies": [
+    "moon",
+    "neptune"
+   ],
+   "time_utc": "2026-07-06T22:35:43",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-07-06T22:35:43",
+    "konjungsi_asensio_rekta_utc": "2026-07-07T02:36:02"
+   },
+   "separation_deg": 4.214
+  },
+  {
+   "id": "konjungsi-conjunction-202607071640-moon-saturn",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Saturnus",
+   "bodies": [
+    "moon",
+    "saturn"
+   ],
+   "time_utc": "2026-07-07T16:40:08",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-07-07T16:40:08",
+    "konjungsi_asensio_rekta_utc": "2026-07-07T21:56:59"
+   },
+   "separation_deg": 5.966
+  },
+  {
+   "id": "fase_bulan-last_quarter-202607071929-moon",
+   "category": "fase_bulan",
+   "kind": "last_quarter",
+   "title": "Bulan Kuartal Akhir",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-07-07T19:29:29",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202607102306-moon-m45",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M45 (Pleiades)",
+   "bodies": [
+    "moon",
+    "m45"
+   ],
+   "time_utc": "2026-07-10T23:06:17",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-07-10T23:06:17",
+    "konjungsi_asensio_rekta_utc": "2026-07-10T23:29:43"
+   },
+   "separation_deg": 1.074
+  },
+  {
+   "id": "konjungsi-conjunction-202607110533-moon-uranus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Uranus",
+   "bodies": [
+    "moon",
+    "uranus"
+   ],
+   "time_utc": "2026-07-11T05:33:20",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-07-11T05:33:20",
+    "konjungsi_asensio_rekta_utc": "2026-07-11T07:08:05"
+   },
+   "separation_deg": 5.31
+  },
+  {
+   "id": "konjungsi-conjunction-202607111323-moon-mars",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Mars",
+   "bodies": [
+    "moon",
+    "mars"
+   ],
+   "time_utc": "2026-07-11T13:23:20",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-07-11T13:23:20",
+    "konjungsi_asensio_rekta_utc": "2026-07-11T14:38:25"
+   },
+   "separation_deg": 5.282
+  },
+  {
+   "id": "okultasi-occultation-202607121132-moon-beta_tauri",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Beta Tauri oleh Bulan",
+   "bodies": [
+    "moon",
+    "beta_tauri"
+   ],
+   "time_utc": "2026-07-12T11:32:12",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-07-12T11:32:12"
+   },
+   "start_utc": "2026-07-12T09:42:51",
+   "end_utc": "2026-07-12T13:21:32",
+   "separation_deg": 0.606
+  },
+  {
+   "id": "fase_bulan-new_moon-202607140944-moon",
+   "category": "fase_bulan",
+   "kind": "new_moon",
+   "title": "Bulan Baru",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-07-14T09:44:32",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202607150406-moon-jupiter",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Jupiter",
+   "bodies": [
+    "moon",
+    "jupiter"
+   ],
+   "time_utc": "2026-07-15T04:06:32",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-07-15T04:06:32",
+    "konjungsi_asensio_rekta_utc": "2026-07-15T03:04:52"
+   },
+   "separation_deg": 1.921
+  },
+  {
+   "id": "konjungsi-conjunction-202607151112-moon-m44",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M44 (Praesepe)",
+   "bodies": [
+    "moon",
+    "m44"
+   ],
+   "time_utc": "2026-07-15T11:12:10",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-07-15T11:12:10",
+    "konjungsi_asensio_rekta_utc": "2026-07-15T10:46:27"
+   },
+   "separation_deg": 0.735
+  },
+  {
+   "id": "okultasi-occultation-202607170023-moon-regulus",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Regulus oleh Bulan",
+   "bodies": [
+    "moon",
+    "regulus"
+   ],
+   "time_utc": "2026-07-17T00:23:11",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-07-17T00:23:11"
+   },
+   "start_utc": "2026-07-16T22:24:00",
+   "end_utc": "2026-07-17T02:22:22",
+   "separation_deg": 0.446
+  },
+  {
+   "id": "konjungsi-conjunction-202607171446-moon-venus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Venus",
+   "bodies": [
+    "moon",
+    "venus"
+   ],
+   "time_utc": "2026-07-17T14:46:22",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-07-17T14:46:22",
+    "konjungsi_asensio_rekta_utc": "2026-07-17T16:30:40"
+   },
+   "separation_deg": 1.786
+  },
+  {
+   "id": "fase_bulan-first_quarter-202607211105-moon",
+   "category": "fase_bulan",
+   "kind": "first_quarter",
+   "title": "Bulan Kuartal Awal",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-07-21T11:05:55",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202607242135-moon-antares",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Antares oleh Bulan",
+   "bodies": [
+    "moon",
+    "antares"
+   ],
+   "time_utc": "2026-07-24T21:35:29",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-07-24T21:35:29"
+   },
+   "start_utc": "2026-07-24T19:34:40",
+   "end_utc": "2026-07-24T23:36:16",
+   "separation_deg": 0.578
+  },
+  {
+   "id": "okultasi-occultation-202607271528-moon-sigma_sagittarii",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Sigma Sagittarii oleh Bulan",
+   "bodies": [
+    "moon",
+    "sigma_sagittarii"
+   ],
+   "time_utc": "2026-07-27T15:28:45",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-07-27T15:28:45"
+   },
+   "start_utc": "2026-07-27T13:18:36",
+   "end_utc": "2026-07-27T17:38:55",
+   "separation_deg": 0.395
+  },
+  {
+   "id": "fase_bulan-full_moon-202607291436-moon",
+   "category": "fase_bulan",
+   "kind": "full_moon",
+   "title": "Bulan Purnama",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-07-29T14:36:44",
+   "details": {}
+  },
+  {
+   "id": "elongasi-greatest_elongation_west-202608021358-mercury",
+   "category": "elongasi",
+   "kind": "greatest_elongation_west",
+   "title": "Merkurius elongasi maksimum barat",
+   "bodies": [
+    "mercury"
+   ],
+   "time_utc": "2026-08-02T13:58:12",
+   "details": {
+    "elongasi_deg": 19.39,
+    "sisi": "barat"
+   }
+  },
+  {
+   "id": "konjungsi-conjunction-202608030345-moon-neptune",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Neptunus",
+   "bodies": [
+    "moon",
+    "neptune"
+   ],
+   "time_utc": "2026-08-03T03:45:17",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-08-03T03:45:17",
+    "konjungsi_asensio_rekta_utc": "2026-08-03T07:55:08"
+   },
+   "separation_deg": 4.357
+  },
+  {
+   "id": "konjungsi-conjunction-202608032245-moon-saturn",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Saturnus",
+   "bodies": [
+    "moon",
+    "saturn"
+   ],
+   "time_utc": "2026-08-03T22:45:59",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-08-03T22:45:59",
+    "konjungsi_asensio_rekta_utc": "2026-08-04T04:19:09"
+   },
+   "separation_deg": 6.245
+  },
+  {
+   "id": "fase_planet-dichotomy-202608051022-mercury",
+   "category": "fase_planet",
+   "kind": "dichotomy",
+   "title": "Merkurius dikotomi (fase 50%)",
+   "bodies": [
+    "mercury"
+   ],
+   "time_utc": "2026-08-05T10:22:39",
+   "details": {}
+  },
+  {
+   "id": "fase_bulan-last_quarter-202608060221-moon",
+   "category": "fase_bulan",
+   "kind": "last_quarter",
+   "title": "Bulan Kuartal Akhir",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-08-06T02:21:37",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202608070633-moon-m45",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M45 (Pleiades)",
+   "bodies": [
+    "moon",
+    "m45"
+   ],
+   "time_utc": "2026-08-07T06:33:32",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-08-07T06:33:32",
+    "konjungsi_asensio_rekta_utc": "2026-08-07T06:59:59"
+   },
+   "separation_deg": 1.181
+  },
+  {
+   "id": "konjungsi-conjunction-202608071455-moon-uranus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Uranus",
+   "bodies": [
+    "moon",
+    "uranus"
+   ],
+   "time_utc": "2026-08-07T14:55:56",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-08-07T14:55:56",
+    "konjungsi_asensio_rekta_utc": "2026-08-07T16:29:59"
+   },
+   "separation_deg": 5.404
+  },
+  {
+   "id": "okultasi-occultation-202608082010-moon-beta_tauri",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Beta Tauri oleh Bulan",
+   "bodies": [
+    "moon",
+    "beta_tauri"
+   ],
+   "time_utc": "2026-08-08T20:10:41",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-08-08T20:10:41"
+   },
+   "start_utc": "2026-08-08T18:16:11",
+   "end_utc": "2026-08-08T22:05:12",
+   "separation_deg": 0.53
+  },
+  {
+   "id": "konjungsi-conjunction-202608090547-moon-mars",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Mars",
+   "bodies": [
+    "moon",
+    "mars"
+   ],
+   "time_utc": "2026-08-09T05:47:59",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-08-09T05:47:59",
+    "konjungsi_asensio_rekta_utc": "2026-08-09T05:31:27"
+   },
+   "separation_deg": 4.425
+  },
+  {
+   "id": "konjungsi-conjunction-202608111405-moon-mercury",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Merkurius",
+   "bodies": [
+    "moon",
+    "mercury"
+   ],
+   "time_utc": "2026-08-11T14:05:38",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-08-11T14:05:38",
+    "konjungsi_asensio_rekta_utc": "2026-08-11T12:47:08"
+   },
+   "separation_deg": 2.008
+  },
+  {
+   "id": "konjungsi-conjunction-202608112123-moon-m44",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M44 (Praesepe)",
+   "bodies": [
+    "moon",
+    "m44"
+   ],
+   "time_utc": "2026-08-11T21:23:16",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-08-11T21:23:16",
+    "konjungsi_asensio_rekta_utc": "2026-08-11T20:57:11"
+   },
+   "separation_deg": 0.737
+  },
+  {
+   "id": "konjungsi-conjunction-202608120015-moon-jupiter",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Jupiter",
+   "bodies": [
+    "moon",
+    "jupiter"
+   ],
+   "time_utc": "2026-08-12T00:15:16",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-08-12T00:15:16",
+    "konjungsi_asensio_rekta_utc": "2026-08-11T23:24:10"
+   },
+   "separation_deg": 1.374
+  },
+  {
+   "id": "fase_bulan-new_moon-202608121736-moon",
+   "category": "fase_bulan",
+   "kind": "new_moon",
+   "title": "Bulan Baru",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-08-12T17:36:57",
+   "details": {}
+  },
+  {
+   "id": "gerhana_matahari-total-202608121746-sun-moon",
+   "category": "gerhana_matahari",
+   "kind": "total",
+   "title": "Gerhana Matahari total",
+   "bodies": [
+    "sun",
+    "moon"
+   ],
+   "time_utc": "2026-08-12T17:46:31",
+   "details": {
+    "jenis": "total",
+    "gamma_perkiraan": 0.928,
+    "sep_pusat_deg": 0.924,
+    "rasio_diameter_bulan_matahari": 1.0316
+   }
+  },
+  {
+   "id": "fase_planet-dichotomy-202608121952-venus",
+   "category": "fase_planet",
+   "kind": "dichotomy",
+   "title": "Venus dikotomi (fase 50%)",
+   "bodies": [
+    "venus"
+   ],
+   "time_utc": "2026-08-12T19:52:06",
+   "details": {}
+  },
+  {
+   "id": "hujan_meteor-per-202608130204",
+   "category": "hujan_meteor",
+   "kind": "per",
+   "title": "Hujan Meteor Perseid",
+   "bodies": [],
+   "time_utc": "2026-08-13T02:04:27",
+   "details": {
+    "nama": "Perseid",
+    "zhr": 100,
+    "radian_ra": 48.0,
+    "radian_dec": 58.0,
+    "kecepatan_kms": 59,
+    "catatan": "Waktu puncak perkiraan (ketidakpastian beberapa jam hingga ~1 hari)."
+   }
+  },
+  {
+   "id": "okultasi-occultation-202608131034-moon-regulus",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Regulus oleh Bulan",
+   "bodies": [
+    "moon",
+    "regulus"
+   ],
+   "time_utc": "2026-08-13T10:34:06",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-08-13T10:34:06"
+   },
+   "start_utc": "2026-08-13T08:36:22",
+   "end_utc": "2026-08-13T12:31:48",
+   "separation_deg": 0.469
+  },
+  {
+   "id": "elongasi-greatest_elongation_east-202608142126-venus",
+   "category": "elongasi",
+   "kind": "greatest_elongation_east",
+   "title": "Venus elongasi maksimum timur",
+   "bodies": [
+    "venus"
+   ],
+   "time_utc": "2026-08-14T21:26:13",
+   "details": {
+    "elongasi_deg": 45.87,
+    "sisi": "timur"
+   }
+  },
+  {
+   "id": "konjungsi-conjunction-202608151058-jupiter-mercury",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Jupiter–Merkurius",
+   "bodies": [
+    "jupiter",
+    "mercury"
+   ],
+   "time_utc": "2026-08-15T10:58:25",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-08-15T10:58:25",
+    "konjungsi_asensio_rekta_utc": "2026-08-15T09:28:12"
+   },
+   "separation_deg": 0.553
+  },
+  {
+   "id": "konjungsi-conjunction-202608160655-moon-venus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Venus",
+   "bodies": [
+    "moon",
+    "venus"
+   ],
+   "time_utc": "2026-08-16T06:55:01",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-08-16T06:55:01",
+    "konjungsi_asensio_rekta_utc": "2026-08-16T08:46:11"
+   },
+   "separation_deg": 1.838
+  },
+  {
+   "id": "fase_bulan-first_quarter-202608200245-moon",
+   "category": "fase_bulan",
+   "kind": "first_quarter",
+   "title": "Bulan Kuartal Awal",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-08-20T02:45:35",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202608210451-moon-antares",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Antares oleh Bulan",
+   "bodies": [
+    "moon",
+    "antares"
+   ],
+   "time_utc": "2026-08-21T04:51:42",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-08-21T04:51:42"
+   },
+   "start_utc": "2026-08-21T02:55:27",
+   "end_utc": "2026-08-21T06:47:55",
+   "separation_deg": 0.64
+  },
+  {
+   "id": "okultasi-occultation-202608232245-moon-sigma_sagittarii",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Sigma Sagittarii oleh Bulan",
+   "bodies": [
+    "moon",
+    "sigma_sagittarii"
+   ],
+   "time_utc": "2026-08-23T22:45:19",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-08-23T22:45:19"
+   },
+   "start_utc": "2026-08-23T20:36:55",
+   "end_utc": "2026-08-24T00:53:43",
+   "separation_deg": 0.442
+  },
+  {
+   "id": "fase_planet-greatest_brightness-202608262309-mercury",
+   "category": "fase_planet",
+   "kind": "greatest_brightness",
+   "title": "Merkurius paling terang",
+   "bodies": [
+    "mercury"
+   ],
+   "time_utc": "2026-08-26T23:09:22",
+   "details": {
+    "magnitudo": -1.84
+   }
+  },
+  {
+   "id": "gerhana_bulan-sebagian-202608280413-moon",
+   "category": "gerhana_bulan",
+   "kind": "sebagian",
+   "title": "Gerhana Bulan sebagian (0.94 umbra)",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-08-28T04:13:03",
+   "details": {
+    "jenis": "sebagian",
+    "magnitudo_umbra": 0.943,
+    "magnitudo_penumbra": 1.998,
+    "jarak_ke_sumbu_deg": 0.462,
+    "umbra_mulai_utc": "2026-08-28T02:33:09",
+    "umbra_selesai_utc": "2026-08-28T05:52:49"
+   },
+   "start_utc": "2026-08-28T01:21:58",
+   "end_utc": "2026-08-28T07:03:44"
+  },
+  {
+   "id": "fase_bulan-full_moon-202608280418-moon",
+   "category": "fase_bulan",
+   "kind": "full_moon",
+   "title": "Bulan Purnama",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-08-28T04:18:39",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202608300842-moon-neptune",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Neptunus",
+   "bodies": [
+    "moon",
+    "neptune"
+   ],
+   "time_utc": "2026-08-30T08:42:32",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-08-30T08:42:32",
+    "konjungsi_asensio_rekta_utc": "2026-08-30T12:48:32"
+   },
+   "separation_deg": 4.342
+  },
+  {
+   "id": "konjungsi-conjunction-202608310241-moon-saturn",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Saturnus",
+   "bodies": [
+    "moon",
+    "saturn"
+   ],
+   "time_utc": "2026-08-31T02:41:58",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-08-31T02:41:58",
+    "konjungsi_asensio_rekta_utc": "2026-08-31T08:15:43"
+   },
+   "separation_deg": 6.299
+  },
+  {
+   "id": "konjungsi-conjunction-202609031214-moon-m45",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M45 (Pleiades)",
+   "bodies": [
+    "moon",
+    "m45"
+   ],
+   "time_utc": "2026-09-03T12:14:29",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-09-03T12:14:29",
+    "konjungsi_asensio_rekta_utc": "2026-09-03T12:41:15"
+   },
+   "separation_deg": 1.18
+  },
+  {
+   "id": "konjungsi-conjunction-202609032132-moon-uranus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Uranus",
+   "bodies": [
+    "moon",
+    "uranus"
+   ],
+   "time_utc": "2026-09-03T21:32:23",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-09-03T21:32:23",
+    "konjungsi_asensio_rekta_utc": "2026-09-03T23:05:29"
+   },
+   "separation_deg": 5.397
+  },
+  {
+   "id": "fase_bulan-last_quarter-202609040751-moon",
+   "category": "fase_bulan",
+   "kind": "last_quarter",
+   "title": "Bulan Kuartal Akhir",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-09-04T07:51:56",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202609050237-moon-beta_tauri",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Beta Tauri oleh Bulan",
+   "bodies": [
+    "moon",
+    "beta_tauri"
+   ],
+   "time_utc": "2026-09-05T02:37:23",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-09-05T02:37:23"
+   },
+   "start_utc": "2026-09-05T00:41:57",
+   "end_utc": "2026-09-05T04:32:49",
+   "separation_deg": 0.536
+  },
+  {
+   "id": "konjungsi-conjunction-202609061928-moon-mars",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Mars",
+   "bodies": [
+    "moon",
+    "mars"
+   ],
+   "time_utc": "2026-09-06T19:28:11",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-09-06T19:28:11",
+    "konjungsi_asensio_rekta_utc": "2026-09-06T18:25:38"
+   },
+   "separation_deg": 2.965
+  },
+  {
+   "id": "konjungsi-conjunction-202609080555-moon-m44",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M44 (Praesepe)",
+   "bodies": [
+    "moon",
+    "m44"
+   ],
+   "time_utc": "2026-09-08T05:55:13",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-09-08T05:55:13",
+    "konjungsi_asensio_rekta_utc": "2026-09-08T05:28:52"
+   },
+   "separation_deg": 0.726
+  },
+  {
+   "id": "okultasi-occultation-202609081846-moon-jupiter",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Jupiter oleh Bulan",
+   "bodies": [
+    "moon",
+    "jupiter"
+   ],
+   "time_utc": "2026-09-08T18:46:32",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-09-08T18:46:32",
+    "konjungsi_asensio_rekta_utc": "2026-09-08T18:12:57"
+   },
+   "start_utc": "2026-09-08T17:06:45",
+   "end_utc": "2026-09-08T20:26:15",
+   "separation_deg": 0.797
+  },
+  {
+   "id": "okultasi-occultation-202609091951-moon-regulus",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Regulus oleh Bulan",
+   "bodies": [
+    "moon",
+    "regulus"
+   ],
+   "time_utc": "2026-09-09T19:51:32",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-09-09T19:51:32"
+   },
+   "start_utc": "2026-09-09T17:53:06",
+   "end_utc": "2026-09-09T21:49:57",
+   "separation_deg": 0.469
+  },
+  {
+   "id": "fase_bulan-new_moon-202609110326-moon",
+   "category": "fase_bulan",
+   "kind": "new_moon",
+   "title": "Bulan Baru",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-09-11T03:26:55",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202609120348-moon-mercury",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Merkurius",
+   "bodies": [
+    "moon",
+    "mercury"
+   ],
+   "time_utc": "2026-09-12T03:48:38",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-09-12T03:48:38",
+    "konjungsi_asensio_rekta_utc": "2026-09-12T07:27:18"
+   },
+   "separation_deg": 3.374
+  },
+  {
+   "id": "okultasi-occultation-202609141134-moon-venus",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Venus oleh Bulan",
+   "bodies": [
+    "moon",
+    "venus"
+   ],
+   "time_utc": "2026-09-14T11:34:14",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-09-14T11:34:14",
+    "konjungsi_asensio_rekta_utc": "2026-09-14T11:09:57"
+   },
+   "start_utc": "2026-09-14T09:25:43",
+   "end_utc": "2026-09-14T13:42:43",
+   "separation_deg": 0.494
+  },
+  {
+   "id": "okultasi-occultation-202609171253-moon-antares",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Antares oleh Bulan",
+   "bodies": [
+    "moon",
+    "antares"
+   ],
+   "time_utc": "2026-09-17T12:53:14",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-09-17T12:53:14"
+   },
+   "start_utc": "2026-09-17T10:52:03",
+   "end_utc": "2026-09-17T14:54:22",
+   "separation_deg": 0.57
+  },
+  {
+   "id": "fase_bulan-first_quarter-202609182043-moon",
+   "category": "fase_bulan",
+   "kind": "first_quarter",
+   "title": "Bulan Kuartal Awal",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-09-18T20:43:28",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202609200645-moon-sigma_sagittarii",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Sigma Sagittarii oleh Bulan",
+   "bodies": [
+    "moon",
+    "sigma_sagittarii"
+   ],
+   "time_utc": "2026-09-20T06:45:22",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-09-20T06:45:22"
+   },
+   "start_utc": "2026-09-20T04:33:30",
+   "end_utc": "2026-09-20T08:57:15",
+   "separation_deg": 0.377
+  },
+  {
+   "id": "fase_planet-greatest_brightness-202609221637-venus",
+   "category": "fase_planet",
+   "kind": "greatest_brightness",
+   "title": "Venus paling terang",
+   "bodies": [
+    "venus"
+   ],
+   "time_utc": "2026-09-22T16:37:55",
+   "details": {
+    "magnitudo": -4.56
+   }
+  },
+  {
+   "id": "oposisi-opposition-202609260113-neptune",
+   "category": "oposisi",
+   "kind": "opposition",
+   "title": "Neptunus oposisi",
+   "bodies": [
+    "neptune"
+   ],
+   "time_utc": "2026-09-26T01:13:15",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202609261505-moon-neptune",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Neptunus",
+   "bodies": [
+    "moon",
+    "neptune"
+   ],
+   "time_utc": "2026-09-26T15:05:08",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-09-26T15:05:08",
+    "konjungsi_asensio_rekta_utc": "2026-09-26T19:01:56"
+   },
+   "separation_deg": 4.26
+  },
+  {
+   "id": "fase_bulan-full_moon-202609261648-moon",
+   "category": "fase_bulan",
+   "kind": "full_moon",
+   "title": "Bulan Purnama",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-09-26T16:48:48",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202609270644-moon-saturn",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Saturnus",
+   "bodies": [
+    "moon",
+    "saturn"
+   ],
+   "time_utc": "2026-09-27T06:44:31",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-09-27T06:44:31",
+    "konjungsi_asensio_rekta_utc": "2026-09-27T12:08:12"
+   },
+   "separation_deg": 6.187
+  },
+  {
+   "id": "konjungsi-conjunction-202609301752-moon-m45",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M45 (Pleiades)",
+   "bodies": [
+    "moon",
+    "m45"
+   ],
+   "time_utc": "2026-09-30T17:52:52",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-09-30T17:52:52",
+    "konjungsi_asensio_rekta_utc": "2026-09-30T18:16:43"
+   },
+   "separation_deg": 1.07
+  },
+  {
+   "id": "konjungsi-conjunction-202610010248-moon-uranus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Uranus",
+   "bodies": [
+    "moon",
+    "uranus"
+   ],
+   "time_utc": "2026-10-01T02:48:21",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-10-01T02:48:21",
+    "konjungsi_asensio_rekta_utc": "2026-10-01T04:18:41"
+   },
+   "separation_deg": 5.284
+  },
+  {
+   "id": "okultasi-occultation-202610020759-moon-beta_tauri",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Beta Tauri oleh Bulan",
+   "bodies": [
+    "moon",
+    "beta_tauri"
+   ],
+   "time_utc": "2026-10-02T07:59:04",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-10-02T07:59:04"
+   },
+   "start_utc": "2026-10-02T06:10:28",
+   "end_utc": "2026-10-02T09:47:41",
+   "separation_deg": 0.66
+  },
+  {
+   "id": "fase_bulan-last_quarter-202610031325-moon",
+   "category": "fase_bulan",
+   "kind": "last_quarter",
+   "title": "Bulan Kuartal Akhir",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-10-03T13:25:56",
+   "details": {}
+  },
+  {
+   "id": "oposisi-opposition-202610041409-saturn",
+   "category": "oposisi",
+   "kind": "opposition",
+   "title": "Saturnus oposisi",
+   "bodies": [
+    "saturn"
+   ],
+   "time_utc": "2026-10-04T14:09:02",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202610050611-moon-mars",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Mars oleh Bulan",
+   "bodies": [
+    "moon",
+    "mars"
+   ],
+   "time_utc": "2026-10-05T06:11:51",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-10-05T06:11:51",
+    "konjungsi_asensio_rekta_utc": "2026-10-05T05:32:04"
+   },
+   "start_utc": "2026-10-05T05:07:28",
+   "end_utc": "2026-10-05T07:16:09",
+   "separation_deg": 1.095
+  },
+  {
+   "id": "konjungsi-conjunction-202610051216-moon-m44",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M44 (Praesepe)",
+   "bodies": [
+    "moon",
+    "m44"
+   ],
+   "time_utc": "2026-10-05T12:16:43",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-10-05T12:16:43",
+    "konjungsi_asensio_rekta_utc": "2026-10-05T11:54:05"
+   },
+   "separation_deg": 0.611
+  },
+  {
+   "id": "okultasi-occultation-202610061026-moon-jupiter",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Jupiter oleh Bulan",
+   "bodies": [
+    "moon",
+    "jupiter"
+   ],
+   "time_utc": "2026-10-06T10:26:33",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-10-06T10:26:33",
+    "konjungsi_asensio_rekta_utc": "2026-10-06T10:19:00"
+   },
+   "start_utc": "2026-10-06T08:17:03",
+   "end_utc": "2026-10-06T12:36:02",
+   "separation_deg": 0.163
+  },
+  {
+   "id": "okultasi-occultation-202610070309-moon-regulus",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Regulus oleh Bulan",
+   "bodies": [
+    "moon",
+    "regulus"
+   ],
+   "time_utc": "2026-10-07T03:09:01",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-10-07T03:09:01"
+   },
+   "start_utc": "2026-10-07T01:13:11",
+   "end_utc": "2026-10-07T05:04:48",
+   "separation_deg": 0.552
+  },
+  {
+   "id": "fase_bulan-new_moon-202610101550-moon",
+   "category": "fase_bulan",
+   "kind": "new_moon",
+   "title": "Bulan Baru",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-10-10T15:50:07",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202610120437-moon-venus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Venus",
+   "bodies": [
+    "moon",
+    "venus"
+   ],
+   "time_utc": "2026-10-12T04:37:10",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-10-12T04:37:10",
+    "konjungsi_asensio_rekta_utc": "2026-10-12T02:30:42"
+   },
+   "separation_deg": 2.85
+  },
+  {
+   "id": "elongasi-greatest_elongation_east-202610120550-mercury",
+   "category": "elongasi",
+   "kind": "greatest_elongation_east",
+   "title": "Merkurius elongasi maksimum timur",
+   "bodies": [
+    "mercury"
+   ],
+   "time_utc": "2026-10-12T05:50:37",
+   "details": {
+    "elongasi_deg": 25.01,
+    "sisi": "timur"
+   }
+  },
+  {
+   "id": "konjungsi-conjunction-202610121844-moon-mercury",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Merkurius",
+   "bodies": [
+    "moon",
+    "mercury"
+   ],
+   "time_utc": "2026-10-12T18:44:31",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-10-12T18:44:31",
+    "konjungsi_asensio_rekta_utc": "2026-10-12T20:08:25"
+   },
+   "separation_deg": 2.006
+  },
+  {
+   "id": "okultasi-occultation-202610142103-moon-antares",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Antares oleh Bulan",
+   "bodies": [
+    "moon",
+    "antares"
+   ],
+   "time_utc": "2026-10-14T21:03:38",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-10-14T21:03:38"
+   },
+   "start_utc": "2026-10-14T18:53:57",
+   "end_utc": "2026-10-14T23:13:19",
+   "separation_deg": 0.409
+  },
+  {
+   "id": "okultasi-occultation-202610171451-moon-sigma_sagittarii",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Sigma Sagittarii oleh Bulan",
+   "bodies": [
+    "moon",
+    "sigma_sagittarii"
+   ],
+   "time_utc": "2026-10-17T14:51:17",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-10-17T14:51:17"
+   },
+   "start_utc": "2026-10-17T12:33:06",
+   "end_utc": "2026-10-17T17:09:29",
+   "separation_deg": 0.183
+  },
+  {
+   "id": "fase_planet-dichotomy-202610171658-mercury",
+   "category": "fase_planet",
+   "kind": "dichotomy",
+   "title": "Merkurius dikotomi (fase 50%)",
+   "bodies": [
+    "mercury"
+   ],
+   "time_utc": "2026-10-17T16:58:01",
+   "details": {}
+  },
+  {
+   "id": "fase_bulan-first_quarter-202610181612-moon",
+   "category": "fase_bulan",
+   "kind": "first_quarter",
+   "title": "Bulan Kuartal Awal",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-10-18T16:12:39",
+   "details": {}
+  },
+  {
+   "id": "hujan_meteor-ori-202610211826",
+   "category": "hujan_meteor",
+   "kind": "ori",
+   "title": "Hujan Meteor Orionid",
+   "bodies": [],
+   "time_utc": "2026-10-21T18:26:56",
+   "details": {
+    "nama": "Orionid",
+    "zhr": 20,
+    "radian_ra": 95.0,
+    "radian_dec": 16.0,
+    "kecepatan_kms": 66,
+    "catatan": "Waktu puncak perkiraan (ketidakpastian beberapa jam hingga ~1 hari)."
+   }
+  },
+  {
+   "id": "konjungsi-conjunction-202610232319-moon-neptune",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Neptunus",
+   "bodies": [
+    "moon",
+    "neptune"
+   ],
+   "time_utc": "2026-10-23T23:19:48",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-10-23T23:19:48",
+    "konjungsi_asensio_rekta_utc": "2026-10-24T03:14:43"
+   },
+   "separation_deg": 4.257
+  },
+  {
+   "id": "konjungsi-conjunction-202610241232-moon-saturn",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Saturnus",
+   "bodies": [
+    "moon",
+    "saturn"
+   ],
+   "time_utc": "2026-10-24T12:32:33",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-10-24T12:32:33",
+    "konjungsi_asensio_rekta_utc": "2026-10-24T17:49:39"
+   },
+   "separation_deg": 6.068
+  },
+  {
+   "id": "fase_bulan-full_moon-202610260412-moon",
+   "category": "fase_bulan",
+   "kind": "full_moon",
+   "title": "Bulan Purnama",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-10-26T04:12:16",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202610280128-moon-m45",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M45 (Pleiades)",
+   "bodies": [
+    "moon",
+    "m45"
+   ],
+   "time_utc": "2026-10-28T01:28:30",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-10-28T01:28:30",
+    "konjungsi_asensio_rekta_utc": "2026-10-28T01:48:41"
+   },
+   "separation_deg": 0.946
+  },
+  {
+   "id": "konjungsi-conjunction-202610280857-moon-uranus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Uranus",
+   "bodies": [
+    "moon",
+    "uranus"
+   ],
+   "time_utc": "2026-10-28T08:57:44",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-10-28T08:57:44",
+    "konjungsi_asensio_rekta_utc": "2026-10-28T10:24:54"
+   },
+   "separation_deg": 5.153
+  },
+  {
+   "id": "okultasi-occultation-202610291427-moon-beta_tauri",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Beta Tauri oleh Bulan",
+   "bodies": [
+    "moon",
+    "beta_tauri"
+   ],
+   "time_utc": "2026-10-29T14:27:47",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-10-29T14:27:47"
+   },
+   "start_utc": "2026-10-29T12:52:44",
+   "end_utc": "2026-10-29T16:02:50",
+   "separation_deg": 0.834
+  },
+  {
+   "id": "konjungsi-conjunction-202611011735-moon-m44",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M44 (Praesepe)",
+   "bodies": [
+    "moon",
+    "m44"
+   ],
+   "time_utc": "2026-11-01T17:35:39",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-11-01T17:35:39",
+    "konjungsi_asensio_rekta_utc": "2026-11-01T17:21:02"
+   },
+   "separation_deg": 0.395
+  },
+  {
+   "id": "fase_bulan-last_quarter-202611012028-moon",
+   "category": "fase_bulan",
+   "kind": "last_quarter",
+   "title": "Bulan Kuartal Akhir",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-11-01T20:28:44",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202611021338-moon-mars",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Mars oleh Bulan",
+   "bodies": [
+    "moon",
+    "mars"
+   ],
+   "time_utc": "2026-11-02T13:38:47",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-11-02T13:38:47",
+    "konjungsi_asensio_rekta_utc": "2026-11-02T14:24:41"
+   },
+   "start_utc": "2026-11-02T12:14:15",
+   "end_utc": "2026-11-02T15:03:11",
+   "separation_deg": 0.965
+  },
+  {
+   "id": "okultasi-occultation-202611022248-moon-jupiter",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Jupiter oleh Bulan",
+   "bodies": [
+    "moon",
+    "jupiter"
+   ],
+   "time_utc": "2026-11-02T22:48:46",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-11-02T22:48:46",
+    "konjungsi_asensio_rekta_utc": "2026-11-02T23:12:34"
+   },
+   "start_utc": "2026-11-02T20:48:18",
+   "end_utc": "2026-11-03T00:49:11",
+   "separation_deg": 0.489
+  },
+  {
+   "id": "okultasi-occultation-202611030842-moon-regulus",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Regulus oleh Bulan",
+   "bodies": [
+    "moon",
+    "regulus"
+   ],
+   "time_utc": "2026-11-03T08:42:36",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-11-03T08:42:36"
+   },
+   "start_utc": "2026-11-03T06:59:34",
+   "end_utc": "2026-11-03T10:25:31",
+   "separation_deg": 0.756
+  },
+  {
+   "id": "okultasi-occultation-202611071042-moon-venus",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Venus oleh Bulan",
+   "bodies": [
+    "moon",
+    "venus"
+   ],
+   "time_utc": "2026-11-07T10:42:32",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-11-07T10:42:32",
+    "konjungsi_asensio_rekta_utc": "2026-11-07T11:32:51"
+   },
+   "start_utc": "2026-11-07T09:23:09",
+   "end_utc": "2026-11-07T12:01:47",
+   "separation_deg": 0.946
+  },
+  {
+   "id": "konjungsi-conjunction-202611081232-moon-mercury",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Merkurius",
+   "bodies": [
+    "moon",
+    "mercury"
+   ],
+   "time_utc": "2026-11-08T12:32:57",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-11-08T12:32:57",
+    "konjungsi_asensio_rekta_utc": "2026-11-08T16:33:19"
+   },
+   "separation_deg": 5.648
+  },
+  {
+   "id": "fase_bulan-new_moon-202611090702-moon",
+   "category": "fase_bulan",
+   "kind": "new_moon",
+   "title": "Bulan Baru",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-11-09T07:02:22",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202611110438-moon-antares",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Antares oleh Bulan",
+   "bodies": [
+    "moon",
+    "antares"
+   ],
+   "time_utc": "2026-11-11T04:38:34",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-11-11T04:38:34"
+   },
+   "start_utc": "2026-11-11T02:24:14",
+   "end_utc": "2026-11-11T06:52:54",
+   "separation_deg": 0.27
+  },
+  {
+   "id": "okultasi-occultation-202611132220-moon-sigma_sagittarii",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Sigma Sagittarii oleh Bulan",
+   "bodies": [
+    "moon",
+    "sigma_sagittarii"
+   ],
+   "time_utc": "2026-11-13T22:20:47",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-11-13T22:20:47"
+   },
+   "start_utc": "2026-11-13T20:01:04",
+   "end_utc": "2026-11-14T00:40:31",
+   "separation_deg": 0.054
+  },
+  {
+   "id": "konjungsi-conjunction-202611160406-jupiter-mars",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Jupiter–Mars",
+   "bodies": [
+    "jupiter",
+    "mars"
+   ],
+   "time_utc": "2026-11-16T04:06:31",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-11-16T04:06:31",
+    "konjungsi_asensio_rekta_utc": "2026-11-15T04:34:51"
+   },
+   "separation_deg": 1.195
+  },
+  {
+   "id": "fase_bulan-first_quarter-202611171147-moon",
+   "category": "fase_bulan",
+   "kind": "first_quarter",
+   "title": "Bulan Kuartal Awal",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-11-17T11:47:32",
+   "details": {}
+  },
+  {
+   "id": "hujan_meteor-leo-202611172349",
+   "category": "hujan_meteor",
+   "kind": "leo",
+   "title": "Hujan Meteor Leonid",
+   "bodies": [],
+   "time_utc": "2026-11-17T23:49:14",
+   "details": {
+    "nama": "Leonid",
+    "zhr": 15,
+    "radian_ra": 152.0,
+    "radian_dec": 22.0,
+    "kecepatan_kms": 71,
+    "catatan": "Waktu puncak perkiraan (ketidakpastian beberapa jam hingga ~1 hari)."
+   }
+  },
+  {
+   "id": "fase_planet-dichotomy-202611180857-mercury",
+   "category": "fase_planet",
+   "kind": "dichotomy",
+   "title": "Merkurius dikotomi (fase 50%)",
+   "bodies": [
+    "mercury"
+   ],
+   "time_utc": "2026-11-18T08:57:38",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202611200827-moon-neptune",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Neptunus",
+   "bodies": [
+    "moon",
+    "neptune"
+   ],
+   "time_utc": "2026-11-20T08:27:54",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-11-20T08:27:54",
+    "konjungsi_asensio_rekta_utc": "2026-11-20T12:34:09"
+   },
+   "separation_deg": 4.396
+  },
+  {
+   "id": "konjungsi-conjunction-202611202011-moon-saturn",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Saturnus",
+   "bodies": [
+    "moon",
+    "saturn"
+   ],
+   "time_utc": "2026-11-20T20:11:22",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-11-20T20:11:22",
+    "konjungsi_asensio_rekta_utc": "2026-11-21T01:34:57"
+   },
+   "separation_deg": 6.062
+  },
+  {
+   "id": "elongasi-greatest_elongation_west-202611210033-mercury",
+   "category": "elongasi",
+   "kind": "greatest_elongation_west",
+   "title": "Merkurius elongasi maksimum barat",
+   "bodies": [
+    "mercury"
+   ],
+   "time_utc": "2026-11-21T00:33:09",
+   "details": {
+    "elongasi_deg": 19.48,
+    "sisi": "barat"
+   }
+  },
+  {
+   "id": "konjungsi-conjunction-202611241136-moon-m45",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M45 (Pleiades)",
+   "bodies": [
+    "moon",
+    "m45"
+   ],
+   "time_utc": "2026-11-24T11:36:43",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-11-24T11:36:43",
+    "konjungsi_asensio_rekta_utc": "2026-11-24T11:55:17"
+   },
+   "separation_deg": 0.906
+  },
+  {
+   "id": "fase_bulan-full_moon-202611241455-moon",
+   "category": "fase_bulan",
+   "kind": "full_moon",
+   "title": "Bulan Purnama",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-11-24T14:55:04",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202611241713-moon-uranus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Uranus",
+   "bodies": [
+    "moon",
+    "uranus"
+   ],
+   "time_utc": "2026-11-24T17:13:51",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-11-24T17:13:51",
+    "konjungsi_asensio_rekta_utc": "2026-11-24T18:40:34"
+   },
+   "separation_deg": 5.106
+  },
+  {
+   "id": "oposisi-opposition-202611252227-uranus",
+   "category": "oposisi",
+   "kind": "opposition",
+   "title": "Uranus oposisi",
+   "bodies": [
+    "uranus"
+   ],
+   "time_utc": "2026-11-25T22:27:04",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202611252336-moon-beta_tauri",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Beta Tauri oleh Bulan",
+   "bodies": [
+    "moon",
+    "beta_tauri"
+   ],
+   "time_utc": "2026-11-25T23:36:34",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-11-25T23:36:34"
+   },
+   "start_utc": "2026-11-25T22:13:52",
+   "end_utc": "2026-11-26T00:59:17",
+   "separation_deg": 0.961
+  },
+  {
+   "id": "fase_planet-greatest_brightness-202611271952-venus",
+   "category": "fase_planet",
+   "kind": "greatest_brightness",
+   "title": "Venus paling terang",
+   "bodies": [
+    "venus"
+   ],
+   "time_utc": "2026-11-27T19:52:08",
+   "details": {
+    "magnitudo": -4.65
+   }
+  },
+  {
+   "id": "konjungsi-conjunction-202611290011-moon-m44",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M44 (Praesepe)",
+   "bodies": [
+    "moon",
+    "m44"
+   ],
+   "time_utc": "2026-11-29T00:11:52",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-11-29T00:11:52",
+    "konjungsi_asensio_rekta_utc": "2026-11-29T00:05:56"
+   },
+   "separation_deg": 0.164
+  },
+  {
+   "id": "fase_planet-greatest_brightness-202611290530-mercury",
+   "category": "fase_planet",
+   "kind": "greatest_brightness",
+   "title": "Merkurius paling terang",
+   "bodies": [
+    "mercury"
+   ],
+   "time_utc": "2026-11-29T05:30:38",
+   "details": {
+    "magnitudo": -0.64
+   }
+  },
+  {
+   "id": "okultasi-occultation-202611300827-moon-jupiter",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Jupiter oleh Bulan",
+   "bodies": [
+    "moon",
+    "jupiter"
+   ],
+   "time_utc": "2026-11-30T08:27:36",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-11-30T08:27:36",
+    "konjungsi_asensio_rekta_utc": "2026-11-30T09:18:14"
+   },
+   "start_utc": "2026-11-30T07:15:46",
+   "end_utc": "2026-11-30T09:39:14",
+   "separation_deg": 1.038
+  },
+  {
+   "id": "okultasi-occultation-202611301424-moon-regulus",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Regulus oleh Bulan",
+   "bodies": [
+    "moon",
+    "regulus"
+   ],
+   "time_utc": "2026-11-30T14:24:30",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-11-30T14:24:30"
+   },
+   "start_utc": "2026-11-30T13:08:45",
+   "end_utc": "2026-11-30T15:40:02",
+   "separation_deg": 1.009
+  },
+  {
+   "id": "konjungsi-conjunction-202611301654-moon-mars",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Mars",
+   "bodies": [
+    "moon",
+    "mars"
+   ],
+   "time_utc": "2026-11-30T16:54:02",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-11-30T16:54:02",
+    "konjungsi_asensio_rekta_utc": "2026-11-30T19:33:33"
+   },
+   "separation_deg": 2.983
+  },
+  {
+   "id": "fase_bulan-last_quarter-202612010609-moon",
+   "category": "fase_bulan",
+   "kind": "last_quarter",
+   "title": "Bulan Kuartal Akhir",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-12-01T06:09:00",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202612050505-moon-venus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Venus",
+   "bodies": [
+    "moon",
+    "venus"
+   ],
+   "time_utc": "2026-12-05T05:05:20",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-12-05T05:05:20",
+    "konjungsi_asensio_rekta_utc": "2026-12-05T10:45:25"
+   },
+   "separation_deg": 6.602
+  },
+  {
+   "id": "konjungsi-conjunction-202612071950-moon-mercury",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Merkurius",
+   "bodies": [
+    "moon",
+    "mercury"
+   ],
+   "time_utc": "2026-12-07T19:50:30",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-12-07T19:50:30",
+    "konjungsi_asensio_rekta_utc": "2026-12-07T22:04:13"
+   },
+   "separation_deg": 5.713
+  },
+  {
+   "id": "okultasi-occultation-202612081116-moon-antares",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Antares oleh Bulan",
+   "bodies": [
+    "moon",
+    "antares"
+   ],
+   "time_utc": "2026-12-08T11:16:14",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-12-08T11:16:14"
+   },
+   "start_utc": "2026-12-08T09:01:07",
+   "end_utc": "2026-12-08T13:31:19",
+   "separation_deg": 0.246
+  },
+  {
+   "id": "fase_bulan-new_moon-202612090052-moon",
+   "category": "fase_bulan",
+   "kind": "new_moon",
+   "title": "Bulan Baru",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-12-09T00:52:43",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202612110459-moon-sigma_sagittarii",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Sigma Sagittarii oleh Bulan",
+   "bodies": [
+    "moon",
+    "sigma_sagittarii"
+   ],
+   "time_utc": "2026-12-11T04:59:41",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-12-11T04:59:41"
+   },
+   "start_utc": "2026-12-11T02:42:38",
+   "end_utc": "2026-12-11T07:16:45",
+   "separation_deg": 0.209
+  },
+  {
+   "id": "hujan_meteor-gem-202612141344",
+   "category": "hujan_meteor",
+   "kind": "gem",
+   "title": "Hujan Meteor Geminid",
+   "bodies": [],
+   "time_utc": "2026-12-14T13:44:43",
+   "details": {
+    "nama": "Geminid",
+    "zhr": 150,
+    "radian_ra": 112.0,
+    "radian_dec": 33.0,
+    "kecepatan_kms": 35,
+    "catatan": "Waktu puncak perkiraan (ketidakpastian beberapa jam hingga ~1 hari)."
+   }
+  },
+  {
+   "id": "fase_bulan-first_quarter-202612170542-moon",
+   "category": "fase_bulan",
+   "kind": "first_quarter",
+   "title": "Bulan Kuartal Awal",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-12-17T05:42:54",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202612171658-moon-neptune",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Neptunus",
+   "bodies": [
+    "moon",
+    "neptune"
+   ],
+   "time_utc": "2026-12-17T16:58:43",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-12-17T16:58:43",
+    "konjungsi_asensio_rekta_utc": "2026-12-17T21:25:03"
+   },
+   "separation_deg": 4.617
+  },
+  {
+   "id": "konjungsi-conjunction-202612180446-moon-saturn",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Saturnus",
+   "bodies": [
+    "moon",
+    "saturn"
+   ],
+   "time_utc": "2026-12-18T04:46:01",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-12-18T04:46:01",
+    "konjungsi_asensio_rekta_utc": "2026-12-18T10:26:32"
+   },
+   "separation_deg": 6.169
+  },
+  {
+   "id": "konjungsi-conjunction-202612212253-moon-m45",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M45 (Pleiades)",
+   "bodies": [
+    "moon",
+    "m45"
+   ],
+   "time_utc": "2026-12-21T22:53:57",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-12-21T22:53:57",
+    "konjungsi_asensio_rekta_utc": "2026-12-21T23:13:37"
+   },
+   "separation_deg": 0.973
+  },
+  {
+   "id": "konjungsi-conjunction-202612220248-moon-uranus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Uranus",
+   "bodies": [
+    "moon",
+    "uranus"
+   ],
+   "time_utc": "2026-12-22T02:48:43",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-12-22T02:48:43",
+    "konjungsi_asensio_rekta_utc": "2026-12-22T04:19:27"
+   },
+   "separation_deg": 5.171
+  },
+  {
+   "id": "hujan_meteor-urs-202612222210",
+   "category": "hujan_meteor",
+   "kind": "urs",
+   "title": "Hujan Meteor Ursid",
+   "bodies": [],
+   "time_utc": "2026-12-22T22:10:33",
+   "details": {
+    "nama": "Ursid",
+    "zhr": 10,
+    "radian_ra": 217.0,
+    "radian_dec": 76.0,
+    "kecepatan_kms": 33,
+    "catatan": "Waktu puncak perkiraan (ketidakpastian beberapa jam hingga ~1 hari)."
+   }
+  },
+  {
+   "id": "okultasi-occultation-202612231051-moon-beta_tauri",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Beta Tauri oleh Bulan",
+   "bodies": [
+    "moon",
+    "beta_tauri"
+   ],
+   "time_utc": "2026-12-23T10:51:23",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-12-23T10:51:23"
+   },
+   "start_utc": "2026-12-23T09:32:02",
+   "end_utc": "2026-12-23T12:10:49",
+   "separation_deg": 0.993
+  },
+  {
+   "id": "fase_bulan-full_moon-202612240129-moon",
+   "category": "fase_bulan",
+   "kind": "full_moon",
+   "title": "Bulan Purnama",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-12-24T01:29:26",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202612260935-moon-m44",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M44 (Praesepe)",
+   "bodies": [
+    "moon",
+    "m44"
+   ],
+   "time_utc": "2026-12-26T09:35:41",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-12-26T09:35:41",
+    "konjungsi_asensio_rekta_utc": "2026-12-26T09:35:51"
+   },
+   "separation_deg": 0.005
+  },
+  {
+   "id": "konjungsi-conjunction-202612271629-moon-jupiter",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Jupiter",
+   "bodies": [
+    "moon",
+    "jupiter"
+   ],
+   "time_utc": "2026-12-27T16:29:05",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-12-27T16:29:05",
+    "konjungsi_asensio_rekta_utc": "2026-12-27T17:31:46"
+   },
+   "separation_deg": 1.341
+  },
+  {
+   "id": "okultasi-occultation-202612272222-moon-regulus",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Regulus oleh Bulan",
+   "bodies": [
+    "moon",
+    "regulus"
+   ],
+   "time_utc": "2026-12-27T22:22:33",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-12-27T22:22:33"
+   },
+   "start_utc": "2026-12-27T21:46:02",
+   "end_utc": "2026-12-27T22:58:45",
+   "separation_deg": 1.211
+  },
+  {
+   "id": "konjungsi-conjunction-202612281328-moon-mars",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Mars",
+   "bodies": [
+    "moon",
+    "mars"
+   ],
+   "time_utc": "2026-12-28T13:28:07",
+   "details": {
+    "pendekatan_terdekat_utc": "2026-12-28T13:28:07",
+    "konjungsi_asensio_rekta_utc": "2026-12-28T17:42:21"
+   },
+   "separation_deg": 4.707
+  },
+  {
+   "id": "fase_bulan-last_quarter-202612301900-moon",
+   "category": "fase_bulan",
+   "kind": "last_quarter",
+   "title": "Bulan Kuartal Akhir",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2026-12-30T19:00:44",
+   "details": {}
+  },
+  {
+   "id": "fase_planet-greatest_brightness-202701021131-mercury",
+   "category": "fase_planet",
+   "kind": "greatest_brightness",
+   "title": "Merkurius paling terang",
+   "bodies": [
+    "mercury"
+   ],
+   "time_utc": "2027-01-02T11:31:04",
+   "details": {
+    "magnitudo": -1.19
+   }
+  },
+  {
+   "id": "fase_planet-dichotomy-202701030822-venus",
+   "category": "fase_planet",
+   "kind": "dichotomy",
+   "title": "Venus dikotomi (fase 50%)",
+   "bodies": [
+    "venus"
+   ],
+   "time_utc": "2027-01-03T08:22:55",
+   "details": {}
+  },
+  {
+   "id": "elongasi-greatest_elongation_west-202701031911-venus",
+   "category": "elongasi",
+   "kind": "greatest_elongation_west",
+   "title": "Venus elongasi maksimum barat",
+   "bodies": [
+    "venus"
+   ],
+   "time_utc": "2027-01-03T19:11:58",
+   "details": {
+    "elongasi_deg": 46.86,
+    "sisi": "barat"
+   }
+  },
+  {
+   "id": "hujan_meteor-qua-202701040324",
+   "category": "hujan_meteor",
+   "kind": "qua",
+   "title": "Hujan Meteor Quadrantid",
+   "bodies": [],
+   "time_utc": "2027-01-04T03:24:44",
+   "details": {
+    "nama": "Quadrantid",
+    "zhr": 80,
+    "radian_ra": 230.0,
+    "radian_dec": 49.0,
+    "kecepatan_kms": 41,
+    "catatan": "Waktu puncak perkiraan (ketidakpastian beberapa jam hingga ~1 hari)."
+   }
+  },
+  {
+   "id": "okultasi-occultation-202701041714-moon-antares",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Antares oleh Bulan",
+   "bodies": [
+    "moon",
+    "antares"
+   ],
+   "time_utc": "2027-01-04T17:14:43",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-01-04T17:14:43"
+   },
+   "start_utc": "2027-01-04T15:01:37",
+   "end_utc": "2027-01-04T19:27:46",
+   "separation_deg": 0.332
+  },
+  {
+   "id": "okultasi-occultation-202701071109-moon-sigma_sagittarii",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Sigma Sagittarii oleh Bulan",
+   "bodies": [
+    "moon",
+    "sigma_sagittarii"
+   ],
+   "time_utc": "2027-01-07T11:09:41",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-01-07T11:09:41"
+   },
+   "start_utc": "2027-01-07T08:53:23",
+   "end_utc": "2027-01-07T13:25:59",
+   "separation_deg": 0.232
+  },
+  {
+   "id": "fase_bulan-new_moon-202701072025-moon",
+   "category": "fase_bulan",
+   "kind": "new_moon",
+   "title": "Bulan Baru",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-01-07T20:25:30",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202701080518-moon-mercury",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Merkurius oleh Bulan",
+   "bodies": [
+    "moon",
+    "mercury"
+   ],
+   "time_utc": "2027-01-08T05:18:43",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-01-08T05:18:43",
+    "konjungsi_asensio_rekta_utc": "2027-01-08T05:00:47"
+   },
+   "start_utc": "2027-01-08T02:52:36",
+   "end_utc": "2027-01-08T07:44:51",
+   "separation_deg": 0.486
+  },
+  {
+   "id": "konjungsi-conjunction-202701140013-moon-neptune",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Neptunus",
+   "bodies": [
+    "moon",
+    "neptune"
+   ],
+   "time_utc": "2027-01-14T00:13:08",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-01-14T00:13:08",
+    "konjungsi_asensio_rekta_utc": "2027-01-14T04:56:32"
+   },
+   "separation_deg": 4.807
+  },
+  {
+   "id": "konjungsi-conjunction-202701141340-moon-saturn",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Saturnus",
+   "bodies": [
+    "moon",
+    "saturn"
+   ],
+   "time_utc": "2027-01-14T13:40:11",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-01-14T13:40:11",
+    "konjungsi_asensio_rekta_utc": "2027-01-14T19:35:56"
+   },
+   "separation_deg": 6.305
+  },
+  {
+   "id": "fase_bulan-first_quarter-202701152035-moon",
+   "category": "fase_bulan",
+   "kind": "first_quarter",
+   "title": "Bulan Kuartal Awal",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-01-15T20:35:06",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202701180900-moon-m45",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M45 (Pleiades)",
+   "bodies": [
+    "moon",
+    "m45"
+   ],
+   "time_utc": "2027-01-18T09:00:49",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-01-18T09:00:49",
+    "konjungsi_asensio_rekta_utc": "2027-01-18T09:23:09"
+   },
+   "separation_deg": 1.082
+  },
+  {
+   "id": "konjungsi-conjunction-202701181148-moon-uranus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Uranus",
+   "bodies": [
+    "moon",
+    "uranus"
+   ],
+   "time_utc": "2027-01-18T11:48:49",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-01-18T11:48:49",
+    "konjungsi_asensio_rekta_utc": "2027-01-18T13:26:35"
+   },
+   "separation_deg": 5.281
+  },
+  {
+   "id": "okultasi-occultation-202701192159-moon-beta_tauri",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Beta Tauri oleh Bulan",
+   "bodies": [
+    "moon",
+    "beta_tauri"
+   ],
+   "time_utc": "2027-01-19T21:59:55",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-01-19T21:59:55"
+   },
+   "start_utc": "2027-01-19T20:36:21",
+   "end_utc": "2027-01-19T23:23:35",
+   "separation_deg": 0.954
+  },
+  {
+   "id": "fase_bulan-full_moon-202701221216-moon",
+   "category": "fase_bulan",
+   "kind": "full_moon",
+   "title": "Bulan Purnama",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-01-22T12:16:58",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202701222057-moon-m44",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M44 (Praesepe)",
+   "bodies": [
+    "moon",
+    "m44"
+   ],
+   "time_utc": "2027-01-22T20:57:36",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-01-22T20:57:36",
+    "konjungsi_asensio_rekta_utc": "2027-01-22T21:00:45"
+   },
+   "separation_deg": 0.091
+  },
+  {
+   "id": "konjungsi-conjunction-202701232323-moon-jupiter",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Jupiter",
+   "bodies": [
+    "moon",
+    "jupiter"
+   ],
+   "time_utc": "2027-01-23T23:23:36",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-01-23T23:23:36",
+    "konjungsi_asensio_rekta_utc": "2027-01-24T00:22:26"
+   },
+   "separation_deg": 1.334
+  },
+  {
+   "id": "konjungsi-conjunction-202701240852-moon-regulus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Regulus",
+   "bodies": [
+    "moon",
+    "regulus"
+   ],
+   "time_utc": "2027-01-24T08:52:50",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-01-24T08:52:50"
+   },
+   "separation_deg": 1.322
+  },
+  {
+   "id": "konjungsi-conjunction-202701242248-moon-mars",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Mars",
+   "bodies": [
+    "moon",
+    "mars"
+   ],
+   "time_utc": "2027-01-24T22:48:16",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-01-24T22:48:16",
+    "konjungsi_asensio_rekta_utc": "2027-01-25T03:38:26"
+   },
+   "separation_deg": 5.719
+  },
+  {
+   "id": "fase_bulan-last_quarter-202701291056-moon",
+   "category": "fase_bulan",
+   "kind": "last_quarter",
+   "title": "Bulan Kuartal Akhir",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-01-29T10:56:35",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202701312327-moon-antares",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Antares oleh Bulan",
+   "bodies": [
+    "moon",
+    "antares"
+   ],
+   "time_utc": "2027-01-31T23:27:39",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-01-31T23:27:39"
+   },
+   "start_utc": "2027-01-31T21:17:49",
+   "end_utc": "2027-02-01T01:37:28",
+   "separation_deg": 0.418
+  },
+  {
+   "id": "konjungsi-conjunction-202702021406-moon-venus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Venus",
+   "bodies": [
+    "moon",
+    "venus"
+   ],
+   "time_utc": "2027-02-02T14:06:39",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-02-02T14:06:39",
+    "konjungsi_asensio_rekta_utc": "2027-02-02T13:13:48"
+   },
+   "separation_deg": 6.572
+  },
+  {
+   "id": "elongasi-greatest_elongation_east-202702030515-mercury",
+   "category": "elongasi",
+   "kind": "greatest_elongation_east",
+   "title": "Merkurius elongasi maksimum timur",
+   "bodies": [
+    "mercury"
+   ],
+   "time_utc": "2027-02-03T05:15:28",
+   "details": {
+    "elongasi_deg": 18.31,
+    "sisi": "timur"
+   }
+  },
+  {
+   "id": "okultasi-occultation-202702031728-moon-sigma_sagittarii",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Sigma Sagittarii oleh Bulan",
+   "bodies": [
+    "moon",
+    "sigma_sagittarii"
+   ],
+   "time_utc": "2027-02-03T17:28:42",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-02-03T17:28:42"
+   },
+   "start_utc": "2027-02-03T15:11:03",
+   "end_utc": "2027-02-03T19:46:19",
+   "separation_deg": 0.19
+  },
+  {
+   "id": "fase_planet-dichotomy-202702040046-mercury",
+   "category": "fase_planet",
+   "kind": "dichotomy",
+   "title": "Merkurius dikotomi (fase 50%)",
+   "bodies": [
+    "mercury"
+   ],
+   "time_utc": "2027-02-04T00:46:31",
+   "details": {}
+  },
+  {
+   "id": "fase_bulan-new_moon-202702061556-moon",
+   "category": "fase_bulan",
+   "kind": "new_moon",
+   "title": "Bulan Baru",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-02-06T15:56:39",
+   "details": {}
+  },
+  {
+   "id": "gerhana_matahari-cincin-202702061600-sun-moon",
+   "category": "gerhana_matahari",
+   "kind": "cincin",
+   "title": "Gerhana Matahari cincin",
+   "bodies": [
+    "sun",
+    "moon"
+   ],
+   "time_utc": "2027-02-06T16:00:08",
+   "details": {
+    "jenis": "cincin",
+    "gamma_perkiraan": 0.289,
+    "sep_pusat_deg": 0.262,
+    "rasio_diameter_bulan_matahari": 0.9146
+   }
+  },
+  {
+   "id": "okultasi-occultation-202702080355-moon-mercury",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Merkurius oleh Bulan",
+   "bodies": [
+    "moon",
+    "mercury"
+   ],
+   "time_utc": "2027-02-08T03:55:47",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-02-08T03:55:47",
+    "konjungsi_asensio_rekta_utc": "2027-02-08T03:38:03"
+   },
+   "start_utc": "2027-02-08T01:40:34",
+   "end_utc": "2027-02-08T06:10:51",
+   "separation_deg": 0.311
+  },
+  {
+   "id": "konjungsi-conjunction-202702100704-moon-neptune",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Neptunus",
+   "bodies": [
+    "moon",
+    "neptune"
+   ],
+   "time_utc": "2027-02-10T07:04:29",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-02-10T07:04:29",
+    "konjungsi_asensio_rekta_utc": "2027-02-10T11:52:47"
+   },
+   "separation_deg": 4.897
+  },
+  {
+   "id": "konjungsi-conjunction-202702102323-moon-saturn",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Saturnus",
+   "bodies": [
+    "moon",
+    "saturn"
+   ],
+   "time_utc": "2027-02-10T23:23:24",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-02-10T23:23:24",
+    "konjungsi_asensio_rekta_utc": "2027-02-11T05:21:29"
+   },
+   "separation_deg": 6.402
+  },
+  {
+   "id": "oposisi-opposition-202702110102-jupiter",
+   "category": "oposisi",
+   "kind": "opposition",
+   "title": "Jupiter oposisi",
+   "bodies": [
+    "jupiter"
+   ],
+   "time_utc": "2027-02-11T01:02:24",
+   "details": {}
+  },
+  {
+   "id": "fase_bulan-first_quarter-202702140758-moon",
+   "category": "fase_bulan",
+   "kind": "first_quarter",
+   "title": "Bulan Kuartal Awal",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-02-14T07:58:49",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202702141628-moon-m45",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M45 (Pleiades)",
+   "bodies": [
+    "moon",
+    "m45"
+   ],
+   "time_utc": "2027-02-14T16:28:20",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-02-14T16:28:20",
+    "konjungsi_asensio_rekta_utc": "2027-02-14T16:52:20"
+   },
+   "separation_deg": 1.126
+  },
+  {
+   "id": "konjungsi-conjunction-202702141904-moon-uranus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Uranus",
+   "bodies": [
+    "moon",
+    "uranus"
+   ],
+   "time_utc": "2027-02-14T19:04:36",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-02-14T19:04:36",
+    "konjungsi_asensio_rekta_utc": "2027-02-14T20:47:19"
+   },
+   "separation_deg": 5.319
+  },
+  {
+   "id": "okultasi-occultation-202702160651-moon-beta_tauri",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Beta Tauri oleh Bulan",
+   "bodies": [
+    "moon",
+    "beta_tauri"
+   ],
+   "time_utc": "2027-02-16T06:51:58",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-02-16T06:51:58"
+   },
+   "start_utc": "2027-02-16T05:25:46",
+   "end_utc": "2027-02-16T08:18:17",
+   "separation_deg": 0.929
+  },
+  {
+   "id": "konjungsi-conjunction-202702190757-moon-m44",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M44 (Praesepe)",
+   "bodies": [
+    "moon",
+    "m44"
+   ],
+   "time_utc": "2027-02-19T07:57:05",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-02-19T07:57:05",
+    "konjungsi_asensio_rekta_utc": "2027-02-19T08:01:25"
+   },
+   "separation_deg": 0.123
+  },
+  {
+   "id": "oposisi-opposition-202702191539-mars",
+   "category": "oposisi",
+   "kind": "opposition",
+   "title": "Mars oposisi",
+   "bodies": [
+    "mars"
+   ],
+   "time_utc": "2027-02-19T15:39:29",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202702200459-moon-jupiter",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Jupiter oleh Bulan",
+   "bodies": [
+    "moon",
+    "jupiter"
+   ],
+   "time_utc": "2027-02-20T04:59:10",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-02-20T04:59:10",
+    "konjungsi_asensio_rekta_utc": "2027-02-20T05:46:04"
+   },
+   "start_utc": "2027-02-20T03:56:20",
+   "end_utc": "2027-02-20T06:01:56",
+   "separation_deg": 1.106
+  },
+  {
+   "id": "konjungsi-conjunction-202702201941-moon-mars",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Mars",
+   "bodies": [
+    "moon",
+    "mars"
+   ],
+   "time_utc": "2027-02-20T19:41:15",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-02-20T19:41:15",
+    "konjungsi_asensio_rekta_utc": "2027-02-20T23:47:59"
+   },
+   "separation_deg": 5.341
+  },
+  {
+   "id": "konjungsi-conjunction-202702202006-moon-regulus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Regulus",
+   "bodies": [
+    "moon",
+    "regulus"
+   ],
+   "time_utc": "2027-02-20T20:06:22",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-02-20T20:06:22"
+   },
+   "separation_deg": 1.359
+  },
+  {
+   "id": "gerhana_bulan-penumbra-202702202311-moon",
+   "category": "gerhana_bulan",
+   "kind": "penumbra",
+   "title": "Gerhana Bulan penumbra",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-02-20T23:11:51",
+   "details": {
+    "jenis": "penumbra",
+    "magnitudo_umbra": -0.068,
+    "magnitudo_penumbra": 0.935,
+    "jarak_ke_sumbu_deg": 1.065
+   },
+   "start_utc": "2027-02-20T21:10:17",
+   "end_utc": "2027-02-21T01:13:36"
+  },
+  {
+   "id": "fase_bulan-full_moon-202702202322-moon",
+   "category": "fase_bulan",
+   "kind": "full_moon",
+   "title": "Bulan Purnama",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-02-20T23:22:37",
+   "details": {}
+  },
+  {
+   "id": "fase_bulan-last_quarter-202702280516-moon",
+   "category": "fase_bulan",
+   "kind": "last_quarter",
+   "title": "Bulan Kuartal Akhir",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-02-28T05:16:35",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202702280647-moon-antares",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Antares oleh Bulan",
+   "bodies": [
+    "moon",
+    "antares"
+   ],
+   "time_utc": "2027-02-28T06:47:48",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-02-28T06:47:48"
+   },
+   "start_utc": "2027-02-28T04:37:22",
+   "end_utc": "2027-02-28T08:58:12",
+   "separation_deg": 0.392
+  },
+  {
+   "id": "okultasi-occultation-202703030028-moon-sigma_sagittarii",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Sigma Sagittarii oleh Bulan",
+   "bodies": [
+    "moon",
+    "sigma_sagittarii"
+   ],
+   "time_utc": "2027-03-03T00:28:36",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-03-03T00:28:36"
+   },
+   "start_utc": "2027-03-02T22:10:58",
+   "end_utc": "2027-03-03T02:46:12",
+   "separation_deg": 0.21
+  },
+  {
+   "id": "konjungsi-conjunction-202703042033-moon-venus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Venus",
+   "bodies": [
+    "moon",
+    "venus"
+   ],
+   "time_utc": "2027-03-04T20:33:49",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-03-04T20:33:49",
+    "konjungsi_asensio_rekta_utc": "2027-03-04T18:58:09"
+   },
+   "separation_deg": 2.005
+  },
+  {
+   "id": "okultasi-occultation-202703060632-moon-mercury",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Merkurius oleh Bulan",
+   "bodies": [
+    "moon",
+    "mercury"
+   ],
+   "time_utc": "2027-03-06T06:32:24",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-03-06T06:32:24",
+    "konjungsi_asensio_rekta_utc": "2027-03-06T05:29:26"
+   },
+   "start_utc": "2027-03-06T05:52:20",
+   "end_utc": "2027-03-06T07:12:39",
+   "separation_deg": 1.112
+  },
+  {
+   "id": "fase_bulan-new_moon-202703080929-moon",
+   "category": "fase_bulan",
+   "kind": "new_moon",
+   "title": "Bulan Baru",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-03-08T09:29:52",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202703091500-moon-neptune",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Neptunus",
+   "bodies": [
+    "moon",
+    "neptune"
+   ],
+   "time_utc": "2027-03-09T15:00:13",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-03-09T15:00:13",
+    "konjungsi_asensio_rekta_utc": "2027-03-09T19:43:52"
+   },
+   "separation_deg": 4.919
+  },
+  {
+   "id": "konjungsi-conjunction-202703101054-moon-saturn",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Saturnus",
+   "bodies": [
+    "moon",
+    "saturn"
+   ],
+   "time_utc": "2027-03-10T10:54:14",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-03-10T10:54:14",
+    "konjungsi_asensio_rekta_utc": "2027-03-10T16:42:01"
+   },
+   "separation_deg": 6.467
+  },
+  {
+   "id": "konjungsi-conjunction-202703132200-moon-m45",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M45 (Pleiades)",
+   "bodies": [
+    "moon",
+    "m45"
+   ],
+   "time_utc": "2027-03-13T22:00:20",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-03-13T22:00:20",
+    "konjungsi_asensio_rekta_utc": "2027-03-13T22:22:43"
+   },
+   "separation_deg": 1.04
+  },
+  {
+   "id": "konjungsi-conjunction-202703140128-moon-uranus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Uranus",
+   "bodies": [
+    "moon",
+    "uranus"
+   ],
+   "time_utc": "2027-03-14T01:28:11",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-03-14T01:28:11",
+    "konjungsi_asensio_rekta_utc": "2027-03-14T03:08:01"
+   },
+   "separation_deg": 5.218
+  },
+  {
+   "id": "fase_planet-dichotomy-202703141422-mercury",
+   "category": "fase_planet",
+   "kind": "dichotomy",
+   "title": "Merkurius dikotomi (fase 50%)",
+   "bodies": [
+    "mercury"
+   ],
+   "time_utc": "2027-03-14T14:22:29",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202703151304-moon-beta_tauri",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Beta Tauri oleh Bulan",
+   "bodies": [
+    "moon",
+    "beta_tauri"
+   ],
+   "time_utc": "2027-03-15T13:04:48",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-03-15T13:04:48"
+   },
+   "start_utc": "2027-03-15T11:49:01",
+   "end_utc": "2027-03-15T14:20:42",
+   "separation_deg": 1.009
+  },
+  {
+   "id": "fase_bulan-first_quarter-202703151625-moon",
+   "category": "fase_bulan",
+   "kind": "first_quarter",
+   "title": "Bulan Kuartal Awal",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-03-15T16:25:14",
+   "details": {}
+  },
+  {
+   "id": "elongasi-greatest_elongation_west-202703170415-mercury",
+   "category": "elongasi",
+   "kind": "greatest_elongation_west",
+   "title": "Merkurius elongasi maksimum barat",
+   "bodies": [
+    "mercury"
+   ],
+   "time_utc": "2027-03-17T04:15:42",
+   "details": {
+    "elongasi_deg": 27.62,
+    "sisi": "barat"
+   }
+  },
+  {
+   "id": "konjungsi-conjunction-202703181632-moon-m44",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M44 (Praesepe)",
+   "bodies": [
+    "moon",
+    "m44"
+   ],
+   "time_utc": "2027-03-18T16:32:56",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-03-18T16:32:56",
+    "konjungsi_asensio_rekta_utc": "2027-03-18T16:39:28"
+   },
+   "separation_deg": 0.18
+  },
+  {
+   "id": "okultasi-occultation-202703190928-moon-jupiter",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Jupiter oleh Bulan",
+   "bodies": [
+    "moon",
+    "jupiter"
+   ],
+   "time_utc": "2027-03-19T09:28:47",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-03-19T09:28:47",
+    "konjungsi_asensio_rekta_utc": "2027-03-19T10:06:15"
+   },
+   "start_utc": "2027-03-19T07:59:12",
+   "end_utc": "2027-03-19T10:58:21",
+   "separation_deg": 0.889
+  },
+  {
+   "id": "konjungsi-conjunction-202703191542-moon-mars",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Mars",
+   "bodies": [
+    "moon",
+    "mars"
+   ],
+   "time_utc": "2027-03-19T15:42:26",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-03-19T15:42:26",
+    "konjungsi_asensio_rekta_utc": "2027-03-19T18:34:42"
+   },
+   "separation_deg": 3.908
+  },
+  {
+   "id": "konjungsi-conjunction-202703200545-moon-regulus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Regulus",
+   "bodies": [
+    "moon",
+    "regulus"
+   ],
+   "time_utc": "2027-03-20T05:45:45",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-03-20T05:45:45"
+   },
+   "separation_deg": 1.392
+  },
+  {
+   "id": "fase_bulan-full_moon-202703221043-moon",
+   "category": "fase_bulan",
+   "kind": "full_moon",
+   "title": "Bulan Purnama",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-03-22T10:43:54",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202703271516-moon-antares",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Antares oleh Bulan",
+   "bodies": [
+    "moon",
+    "antares"
+   ],
+   "time_utc": "2027-03-27T15:16:39",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-03-27T15:16:39"
+   },
+   "start_utc": "2027-03-27T13:02:23",
+   "end_utc": "2027-03-27T17:30:56",
+   "separation_deg": 0.239
+  },
+  {
+   "id": "fase_bulan-last_quarter-202703300054-moon",
+   "category": "fase_bulan",
+   "kind": "last_quarter",
+   "title": "Bulan Kuartal Akhir",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-03-30T00:54:04",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202703300815-moon-sigma_sagittarii",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Sigma Sagittarii oleh Bulan",
+   "bodies": [
+    "moon",
+    "sigma_sagittarii"
+   ],
+   "time_utc": "2027-03-30T08:15:43",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-03-30T08:15:43"
+   },
+   "start_utc": "2027-03-30T06:03:03",
+   "end_utc": "2027-03-30T10:28:23",
+   "separation_deg": 0.365
+  },
+  {
+   "id": "konjungsi-conjunction-202703310454-jupiter-mars",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Jupiter–Mars",
+   "bodies": [
+    "jupiter",
+    "mars"
+   ],
+   "time_utc": "2027-03-31T04:54:46",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-03-31T04:54:46"
+   },
+   "separation_deg": 4.262
+  },
+  {
+   "id": "konjungsi-conjunction-202704040333-moon-venus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Venus",
+   "bodies": [
+    "moon",
+    "venus"
+   ],
+   "time_utc": "2027-04-04T03:33:23",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-04-04T03:33:23",
+    "konjungsi_asensio_rekta_utc": "2027-04-04T06:49:04"
+   },
+   "separation_deg": 2.91
+  },
+  {
+   "id": "konjungsi-conjunction-202704050423-moon-mercury",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Merkurius",
+   "bodies": [
+    "moon",
+    "mercury"
+   ],
+   "time_utc": "2027-04-05T04:23:37",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-04-05T04:23:37",
+    "konjungsi_asensio_rekta_utc": "2027-04-05T10:30:16"
+   },
+   "separation_deg": 5.329
+  },
+  {
+   "id": "konjungsi-conjunction-202704060037-moon-neptune",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Neptunus",
+   "bodies": [
+    "moon",
+    "neptune"
+   ],
+   "time_utc": "2027-04-06T00:37:41",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-04-06T00:37:41",
+    "konjungsi_asensio_rekta_utc": "2027-04-06T05:17:19"
+   },
+   "separation_deg": 4.97
+  },
+  {
+   "id": "fase_bulan-new_moon-202704062351-moon",
+   "category": "fase_bulan",
+   "kind": "new_moon",
+   "title": "Bulan Baru",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-04-06T23:51:39",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202704070033-moon-saturn",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Saturnus",
+   "bodies": [
+    "moon",
+    "saturn"
+   ],
+   "time_utc": "2027-04-07T00:33:34",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-04-07T00:33:34",
+    "konjungsi_asensio_rekta_utc": "2027-04-07T06:07:28"
+   },
+   "separation_deg": 6.569
+  },
+  {
+   "id": "konjungsi-conjunction-202704100350-moon-m45",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M45 (Pleiades)",
+   "bodies": [
+    "moon",
+    "m45"
+   ],
+   "time_utc": "2027-04-10T03:50:51",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-04-10T03:50:51",
+    "konjungsi_asensio_rekta_utc": "2027-04-10T04:09:15"
+   },
+   "separation_deg": 0.878
+  },
+  {
+   "id": "konjungsi-conjunction-202704100903-moon-uranus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Uranus",
+   "bodies": [
+    "moon",
+    "uranus"
+   ],
+   "time_utc": "2027-04-10T09:03:25",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-04-10T09:03:25",
+    "konjungsi_asensio_rekta_utc": "2027-04-10T10:32:41"
+   },
+   "separation_deg": 5.024
+  },
+  {
+   "id": "okultasi-occultation-202704111827-moon-beta_tauri",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Beta Tauri oleh Bulan",
+   "bodies": [
+    "moon",
+    "beta_tauri"
+   ],
+   "time_utc": "2027-04-11T18:27:13",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-04-11T18:27:13"
+   },
+   "start_utc": "2027-04-11T17:50:00",
+   "end_utc": "2027-04-11T19:04:30",
+   "separation_deg": 1.198
+  },
+  {
+   "id": "fase_bulan-first_quarter-202704132256-moon",
+   "category": "fase_bulan",
+   "kind": "first_quarter",
+   "title": "Bulan Kuartal Awal",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-04-13T22:56:35",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202704142236-moon-m44",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M44 (Praesepe)",
+   "bodies": [
+    "moon",
+    "m44"
+   ],
+   "time_utc": "2027-04-14T22:36:26",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-04-14T22:36:26",
+    "konjungsi_asensio_rekta_utc": "2027-04-14T22:49:05"
+   },
+   "separation_deg": 0.342
+  },
+  {
+   "id": "okultasi-occultation-202704151422-moon-jupiter",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Jupiter oleh Bulan",
+   "bodies": [
+    "moon",
+    "jupiter"
+   ],
+   "time_utc": "2027-04-15T14:22:05",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-04-15T14:22:05",
+    "konjungsi_asensio_rekta_utc": "2027-04-15T15:01:11"
+   },
+   "start_utc": "2027-04-15T12:54:18",
+   "end_utc": "2027-04-15T15:49:51",
+   "separation_deg": 0.913
+  },
+  {
+   "id": "konjungsi-conjunction-202704152243-moon-mars",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Mars",
+   "bodies": [
+    "moon",
+    "mars"
+   ],
+   "time_utc": "2027-04-15T22:43:56",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-04-15T22:43:56",
+    "konjungsi_asensio_rekta_utc": "2027-04-16T01:01:19"
+   },
+   "separation_deg": 2.974
+  },
+  {
+   "id": "konjungsi-conjunction-202704161248-moon-regulus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Regulus",
+   "bodies": [
+    "moon",
+    "regulus"
+   ],
+   "time_utc": "2027-04-16T12:48:04",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-04-16T12:48:04"
+   },
+   "separation_deg": 1.513
+  },
+  {
+   "id": "konjungsi-conjunction-202704191328-mercury-saturn",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Merkurius–Saturnus",
+   "bodies": [
+    "mercury",
+    "saturn"
+   ],
+   "time_utc": "2027-04-19T13:28:43",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-04-19T13:28:43",
+    "konjungsi_asensio_rekta_utc": "2027-04-19T17:04:17"
+   },
+   "separation_deg": 0.567
+  },
+  {
+   "id": "fase_bulan-full_moon-202704202228-moon",
+   "category": "fase_bulan",
+   "kind": "full_moon",
+   "title": "Bulan Purnama",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-04-20T22:28:18",
+   "details": {}
+  },
+  {
+   "id": "hujan_meteor-lyr-202704230141",
+   "category": "hujan_meteor",
+   "kind": "lyr",
+   "title": "Hujan Meteor Lyrid",
+   "bodies": [],
+   "time_utc": "2027-04-23T01:41:17",
+   "details": {
+    "nama": "Lyrid",
+    "zhr": 18,
+    "radian_ra": 271.0,
+    "radian_dec": 34.0,
+    "kecepatan_kms": 49,
+    "catatan": "Waktu puncak perkiraan (ketidakpastian beberapa jam hingga ~1 hari)."
+   }
+  },
+  {
+   "id": "okultasi-occultation-202704232359-moon-antares",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Antares oleh Bulan",
+   "bodies": [
+    "moon",
+    "antares"
+   ],
+   "time_utc": "2027-04-23T23:59:36",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-04-23T23:59:36"
+   },
+   "start_utc": "2027-04-23T21:43:37",
+   "end_utc": "2027-04-24T02:15:38",
+   "separation_deg": 0.052
+  },
+  {
+   "id": "okultasi-occultation-202704261622-moon-sigma_sagittarii",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Sigma Sagittarii oleh Bulan",
+   "bodies": [
+    "moon",
+    "sigma_sagittarii"
+   ],
+   "time_utc": "2027-04-26T16:22:05",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-04-26T16:22:05"
+   },
+   "start_utc": "2027-04-26T14:23:44",
+   "end_utc": "2027-04-26T18:20:26",
+   "separation_deg": 0.609
+  },
+  {
+   "id": "fase_bulan-last_quarter-202704282019-moon",
+   "category": "fase_bulan",
+   "kind": "last_quarter",
+   "title": "Bulan Kuartal Akhir",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-04-28T20:19:00",
+   "details": {}
+  },
+  {
+   "id": "fase_planet-greatest_brightness-202704282338-mercury",
+   "category": "fase_planet",
+   "kind": "greatest_brightness",
+   "title": "Merkurius paling terang",
+   "bodies": [
+    "mercury"
+   ],
+   "time_utc": "2027-04-28T23:38:46",
+   "details": {
+    "magnitudo": -2.25
+   }
+  },
+  {
+   "id": "konjungsi-conjunction-202705031121-moon-neptune",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Neptunus",
+   "bodies": [
+    "moon",
+    "neptune"
+   ],
+   "time_utc": "2027-05-03T11:21:30",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-05-03T11:21:30",
+    "konjungsi_asensio_rekta_utc": "2027-05-03T16:05:52"
+   },
+   "separation_deg": 5.125
+  },
+  {
+   "id": "konjungsi-conjunction-202705040844-moon-venus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Venus",
+   "bodies": [
+    "moon",
+    "venus"
+   ],
+   "time_utc": "2027-05-04T08:44:30",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-05-04T08:44:30",
+    "konjungsi_asensio_rekta_utc": "2027-05-04T14:17:39"
+   },
+   "separation_deg": 6.021
+  },
+  {
+   "id": "konjungsi-conjunction-202705041540-moon-saturn",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Saturnus",
+   "bodies": [
+    "moon",
+    "saturn"
+   ],
+   "time_utc": "2027-05-04T15:40:32",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-05-04T15:40:32",
+    "konjungsi_asensio_rekta_utc": "2027-05-04T21:05:59"
+   },
+   "separation_deg": 6.77
+  },
+  {
+   "id": "fase_bulan-new_moon-202705061059-moon",
+   "category": "fase_bulan",
+   "kind": "new_moon",
+   "title": "Bulan Baru",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-05-06T10:59:00",
+   "details": {}
+  },
+  {
+   "id": "hujan_meteor-eta-202705061512",
+   "category": "hujan_meteor",
+   "kind": "eta",
+   "title": "Hujan Meteor eta-Aquariid",
+   "bodies": [],
+   "time_utc": "2027-05-06T15:12:40",
+   "details": {
+    "nama": "eta-Aquariid",
+    "zhr": 50,
+    "radian_ra": 338.0,
+    "radian_dec": -1.0,
+    "kecepatan_kms": 66,
+    "catatan": "Waktu puncak perkiraan (ketidakpastian beberapa jam hingga ~1 hari)."
+   }
+  },
+  {
+   "id": "konjungsi-conjunction-202705070449-moon-mercury",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Merkurius",
+   "bodies": [
+    "moon",
+    "mercury"
+   ],
+   "time_utc": "2027-05-07T04:49:44",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-05-07T04:49:44",
+    "konjungsi_asensio_rekta_utc": "2027-05-07T06:23:41"
+   },
+   "separation_deg": 3.786
+  },
+  {
+   "id": "konjungsi-conjunction-202705071135-moon-m45",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M45 (Pleiades)",
+   "bodies": [
+    "moon",
+    "m45"
+   ],
+   "time_utc": "2027-05-07T11:35:25",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-05-07T11:35:25",
+    "konjungsi_asensio_rekta_utc": "2027-05-07T11:50:37"
+   },
+   "separation_deg": 0.758
+  },
+  {
+   "id": "konjungsi-conjunction-202705071905-moon-uranus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Uranus",
+   "bodies": [
+    "moon",
+    "uranus"
+   ],
+   "time_utc": "2027-05-07T19:05:41",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-05-07T19:05:41",
+    "konjungsi_asensio_rekta_utc": "2027-05-07T20:22:08"
+   },
+   "separation_deg": 4.849
+  },
+  {
+   "id": "konjungsi-conjunction-202705072014-saturn-venus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Saturnus–Venus",
+   "bodies": [
+    "saturn",
+    "venus"
+   ],
+   "time_utc": "2027-05-07T20:14:28",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-05-07T20:14:28",
+    "konjungsi_asensio_rekta_utc": "2027-05-08T01:37:24"
+   },
+   "separation_deg": 0.604
+  },
+  {
+   "id": "konjungsi-conjunction-202705090111-moon-beta_tauri",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Beta Tauri",
+   "bodies": [
+    "moon",
+    "beta_tauri"
+   ],
+   "time_utc": "2027-05-09T01:11:41",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-05-09T01:11:41"
+   },
+   "separation_deg": 1.389
+  },
+  {
+   "id": "konjungsi-conjunction-202705120358-moon-m44",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M44 (Praesepe)",
+   "bodies": [
+    "moon",
+    "m44"
+   ],
+   "time_utc": "2027-05-12T03:58:12",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-05-12T03:58:12",
+    "konjungsi_asensio_rekta_utc": "2027-05-12T04:19:52"
+   },
+   "separation_deg": 0.589
+  },
+  {
+   "id": "okultasi-occultation-202705122155-moon-jupiter",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Jupiter oleh Bulan",
+   "bodies": [
+    "moon",
+    "jupiter"
+   ],
+   "time_utc": "2027-05-12T21:55:33",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-05-12T21:55:33",
+    "konjungsi_asensio_rekta_utc": "2027-05-12T22:49:16"
+   },
+   "start_utc": "2027-05-12T21:28:06",
+   "end_utc": "2027-05-12T22:22:51",
+   "separation_deg": 1.226
+  },
+  {
+   "id": "fase_bulan-first_quarter-202705130444-moon",
+   "category": "fase_bulan",
+   "kind": "first_quarter",
+   "title": "Bulan Kuartal Awal",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-05-13T04:44:10",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202705131704-moon-mars",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Mars",
+   "bodies": [
+    "moon",
+    "mars"
+   ],
+   "time_utc": "2027-05-13T17:04:46",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-05-13T17:04:46",
+    "konjungsi_asensio_rekta_utc": "2027-05-13T19:35:04"
+   },
+   "separation_deg": 2.967
+  },
+  {
+   "id": "fase_bulan-full_moon-202705201100-moon",
+   "category": "fase_bulan",
+   "kind": "full_moon",
+   "title": "Bulan Purnama",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-05-20T11:00:04",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202705210753-moon-antares",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Antares oleh Bulan",
+   "bodies": [
+    "moon",
+    "antares"
+   ],
+   "time_utc": "2027-05-21T07:53:12",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-05-21T07:53:12"
+   },
+   "start_utc": "2027-05-21T05:37:22",
+   "end_utc": "2027-05-21T10:09:03",
+   "separation_deg": 0.053
+  },
+  {
+   "id": "fase_planet-dichotomy-202705222039-mercury",
+   "category": "fase_planet",
+   "kind": "dichotomy",
+   "title": "Merkurius dikotomi (fase 50%)",
+   "bodies": [
+    "mercury"
+   ],
+   "time_utc": "2027-05-22T20:39:00",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202705240005-moon-sigma_sagittarii",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Sigma Sagittarii oleh Bulan",
+   "bodies": [
+    "moon",
+    "sigma_sagittarii"
+   ],
+   "time_utc": "2027-05-24T00:05:14",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-05-24T00:05:14"
+   },
+   "start_utc": "2027-05-23T22:28:10",
+   "end_utc": "2027-05-24T01:42:15",
+   "separation_deg": 0.825
+  },
+  {
+   "id": "elongasi-greatest_elongation_east-202705281319-mercury",
+   "category": "elongasi",
+   "kind": "greatest_elongation_east",
+   "title": "Merkurius elongasi maksimum timur",
+   "bodies": [
+    "mercury"
+   ],
+   "time_utc": "2027-05-28T13:19:20",
+   "details": {
+    "elongasi_deg": 22.84,
+    "sisi": "timur"
+   }
+  },
+  {
+   "id": "fase_bulan-last_quarter-202705281359-moon",
+   "category": "fase_bulan",
+   "kind": "last_quarter",
+   "title": "Bulan Kuartal Akhir",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-05-28T13:59:42",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202705302150-moon-neptune",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Neptunus",
+   "bodies": [
+    "moon",
+    "neptune"
+   ],
+   "time_utc": "2027-05-30T21:50:46",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-05-30T21:50:46",
+    "konjungsi_asensio_rekta_utc": "2027-05-31T02:49:54"
+   },
+   "separation_deg": 5.374
+  },
+  {
+   "id": "konjungsi-conjunction-202706010646-moon-saturn",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Saturnus",
+   "bodies": [
+    "moon",
+    "saturn"
+   ],
+   "time_utc": "2027-06-01T06:46:31",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-06-01T06:46:31",
+    "konjungsi_asensio_rekta_utc": "2027-06-01T12:13:02"
+   },
+   "separation_deg": 7.073
+  },
+  {
+   "id": "konjungsi-conjunction-202706031036-moon-venus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Venus",
+   "bodies": [
+    "moon",
+    "venus"
+   ],
+   "time_utc": "2027-06-03T10:36:30",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-06-03T10:36:30",
+    "konjungsi_asensio_rekta_utc": "2027-06-03T13:13:35"
+   },
+   "separation_deg": 6.153
+  },
+  {
+   "id": "konjungsi-conjunction-202706032112-moon-m45",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M45 (Pleiades)",
+   "bodies": [
+    "moon",
+    "m45"
+   ],
+   "time_utc": "2027-06-03T21:12:04",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-06-03T21:12:04",
+    "konjungsi_asensio_rekta_utc": "2027-06-03T21:26:46"
+   },
+   "separation_deg": 0.756
+  },
+  {
+   "id": "konjungsi-conjunction-202706040716-moon-uranus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Uranus",
+   "bodies": [
+    "moon",
+    "uranus"
+   ],
+   "time_utc": "2027-06-04T07:16:52",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-06-04T07:16:52",
+    "konjungsi_asensio_rekta_utc": "2027-06-04T08:22:40"
+   },
+   "separation_deg": 4.772
+  },
+  {
+   "id": "fase_bulan-new_moon-202706041940-moon",
+   "category": "fase_bulan",
+   "kind": "new_moon",
+   "title": "Bulan Baru",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-06-04T19:40:40",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202706051007-moon-beta_tauri",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Beta Tauri",
+   "bodies": [
+    "moon",
+    "beta_tauri"
+   ],
+   "time_utc": "2027-06-05T10:07:52",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-06-05T10:07:52"
+   },
+   "separation_deg": 1.479
+  },
+  {
+   "id": "konjungsi-conjunction-202706060656-moon-mercury",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Merkurius",
+   "bodies": [
+    "moon",
+    "mercury"
+   ],
+   "time_utc": "2027-06-06T06:56:18",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-06-06T06:56:18",
+    "konjungsi_asensio_rekta_utc": "2027-06-06T06:29:47"
+   },
+   "separation_deg": 2.711
+  },
+  {
+   "id": "konjungsi-conjunction-202706081046-moon-m44",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M44 (Praesepe)",
+   "bodies": [
+    "moon",
+    "m44"
+   ],
+   "time_utc": "2027-06-08T10:46:18",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-06-08T10:46:18",
+    "konjungsi_asensio_rekta_utc": "2027-06-08T11:15:06"
+   },
+   "separation_deg": 0.802
+  },
+  {
+   "id": "konjungsi-conjunction-202706090938-moon-jupiter",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Jupiter",
+   "bodies": [
+    "moon",
+    "jupiter"
+   ],
+   "time_utc": "2027-06-09T09:38:35",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-06-09T09:38:35",
+    "konjungsi_asensio_rekta_utc": "2027-06-09T10:55:10"
+   },
+   "separation_deg": 1.704
+  },
+  {
+   "id": "konjungsi-conjunction-202706101934-moon-mars",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Mars",
+   "bodies": [
+    "moon",
+    "mars"
+   ],
+   "time_utc": "2027-06-10T19:34:36",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-06-10T19:34:36",
+    "konjungsi_asensio_rekta_utc": "2027-06-10T22:46:25"
+   },
+   "separation_deg": 3.519
+  },
+  {
+   "id": "fase_bulan-first_quarter-202706111057-moon",
+   "category": "fase_bulan",
+   "kind": "first_quarter",
+   "title": "Bulan Kuartal Awal",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-06-11T10:57:04",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202706171431-moon-antares",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Antares oleh Bulan",
+   "bodies": [
+    "moon",
+    "antares"
+   ],
+   "time_utc": "2027-06-17T14:31:24",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-06-17T14:31:24"
+   },
+   "start_utc": "2027-06-17T12:14:49",
+   "end_utc": "2027-06-17T16:47:58",
+   "separation_deg": 0.03
+  },
+  {
+   "id": "fase_bulan-full_moon-202706190045-moon",
+   "category": "fase_bulan",
+   "kind": "full_moon",
+   "title": "Bulan Purnama",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-06-19T00:45:15",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202706200659-moon-sigma_sagittarii",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Sigma Sagittarii oleh Bulan",
+   "bodies": [
+    "moon",
+    "sigma_sagittarii"
+   ],
+   "time_utc": "2027-06-20T06:59:56",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-06-20T06:59:56"
+   },
+   "start_utc": "2027-06-20T05:36:16",
+   "end_utc": "2027-06-20T08:23:33",
+   "separation_deg": 0.917
+  },
+  {
+   "id": "fase_bulan-last_quarter-202706270455-moon",
+   "category": "fase_bulan",
+   "kind": "last_quarter",
+   "title": "Bulan Kuartal Akhir",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-06-27T04:55:44",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202706270644-moon-neptune",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Neptunus",
+   "bodies": [
+    "moon",
+    "neptune"
+   ],
+   "time_utc": "2027-06-27T06:44:23",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-06-27T06:44:23",
+    "konjungsi_asensio_rekta_utc": "2027-06-27T12:02:14"
+   },
+   "separation_deg": 5.622
+  },
+  {
+   "id": "konjungsi-conjunction-202706282003-moon-saturn",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Saturnus",
+   "bodies": [
+    "moon",
+    "saturn"
+   ],
+   "time_utc": "2027-06-28T20:03:06",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-06-28T20:03:06"
+   },
+   "separation_deg": 7.406
+  },
+  {
+   "id": "konjungsi-conjunction-202707010725-moon-m45",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M45 (Pleiades)",
+   "bodies": [
+    "moon",
+    "m45"
+   ],
+   "time_utc": "2027-07-01T07:25:39",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-07-01T07:25:39",
+    "konjungsi_asensio_rekta_utc": "2027-07-01T07:42:04"
+   },
+   "separation_deg": 0.848
+  },
+  {
+   "id": "konjungsi-conjunction-202707010757-mercury-venus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Merkurius–Venus",
+   "bodies": [
+    "mercury",
+    "venus"
+   ],
+   "time_utc": "2027-07-01T07:57:24",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-07-01T07:57:24",
+    "konjungsi_asensio_rekta_utc": "2027-07-01T10:34:17"
+   },
+   "separation_deg": 4.556
+  },
+  {
+   "id": "konjungsi-conjunction-202707012010-moon-uranus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Uranus",
+   "bodies": [
+    "moon",
+    "uranus"
+   ],
+   "time_utc": "2027-07-01T20:10:39",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-07-01T20:10:39",
+    "konjungsi_asensio_rekta_utc": "2027-07-01T21:09:19"
+   },
+   "separation_deg": 4.783
+  },
+  {
+   "id": "konjungsi-conjunction-202707022031-moon-beta_tauri",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Beta Tauri",
+   "bodies": [
+    "moon",
+    "beta_tauri"
+   ],
+   "time_utc": "2027-07-02T20:31:01",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-07-02T20:31:01"
+   },
+   "separation_deg": 1.458
+  },
+  {
+   "id": "konjungsi-conjunction-202707030858-moon-venus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Venus",
+   "bodies": [
+    "moon",
+    "venus"
+   ],
+   "time_utc": "2027-07-03T08:58:31",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-07-03T08:58:31",
+    "konjungsi_asensio_rekta_utc": "2027-07-03T08:29:24"
+   },
+   "separation_deg": 3.5
+  },
+  {
+   "id": "fase_bulan-new_moon-202707040302-moon",
+   "category": "fase_bulan",
+   "kind": "new_moon",
+   "title": "Bulan Baru",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-07-04T03:02:28",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202707051951-moon-m44",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M44 (Praesepe)",
+   "bodies": [
+    "moon",
+    "m44"
+   ],
+   "time_utc": "2027-07-05T19:51:42",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-07-05T19:51:42",
+    "konjungsi_asensio_rekta_utc": "2027-07-05T20:23:11"
+   },
+   "separation_deg": 0.898
+  },
+  {
+   "id": "konjungsi-conjunction-202707070131-moon-jupiter",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Jupiter",
+   "bodies": [
+    "moon",
+    "jupiter"
+   ],
+   "time_utc": "2027-07-07T01:31:57",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-07-07T01:31:57",
+    "konjungsi_asensio_rekta_utc": "2027-07-07T03:14:10"
+   },
+   "separation_deg": 2.216
+  },
+  {
+   "id": "konjungsi-conjunction-202707090400-moon-mars",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Mars",
+   "bodies": [
+    "moon",
+    "mars"
+   ],
+   "time_utc": "2027-07-09T04:00:32",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-07-09T04:00:32",
+    "konjungsi_asensio_rekta_utc": "2027-07-09T07:53:44"
+   },
+   "separation_deg": 4.214
+  },
+  {
+   "id": "fase_bulan-first_quarter-202707101840-moon",
+   "category": "fase_bulan",
+   "kind": "first_quarter",
+   "title": "Bulan Kuartal Awal",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-07-10T18:40:01",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202707142018-moon-antares",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Antares oleh Bulan",
+   "bodies": [
+    "moon",
+    "antares"
+   ],
+   "time_utc": "2027-07-14T20:18:58",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-07-14T20:18:58"
+   },
+   "start_utc": "2027-07-14T18:01:43",
+   "end_utc": "2027-07-14T22:36:12",
+   "separation_deg": 0.054
+  },
+  {
+   "id": "elongasi-greatest_elongation_west-202707160331-mercury",
+   "category": "elongasi",
+   "kind": "greatest_elongation_west",
+   "title": "Merkurius elongasi maksimum barat",
+   "bodies": [
+    "mercury"
+   ],
+   "time_utc": "2027-07-16T03:31:48",
+   "details": {
+    "elongasi_deg": 20.54,
+    "sisi": "barat"
+   }
+  },
+  {
+   "id": "okultasi-occultation-202707171311-moon-sigma_sagittarii",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Sigma Sagittarii oleh Bulan",
+   "bodies": [
+    "moon",
+    "sigma_sagittarii"
+   ],
+   "time_utc": "2027-07-17T13:11:45",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-07-17T13:11:45"
+   },
+   "start_utc": "2027-07-17T11:45:32",
+   "end_utc": "2027-07-17T14:37:54",
+   "separation_deg": 0.9
+  },
+  {
+   "id": "fase_bulan-full_moon-202707181546-moon",
+   "category": "fase_bulan",
+   "kind": "full_moon",
+   "title": "Bulan Purnama",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-07-18T15:46:06",
+   "details": {}
+  },
+  {
+   "id": "gerhana_bulan-penumbra-202707181604-moon",
+   "category": "gerhana_bulan",
+   "kind": "penumbra",
+   "title": "Gerhana Bulan penumbra",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-07-18T16:04:23",
+   "details": {
+    "jenis": "penumbra",
+    "magnitudo_umbra": -1.074,
+    "magnitudo_penumbra": 0.017,
+    "jarak_ke_sumbu_deg": 1.425
+   },
+   "start_utc": "2027-07-18T15:43:54",
+   "end_utc": "2027-07-18T16:24:52"
+  },
+  {
+   "id": "fase_planet-dichotomy-202707200139-mercury",
+   "category": "fase_planet",
+   "kind": "dichotomy",
+   "title": "Merkurius dikotomi (fase 50%)",
+   "bodies": [
+    "mercury"
+   ],
+   "time_utc": "2027-07-20T01:39:17",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202707241326-moon-neptune",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Neptunus",
+   "bodies": [
+    "moon",
+    "neptune"
+   ],
+   "time_utc": "2027-07-24T13:26:05",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-07-24T13:26:05",
+    "konjungsi_asensio_rekta_utc": "2027-07-24T18:56:31"
+   },
+   "separation_deg": 5.759
+  },
+  {
+   "id": "konjungsi-conjunction-202707260559-moon-saturn",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Saturnus",
+   "bodies": [
+    "moon",
+    "saturn"
+   ],
+   "time_utc": "2027-07-26T05:59:29",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-07-26T05:59:29"
+   },
+   "separation_deg": 7.66
+  },
+  {
+   "id": "fase_bulan-last_quarter-202707261655-moon",
+   "category": "fase_bulan",
+   "kind": "last_quarter",
+   "title": "Bulan Kuartal Akhir",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-07-26T16:55:26",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202707281640-moon-m45",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M45 (Pleiades)",
+   "bodies": [
+    "moon",
+    "m45"
+   ],
+   "time_utc": "2027-07-28T16:40:49",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-07-28T16:40:49",
+    "konjungsi_asensio_rekta_utc": "2027-07-28T16:59:13"
+   },
+   "separation_deg": 0.929
+  },
+  {
+   "id": "konjungsi-conjunction-202707290755-moon-uranus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Uranus",
+   "bodies": [
+    "moon",
+    "uranus"
+   ],
+   "time_utc": "2027-07-29T07:55:26",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-07-29T07:55:26",
+    "konjungsi_asensio_rekta_utc": "2027-07-29T08:50:01"
+   },
+   "separation_deg": 4.801
+  },
+  {
+   "id": "konjungsi-conjunction-202707300644-moon-beta_tauri",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Beta Tauri",
+   "bodies": [
+    "moon",
+    "beta_tauri"
+   ],
+   "time_utc": "2027-07-30T06:44:27",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-07-30T06:44:27"
+   },
+   "separation_deg": 1.408
+  },
+  {
+   "id": "okultasi-occultation-202708011558-moon-mercury",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Merkurius oleh Bulan",
+   "bodies": [
+    "moon",
+    "mercury"
+   ],
+   "time_utc": "2027-08-01T15:58:19",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-08-01T15:58:19",
+    "konjungsi_asensio_rekta_utc": "2027-08-01T15:47:31"
+   },
+   "start_utc": "2027-08-01T13:40:54",
+   "end_utc": "2027-08-01T18:15:46",
+   "separation_deg": 0.301
+  },
+  {
+   "id": "okultasi-occultation-202708020526-moon-venus",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Venus oleh Bulan",
+   "bodies": [
+    "moon",
+    "venus"
+   ],
+   "time_utc": "2027-08-02T05:26:18",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-08-02T05:26:18",
+    "konjungsi_asensio_rekta_utc": "2027-08-02T05:48:49"
+   },
+   "start_utc": "2027-08-02T03:27:04",
+   "end_utc": "2027-08-02T07:25:33",
+   "separation_deg": 0.585
+  },
+  {
+   "id": "konjungsi-conjunction-202708020630-moon-m44",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M44 (Praesepe)",
+   "bodies": [
+    "moon",
+    "m44"
+   ],
+   "time_utc": "2027-08-02T06:30:50",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-08-02T06:30:50",
+    "konjungsi_asensio_rekta_utc": "2027-08-02T07:02:25"
+   },
+   "separation_deg": 0.908
+  },
+  {
+   "id": "fase_bulan-new_moon-202708021005-moon",
+   "category": "fase_bulan",
+   "kind": "new_moon",
+   "title": "Bulan Baru",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-08-02T10:05:42",
+   "details": {}
+  },
+  {
+   "id": "gerhana_matahari-total-202708021007-sun-moon",
+   "category": "gerhana_matahari",
+   "kind": "total",
+   "title": "Gerhana Matahari total",
+   "bodies": [
+    "sun",
+    "moon"
+   ],
+   "time_utc": "2027-08-02T10:07:18",
+   "details": {
+    "jenis": "total",
+    "gamma_perkiraan": 0.158,
+    "sep_pusat_deg": 0.162,
+    "rasio_diameter_bulan_matahari": 1.0608
+   }
+  },
+  {
+   "id": "konjungsi-conjunction-202708032029-moon-jupiter",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Jupiter",
+   "bodies": [
+    "moon",
+    "jupiter"
+   ],
+   "time_utc": "2027-08-03T20:29:25",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-08-03T20:29:25",
+    "konjungsi_asensio_rekta_utc": "2027-08-03T22:38:12"
+   },
+   "separation_deg": 2.717
+  },
+  {
+   "id": "konjungsi-conjunction-202708061709-moon-mars",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Mars",
+   "bodies": [
+    "moon",
+    "mars"
+   ],
+   "time_utc": "2027-08-06T17:09:35",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-08-06T17:09:35",
+    "konjungsi_asensio_rekta_utc": "2027-08-06T21:13:51"
+   },
+   "separation_deg": 4.728
+  },
+  {
+   "id": "fase_bulan-first_quarter-202708090454-moon",
+   "category": "fase_bulan",
+   "kind": "first_quarter",
+   "title": "Bulan Kuartal Awal",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-08-09T04:54:19",
+   "details": {}
+  },
+  {
+   "id": "fase_planet-greatest_brightness-202708102051-mercury",
+   "category": "fase_planet",
+   "kind": "greatest_brightness",
+   "title": "Merkurius paling terang",
+   "bodies": [
+    "mercury"
+   ],
+   "time_utc": "2027-08-10T20:51:14",
+   "details": {
+    "magnitudo": -1.95
+   }
+  },
+  {
+   "id": "okultasi-occultation-202708110214-moon-antares",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Antares oleh Bulan",
+   "bodies": [
+    "moon",
+    "antares"
+   ],
+   "time_utc": "2027-08-11T02:14:46",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-08-11T02:14:46"
+   },
+   "start_utc": "2027-08-10T23:57:37",
+   "end_utc": "2027-08-11T04:31:54",
+   "separation_deg": 0.078
+  },
+  {
+   "id": "konjungsi-conjunction-202708110626-mercury-venus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Merkurius–Venus",
+   "bodies": [
+    "mercury",
+    "venus"
+   ],
+   "time_utc": "2027-08-11T06:26:35",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-08-11T06:26:35",
+    "konjungsi_asensio_rekta_utc": "2027-08-11T01:37:27"
+   },
+   "separation_deg": 0.51
+  },
+  {
+   "id": "hujan_meteor-per-202708130811",
+   "category": "hujan_meteor",
+   "kind": "per",
+   "title": "Hujan Meteor Perseid",
+   "bodies": [],
+   "time_utc": "2027-08-13T08:11:34",
+   "details": {
+    "nama": "Perseid",
+    "zhr": 100,
+    "radian_ra": 48.0,
+    "radian_dec": 58.0,
+    "kecepatan_kms": 59,
+    "catatan": "Waktu puncak perkiraan (ketidakpastian beberapa jam hingga ~1 hari)."
+   }
+  },
+  {
+   "id": "fase_planet-greatest_brightness-202708130902-venus",
+   "category": "fase_planet",
+   "kind": "greatest_brightness",
+   "title": "Venus paling terang",
+   "bodies": [
+    "venus"
+   ],
+   "time_utc": "2027-08-13T09:02:38",
+   "details": {
+    "magnitudo": -3.92
+   }
+  },
+  {
+   "id": "okultasi-occultation-202708131911-moon-sigma_sagittarii",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Sigma Sagittarii oleh Bulan",
+   "bodies": [
+    "moon",
+    "sigma_sagittarii"
+   ],
+   "time_utc": "2027-08-13T19:11:26",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-08-13T19:11:26"
+   },
+   "start_utc": "2027-08-13T17:42:15",
+   "end_utc": "2027-08-13T20:40:33",
+   "separation_deg": 0.883
+  },
+  {
+   "id": "gerhana_bulan-penumbra-202708170714-moon",
+   "category": "gerhana_bulan",
+   "kind": "penumbra",
+   "title": "Gerhana Bulan penumbra",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-08-17T07:14:47",
+   "details": {
+    "jenis": "penumbra",
+    "magnitudo_umbra": -0.516,
+    "magnitudo_penumbra": 0.576,
+    "jarak_ke_sumbu_deg": 1.153
+   },
+   "start_utc": "2027-08-17T05:22:10",
+   "end_utc": "2027-08-17T09:07:20"
+  },
+  {
+   "id": "fase_bulan-full_moon-202708170729-moon",
+   "category": "fase_bulan",
+   "kind": "full_moon",
+   "title": "Bulan Purnama",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-08-17T07:29:43",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202708192334-jupiter-mercury",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Jupiter–Merkurius",
+   "bodies": [
+    "jupiter",
+    "mercury"
+   ],
+   "time_utc": "2027-08-19T23:34:19",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-08-19T23:34:19",
+    "konjungsi_asensio_rekta_utc": "2027-08-19T19:36:25"
+   },
+   "separation_deg": 0.621
+  },
+  {
+   "id": "konjungsi-conjunction-202708201826-moon-neptune",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Neptunus",
+   "bodies": [
+    "moon",
+    "neptune"
+   ],
+   "time_utc": "2027-08-20T18:26:07",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-08-20T18:26:07",
+    "konjungsi_asensio_rekta_utc": "2027-08-20T23:56:29"
+   },
+   "separation_deg": 5.743
+  },
+  {
+   "id": "konjungsi-conjunction-202708221206-moon-saturn",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Saturnus",
+   "bodies": [
+    "moon",
+    "saturn"
+   ],
+   "time_utc": "2027-08-22T12:06:45",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-08-22T12:06:45"
+   },
+   "separation_deg": 7.754
+  },
+  {
+   "id": "konjungsi-conjunction-202708242358-moon-m45",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M45 (Pleiades)",
+   "bodies": [
+    "moon",
+    "m45"
+   ],
+   "time_utc": "2027-08-24T23:58:30",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-08-24T23:58:30",
+    "konjungsi_asensio_rekta_utc": "2027-08-25T00:16:44"
+   },
+   "separation_deg": 0.894
+  },
+  {
+   "id": "fase_bulan-last_quarter-202708250227-moon",
+   "category": "fase_bulan",
+   "kind": "last_quarter",
+   "title": "Bulan Kuartal Akhir",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-08-25T02:27:46",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202708251701-moon-uranus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Uranus",
+   "bodies": [
+    "moon",
+    "uranus"
+   ],
+   "time_utc": "2027-08-25T17:01:41",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-08-25T17:01:41",
+    "konjungsi_asensio_rekta_utc": "2027-08-25T17:53:58"
+   },
+   "separation_deg": 4.731
+  },
+  {
+   "id": "konjungsi-conjunction-202708260339-jupiter-venus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Jupiter–Venus",
+   "bodies": [
+    "jupiter",
+    "venus"
+   ],
+   "time_utc": "2027-08-26T03:39:57",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-08-26T03:39:57",
+    "konjungsi_asensio_rekta_utc": "2027-08-25T23:04:50"
+   },
+   "separation_deg": 0.494
+  },
+  {
+   "id": "konjungsi-conjunction-202708261516-moon-beta_tauri",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Beta Tauri",
+   "bodies": [
+    "moon",
+    "beta_tauri"
+   ],
+   "time_utc": "2027-08-26T15:16:33",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-08-26T15:16:33"
+   },
+   "separation_deg": 1.44
+  },
+  {
+   "id": "konjungsi-conjunction-202708291702-moon-m44",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M44 (Praesepe)",
+   "bodies": [
+    "moon",
+    "m44"
+   ],
+   "time_utc": "2027-08-29T17:02:03",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-08-29T17:02:03",
+    "konjungsi_asensio_rekta_utc": "2027-08-29T17:34:52"
+   },
+   "separation_deg": 0.931
+  },
+  {
+   "id": "konjungsi-conjunction-202708311647-moon-jupiter",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Jupiter",
+   "bodies": [
+    "moon",
+    "jupiter"
+   ],
+   "time_utc": "2027-08-31T16:47:52",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-08-31T16:47:52",
+    "konjungsi_asensio_rekta_utc": "2027-08-31T19:25:18"
+   },
+   "separation_deg": 3.225
+  },
+  {
+   "id": "fase_bulan-new_moon-202708311741-moon",
+   "category": "fase_bulan",
+   "kind": "new_moon",
+   "title": "Bulan Baru",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-08-31T17:41:52",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202709010233-moon-venus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Venus",
+   "bodies": [
+    "moon",
+    "venus"
+   ],
+   "time_utc": "2027-09-01T02:33:54",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-09-01T02:33:54",
+    "konjungsi_asensio_rekta_utc": "2027-09-01T06:23:46"
+   },
+   "separation_deg": 4.208
+  },
+  {
+   "id": "konjungsi-conjunction-202709020102-moon-mercury",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Merkurius",
+   "bodies": [
+    "moon",
+    "mercury"
+   ],
+   "time_utc": "2027-09-02T01:02:31",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-09-02T01:02:31",
+    "konjungsi_asensio_rekta_utc": "2027-09-02T04:45:18"
+   },
+   "separation_deg": 3.992
+  },
+  {
+   "id": "konjungsi-conjunction-202709041018-moon-mars",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Mars",
+   "bodies": [
+    "moon",
+    "mars"
+   ],
+   "time_utc": "2027-09-04T10:18:17",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-09-04T10:18:17",
+    "konjungsi_asensio_rekta_utc": "2027-09-04T13:44:54"
+   },
+   "separation_deg": 4.823
+  },
+  {
+   "id": "okultasi-occultation-202709070917-moon-antares",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Antares oleh Bulan",
+   "bodies": [
+    "moon",
+    "antares"
+   ],
+   "time_utc": "2027-09-07T09:17:40",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-09-07T09:17:40"
+   },
+   "start_utc": "2027-09-07T07:01:18",
+   "end_utc": "2027-09-07T11:34:03",
+   "separation_deg": 0.029
+  },
+  {
+   "id": "fase_bulan-first_quarter-202709071830-moon",
+   "category": "fase_bulan",
+   "kind": "first_quarter",
+   "title": "Bulan Kuartal Awal",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-09-07T18:30:55",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202709100140-moon-sigma_sagittarii",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Sigma Sagittarii oleh Bulan",
+   "bodies": [
+    "moon",
+    "sigma_sagittarii"
+   ],
+   "time_utc": "2027-09-10T01:40:58",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-09-10T01:40:58"
+   },
+   "start_utc": "2027-09-10T00:26:47",
+   "end_utc": "2027-09-10T02:55:03",
+   "separation_deg": 0.976
+  },
+  {
+   "id": "fase_bulan-full_moon-202709152303-moon",
+   "category": "fase_bulan",
+   "kind": "full_moon",
+   "title": "Bulan Purnama",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-09-15T23:03:52",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202709162306-moon-neptune",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Neptunus",
+   "bodies": [
+    "moon",
+    "neptune"
+   ],
+   "time_utc": "2027-09-16T23:06:02",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-09-16T23:06:02",
+    "konjungsi_asensio_rekta_utc": "2027-09-17T04:27:30"
+   },
+   "separation_deg": 5.651
+  },
+  {
+   "id": "konjungsi-conjunction-202709181529-moon-saturn",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Saturnus",
+   "bodies": [
+    "moon",
+    "saturn"
+   ],
+   "time_utc": "2027-09-18T15:29:36",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-09-18T15:29:36"
+   },
+   "separation_deg": 7.713
+  },
+  {
+   "id": "konjungsi-conjunction-202709210538-moon-m45",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M45 (Pleiades)",
+   "bodies": [
+    "moon",
+    "m45"
+   ],
+   "time_utc": "2027-09-21T05:38:11",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-09-21T05:38:11",
+    "konjungsi_asensio_rekta_utc": "2027-09-21T05:53:14"
+   },
+   "separation_deg": 0.732
+  },
+  {
+   "id": "konjungsi-conjunction-202709212312-moon-uranus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Uranus",
+   "bodies": [
+    "moon",
+    "uranus"
+   ],
+   "time_utc": "2027-09-21T23:12:44",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-09-21T23:12:44",
+    "konjungsi_asensio_rekta_utc": "2027-09-22T00:03:06"
+   },
+   "separation_deg": 4.556
+  },
+  {
+   "id": "fase_bulan-last_quarter-202709231021-moon",
+   "category": "fase_bulan",
+   "kind": "last_quarter",
+   "title": "Bulan Kuartal Akhir",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-09-23T10:21:27",
+   "details": {}
+  },
+  {
+   "id": "elongasi-greatest_elongation_east-202709241607-mercury",
+   "category": "elongasi",
+   "kind": "greatest_elongation_east",
+   "title": "Merkurius elongasi maksimum timur",
+   "bodies": [
+    "mercury"
+   ],
+   "time_utc": "2027-09-24T16:07:24",
+   "details": {
+    "elongasi_deg": 26.13,
+    "sisi": "timur"
+   }
+  },
+  {
+   "id": "konjungsi-conjunction-202709260144-moon-m44",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M44 (Praesepe)",
+   "bodies": [
+    "moon",
+    "m44"
+   ],
+   "time_utc": "2027-09-26T01:44:12",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-09-26T01:44:12",
+    "konjungsi_asensio_rekta_utc": "2027-09-26T02:22:20"
+   },
+   "separation_deg": 1.052
+  },
+  {
+   "id": "konjungsi-conjunction-202709281230-moon-jupiter",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Jupiter",
+   "bodies": [
+    "moon",
+    "jupiter"
+   ],
+   "time_utc": "2027-09-28T12:30:53",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-09-28T12:30:53",
+    "konjungsi_asensio_rekta_utc": "2027-09-28T15:40:42"
+   },
+   "separation_deg": 3.77
+  },
+  {
+   "id": "oposisi-opposition-202709281351-neptune",
+   "category": "oposisi",
+   "kind": "opposition",
+   "title": "Neptunus oposisi",
+   "bodies": [
+    "neptune"
+   ],
+   "time_utc": "2027-09-28T13:51:01",
+   "details": {}
+  },
+  {
+   "id": "fase_planet-dichotomy-202709291412-mercury",
+   "category": "fase_planet",
+   "kind": "dichotomy",
+   "title": "Merkurius dikotomi (fase 50%)",
+   "bodies": [
+    "mercury"
+   ],
+   "time_utc": "2027-09-29T14:12:02",
+   "details": {}
+  },
+  {
+   "id": "fase_bulan-new_moon-202709300237-moon",
+   "category": "fase_bulan",
+   "kind": "new_moon",
+   "title": "Bulan Baru",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-09-30T02:37:00",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202710010234-moon-venus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Venus",
+   "bodies": [
+    "moon",
+    "venus"
+   ],
+   "time_utc": "2027-10-01T02:34:28",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-10-01T02:34:28",
+    "konjungsi_asensio_rekta_utc": "2027-10-01T07:10:24"
+   },
+   "separation_deg": 5.684
+  },
+  {
+   "id": "konjungsi-conjunction-202710012321-moon-mercury",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Merkurius",
+   "bodies": [
+    "moon",
+    "mercury"
+   ],
+   "time_utc": "2027-10-01T23:21:54",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-10-01T23:21:54",
+    "konjungsi_asensio_rekta_utc": "2027-10-02T00:27:52"
+   },
+   "separation_deg": 1.626
+  },
+  {
+   "id": "konjungsi-conjunction-202710030653-moon-mars",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Mars",
+   "bodies": [
+    "moon",
+    "mars"
+   ],
+   "time_utc": "2027-10-03T06:53:39",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-10-03T06:53:39",
+    "konjungsi_asensio_rekta_utc": "2027-10-03T08:58:32"
+   },
+   "separation_deg": 4.343
+  },
+  {
+   "id": "okultasi-occultation-202710041746-moon-antares",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Antares oleh Bulan",
+   "bodies": [
+    "moon",
+    "antares"
+   ],
+   "time_utc": "2027-10-04T17:46:57",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-10-04T17:46:57"
+   },
+   "start_utc": "2027-10-04T15:34:38",
+   "end_utc": "2027-10-04T19:59:17",
+   "separation_deg": 0.226
+  },
+  {
+   "id": "konjungsi-conjunction-202710070909-moon-sigma_sagittarii",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Sigma Sagittarii",
+   "bodies": [
+    "moon",
+    "sigma_sagittarii"
+   ],
+   "time_utc": "2027-10-07T09:09:27",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-10-07T09:09:27"
+   },
+   "separation_deg": 1.196
+  },
+  {
+   "id": "fase_bulan-first_quarter-202710071147-moon",
+   "category": "fase_bulan",
+   "kind": "first_quarter",
+   "title": "Bulan Kuartal Awal",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-10-07T11:47:43",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202710111412-mercury-venus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Merkurius–Venus",
+   "bodies": [
+    "mercury",
+    "venus"
+   ],
+   "time_utc": "2027-10-11T14:12:35",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-10-11T14:12:35",
+    "konjungsi_asensio_rekta_utc": "2027-10-10T13:08:48"
+   },
+   "separation_deg": 3.784
+  },
+  {
+   "id": "konjungsi-conjunction-202710140450-moon-neptune",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Neptunus",
+   "bodies": [
+    "moon",
+    "neptune"
+   ],
+   "time_utc": "2027-10-14T04:50:14",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-10-14T04:50:14",
+    "konjungsi_asensio_rekta_utc": "2027-10-14T10:05:22"
+   },
+   "separation_deg": 5.618
+  },
+  {
+   "id": "fase_bulan-full_moon-202710151347-moon",
+   "category": "fase_bulan",
+   "kind": "full_moon",
+   "title": "Bulan Purnama",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-10-15T13:47:02",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202710151827-moon-saturn",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Saturnus",
+   "bodies": [
+    "moon",
+    "saturn"
+   ],
+   "time_utc": "2027-10-15T18:27:36",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-10-15T18:27:36"
+   },
+   "separation_deg": 7.642
+  },
+  {
+   "id": "oposisi-opposition-202710180207-saturn",
+   "category": "oposisi",
+   "kind": "opposition",
+   "title": "Saturnus oposisi",
+   "bodies": [
+    "saturn"
+   ],
+   "time_utc": "2027-10-18T02:07:15",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202710181117-moon-m45",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M45 (Pleiades)",
+   "bodies": [
+    "moon",
+    "m45"
+   ],
+   "time_utc": "2027-10-18T11:17:35",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-10-18T11:17:35",
+    "konjungsi_asensio_rekta_utc": "2027-10-18T11:28:37"
+   },
+   "separation_deg": 0.552
+  },
+  {
+   "id": "konjungsi-conjunction-202710190353-moon-uranus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Uranus",
+   "bodies": [
+    "moon",
+    "uranus"
+   ],
+   "time_utc": "2027-10-19T03:53:14",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-10-19T03:53:14",
+    "konjungsi_asensio_rekta_utc": "2027-10-19T04:41:53"
+   },
+   "separation_deg": 4.371
+  },
+  {
+   "id": "hujan_meteor-ori-202710220034",
+   "category": "hujan_meteor",
+   "kind": "ori",
+   "title": "Hujan Meteor Orionid",
+   "bodies": [],
+   "time_utc": "2027-10-22T00:34:22",
+   "details": {
+    "nama": "Orionid",
+    "zhr": 20,
+    "radian_ra": 95.0,
+    "radian_dec": 16.0,
+    "kecepatan_kms": 66,
+    "catatan": "Waktu puncak perkiraan (ketidakpastian beberapa jam hingga ~1 hari)."
+   }
+  },
+  {
+   "id": "fase_bulan-last_quarter-202710221730-moon",
+   "category": "fase_bulan",
+   "kind": "last_quarter",
+   "title": "Bulan Kuartal Akhir",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-10-22T17:30:22",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202710230803-moon-m44",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M44 (Praesepe)",
+   "bodies": [
+    "moon",
+    "m44"
+   ],
+   "time_utc": "2027-10-23T08:03:17",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-10-23T08:03:17",
+    "konjungsi_asensio_rekta_utc": "2027-10-23T08:50:41"
+   },
+   "separation_deg": 1.28
+  },
+  {
+   "id": "konjungsi-conjunction-202710260551-moon-jupiter",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Jupiter",
+   "bodies": [
+    "moon",
+    "jupiter"
+   ],
+   "time_utc": "2027-10-26T05:51:05",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-10-26T05:51:05",
+    "konjungsi_asensio_rekta_utc": "2027-10-26T09:36:25"
+   },
+   "separation_deg": 4.355
+  },
+  {
+   "id": "konjungsi-conjunction-202710280838-moon-mercury",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Merkurius",
+   "bodies": [
+    "moon",
+    "mercury"
+   ],
+   "time_utc": "2027-10-28T08:38:01",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-10-28T08:38:01",
+    "konjungsi_asensio_rekta_utc": "2027-10-28T13:23:29"
+   },
+   "separation_deg": 6.098
+  },
+  {
+   "id": "fase_bulan-new_moon-202710291337-moon",
+   "category": "fase_bulan",
+   "kind": "new_moon",
+   "title": "Bulan Baru",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-10-29T13:37:29",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202710310622-moon-venus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Venus",
+   "bodies": [
+    "moon",
+    "venus"
+   ],
+   "time_utc": "2027-10-31T06:22:28",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-10-31T06:22:28",
+    "konjungsi_asensio_rekta_utc": "2027-10-31T07:57:55"
+   },
+   "separation_deg": 4.326
+  },
+  {
+   "id": "okultasi-occultation-202711010301-moon-antares",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Antares oleh Bulan",
+   "bodies": [
+    "moon",
+    "antares"
+   ],
+   "time_utc": "2027-11-01T03:01:27",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-11-01T03:01:27"
+   },
+   "start_utc": "2027-11-01T00:55:41",
+   "end_utc": "2027-11-01T05:07:11",
+   "separation_deg": 0.403
+  },
+  {
+   "id": "konjungsi-conjunction-202711010624-moon-mars",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Mars",
+   "bodies": [
+    "moon",
+    "mars"
+   ],
+   "time_utc": "2027-11-01T06:24:22",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-11-01T06:24:22",
+    "konjungsi_asensio_rekta_utc": "2027-11-01T06:55:28"
+   },
+   "separation_deg": 3.228
+  },
+  {
+   "id": "fase_planet-dichotomy-202711021459-mercury",
+   "category": "fase_planet",
+   "kind": "dichotomy",
+   "title": "Merkurius dikotomi (fase 50%)",
+   "bodies": [
+    "mercury"
+   ],
+   "time_utc": "2027-11-02T14:59:15",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202711031729-moon-sigma_sagittarii",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Sigma Sagittarii",
+   "bodies": [
+    "moon",
+    "sigma_sagittarii"
+   ],
+   "time_utc": "2027-11-03T17:29:03",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-11-03T17:29:03"
+   },
+   "separation_deg": 1.451
+  },
+  {
+   "id": "elongasi-greatest_elongation_west-202711040757-mercury",
+   "category": "elongasi",
+   "kind": "greatest_elongation_west",
+   "title": "Merkurius elongasi maksimum barat",
+   "bodies": [
+    "mercury"
+   ],
+   "time_utc": "2027-11-04T07:57:35",
+   "details": {
+    "elongasi_deg": 18.64,
+    "sisi": "barat"
+   }
+  },
+  {
+   "id": "fase_bulan-first_quarter-202711060801-moon",
+   "category": "fase_bulan",
+   "kind": "first_quarter",
+   "title": "Bulan Kuartal Awal",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-11-06T08:01:09",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202711101210-moon-neptune",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Neptunus",
+   "bodies": [
+    "moon",
+    "neptune"
+   ],
+   "time_utc": "2027-11-10T12:10:41",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-11-10T12:10:41",
+    "konjungsi_asensio_rekta_utc": "2027-11-10T17:30:30"
+   },
+   "separation_deg": 5.716
+  },
+  {
+   "id": "konjungsi-conjunction-202711112307-moon-saturn",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Saturnus",
+   "bodies": [
+    "moon",
+    "saturn"
+   ],
+   "time_utc": "2027-11-11T23:07:44",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-11-11T23:07:44"
+   },
+   "separation_deg": 7.628
+  },
+  {
+   "id": "fase_bulan-full_moon-202711140326-moon",
+   "category": "fase_bulan",
+   "kind": "full_moon",
+   "title": "Bulan Purnama",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-11-14T03:26:45",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202711141845-moon-m45",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M45 (Pleiades)",
+   "bodies": [
+    "moon",
+    "m45"
+   ],
+   "time_utc": "2027-11-14T18:45:31",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-11-14T18:45:31",
+    "konjungsi_asensio_rekta_utc": "2027-11-14T18:54:25"
+   },
+   "separation_deg": 0.465
+  },
+  {
+   "id": "konjungsi-conjunction-202711150922-moon-uranus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Uranus",
+   "bodies": [
+    "moon",
+    "uranus"
+   ],
+   "time_utc": "2027-11-15T09:22:23",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-11-15T09:22:23",
+    "konjungsi_asensio_rekta_utc": "2027-11-15T10:10:52"
+   },
+   "separation_deg": 4.292
+  },
+  {
+   "id": "hujan_meteor-leo-202711180556",
+   "category": "hujan_meteor",
+   "kind": "leo",
+   "title": "Hujan Meteor Leonid",
+   "bodies": [],
+   "time_utc": "2027-11-18T05:56:48",
+   "details": {
+    "nama": "Leonid",
+    "zhr": 15,
+    "radian_ra": 152.0,
+    "radian_dec": 22.0,
+    "kecepatan_kms": 71,
+    "catatan": "Waktu puncak perkiraan (ketidakpastian beberapa jam hingga ~1 hari)."
+   }
+  },
+  {
+   "id": "konjungsi-conjunction-202711191320-moon-m44",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M44 (Praesepe)",
+   "bodies": [
+    "moon",
+    "m44"
+   ],
+   "time_utc": "2027-11-19T13:20:54",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-11-19T13:20:54",
+    "konjungsi_asensio_rekta_utc": "2027-11-19T14:17:16"
+   },
+   "separation_deg": 1.523
+  },
+  {
+   "id": "fase_bulan-last_quarter-202711210049-moon",
+   "category": "fase_bulan",
+   "kind": "last_quarter",
+   "title": "Bulan Kuartal Akhir",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-11-21T00:49:10",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202711221940-moon-jupiter",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Jupiter",
+   "bodies": [
+    "moon",
+    "jupiter"
+   ],
+   "time_utc": "2027-11-22T19:40:18",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-11-22T19:40:18",
+    "konjungsi_asensio_rekta_utc": "2027-11-22T23:59:06"
+   },
+   "separation_deg": 4.933
+  },
+  {
+   "id": "konjungsi-conjunction-202711250102-mars-venus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Mars–Venus",
+   "bodies": [
+    "mars",
+    "venus"
+   ],
+   "time_utc": "2027-11-25T01:02:51",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-11-25T01:02:51",
+    "konjungsi_asensio_rekta_utc": "2027-11-25T02:02:04"
+   },
+   "separation_deg": 0.31
+  },
+  {
+   "id": "konjungsi-conjunction-202711271153-moon-mercury",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Merkurius",
+   "bodies": [
+    "moon",
+    "mercury"
+   ],
+   "time_utc": "2027-11-27T11:53:29",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-11-27T11:53:29",
+    "konjungsi_asensio_rekta_utc": "2027-11-27T13:49:12"
+   },
+   "separation_deg": 5.059
+  },
+  {
+   "id": "fase_bulan-new_moon-202711280325-moon",
+   "category": "fase_bulan",
+   "kind": "new_moon",
+   "title": "Bulan Baru",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-11-28T03:25:23",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202711281142-moon-antares",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Antares oleh Bulan",
+   "bodies": [
+    "moon",
+    "antares"
+   ],
+   "time_utc": "2027-11-28T11:42:47",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-11-28T11:42:47"
+   },
+   "start_utc": "2027-11-28T09:40:04",
+   "end_utc": "2027-11-28T13:45:28",
+   "separation_deg": 0.47
+  },
+  {
+   "id": "konjungsi-conjunction-202711300816-moon-mars",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Mars",
+   "bodies": [
+    "moon",
+    "mars"
+   ],
+   "time_utc": "2027-11-30T08:16:52",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-11-30T08:16:52",
+    "konjungsi_asensio_rekta_utc": "2027-11-30T07:56:02"
+   },
+   "separation_deg": 1.542
+  },
+  {
+   "id": "oposisi-opposition-202711300903-uranus",
+   "category": "oposisi",
+   "kind": "opposition",
+   "title": "Uranus oposisi",
+   "bodies": [
+    "uranus"
+   ],
+   "time_utc": "2027-11-30T09:03:43",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202711301337-moon-venus",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Venus oleh Bulan",
+   "bodies": [
+    "moon",
+    "venus"
+   ],
+   "time_utc": "2027-11-30T13:37:48",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-11-30T13:37:48",
+    "konjungsi_asensio_rekta_utc": "2027-11-30T13:22:13"
+   },
+   "start_utc": "2027-11-30T11:55:19",
+   "end_utc": "2027-11-30T15:20:09",
+   "separation_deg": 0.863
+  },
+  {
+   "id": "fase_bulan-first_quarter-202712060523-moon",
+   "category": "fase_bulan",
+   "kind": "first_quarter",
+   "title": "Bulan Kuartal Awal",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-12-06T05:23:13",
+   "details": {}
+  },
+  {
+   "id": "konjungsi-conjunction-202712072033-moon-neptune",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Neptunus",
+   "bodies": [
+    "moon",
+    "neptune"
+   ],
+   "time_utc": "2027-12-07T20:33:20",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-12-07T20:33:20",
+    "konjungsi_asensio_rekta_utc": "2027-12-08T02:07:31"
+   },
+   "separation_deg": 5.897
+  },
+  {
+   "id": "konjungsi-conjunction-202712090609-moon-saturn",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Saturnus",
+   "bodies": [
+    "moon",
+    "saturn"
+   ],
+   "time_utc": "2027-12-09T06:09:49",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-12-09T06:09:49"
+   },
+   "separation_deg": 7.669
+  },
+  {
+   "id": "fase_planet-greatest_brightness-202712111502-mercury",
+   "category": "fase_planet",
+   "kind": "greatest_brightness",
+   "title": "Merkurius paling terang",
+   "bodies": [
+    "mercury"
+   ],
+   "time_utc": "2027-12-11T15:02:27",
+   "details": {
+    "magnitudo": -1.18
+   }
+  },
+  {
+   "id": "konjungsi-conjunction-202712120426-moon-m45",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M45 (Pleiades)",
+   "bodies": [
+    "moon",
+    "m45"
+   ],
+   "time_utc": "2027-12-12T04:26:36",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-12-12T04:26:36",
+    "konjungsi_asensio_rekta_utc": "2027-12-12T04:35:44"
+   },
+   "separation_deg": 0.493
+  },
+  {
+   "id": "konjungsi-conjunction-202712121658-moon-uranus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Uranus",
+   "bodies": [
+    "moon",
+    "uranus"
+   ],
+   "time_utc": "2027-12-12T16:58:20",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-12-12T16:58:20",
+    "konjungsi_asensio_rekta_utc": "2027-12-12T17:49:11"
+   },
+   "separation_deg": 4.341
+  },
+  {
+   "id": "fase_bulan-full_moon-202712131610-moon",
+   "category": "fase_bulan",
+   "kind": "full_moon",
+   "title": "Bulan Purnama",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-12-13T16:10:38",
+   "details": {}
+  },
+  {
+   "id": "hujan_meteor-gem-202712141952",
+   "category": "hujan_meteor",
+   "kind": "gem",
+   "title": "Hujan Meteor Geminid",
+   "bodies": [],
+   "time_utc": "2027-12-14T19:52:25",
+   "details": {
+    "nama": "Geminid",
+    "zhr": 150,
+    "radian_ra": 112.0,
+    "radian_dec": 33.0,
+    "kecepatan_kms": 35,
+    "catatan": "Waktu puncak perkiraan (ketidakpastian beberapa jam hingga ~1 hari)."
+   }
+  },
+  {
+   "id": "konjungsi-conjunction-202712162009-moon-m44",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–M44 (Praesepe)",
+   "bodies": [
+    "moon",
+    "m44"
+   ],
+   "time_utc": "2027-12-16T20:09:35",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-12-16T20:09:35",
+    "konjungsi_asensio_rekta_utc": "2027-12-16T21:10:20"
+   },
+   "separation_deg": 1.685
+  },
+  {
+   "id": "konjungsi-conjunction-202712200603-moon-jupiter",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Jupiter",
+   "bodies": [
+    "moon",
+    "jupiter"
+   ],
+   "time_utc": "2027-12-20T06:03:06",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-12-20T06:03:06",
+    "konjungsi_asensio_rekta_utc": "2027-12-20T10:43:34"
+   },
+   "separation_deg": 5.404
+  },
+  {
+   "id": "fase_bulan-last_quarter-202712200911-moon",
+   "category": "fase_bulan",
+   "kind": "last_quarter",
+   "title": "Bulan Kuartal Akhir",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-12-20T09:11:46",
+   "details": {}
+  },
+  {
+   "id": "hujan_meteor-urs-202712230418",
+   "category": "hujan_meteor",
+   "kind": "urs",
+   "title": "Hujan Meteor Ursid",
+   "bodies": [],
+   "time_utc": "2027-12-23T04:18:16",
+   "details": {
+    "nama": "Ursid",
+    "zhr": 10,
+    "radian_ra": 217.0,
+    "radian_dec": 76.0,
+    "kecepatan_kms": 33,
+    "catatan": "Waktu puncak perkiraan (ketidakpastian beberapa jam hingga ~1 hari)."
+   }
+  },
+  {
+   "id": "okultasi-occultation-202712251850-moon-antares",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Antares oleh Bulan",
+   "bodies": [
+    "moon",
+    "antares"
+   ],
+   "time_utc": "2027-12-25T18:50:23",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-12-25T18:50:23"
+   },
+   "start_utc": "2027-12-25T16:44:57",
+   "end_utc": "2027-12-25T20:55:47",
+   "separation_deg": 0.429
+  },
+  {
+   "id": "fase_bulan-new_moon-202712272013-moon",
+   "category": "fase_bulan",
+   "kind": "new_moon",
+   "title": "Bulan Baru",
+   "bodies": [
+    "moon"
+   ],
+   "time_utc": "2027-12-27T20:13:35",
+   "details": {}
+  },
+  {
+   "id": "okultasi-occultation-202712281636-moon-mercury",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Merkurius oleh Bulan",
+   "bodies": [
+    "moon",
+    "mercury"
+   ],
+   "time_utc": "2027-12-28T16:36:39",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-12-28T16:36:39",
+    "konjungsi_asensio_rekta_utc": "2027-12-28T16:58:14"
+   },
+   "start_utc": "2027-12-28T14:29:31",
+   "end_utc": "2027-12-28T18:43:44",
+   "separation_deg": 0.689
+  },
+  {
+   "id": "okultasi-occultation-202712291153-moon-mars",
+   "category": "okultasi",
+   "kind": "occultation",
+   "title": "Okultasi Mars oleh Bulan",
+   "bodies": [
+    "moon",
+    "mars"
+   ],
+   "time_utc": "2027-12-29T11:53:41",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-12-29T11:53:41",
+    "konjungsi_asensio_rekta_utc": "2027-12-29T12:12:58"
+   },
+   "start_utc": "2027-12-29T09:41:30",
+   "end_utc": "2027-12-29T14:05:52",
+   "separation_deg": 0.512
+  },
+  {
+   "id": "konjungsi-conjunction-202712302313-moon-venus",
+   "category": "konjungsi",
+   "kind": "conjunction",
+   "title": "Konjungsi Bulan–Venus",
+   "bodies": [
+    "moon",
+    "venus"
+   ],
+   "time_utc": "2027-12-30T23:13:46",
+   "details": {
+    "pendekatan_terdekat_utc": "2027-12-30T23:13:46",
+    "konjungsi_asensio_rekta_utc": "2027-12-31T01:56:10"
+   },
+   "separation_deg": 2.886
+  }
+ ]
+}

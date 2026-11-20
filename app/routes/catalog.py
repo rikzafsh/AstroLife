@@ -30,7 +30,8 @@ def _load():
 
 @lru_cache(maxsize=2)
 def _read(path: str, mtime: float):
-    return json.loads(open(path, encoding='utf-8').read())
+    with open(path, encoding='utf-8') as f:
+        return json.load(f)
 
 
 @lru_cache(maxsize=20000)
@@ -89,10 +90,11 @@ def api_events():
         vis, rar = _evaluate(json.dumps(ev, sort_keys=True), round(lat, 3), round(lon, 3), SKY_LIMITS[sky], tz)
         items.append({**ev, 'time_local': local_t, 'kategori_label': CATEGORY_LABEL.get(ev['category'], ev['category']),
                       'visibility': vis, 'rarity': rar})
+    obs = [i for i in items if i['visibility']['observable']]
     summary = {
         'total': len(items),
-        'teramati': sum(1 for i in items if i['visibility']['state'] in ('visible', 'twilight')),
-        'mata_telanjang': sum(1 for i in items if i['visibility']['instrument'] == 'naked_eye' and i['visibility']['state'] in ('visible', 'twilight')),
+        'teramati': len(obs),
+        'mata_telanjang': sum(1 for i in obs if i['visibility']['instrument'] == 'naked_eye'),
         'langka_ke_atas': sum(1 for i in items if R.TIERS.index(i['rarity']['tier']) >= 2),
     }
     return jsonify({'status': 'success', 'meta': doc['meta'], 'lokasi': {'lat': lat, 'lon': lon, 'tz': tz, 'langit': sky,

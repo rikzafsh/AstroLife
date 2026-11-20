@@ -145,6 +145,44 @@ class Visibility(unittest.TestCase):
         self.assertEqual(V.evaluate(d, *JKT)['instrument'], 'small_telescope')
 
 
+class Observable(unittest.TestCase):
+    """Satu bendera `observable` yang jujur + ringkasan `headline` untuk antarmuka."""
+
+    def test_local_occultation_is_observable_remote_ones_are_not(self):
+        occ = [e for e in EV if e['category'] == 'okultasi' and e['time_utc'].startswith('2026-11')]
+        res = {e['title'] + e['time_utc'][:10]: V.evaluate(e, *JKT) for e in occ}
+        obs = [k for k, v in res.items() if v['observable']]
+        self.assertEqual(obs, ['Okultasi Jupiter oleh Bulan2026-11-02'])
+        self.assertTrue(res[obs[0]]['headline'].startswith('Terjadi di lokasi Anda'))
+        for k, v in res.items():
+            if k not in obs:
+                self.assertIn('wilayah lain', v['headline'], k)       # tidak diberi label "terlihat jelas" yang menyesatkan
+
+    def test_new_moon_and_invisible_solar_eclipse_not_observable(self):
+        self.assertFalse(V.evaluate(find('Bulan Baru', '11')[0], *JKT)['observable'])
+        for e in find('Gerhana Matahari'):
+            v = V.evaluate(e, *JKT)
+            self.assertFalse(v['observable'])
+            self.assertIn('tidak terlihat', v['headline'])
+
+    def test_full_moon_observable_with_headline(self):
+        v = V.evaluate(find('Bulan Purnama', '11')[0], *JKT)
+        self.assertTrue(v['observable'])
+        self.assertTrue(v['headline'].startswith('Terbaik '))
+        self.assertIn('Mata Telanjang', v['headline'])
+
+    def test_slow_events_use_wide_window_and_show_best_day(self):
+        d = find('dikotomi', '11')[0]
+        t0, t1 = V._window(d)
+        self.assertAlmostEqual((t1 - t0) * 24, 72, delta=0.5)                        # +-36 jam
+        v = V.evaluate(d, *JKT)
+        self.assertTrue(v['observable'])                                             # fajar terdekat tercakup
+        self.assertIn('/', v['headline'])                                            # tanggal ditampilkan karena beda hari
+        m = find('Konjungsi Bulan–Saturnus', '11')[0]
+        t0, t1 = V._window(m)
+        self.assertAlmostEqual((t1 - t0) * 24, 20, delta=0.5)                        # +-10 jam untuk event cepat
+
+
 class Rarity(unittest.TestCase):
     def tier(self, title, month=None, loc=JKT):
         e = find(title, month)[0]
@@ -189,6 +227,9 @@ class CatalogApi(unittest.TestCase):
         self.assertEqual(j['status'], 'success')
         self.assertTrue(all(e['time_local'].startswith('2026-11') for e in j['events']))
         self.assertEqual(j['summary']['total'], len(j['events']))
+        self.assertEqual(j['summary']['teramati'], sum(1 for e in j['events'] if e['visibility']['observable']))
+        self.assertEqual(j['summary']['mata_telanjang'], sum(1 for e in j['events'] if e['visibility']['observable'] and e['visibility']['instrument'] == 'naked_eye'))
+        self.assertTrue(all('headline' in e['visibility'] for e in j['events']))
         self.assertEqual(j['lokasi']['tz'], 7.0)
         self.assertEqual(j['body_names']['jupiter'], 'Jupiter')
 

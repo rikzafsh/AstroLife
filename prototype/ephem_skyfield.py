@@ -12,6 +12,8 @@ Waktu masukan: JD dalam UT (UT1 ~ UT untuk keperluan ini); Skyfield mengurus Del
 """
 import math
 from functools import lru_cache
+
+import numpy as np
 from pathlib import Path
 
 from skyfield.api import Loader, Star, wgs84
@@ -23,7 +25,7 @@ except Exception:                       # pragma: no cover
 
 # Fungsi MURNI (bukan mesin posisi) dipakai bersama dengan ephem_lite
 from prototype import magnitudes as MG
-from prototype.ephem_lite import FIXED, PLANETS, wrap180, separation, EARTH_RADIUS_KM  # noqa: F401
+from prototype.ephem_lite import FIXED, PLANETS, wrap180, separation, separation_many, EARTH_RADIUS_KM  # noqa: F401
 from prototype.ephem_lite import SUN_SD_1AU_DEG, SUN_PARALLAX_1AU_DEG  # noqa: F401
 
 NAME = 'skyfield + JPL DE440s'
@@ -137,3 +139,32 @@ def apparent_mag(body: str, jd_ut: float):
         ra, dec = eq(body, jd_ut)
         return MG.planet_mag(body, r, delta, i, ra, dec)
     return None
+
+
+# ---------------------------------------------------------------------------
+# API BATCH: satu panggilan Skyfield untuk SELURUH larik waktu (puluhan-ratusan kali lebih cepat daripada loop skalar)
+# ---------------------------------------------------------------------------
+HAS_BATCH = True
+
+
+def _geo_many(body: str, jds):
+    t = _ts.ut1_jd(np.asarray(jds, dtype=float))
+    app = _earth.at(t).observe(_BODY[body]).apparent()
+    ra, dec, dist = app.radec(epoch='date')
+    lat, lon, _ = app.ecliptic_latlon(epoch='date')
+    return (np.asarray(ra.hours) * 15.0) % 360.0, np.asarray(dec.degrees), np.asarray(lon.degrees) % 360.0, np.asarray(lat.degrees), np.asarray(dist.km)
+
+
+def eq_many(body: str, jds):
+    g = _geo_many(body, jds)
+    return g[0], g[1]
+
+
+def ecl_many(body: str, jds):
+    g = _geo_many(body, jds)
+    return g[2], g[3]
+
+
+def moon_radii_many(jds):
+    dist = _geo_many('moon', jds)[4]
+    return (np.degrees(np.arcsin(0.2725076 * EARTH_RADIUS_KM / dist)), np.degrees(np.arcsin(EARTH_RADIUS_KM / dist)))

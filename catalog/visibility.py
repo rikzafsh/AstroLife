@@ -68,11 +68,17 @@ def moon_illumination(jd: float) -> float:
 
 
 # ---------------------------------------------------------------------------
+SLOW_CATEGORIES = {'elongasi', 'oposisi', 'fase_planet', 'hujan_meteor'}
+
+
 def _window(ev: dict):
+    """Jendela penilaian. Event cepat (Bulan, okultasi, gerhana): +-10 jam. Event lambat (planet, hujan meteor,
+    konjungsi planet-planet) berlangsung berhari-hari, jadi dinilai pada malam terbaik dalam +-36 jam."""
     c = F_jd(ev['time_utc'])
     if ev.get('start_utc') and ev.get('end_utc'):
         return F_jd(ev['start_utc']), F_jd(ev['end_utc'])
-    half = 14 / 24 if ev['category'] == 'hujan_meteor' else 10 / 24
+    slow = ev['category'] in SLOW_CATEGORIES or (ev['category'] == 'konjungsi' and 'moon' not in ev['bodies'])
+    half = 36 / 24 if slow else 10 / 24
     return c - half, c + half
 
 
@@ -121,7 +127,8 @@ def evaluate(ev: dict, lat: float, lon: float, naked_limit: float = DEFAULT_NAKE
     # --- kasus khusus: Bulan baru tidak terlihat -------------------------------------------------------------
     if kind == 'new_moon':
         out.update(state='not_observable', state_label=STATE_LABEL['not_observable'], instrument=None,
-                   instrument_label=INSTRUMENT_LABEL[None], best_time=None, min_altitude=None,
+                   instrument_label=INSTRUMENT_LABEL[None], best_time=None, min_altitude=None, observable=False,
+                   headline='Bulan tidak terlihat (sisi gelap menghadap Bumi)',
                    reason='Sisi Bulan yang terang menghadap menjauhi Bumi; Bulan tidak terlihat.')
         return out
 
@@ -217,7 +224,33 @@ def evaluate(ev: dict, lat: float, lon: float, naked_limit: float = DEFAULT_NAKE
         out['notes'].append(f"Perkiraan {rate:.0f} meteor/jam di lokasi ini (ZHR {zhr} x sin tinggi radian x koreksi batas magnitudo; r=2,5).")
     if solar:
         out['local_eclipse'] = _local_solar(ev, lat, lon)
+    _finalize(out, ev, tz)
     return out
+
+
+def _finalize(out: dict, ev: dict, tz: float) -> None:
+    """Menetapkan satu bendera `observable` yang jujur dan ringkasan `headline` untuk antarmuka."""
+    state, cat = out['state'], ev['category']
+    ok = state in ('visible', 'twilight') or (state == 'low' and (out.get('min_altitude') or -99) >= MIN_ALT)
+    headline = None
+    if cat == 'gerhana_matahari':
+        le = out['local_eclipse']
+        ok = bool(le['terlihat'])
+        headline = (f"Gerhana {le['jenis_lokal']} terlihat dari lokasi (magnitudo {le['magnitudo_lokal']})" if ok
+                    else 'Gerhana tidak terlihat dari lokasi ini (jalur/wilayah lain)')
+    elif cat == 'okultasi' and not out['local_occultation']['terjadi']:
+        ok = False
+        headline = f"Bulan hanya lewat {out['local_occultation']['jarak_min_deg']:.2f}° dari objek; okultasi terlihat di wilayah lain"
+    elif cat == 'okultasi':
+        lo = out['local_occultation']
+        headline = f"Terjadi di lokasi Anda: hilang {_wib(lo['hilang_utc'], tz)[11:]}, muncul {_wib(lo['muncul_utc'], tz)[11:]}"
+    if headline is None:
+        best = out.get('best_time_local') or ''
+        same_day = best[:10] == _wib(ev['time_utc'], tz)[:10]
+        best_txt = best[11:] if same_day else f"{best[8:10]}/{best[5:7]} {best[11:]}"
+        headline = (f"Terbaik {best_txt} · tinggi {out['min_altitude']:.0f}° · {out['instrument_label']}" if ok
+                    else out['state_label'] + (f" ({out['reason']})" if state in ('below_horizon', 'low') else ''))
+    out['observable'], out['headline'] = bool(ok), headline
 
 
 def _local_occultation(ev: dict, lat: float, lon: float) -> dict:

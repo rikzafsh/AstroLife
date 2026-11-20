@@ -8,6 +8,9 @@ PENGGANTI PRODUKSI: Skyfield + JPL DE440s (detik busur). Antarmuka `eq()`, `ecl(
 untuk semua benda agar mesin ini bisa diganti tanpa mengubah kode pencari event.
 """
 import math
+
+import numpy as np
+
 from app.services import astro_core as ac
 from prototype import magnitudes as MG
 
@@ -233,3 +236,32 @@ def apparent_mag(body: str, jd_ut: float):
         ra, dec = eq(body, jd_ut)
         return MG.planet_mag(body, r, delta, i, ra, dec)
     return None
+
+
+# ---------------------------------------------------------------------------
+# API BATCH (vektor). Pada ephem_lite hanya melingkar skalar; pada Skyfield benar-benar vektor (jauh lebih cepat).
+# ---------------------------------------------------------------------------
+HAS_BATCH = True
+
+
+def eq_many(body: str, jds):
+    out = np.array([eq(body, float(j)) for j in np.asarray(jds, float)]).reshape(-1, 2)
+    return out[:, 0], out[:, 1]
+
+
+def ecl_many(body: str, jds):
+    out = np.array([ecl(body, float(j)) for j in np.asarray(jds, float)]).reshape(-1, 2)
+    return out[:, 0], out[:, 1]
+
+
+def moon_radii_many(jds):
+    """(semidiameter, paralaks horizontal) Bulan dalam derajat untuk larik JD."""
+    jds = np.asarray(jds, float)
+    return (np.array([moon_semidiameter_deg(float(j)) for j in jds]),
+            np.array([moon_horizontal_parallax_deg(float(j)) for j in jds]))
+
+
+def separation_many(a_ra, a_dec, b_ra, b_dec):
+    a1, d1, a2, d2 = (np.radians(np.asarray(x, float)) for x in (a_ra, a_dec, b_ra, b_dec))
+    c = np.sin(d1) * np.sin(d2) + np.cos(d1) * np.cos(d2) * np.cos(a1 - a2)
+    return np.degrees(np.arccos(np.clip(c, -1.0, 1.0)))

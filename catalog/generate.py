@@ -29,7 +29,7 @@ def _month_events(year: int, month: int, cache_dir: Path, force: bool, log) -> l
         return json.loads(cache.read_text(encoding='utf-8'))
     t0 = time.time()
     nxt = (year + (month == 12), 1 if month == 12 else month + 1)
-    raw = F.find_window(F.wib_to_jd(year, month, 1), F.wib_to_jd(nxt[0], nxt[1], 1), include_local=False)
+    raw = F.find_window(F.wib_to_jd(year, month, 1), F.wib_to_jd(nxt[0], nxt[1], 1), include_local=False, with_lon=False)
     for r in raw:                                           # tuple -> list agar bisa disimpan sebagai JSON
         r['bodies'] = list(r['bodies'])
     cache.write_text(json.dumps(raw), encoding='utf-8')
