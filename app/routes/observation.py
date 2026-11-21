@@ -5,6 +5,7 @@ from flask import Blueprint, render_template, request, jsonify
 from app.services.scraper_service import scrape_in_the_sky_events
 from app.services.weather_service import get_weather_at
 from app.services import planner_service as planner
+from app.services.timezones import tz_from_lon, tz_label
 
 observation_bp = Blueprint('observation', __name__)
 
@@ -50,7 +51,11 @@ def _coords(data):
 
 @observation_bp.route('/api/feasibility', methods=['POST'])
 def api_feasibility():
-    """Kelayakan pengamatan di lokasi untuk waktu tertentu (default: malam ini 20:00 WIB / waktu terdekat)."""
+    """
+    Kelayakan pengamatan di lokasi pada waktu tertentu.
+    Waktu: `datetime_local` (YYYY-MM-DDTHH:MM, waktu lokal lokasi) + `tz` (jam, default dari bujur),
+    atau `datetime_wib` (kompatibilitas); bila kosong: sekarang.
+    """
     data = request.get_json(silent=True) or {}
     try:
         lat, lon = _coords(data)
@@ -58,21 +63,32 @@ def api_feasibility():
         return jsonify({'status': 'error', 'message': str(e)}), 400
     difficulty = data.get('difficulty', 'naked_eye')
     event_type = data.get('event_type', 'General')
+    try:
+        tz = float(data['tz']) if data.get('tz') not in (None, '') else tz_from_lon(lon)
+    except (TypeError, ValueError):
+        return jsonify({'status': 'error', 'message': 'tz harus berupa angka (jam).'}), 400
+    if not -12 <= tz <= 14:
+        return jsonify({'status': 'error', 'message': 'tz di luar rentang -12..+14.'}), 400
 
     now = datetime.utcnow()
     when = now + timedelta(minutes=5)
-    if data.get('datetime_wib'):           # contoh: 2026-11-18T20:00
-        try:
+    try:
+        if data.get('datetime_local'):
+            when = datetime.strptime(data['datetime_local'][:16], '%Y-%m-%dT%H:%M') - timedelta(hours=tz)
+        elif data.get('datetime_wib'):
             when = planner.wib_to_utc(data['datetime_wib'])
-        except ValueError:
-            return jsonify({'status': 'error', 'message': 'Format waktu harus YYYY-MM-DDTHH:MM (WIB).'}), 400
+    except ValueError:
+        return jsonify({'status': 'error', 'message': 'Format waktu harus YYYY-MM-DDTHH:MM.'}), 400
 
     weather = get_weather_at(lat, lon, when, now)
     illum = planner.moon_illumination(when)
     malt = planner.moon_altitude_at(when, lat, lon)
-    score = planner.calculate_observation_feasibility(weather, difficulty, event_type, illum, False, malt)
+    score = planner.calculate_observation_feasibility(weather, difficulty, event_type, illum,
+                                                      bool(data.get('involves_moon')), malt)
     return jsonify({'status': 'success', 'weather': weather, 'feasibility': score,
-                    'moon_illumination_pct': round(illum * 100)})
+                    'moon_illumination_pct': round(illum * 100), 'moon_altitude_deg': round(malt),
+                    'when_local': (when + timedelta(hours=tz)).strftime('%Y-%m-%d %H:%M'),
+                    'tz': tz, 'tz_label': tz_label(tz)})
 
 
 @observation_bp.route('/api/event-forecast', methods=['POST'])

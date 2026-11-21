@@ -40,3 +40,13 @@ Sidebar (lokasi, bulan dengan tombol sebelumnya/berikutnya, kualitas langit, "Da
 kelangkaan minimal, kategori), kartu Sorotan, dan daftar dikelompokkan per hari. Klik baris untuk detail. Pengaturan lokasi dan
 filter utama diingat di peramban (localStorage). Bendera `observable` pada API: di atas ufuk dan langit memadai, okultasi benar-benar
 terjadi di lokasi, atau gerhana Matahari benar-benar terlihat dari lokasi.
+
+## Waktu, tema, dan tautan cuaca
+- **Semua waktu di halaman dalam waktu lokal lokasi** (WIB/WITA/WIT dari bujur; di luar Indonesia: bujur/15). UTC hanya ada di JSON katalog.
+  API mengembalikan `times_local` dan `lokasi.tz_label`.
+- **Tema**: Otomatis / Gelap / Terang (disimpan di peramban). Berlaku untuk halaman katalog (variabel CSS pada `.cat`);
+  halaman lain tetap gelap.
+- **Analisis cuaca**: tombol pada tiap event membuka `/observation/?lat=&lon=&dt=&best=&peak=&title=&type=&inst=&moon=` dengan kolom
+  "Waktu analisis" (waktu lokal) terisi: waktu terbaik bila event dapat diamati, selain itu waktu puncak. Dua tombol waktu tersedia di halaman tujuan.
+- **Waktu terbaik**: bila peristiwa itu sendiri dapat diamati dan cukup tinggi (>= 10 derajat), itulah waktu yang dinilai; bila tidak,
+  dicari waktu terdekat yang terbaik. Gerhana Bulan dinilai pada fase umbra; okultasi pada saat terjadi di lokasi.

@@ -3,35 +3,64 @@
 
 {% block content %}
 <style>
-  /* Tata letak halaman katalog (CSS sendiri agar tidak bergantung pada kelas Tailwind dinamis) */
-  .cat { --muted:#94a3b8; --text:#e2e8f0; --line:rgba(148,163,184,.18); --field:#0b1324; --accent:#8b5cf6; color:var(--text); }
+  /* ===== Wadah: sama dengan navigasi/footer (max-w-7xl + padding responsif) ===== */
+  .cat-wrap { box-sizing:border-box; max-width:80rem; margin:0 auto; padding:1.5rem 1rem 3rem; }
+  @media (min-width:640px)  { .cat-wrap { padding-left:1.5rem; padding-right:1.5rem; } }
+  @media (min-width:1024px) { .cat-wrap { padding-left:2rem;   padding-right:2rem; } }
+
+  /* ===== Tema (variabel CSS). Gelap = bawaan situs; Terang dipilih lewat data-theme ===== */
+  .cat { --text:#e2e8f0; --muted:#94a3b8; --line:rgba(148,163,184,.18); --field:#0b1324; --card:rgba(15,23,42,.62);
+         --card-open:rgba(30,41,59,.62); --sheet:transparent; --sheet-line:transparent; --time:#67e8f9; --note:#fde68a;
+         --accent:#8b5cf6; --seg-on-bg:rgba(139,92,246,.28); --seg-on-text:#ede9fe; --btn:#1e293b; --btn-hover:#273449;
+         --link:#c4b5fd; --warn-bg:rgba(245,158,11,.1); --warn-line:rgba(245,158,11,.3); --warn-text:#fcd34d; --shadow:none;
+         --t-common:#94a3b8; --t-uncommon:#34d399; --t-rare:#38bdf8; --t-epic:#a78bfa; --t-legendary:#fbbf24;
+         --s-visible:#34d399; --s-twilight:#fbbf24; --s-low:#fb923c; --s-daylight:#facc15; --s-off:#64748b;
+         --k-total:#f1f5f9; --k-ok:#34d399; --k-naked:#a5b4fc; --k-rare:#c4b5fd; --wx:#0891b2; --wx-text:#ecfeff;
+         color-scheme:dark; color:var(--text); background:var(--sheet); border:1px solid var(--sheet-line);
+         border-radius:24px; padding:clamp(14px,2.2vw,28px); }
+  .cat[data-theme="light"] { --text:#0f172a; --muted:#475569; --line:rgba(15,23,42,.14); --field:#ffffff; --card:#ffffff;
+         --card-open:#f1f5f9; --sheet:linear-gradient(180deg,#f8fafc,#eef2f7); --sheet-line:rgba(15,23,42,.10); --time:#0e7490;
+         --note:#92400e; --accent:#7c3aed; --seg-on-bg:#ede9fe; --seg-on-text:#5b21b6; --btn:#e2e8f0; --btn-hover:#cbd5e1;
+         --link:#6d28d9; --warn-bg:#fffbeb; --warn-line:#fcd34d; --warn-text:#92400e; --shadow:0 1px 2px rgba(15,23,42,.06);
+         --t-common:#64748b; --t-uncommon:#059669; --t-rare:#0284c7; --t-epic:#7c3aed; --t-legendary:#b45309;
+         --s-visible:#059669; --s-twilight:#b45309; --s-low:#c2410c; --s-daylight:#a16207; --s-off:#94a3b8;
+         --k-total:#0f172a; --k-ok:#059669; --k-naked:#4f46e5; --k-rare:#7c3aed; --wx:#0e7490; --wx-text:#ffffff;
+         color-scheme:light; }
   .cat * { box-sizing:border-box; }
-  .cat-layout { display:grid; grid-template-columns:320px minmax(0,1fr); gap:24px; align-items:start; }
-  .cat-side { position:sticky; top:92px; max-height:calc(100vh - 108px); overflow:auto; padding:18px; }
+  .cat .glass-card { background:var(--card) !important; border:1px solid var(--line) !important; box-shadow:var(--shadow);
+         -webkit-backdrop-filter:none; backdrop-filter:none; }
+
+  .cat-layout { display:grid; grid-template-columns:300px minmax(0,1fr); gap:24px; align-items:start; }
+  .cat-side { position:sticky; top:92px; max-height:calc(100vh - 108px); overflow:auto; padding:18px; border-radius:16px; }
   .cat-side h2 { font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin:18px 0 8px; font-weight:600; }
   .cat-side h2:first-child { margin-top:0; }
   .cat label.lbl { display:block; font-size:12px; color:var(--muted); margin-bottom:4px; }
   .cat input[type=number], .cat input[type=month], .cat input[type=search], .cat select {
       width:100%; background:var(--field); border:1px solid var(--line); border-radius:10px; color:var(--text);
       padding:9px 11px; font-size:14px; }
-  .cat input:focus, .cat select:focus { outline:2px solid rgba(139,92,246,.55); outline-offset:0; }
+  .cat input:focus, .cat select:focus, .cat button:focus-visible, .cat a:focus-visible { outline:2px solid var(--accent); outline-offset:1px; }
   .row2 { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
   .seg { display:flex; background:var(--field); border:1px solid var(--line); border-radius:10px; padding:3px; gap:3px; }
   .seg button { flex:1; border:0; background:transparent; color:var(--muted); font-size:13px; padding:7px 4px; border-radius:7px; cursor:pointer; }
-  .seg button.on { background:rgba(139,92,246,.28); color:#ede9fe; font-weight:600; }
-  .btn { background:#1e293b; color:var(--text); border:1px solid var(--line); border-radius:10px; padding:8px 12px; font-size:13px; cursor:pointer; }
-  .btn:hover { background:#273449; }
+  .seg button.on { background:var(--seg-on-bg); color:var(--seg-on-text); font-weight:600; }
+  .btn { background:var(--btn); color:var(--text); border:1px solid var(--line); border-radius:10px; padding:8px 12px; font-size:13px; cursor:pointer; text-decoration:none; display:inline-block; }
+  .btn:hover { background:var(--btn-hover); }
   .btn.ghost { background:transparent; }
-  .month-nav { display:grid; grid-template-columns:40px 1fr 40px; gap:6px; }
+  .btn.wx { background:var(--wx); border-color:transparent; color:var(--wx-text); font-weight:600; }
+  .btn.wx:hover { filter:brightness(1.1); background:var(--wx); }
+  .month-nav { display:grid; grid-template-columns:40px minmax(0,1fr) 40px; gap:6px; }
+  .month-nav input { min-width:0; }
   .checks label { display:flex; align-items:center; gap:8px; font-size:13.5px; padding:5px 2px; cursor:pointer; color:var(--text); }
   .checks .n { margin-left:auto; color:var(--muted); font-size:12px; }
   .checks input { accent-color:var(--accent); width:15px; height:15px; }
   .hint { font-size:12px; color:var(--muted); line-height:1.5; margin-top:6px; }
 
+  .cat-head { padding:20px 24px; border-radius:16px; margin-bottom:20px; display:flex; flex-wrap:wrap; gap:16px; align-items:flex-start; justify-content:space-between; }
   .cat-head h1 { font-size:26px; font-weight:700; margin:0 0 4px; }
-  .cat-head p { color:var(--muted); font-size:14px; margin:0; max-width:760px; line-height:1.55; }
-  .warn { margin-top:10px; font-size:12.5px; color:#fcd34d; background:rgba(245,158,11,.1); border:1px solid rgba(245,158,11,.3);
-          border-radius:10px; padding:8px 12px; }
+  .cat-head p { color:var(--muted); font-size:14px; margin:0; max-width:680px; line-height:1.55; }
+  .theme-box { min-width:230px; }
+  .theme-box .lbl { margin-bottom:6px; }
+  .warn { margin-top:10px; font-size:12.5px; color:var(--warn-text); background:var(--warn-bg); border:1px solid var(--warn-line); border-radius:10px; padding:8px 12px; flex-basis:100%; }
   .hidden { display:none !important; }
 
   .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:0 0 18px; }
@@ -41,8 +70,8 @@
 
   .sec-title { font-size:12px; font-weight:600; color:var(--muted); margin:6px 0 10px; text-transform:uppercase; letter-spacing:.06em; }
   .spot { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-bottom:22px; }
-  .spot-card { padding:14px 16px; border-radius:14px; border-top:3px solid var(--tc); cursor:pointer; }
-  .spot-card:hover { background:rgba(255,255,255,.04); }
+  .spot-card { padding:14px 16px; border-radius:14px; border-top:3px solid var(--tc) !important; cursor:pointer; }
+  .spot-card:hover { filter:brightness(1.06); }
   .spot-card .t { font-weight:700; font-size:15px; margin:8px 0 4px; line-height:1.3; }
   .spot-card .m { font-size:12.5px; color:var(--muted); line-height:1.5; }
 
@@ -50,32 +79,35 @@
   .bar .grow { flex:1 1 220px; }
   .bar select { width:auto; }
   .count { font-size:13px; color:var(--muted); margin:8px 0 6px; }
-  .count a { color:#c4b5fd; cursor:pointer; text-decoration:underline; }
+  .count a { color:var(--link); cursor:pointer; text-decoration:underline; }
 
   .day { display:flex; align-items:baseline; gap:10px; margin:22px 0 8px; padding-bottom:6px; border-bottom:1px solid var(--line); }
   .day h3 { margin:0; font-size:15px; font-weight:700; }
   .day span { font-size:12px; color:var(--muted); }
 
-  details.ev { border:1px solid var(--line); border-left:4px solid var(--tc); border-radius:12px; margin-bottom:8px; background:rgba(15,23,42,.55); }
-  details.ev[open] { background:rgba(30,41,59,.55); }
-  details.ev > summary { list-style:none; cursor:pointer; display:grid; grid-template-columns:54px minmax(0,1fr) auto 18px; gap:12px;
-          align-items:center; padding:11px 14px; }
+  details.ev { border:1px solid var(--line); border-left:4px solid var(--tc); border-radius:12px; margin-bottom:8px; background:var(--card); box-shadow:var(--shadow); }
+  details.ev[open] { background:var(--card-open); }
+  details.ev > summary { list-style:none; cursor:pointer; display:grid; grid-template-columns:56px minmax(0,1fr) auto auto 18px; gap:12px; align-items:center; padding:11px 14px; }
   details.ev > summary::-webkit-details-marker { display:none; }
-  .ev-time { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:14px; color:#67e8f9; }
+  .ev-time { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:14px; color:var(--time); line-height:1.15; }
+  .ev-time small { display:block; font-size:10.5px; color:var(--muted); }
   .ev-title { font-weight:600; font-size:15px; line-height:1.3; }
   .ev-sub { font-size:12.5px; color:var(--muted); margin-top:3px; display:flex; flex-wrap:wrap; gap:4px 12px; align-items:center; }
   .dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:5px; background:var(--sc); }
-  .pill { font-size:11.5px; font-weight:600; padding:3px 9px; border-radius:999px; border:1px solid var(--tc); color:var(--tc);
-          background:rgba(148,163,184,.10); white-space:nowrap; }
+  .pill { font-size:11.5px; font-weight:600; padding:3px 9px; border-radius:999px; border:1px solid var(--tc); color:var(--tc); background:rgba(148,163,184,.12); white-space:nowrap; }
+  .pill { background:color-mix(in srgb, var(--tc) 13%, transparent); }
+  a.wx-mini { font-size:12px; font-weight:600; padding:4px 10px; border-radius:999px; background:var(--wx); color:var(--wx-text); text-decoration:none; white-space:nowrap; }
+  a.wx-mini:hover { filter:brightness(1.12); }
   .chev { color:var(--muted); transition:transform .15s; text-align:center; }
   details[open] > summary .chev { transform:rotate(90deg); }
-  .ev-body { padding:4px 16px 16px 82px; font-size:13.5px; line-height:1.6; }
+  .ev-body { padding:4px 16px 16px 84px; font-size:13.5px; line-height:1.6; }
   .ev-body p { margin:6px 0; }
   .facts { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:8px 18px; margin:10px 0; }
   .facts div { font-size:12.5px; } .facts b { display:block; font-weight:500; color:var(--muted); font-size:11.5px; }
-  .notes { margin:8px 0 0; padding-left:18px; color:#fde68a; font-size:12.5px; }
+  .notes { margin:8px 0 0; padding-left:18px; color:var(--note); font-size:12.5px; }
   .why { margin-top:10px; font-size:12.5px; color:var(--muted); }
   .why strong { color:var(--tc); }
+  .actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
   .empty { padding:28px; border-radius:14px; text-align:center; color:var(--muted); font-size:14px; }
 
   .rar-inline { display:none; font-weight:600; }
@@ -89,23 +121,33 @@
     .spot { grid-template-columns:minmax(0,1fr); }
   }
   @media (max-width:640px) {
-    details.ev > summary { grid-template-columns:46px minmax(0,1fr) 16px; }
+    details.ev > summary { grid-template-columns:48px minmax(0,1fr) auto 16px; }
     details.ev > summary .pill { display:none; }
     .rar-inline { display:inline; }
     .ev-body { padding-left:16px; }
+    .cat-head { padding:16px; }
   }
 </style>
 
-<div class="cat">
-  <div class="cat-head glass-card" style="padding:20px 24px;border-radius:16px;margin-bottom:20px;">
-    <h1 class="font-display">Katalog Event Astronomi</h1>
-    <p>Semua peristiwa dihitung sendiri dari posisi Matahari, Bulan, dan planet. Keterlihatan (ufuk, langit gelap, magnitudo, cahaya Bulan) dihitung untuk lokasi Anda.</p>
+<div class="cat-wrap">
+<div class="cat" id="cat" data-theme="dark">
+  <div class="cat-head glass-card">
+    <div>
+      <h1 class="font-display">Katalog Event Astronomi</h1>
+      <p>Semua peristiwa dihitung sendiri dari posisi Matahari, Bulan, dan planet. Keterlihatan (ufuk, langit gelap, magnitudo, cahaya Bulan) dan seluruh waktu dihitung dalam <b>waktu lokal lokasi Anda</b>.</p>
+    </div>
+    <div class="theme-box">
+      <label class="lbl">Tema halaman</label>
+      <div class="seg" id="seg-theme" role="group" aria-label="Tema">
+        <button data-v="auto">Otomatis</button><button data-v="dark" class="on">Gelap</button><button data-v="light">Terang</button>
+      </div>
+    </div>
     <div id="engine-warning" class="warn hidden">Katalog ini dibuat dengan mesin sementara (galat planet ~2 menit busur). Untuk hasil akhir buat ulang dengan <code>ASTROLIFE_ENGINE=skyfield</code>.</div>
   </div>
 
   <div class="cat-layout">
     <!-- ================= SIDEBAR ================= -->
-    <aside class="cat-side glass-card" id="side" style="border-radius:16px;">
+    <aside class="cat-side glass-card" id="side">
       <button class="btn only-mobile" id="side-toggle" style="width:100%;margin-bottom:6px;">Pengaturan &amp; filter</button>
       <div class="side-body">
         <h2>Lokasi</h2>
@@ -177,7 +219,7 @@
       </div>
 
       <div class="bar">
-        <input id="q" type="search" class="grow" placeholder="Cari: Jupiter, gerhana, Leonid…">
+        <input id="q" type="search" class="grow" placeholder="Cari: Jupiter, gerhana, Leonid…" aria-label="Cari event">
         <select id="sort" aria-label="Urutkan"><option value="time">Urut waktu</option><option value="rarity">Urut kelangkaan</option><option value="altitude">Urut ketinggian</option></select>
       </div>
       <div class="count" id="count"></div>
@@ -185,26 +227,42 @@
     </main>
   </div>
 </div>
+</div>
 {% endblock %}
 
 {% block scripts %}
 <script>
 (function () {
     const API = "{{ url_for('catalog.api_events') }}";
+    const OBS = "{{ url_for('observation.index') }}";
     const $ = (id) => document.getElementById(id);
     const esc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
     const TIERS = ['common', 'uncommon', 'rare', 'epic', 'legendary'];
-    const TIER_COLOR = {common: '#94a3b8', uncommon: '#34d399', rare: '#38bdf8', epic: '#a78bfa', legendary: '#fbbf24'};
-    const STATE_COLOR = {visible: '#34d399', twilight: '#fbbf24', low: '#fb923c', daylight: '#facc15', below_horizon: '#64748b', not_observable: '#64748b'};
     const RANK = {naked_eye: 0, binoculars: 1, small_telescope: 2, telescope_4inch: 3, large_telescope: 4};
     const ICON = {fase_bulan: '🌙', konjungsi: '✨', okultasi: '🌑', gerhana_bulan: '🌘', gerhana_matahari: '☀️', elongasi: '⭐', oposisi: '🔭', fase_planet: '🪐', hujan_meteor: '☄️'};
-    const STORE = 'astrolife.catalog.v2';
+    const STORE = 'astrolife.catalog.v3', THEME = 'astrolife.theme';
 
     const S = {view: 'obs', gear: 4, tier: 0, cats: new Set(), q: '', sort: 'time'};
-    let data = null;
+    let data = null, themePref = 'dark';
 
-    // ---------- preferensi (hanya kenyamanan; bila penyimpanan gagal tidak masalah) ----------
+    // ---------- tema ----------
+    const mqLight = window.matchMedia ? window.matchMedia('(prefers-color-scheme: light)') : null;
+    function applyTheme() {
+        const eff = themePref === 'auto' ? (mqLight && mqLight.matches ? 'light' : 'dark') : themePref;
+        $('cat').dataset.theme = eff;
+        document.querySelectorAll('#seg-theme button').forEach(b => { b.classList.toggle('on', b.dataset.v === themePref); b.setAttribute('aria-pressed', b.dataset.v === themePref); });
+    }
+    try { themePref = localStorage.getItem(THEME) || 'dark'; } catch (e) {}
+    $('seg-theme').addEventListener('click', (e) => {
+        const b = e.target.closest('button'); if (!b) return;
+        themePref = b.dataset.v; try { localStorage.setItem(THEME, themePref); } catch (err) {}
+        applyTheme();
+    });
+    if (mqLight && mqLight.addEventListener) mqLight.addEventListener('change', () => { if (themePref === 'auto') applyTheme(); });
+    applyTheme();
+
+    // ---------- preferensi (kenyamanan saja) ----------
     function save() {
         try { localStorage.setItem(STORE, JSON.stringify({preset: $('preset').value, lat: $('lat').value, lon: $('lon').value, sky: $('sky').value, view: S.view, gear: S.gear, tier: S.tier})); } catch (e) {}
     }
@@ -221,10 +279,21 @@
     }
 
     // ---------- util ----------
-    const fmtDay = (ymd) => new Date(ymd + 'T12:00').toLocaleDateString('id-ID', {weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'});
     const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
-    const fmtShort = (tl) => `${Number(tl.slice(8, 10))} ${MON[Number(tl.slice(5, 7)) - 1]} ${tl.slice(11)}`;
+    const tzl = () => (data && data.lokasi.tz_label) || '';
+    const fmtDay = (ymd) => new Date(ymd + 'T12:00').toLocaleDateString('id-ID', {weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'});
+    const fmtShort = (tl) => `${Number(tl.slice(8, 10))} ${MON[Number(tl.slice(5, 7)) - 1]} ${tl.slice(11)} ${tzl()}`;
     const gearOK = (e) => e.visibility.instrument != null && RANK[e.visibility.instrument] <= S.gear;
+    const tcol = (r) => `var(--t-${r.tier})`;
+
+    function wxHref(e, which) {
+        const w = e.wx, v = e.visibility;
+        const p = new URLSearchParams({lat: data.lokasi.lat, lon: data.lokasi.lon, dt: which === 'peak' ? w.peak : w.default, peak: w.peak,
+                                       title: e.title, type: e.kategori_label, inst: v.instrument || 'naked_eye'});
+        if (w.best) p.set('best', w.best);
+        if (e.bodies.includes('moon')) p.set('moon', '1');
+        return `${OBS}?${p.toString()}`;
+    }
 
     function passes(e) {
         const v = e.visibility;
@@ -240,14 +309,15 @@
     function fact(label, val) { return val == null || val === '' ? '' : `<div><b>${esc(label)}</b>${esc(val)}</div>`; }
 
     function rowHTML(e) {
-        const v = e.visibility, r = e.rarity, tc = TIER_COLOR[r.tier];
-        const sc = v.observable ? (STATE_COLOR[v.state] || '#34d399') : '#64748b';
+        const v = e.visibility, r = e.rarity;
+        const sc = v.observable ? `var(--s-${v.state in {visible:1, twilight:1, low:1, daylight:1} ? v.state : 'visible'})` : 'var(--s-off)';
         const names = data.body_names || {};
         const mags = Object.entries(v.bodies_mag || {}).map(([b, m]) => `${names[b] || b} ${m > 0 ? '+' : ''}${m.toFixed(1)}`).join(' · ');
-        const lo = v.local_occultation, le = v.local_eclipse, d = e.details || {};
+        const lo = v.local_occultation, le = v.local_eclipse, d = e.details || {}, z = tzl();
+        const timeFacts = (e.times_local || []).map(t => fact(`${t.label} (${z})`, t.value.slice(5).replace('-', '/').replace(' ', ' · ')));
         const facts = [
-            fact('Waktu (UTC)', e.time_utc.slice(0, 16).replace('T', ' ')),
-            fact('Waktu terbaik', v.best_time_local ? `${v.best_time_local} (tinggi ${v.min_altitude}°)` : ''),
+            fact(`Waktu terbaik (${z})`, v.best_time_local ? `${v.best_time_local.slice(5).replace('-', '/').replace(' ', ' · ')} · tinggi ${v.min_altitude}°` : ''),
+            ...timeFacts,
             fact('Matahari saat itu', v.sun_altitude != null ? `${v.sun_altitude}°` : ''),
             fact('Bulan', v.moon_illumination_pct != null ? `${v.moon_illumination_pct}% terang, tinggi ${v.moon_altitude}°` : ''),
             fact('Magnitudo', mags), fact('Jarak sudut', e.separation_deg != null ? `${e.separation_deg.toFixed(2)}°` : ''),
@@ -259,29 +329,36 @@
         ].join('');
         const notes = (v.notes || []).map(n => `<li>${esc(n)}</li>`).join('');
         const stateTxt = v.observable ? v.state_label : (lo && !lo.terjadi ? 'Tidak terjadi di lokasi Anda' : v.state_label);
-        return `<details class="ev" style="--tc:${tc};--sc:${sc}">
+        const bestTxt = e.wx.best ? e.wx.best.slice(11) : null;
+        const actions = `<div class="actions">
+              <a class="btn wx" href="${esc(wxHref(e, 'default'))}">☁ Analisis cuaca ${bestTxt ? `pada waktu terbaik (${esc(bestTxt)} ${esc(z)})` : `pada waktu event (${esc(e.wx.peak.slice(11))} ${esc(z)})`}</a>
+              ${bestTxt && e.wx.best !== e.wx.peak ? `<a class="btn" href="${esc(wxHref(e, 'peak'))}">Cuaca pada waktu puncak (${esc(e.wx.peak.slice(11))} ${esc(z)})</a>` : ''}
+            </div>`;
+        return `<details class="ev" style="--tc:${tcol(r)};--sc:${sc}">
             <summary>
-              <div class="ev-time">${esc(e.time_local.slice(11))}</div>
+              <div class="ev-time">${esc(e.time_local.slice(11))}<small>${esc(z)}</small></div>
               <div>
                 <div class="ev-title">${ICON[e.category] || '•'} ${esc(e.title)}</div>
-                <div class="ev-sub"><span><i class="dot"></i>${esc(stateTxt)}</span><span>${esc(v.headline)}</span><span class="rar-inline" style="color:${tc}">${esc(r.label)}</span></div>
+                <div class="ev-sub"><span><i class="dot"></i>${esc(stateTxt)}</span><span>${esc(v.headline)}</span><span class="rar-inline" style="color:${tcol(r)}">${esc(r.label)}</span></div>
               </div>
-              <span class="pill" style="--tc:${tc}">${esc(r.label)}</span>
+              <span class="pill">${esc(r.label)}</span>
+              <a class="wx-mini" href="${esc(wxHref(e, 'default'))}" title="Analisis cuaca untuk event ini">☁ Cuaca</a>
               <span class="chev">▸</span>
             </summary>
             <div class="ev-body">
               <p>${esc(v.reason)}</p>
               <div class="facts">${facts}</div>
               ${notes ? `<ul class="notes">${notes}</ul>` : ''}
-              <div class="why" style="--tc:${tc}"><strong>${esc(r.label)}</strong> · ${esc(r.alasan)} <em>(${esc(r.frekuensi)})</em></div>
+              <div class="why"><strong>${esc(r.label)}</strong> · ${esc(r.alasan)} <em>(${esc(r.frekuensi)})</em></div>
+              ${actions}
             </div>
           </details>`;
     }
 
     function spotHTML(e) {
-        const r = e.rarity, v = e.visibility, tc = TIER_COLOR[r.tier];
-        return `<div class="spot-card glass-card" style="--tc:${tc}" data-id="${esc(e.id)}">
-            <span class="pill" style="--tc:${tc}">${esc(r.label)}</span>
+        const r = e.rarity, v = e.visibility;
+        return `<div class="spot-card glass-card" style="--tc:${tcol(r)}" data-id="${esc(e.id)}">
+            <span class="pill">${esc(r.label)}</span>
             <div class="t">${ICON[e.category] || ''} ${esc(e.title)}</div>
             <div class="m">${esc(fmtShort(e.time_local))} · ${esc(v.headline)}</div></div>`;
     }
@@ -295,7 +372,8 @@
         const m = data.meta;
         $('meta').innerHTML = `Mesin: ${esc(m.engine)}<br>Rentang katalog ${m.dari_tahun}–${m.sampai_tahun} · ${m.jumlah} event<br>Dibuat ${esc(m.dibuat)}`;
         $('engine-warning').classList.toggle('hidden', m.engine_key === 'skyfield');
-        $('loc-note').textContent = `Zona waktu UTC${data.lokasi.tz >= 0 ? '+' : ''}${data.lokasi.tz}`;
+        const tz = data.lokasi.tz;
+        $('loc-note').textContent = `Zona waktu lokasi: ${data.lokasi.tz_label} (UTC${tz >= 0 ? '+' : ''}${tz}). Semua waktu di halaman ini dalam waktu lokal tersebut.`;
         document.querySelectorAll('#seg-view button').forEach(b => b.classList.toggle('on', b.dataset.v === S.view));
         document.querySelectorAll('#seg-gear button').forEach(b => b.classList.toggle('on', Number(b.dataset.v) === S.gear));
         $('tier').value = String(S.tier);
@@ -303,9 +381,9 @@
 
     function renderStats() {
         const s = data.summary;
-        const box = (k, v, c) => `<div class="stat glass-card"><div class="k">${k}</div><div class="v" style="color:${c}">${v}</div></div>`;
-        $('stats').innerHTML = box('Event pada periode', s.total, '#f1f5f9') + box('Dapat diamati dari lokasi', s.teramati, '#34d399') +
-            box('Cukup mata telanjang', s.mata_telanjang, '#a5b4fc') + box('Langka ke atas', s.langka_ke_atas, '#c4b5fd');
+        const box = (k, v, c) => `<div class="stat glass-card"><div class="k">${k}</div><div class="v" style="color:var(--${c})">${v}</div></div>`;
+        $('stats').innerHTML = box('Event pada periode', s.total, 'k-total') + box('Dapat diamati dari lokasi', s.teramati, 'k-ok') +
+            box('Cukup mata telanjang', s.mata_telanjang, 'k-naked') + box('Langka ke atas', s.langka_ke_atas, 'k-rare');
     }
 
     function renderList() {
@@ -329,7 +407,7 @@
             const groups = {};
             items.forEach(e => (groups[e.time_local.slice(0, 10)] ||= []).push(e));
             $('list').innerHTML = Object.keys(groups).sort().map(day =>
-                `<div class="day"><h3>${esc(fmtDay(day))}</h3><span>${groups[day].length} event</span></div>` + groups[day].map(rowHTML).join('')).join('');
+                `<div class="day"><h3>${esc(fmtDay(day))}</h3><span>${groups[day].length} event · ${esc(tzl())}</span></div>` + groups[day].map(rowHTML).join('')).join('');
         } else {
             $('list').innerHTML = items.map(rowHTML).join('');
         }
@@ -354,12 +432,12 @@
         try {
             const res = await fetch(`${API}?${p}`);
             const j = await res.json();
-            if (!res.ok) { $('list').innerHTML = `<div class="empty glass-card" style="color:#fcd34d">${esc(j.message || 'Gagal memuat katalog.')}</div>`; $('stats').innerHTML = ''; return; }
+            if (!res.ok) { $('list').innerHTML = `<div class="empty glass-card" style="color:var(--warn-text)">${esc(j.message || 'Gagal memuat katalog.')}</div>`; $('stats').innerHTML = ''; return; }
             data = j;
             if (!j.events.length && retry && j.meta.dari_tahun) { $('month').value = `${j.meta.dari_tahun}-01`; return load(false); }
             renderAll();
         } catch (err) {
-            $('list').innerHTML = '<div class="empty glass-card" style="color:#fda4af">Tidak dapat menghubungi server.</div>';
+            $('list').innerHTML = '<div class="empty glass-card" style="color:#e11d48">Tidak dapat menghubungi server.</div>';
         }
     }
 
@@ -382,7 +460,7 @@
         const ev = data.events.find(x => x.id === c.dataset.id); if (!ev) return;
         S.q = ''; $('q').value = ''; S.sort = 'time'; $('sort').value = 'time'; S.view = 'all'; S.tier = 0; S.cats.clear();
         renderSide(); renderList();
-        const t = [...document.querySelectorAll('details.ev')].find(d => d.querySelector('.ev-title').textContent.includes(ev.title) && d.querySelector('.ev-time').textContent === ev.time_local.slice(11));
+        const t = [...document.querySelectorAll('details.ev')].find(d => d.querySelector('.ev-title').textContent.includes(ev.title) && d.querySelector('.ev-time').textContent.startsWith(ev.time_local.slice(11)));
         if (t) { t.open = true; t.scrollIntoView({behavior: 'smooth', block: 'center'}); }
     });
     $('reset').addEventListener('click', () => {

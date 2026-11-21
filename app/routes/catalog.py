@@ -9,6 +9,7 @@ from functools import lru_cache
 from flask import Blueprint, current_app, jsonify, render_template, request
 
 from catalog import rarity as R
+from app.services.timezones import tz_from_lon, tz_label
 from prototype.find_events import BODY_ID
 from catalog import visibility as V
 
@@ -42,18 +43,38 @@ def _evaluate(ev_json: str, lat: float, lon: float, limit: float, tz: float):
     return vis, rar
 
 
-def _tz_from_lon(lon: float) -> float:
-    if 95 <= lon < 115:
-        return 7.0
-    if 115 <= lon < 130:
-        return 8.0
-    if 130 <= lon <= 141.5:
-        return 9.0
-    return float(round(lon / 15.0))
-
-
 def _local(utc_iso: str, tz: float) -> str:
     return (datetime.strptime(utc_iso[:19], '%Y-%m-%dT%H:%M:%S') + timedelta(hours=tz)).strftime('%Y-%m-%d %H:%M')
+
+
+TIME_LABELS = [('start_utc', 'Mulai'), ('end_utc', 'Selesai')]
+DETAIL_TIME_LABELS = {
+    'pendekatan_terdekat_utc': 'Pendekatan terdekat', 'konjungsi_asensio_rekta_utc': 'Konjungsi (asensio rekta)',
+    'umbra_mulai_utc': 'Umbra mulai', 'umbra_selesai_utc': 'Umbra selesai',
+    'total_mulai_utc': 'Totalitas mulai', 'total_selesai_utc': 'Totalitas selesai',
+}
+
+
+def _times_local(ev: dict, vis: dict, tz: float) -> list:
+    """Semua jam yang ditampilkan di UI, SUDAH dalam waktu lokal lokasi (UI tidak menampilkan UTC)."""
+    out = []
+    for key, label in TIME_LABELS:
+        if ev.get(key):
+            out.append({'label': label + (' (jendela global)' if ev['category'] == 'okultasi' else ''), 'value': _local(ev[key], tz)})
+    for key, label in DETAIL_TIME_LABELS.items():
+        if ev.get('details', {}).get(key):
+            out.append({'label': label, 'value': _local(ev['details'][key], tz)})
+    le = vis.get('local_eclipse')
+    if le and le.get('terlihat'):
+        out.append({'label': 'Puncak gerhana di lokasi', 'value': _local(le['waktu_maks_utc'], tz)})
+    return out
+
+
+def _wx(ev: dict, vis: dict, tz: float) -> dict:
+    """Bahan tautan ke analisis cuaca: waktu puncak event & waktu terbaik (bila dapat diamati), format lokal ISO."""
+    peak = _local(ev['time_utc'], tz).replace(' ', 'T')
+    best = _local(vis['best_time_utc'], tz).replace(' ', 'T') if vis.get('observable') and vis.get('best_time_utc') else None
+    return {'peak': peak, 'best': best, 'default': best or peak}
 
 
 @catalog_bp.route('/')
@@ -77,7 +98,7 @@ def api_events():
     if sky not in SKY_LIMITS:
         return jsonify({'status': 'error', 'message': 'Parameter langit: kota | pinggiran | gelap.'}), 400
     try:
-        tz = float(request.args.get('tz')) if request.args.get('tz') else _tz_from_lon(lon)
+        tz = float(request.args.get('tz')) if request.args.get('tz') else tz_from_lon(lon)
     except ValueError:
         return jsonify({'status': 'error', 'message': 'tz harus berupa angka (jam).'}), 400
 
@@ -89,7 +110,7 @@ def api_events():
             continue
         vis, rar = _evaluate(json.dumps(ev, sort_keys=True), round(lat, 3), round(lon, 3), SKY_LIMITS[sky], tz)
         items.append({**ev, 'time_local': local_t, 'kategori_label': CATEGORY_LABEL.get(ev['category'], ev['category']),
-                      'visibility': vis, 'rarity': rar})
+                      'visibility': vis, 'rarity': rar, 'times_local': _times_local(ev, vis, tz), 'wx': _wx(ev, vis, tz)})
     obs = [i for i in items if i['visibility']['observable']]
     summary = {
         'total': len(items),
@@ -97,6 +118,6 @@ def api_events():
         'mata_telanjang': sum(1 for i in obs if i['visibility']['instrument'] == 'naked_eye'),
         'langka_ke_atas': sum(1 for i in items if R.TIERS.index(i['rarity']['tier']) >= 2),
     }
-    return jsonify({'status': 'success', 'meta': doc['meta'], 'lokasi': {'lat': lat, 'lon': lon, 'tz': tz, 'langit': sky,
+    return jsonify({'status': 'success', 'meta': doc['meta'], 'lokasi': {'lat': lat, 'lon': lon, 'tz': tz, 'tz_label': tz_label(tz), 'langit': sky,
                     'batas_magnitudo': SKY_LIMITS[sky]}, 'summary': summary, 'events': items,
                     'tier_label': R.TIER_LABEL, 'body_names': BODY_ID, 'state_label': V.STATE_LABEL, 'instrument_label': {k: v for k, v in V.INSTRUMENT_LABEL.items() if k}})

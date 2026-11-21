@@ -28,6 +28,7 @@ INSTRUMENT_LABEL = {'naked_eye': 'Mata Telanjang', 'binoculars': 'Binokular', 's
 OPTIC_LIMITS = {'binoculars': 9.0, 'small_telescope': 11.0, 'telescope_4inch': 12.5}
 DEFAULT_NAKED_LIMIT = 5.0           # langit pinggiran kota; kota besar ~4,0; langit gelap ~6,0
 MIN_ALT = 5.0                       # batas praktis (pohon/gedung/kabut ufuk)
+PREF_MIN_ALT = 10.0                 # waktu peristiwa dipakai apa adanya hanya bila setinggi ini; kalau tidak cari waktu lebih baik
 
 STATE_LABEL = {'visible': 'Terlihat jelas', 'twilight': 'Saat senja/fajar', 'low': 'Rendah di ufuk',
                'daylight': 'Siang hari', 'below_horizon': 'Di bawah ufuk', 'not_observable': 'Tidak teramati'}
@@ -75,6 +76,9 @@ def _window(ev: dict):
     """Jendela penilaian. Event cepat (Bulan, okultasi, gerhana): +-10 jam. Event lambat (planet, hujan meteor,
     konjungsi planet-planet) berlangsung berhari-hari, jadi dinilai pada malam terbaik dalam +-36 jam."""
     c = F_jd(ev['time_utc'])
+    d = ev.get('details', {})
+    if ev['category'] == 'gerhana_bulan' and d.get('umbra_mulai_utc'):          # fase penumbra nyaris tak terlihat mata
+        return F_jd(d['umbra_mulai_utc']), F_jd(d['umbra_selesai_utc'])
     if ev.get('start_utc') and ev.get('end_utc'):
         return F_jd(ev['start_utc']), F_jd(ev['end_utc'])
     slow = ev['category'] in SLOW_CATEGORIES or (ev['category'] == 'konjungsi' and 'moon' not in ev['bodies'])
@@ -147,15 +151,27 @@ def evaluate(ev: dict, lat: float, lon: float, naked_limit: float = DEFAULT_NAKE
         out['local_occultation'] = lo
         if lo['terjadi']:
             t0, t1 = F_jd(lo['hilang_utc']), F_jd(lo['muncul_utc'])                           # nilai tepat saat okultasi terjadi
+    slow = cat in SLOW_CATEGORIES or (cat == 'konjungsi' and 'moon' not in bodies)
+    t_pref = t_peak                                              # waktu acuan: puncak event ...
+    if cat == 'okultasi' and out['local_occultation']['terjadi']:
+        t_pref = F_jd(out['local_occultation']['waktu_terdekat_utc'])    # ... atau titik terdekat di lokasi
+    times = _samples(t0, t1)
+    if not slow and t0 <= t_pref <= t1:
+        times = sorted(times + [t_pref])
     rows = []
-    for t in _samples(t0, t1):
+    for t in times:
         rows.append({'t': t, 'alt': alt_fn(t), 'sun': sun_alt(t, lat, lon)})
+    pref = next((r for r in rows if r['t'] == t_pref), None) if not slow else None
 
     # --- pemilihan sampel terbaik ---------------------------------------------------------------------------
     if solar:
         usable = [r for r in rows if r['alt'] >= MIN_ALT and r['sun'] > 0]
-        best = max(usable or rows, key=lambda r: r['alt'])
+        best = pref if (pref and pref in usable) else max(usable or rows, key=lambda r: r['alt'])
         state = 'daylight' if usable else ('below_horizon' if best['alt'] < 0 else 'low')
+    elif pref is not None and pref['alt'] >= PREF_MIN_ALT and pref['sun'] <= -6:
+        # Saat peristiwa itu sendiri dapat diamati: itulah waktu yang dinilai (bukan titik tertinggi di malam itu)
+        best = pref
+        state = 'twilight' if pref['sun'] > -12 else ('visible' if pref['alt'] >= 15 else 'low')
     else:
         dark = [r for r in rows if r['alt'] >= MIN_ALT and r['sun'] <= -12]
         dusk = [r for r in rows if r['alt'] >= MIN_ALT and -12 < r['sun'] <= -6]

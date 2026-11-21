@@ -79,6 +79,7 @@
                         <option value="3.5952,98.6722">Medan (3.60°N, 98.67°E)</option>
                         <option value="-5.1477,119.4327">Makassar (-5.15°S, 119.43°E)</option>
                         <option value="-8.3405,115.0920">Denpasar / Bali (-8.34°S, 115.09°E)</option>
+                        <option value="custom">Koordinat sendiri / dari katalog</option>
                     </select>
                 </div>
 
@@ -102,6 +103,16 @@
                         <option value="binoculars">Binokular (7x50 / 10x50)</option>
                         <option value="telescope">Teleskop (Optik > 70mm)</option>
                     </select>
+                </div>
+
+                <!-- Waktu analisis (waktu lokal lokasi) -->
+                <div>
+                    <label class="text-slate-400 text-[11px] block mb-1">Waktu analisis (waktu lokal lokasi):</label>
+                    <div class="flex gap-2">
+                        <input id="input-datetime" type="datetime-local" class="flex-1 min-w-0 bg-slate-900 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-white text-xs focus:outline-none focus:border-cyan-500">
+                        <button id="btn-now" type="button" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs">Sekarang</button>
+                    </div>
+                    <span id="tz-note" class="text-[11px] text-slate-500 block mt-1"></span>
                 </div>
             </div>
 
@@ -161,6 +172,9 @@
                     <span id="val-visibility" class="text-sm font-bold text-white">-- km</span>
                 </div>
             </div>
+
+            <!-- Konteks event dari katalog -->
+            <div id="event-context" class="hidden rounded-xl px-3 py-2.5 border border-cyan-500/30 bg-cyan-500/5"></div>
 
             <!-- Konteks prakiraan: waktu, kepercayaan, Bulan -->
             <div id="forecast-context" class="text-[11px] text-slate-400 leading-relaxed bg-slate-950/40 rounded-xl px-3 py-2 border border-slate-800/60">
@@ -308,9 +322,11 @@
 
     // Quick City Presets Selector
     document.getElementById('quick-city-select').addEventListener('change', (e) => {
+        if (e.target.value === 'custom') return;
         const [lat, lon] = e.target.value.split(',');
         document.getElementById('input-lat').value = lat;
         document.getElementById('input-lon').value = lon;
+        updateTzNote();
         checkFeasibility();
         loadPlan();
     });
@@ -569,18 +585,75 @@
     }
 
     // Cek umum (tanpa fenomena): kondisi langit malam ini / terdekat untuk alat terpilih
+    // ---- Konteks dari katalog: ?lat=&lon=&dt=&best=&peak=&title=&type=&inst=&moon=1 ----
+    const byId = (id) => document.getElementById(id);
+    const CATALOG_URL = "{{ url_for('catalog.index') }}";
+    const tzForLon = (lon) => (lon >= 95 && lon < 115) ? 7 : (lon >= 115 && lon < 130) ? 8 : (lon >= 130 && lon <= 141.5) ? 9 : Math.round(lon / 15);
+    const tzLabel = (tz) => ({7: 'WIB', 8: 'WITA', 9: 'WIT'}[tz] || `UTC${tz >= 0 ? '+' : '-'}${Math.abs(tz)}`);
+    const DT_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/;
+    let EVENT_CTX = null;
+
+    function currentTz() { return tzForLon(getLoc().lon); }
+    function updateTzNote() {
+        const tz = currentTz();
+        byId('tz-note').textContent = `Zona waktu lokasi: ${tzLabel(tz)} (UTC${tz >= 0 ? '+' : ''}${tz}). Kosongkan untuk memakai waktu sekarang.`;
+    }
+
+    function renderEventContext() {
+        const box = byId('event-context');
+        if (!EVENT_CTX) { box.classList.add('hidden'); box.innerHTML = ''; return; }
+        box.classList.remove('hidden');
+        const cur = byId('input-datetime').value;
+        const btn = (label, val) => `<button type="button" data-dt="${esc(val)}" class="ctx-time px-2.5 py-1 rounded-lg text-[11px] ${cur === val ? 'bg-cyan-600 text-white font-semibold' : 'bg-slate-800 text-slate-300 hover:text-white'}">${label} ${esc(val.slice(11))}</button>`;
+        const opts = [];
+        if (EVENT_CTX.best) opts.push(btn('Waktu terbaik', EVENT_CTX.best));
+        if (EVENT_CTX.peak && EVENT_CTX.peak !== EVENT_CTX.best) opts.push(btn('Waktu puncak event', EVENT_CTX.peak));
+        box.innerHTML = `<div class="flex flex-wrap items-center justify-between gap-2">
+            <div><span class="text-[11px] text-cyan-300 font-semibold uppercase tracking-wide">Analisis cuaca untuk event</span>
+                <div class="text-sm font-bold text-white">${esc(EVENT_CTX.title)}</div>
+                <div class="text-[11px] text-slate-400">${esc(cur.replace('T', ' '))} ${tzLabel(currentTz())} (waktu lokal)</div></div>
+            <div class="flex flex-wrap gap-1.5 items-center">${opts.join('')}
+                <a href="${CATALOG_URL}" class="text-[11px] text-slate-400 hover:text-white underline ml-1">&larr; Katalog</a>
+                <button type="button" id="ctx-clear" class="text-[11px] text-slate-500 hover:text-white underline">Lepas event</button></div></div>`;
+        box.querySelectorAll('.ctx-time').forEach(b => b.addEventListener('click', () => { byId('input-datetime').value = b.dataset.dt; renderEventContext(); checkFeasibility(); }));
+        const c = byId('ctx-clear');
+        if (c) c.addEventListener('click', () => { EVENT_CTX = null; renderEventContext(); checkFeasibility(); });
+    }
+
+    function applyUrlParams() {
+        const q = new URLSearchParams(location.search);
+        const lat = parseFloat(q.get('lat')), lon = parseFloat(q.get('lon'));
+        if (isNaN(lat) || isNaN(lon)) return false;
+        byId('input-lat').value = lat; byId('input-lon').value = lon;
+        const sel = byId('quick-city-select');
+        const match = [...sel.options].find(o => o.value === `${lat},${lon}`);
+        sel.value = match ? match.value : 'custom';
+        const inst = q.get('inst') || 'naked_eye';
+        byId('input-instrument').value = inst.includes('telescope') ? 'telescope' : (inst === 'binoculars' ? 'binoculars' : 'naked_eye');
+        const best = DT_RE.test(q.get('best') || '') ? q.get('best') : null, peak = DT_RE.test(q.get('peak') || '') ? q.get('peak') : null;
+        const dt = DT_RE.test(q.get('dt') || '') ? q.get('dt') : (best || peak);
+        if (dt) byId('input-datetime').value = dt;
+        if (q.get('title')) EVENT_CTX = {title: q.get('title'), type: q.get('type') || 'General', moon: q.get('moon') === '1', best, peak};
+        return true;
+    }
+
+    // Cek kondisi langit pada waktu analisis (kosong = sekarang) untuk alat terpilih
     async function checkFeasibility(forcedDifficulty = null, forcedType = 'General') {
         const { lat, lon } = getLoc();
         const difficulty = forcedDifficulty || document.getElementById('input-instrument').value;
+        const dt = byId('input-datetime').value;
         try {
             const res = await fetch("{{ url_for('observation.api_feasibility') }}", {
                 method: 'POST', headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({lat, lon, difficulty, event_type: forcedType})
+                body: JSON.stringify({lat, lon, difficulty, event_type: EVENT_CTX ? EVENT_CTX.type : forcedType,
+                                      datetime_local: DT_RE.test(dt) ? dt : undefined, tz: currentTz(),
+                                      involves_moon: !!(EVENT_CTX && EVENT_CTX.moon)})
             });
             const data = await res.json();
             if (!res.ok) { document.getElementById('forecast-context').innerText = data.message || 'Permintaan tidak valid.'; return; }
+            const note = EVENT_CTX ? `${EVENT_CTX.title} · ${data.when_local} ${data.tz_label}` : `Waktu analisis: ${data.when_local} ${data.tz_label}`;
             paintPanel(data.weather, data.feasibility,
-                contextLine(data.weather, data.feasibility, {moon: data.moon_illumination_pct}));
+                contextLine(data.weather, data.feasibility, {moon: data.moon_illumination_pct, moonAlt: data.moon_altitude_deg, note}));
         } catch (err) {
             console.error(err);
             document.getElementById('forecast-context').innerText = 'Gagal menghubungi server.';
@@ -702,6 +775,12 @@
 
     // Init
     document.addEventListener('DOMContentLoaded', () => {
+        applyUrlParams();
+        updateTzNote();
+        renderEventContext();
+        byId('input-datetime').addEventListener('change', () => { renderEventContext(); checkFeasibility(); });
+        byId('btn-now').addEventListener('click', () => { byId('input-datetime').value = ''; EVENT_CTX = null; renderEventContext(); checkFeasibility(); });
+        ['input-lat', 'input-lon'].forEach(id => byId(id).addEventListener('change', () => { byId('quick-city-select').value = 'custom'; updateTzNote(); renderEventContext(); checkFeasibility(); loadPlan(); }));
         loadEvents().then(loadPlan);
         checkFeasibility();
     });
