@@ -241,7 +241,7 @@ def hukum_puasa(d: int, m: int, hari: int, panjang_bulan: int | None, sk: bool, 
     if m == 9:
         return {'k': 'wajib', 't': 'Puasa wajib Ramadan', 'n': 0}
     if m == 8 and panjang_bulan and d >= 16:
-        return {'k': 'makruh', 'n': 0, 't': 'Makruh: Hari Syak (akhir Syaban)' if d == panjang_bulan else 'Makruh: puasa setelah pertengahan Syaban'}
+        return {'k': 'makruh', 'n': 0, 't': 'Makruh: Hari Syak (akhir Syakban)' if d == panjang_bulan else 'Makruh: puasa setelah pertengahan Syakban'}
     sunah = []
     if sk:
         if hari == 0: sunah.append('Senin')
@@ -279,13 +279,12 @@ def perbandingan_kalender(d: date, sk: bool = True, ab: bool = True) -> dict:
                 sel.append(None)
                 continue
             nama_bln = (hisab.BULAN_JAWA if r['jawa'] else kalender.BULAN_H)[x['m'] - 1]
-            e = {'d': x['d'], 'm': x['m'], 'y': x['y'], 'bulan': nama_bln}
-            if not r['jawa']:
-                e['puasa'] = hukum_puasa(x['d'], x['m'], c % 7, x['panjang_bulan'], sk, ab)
+            e = {'d': x['d'], 'm': x['m'], 'y': x['y'], 'bulan': nama_bln,
+                 'puasa': hukum_puasa(x['d'], x['m'], c % 7, x['panjang_bulan'], sk, ab)}
             sel.append(e)
         baris.append({'nama': r['nama'], 'jawa': r['jawa'], 'sel': sel})
     return {'tanggal': d.isoformat(), 'bulan_acuan': {'no': t['bulan_acuan'], 'nama': kalender.BULAN_H[t['bulan_acuan'] - 1]},
             'kolom': kolom, 'baris': baris, 'awal': t['cjdn_awal'], 'akhir': t['cjdn_akhir'],
             'catatan': 'Hisab (MABIMS, Ummul Qura, Wujudul Hilal, KHGT) memakai kriteria & lokasi bawaan tiap kalender, bukan lokasi di formulir. '
-                       'Aritmetis I–IV = pola kabisat 1–4 (epoch Jumat). Mataraman memakai nomor bulan Jawa (Sura = Muharram). '
-                       'Prioritas: haram > wajib > makruh Syaban > sunah > Jumat (makruh bila tidak bertepatan puasa sunah).'}
+                       'Aritmetis I–IV = pola kabisat 1–4 (epoch Jumat). Mataraman memakai nomor bulan Jawa (Sura = Muharam) dan diwarnai dengan aturan puasa yang sama. '
+                       'Prioritas: haram > wajib > makruh Syakban > sunah > Jumat (makruh bila tidak bertepatan puasa sunah).'}

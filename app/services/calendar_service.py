@@ -27,8 +27,8 @@ NEPTU_PASARAN = {'Legi': 5, 'Pahing': 9, 'Pon': 7, 'Wage': 4, 'Kliwon': 8}
 
 BULAN_MASEHI = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli',
                 'Agustus', 'September', 'Oktober', 'November', 'Desember']
-BULAN_HIJRIAH = ['Muharram', 'Safar', 'Rabiul Awal', 'Rabiul Akhir', 'Jumadil Awal', 'Jumadil Akhir',
-                 'Rajab', 'Syaban', 'Ramadan', 'Syawal', 'Zulkaidah', 'Zulhijah']
+BULAN_HIJRIAH = ['Muharam', 'Safar', 'Rabiulawal', 'Rabiulakhir', 'Jumadilawal', 'Jumadilakhir',
+                 'Rajab', 'Syakban', 'Ramadan', 'Syawal', 'Zulkaidah', 'Zulhijah']
 BULAN_JAWA = ['Sura', 'Sapar', 'Mulud', 'Bakda Mulud', 'Jumadilawal', 'Jumadilakir',
               'Rejeb', 'Ruwah', 'Pasa', 'Sawal', 'Sela', 'Besar']
 WINDU_TAHUN = ['Alip', 'Ehé', 'Jimawal', 'Jé', 'Dal', 'Bé', 'Wawu', 'Jimakir']
@@ -337,7 +337,7 @@ def find_saka_date(saka_year: int, bulan: int, paksa: str, tithi: int,
 CALENDAR_INFO = [
     {
         'id': 'hijriah', 'nama': 'Hijriah Aritmetis (Hisab Urfi)',
-        'sejarah': "Kalender Hijriah dimulai dari 1 Muharram 1 H (16 Juli 622 M, Julian), tahun hijrah Nabi "
+        'sejarah': "Kalender Hijriah dimulai dari 1 Muharam 1 H (16 Juli 622 M, Julian), tahun hijrah Nabi "
                    "Muhammad ke Madinah, dan ditetapkan sebagai sistem tahun pada masa Khalifah Umar bin Khattab. "
                    "Versi aritmetis memakai aturan tetap, bukan pengamatan hilal.",
         'prinsip': "Siklus 30 tahun berisi 11 tahun kabisat (tahun ke-2, 5, 7, 10, 13, 16, 18, 21, 24, 26, 29). "
@@ -349,7 +349,7 @@ CALENDAR_INFO = [
         'id': 'jawa', 'nama': 'Jawa Mataraman (Sultan Agungan)',
         'sejarah': "Pada 1633 M (1043 H) Sultan Agung dari Mataram menyelaraskan tahun Jawa dengan peredaran "
                    "Bulan seperti Hijriah, tetapi meneruskan hitungan tahun Saka sehingga 1 Sura 1555 sama dengan "
-                   "1 Muharram 1043 H.",
+                   "1 Muharam 1043 H.",
         'prinsip': "Tahun Jawa = tahun Hijriah + 512. Delapan tahun membentuk satu windu (Alip, Ehé, Jimawal, Jé, "
                    "Dal, Bé, Wawu, Jimakir). Pancawara/pasaran (5 hari) dan pawukon (210 hari = 30 wuku x 7 hari) "
                    "berjalan terus tanpa terikat bulan.",

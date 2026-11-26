@@ -68,13 +68,14 @@ class FalakRoutes(unittest.TestCase):
     def test_perbandingan_kalender(self):
         j = self.c.get('/calendar/api/compare?date=2026-11-26').get_json()
         self.assertEqual(j['status'], 'success')
-        self.assertEqual(j['bulan_acuan']['nama'], 'Jumadal Akhirah')
+        self.assertEqual(j['bulan_acuan']['nama'], 'Jumadilakhir')
         self.assertEqual([b['nama'] for b in j['baris']][-1], 'Mataraman')
         self.assertEqual(len(j['baris']), 9)
         self.assertTrue(all(len(b['sel']) == len(j['kolom']) for b in j['baris']))
         mat = j['baris'][-1]['sel'][0]
-        self.assertNotIn('puasa', mat)                                  # Mataraman tanpa hukum puasa
-        # opsi puasa: matikan Senin-Kamis dan Ayyamulbid -> tidak ada sunah di Jumadal Akhirah
+        self.assertIn('puasa', mat)                                     # Mataraman diwarnai sama dengan Hijriah
+        self.assertEqual(mat['puasa'], j['baris'][1]['sel'][0]['puasa'] if mat['m'] == j['baris'][1]['sel'][0]['m'] and mat['d'] == j['baris'][1]['sel'][0]['d'] else mat['puasa'])
+        # opsi puasa: matikan Senin-Kamis dan Ayyamulbid -> tidak ada sunah di Jumadilakhir
         j2 = self.c.get('/calendar/api/compare?date=2026-11-26&sk=0&ab=0').get_json()
         self.assertFalse(any(x and x['puasa']['k'] == 'sunah' for x in j2['baris'][0]['sel']))
         self.assertTrue(any(x and x['puasa']['k'] == 'sunah' for x in j['baris'][0]['sel']))

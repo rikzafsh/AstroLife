@@ -12,6 +12,14 @@ G = json.loads((Path(__file__).parent / 'fixtures' / 'persis_golden_bulan.json')
 DET = 1 / 86400
 
 
+def nomor_js(nama):
+    """Nomor bulan dari nama pada JS (ejaan JS berbeda dari KBBI yang dipakai aplikasi)."""
+    return [norm(x) for x in NAMA_JS].index(norm(nama)) + 1
+
+
+NAMA_JS = ('Al-Muharram', 'Shafar', 'Rabiul Awwal', 'Rabiul Akhir', 'Jumadal Ula', 'Jumadal Akhirah', 'Rajab', 'Syaban', 'Ramadhan', 'Syawwal', 'Dzulqadah', 'Dzulhijjah')
+
+
 def norm(n):
     """Samakan ejaan nama bulan (JS: Syawwal; aplikasi: Syawal): huruf kembar dan tanda baca dibuang."""
     return re.sub(r'(.)\1+', r'\1', re.sub(r'[^a-z]', '', n.lower()))
@@ -61,7 +69,7 @@ class AwalBulan(unittest.TestCase):
             for k, nama in (('mabims', 'mabims'), ('uq', 'ummulqura'), ('wh', 'wujudulhilal'), ('turki', 'turki')):
                 mm = re.search(r'\| (\d+) (.+) (\d+) H', c[k])
                 h = hisab.hijri_kriteria(cjdn, nama)
-                self.assertEqual((h['tgl'], norm(h['nama_bulan']), h['thn']), (int(mm.group(1)), norm(mm.group(2)), int(mm.group(3))), (k, c['d'], c['m'], c['y']))
+                self.assertEqual((h['tgl'], h['bln'], h['thn']), (int(mm.group(1)), nomor_js(mm.group(2)), int(mm.group(3))), (k, c['d'], c['m'], c['y']))
 
     def test_ramadan_ummul_qura(self):
         # 1 Ramadan 1447 (UQ) = 19 Feb 2026? Hitungan: malam sebelum awal Ramadan ikut dianggap Ramadan

@@ -150,7 +150,7 @@ WIB 7 (bujur 95-115), WITA 8 (115-130), WIT 9 (130-141,5); di luar itu round(buj
 - Pasaran: jangkar **17 Agustus 1945 = Jumat Legi** (juga cocok: 1 Jan 1970 Kamis Wage; 16 Jun 2026 Selasa Wage; 17 Jun 2026 Rabu Kliwon).
 - Wuku: jangkar **Galungan 2 Agustus 2023 = Rabu Kliwon, Wuku Dungulan** (210 hari; Galungan 4 Jan 2023 juga cocok); pawukon 30 wuku × 7 hari.
 - Windu: **1 Sura 1555 AJ = Alip**; tahun Jawa = tahun Hijriah + 512; Alip, Ehé, Jimawal, Jé, Dal, Bé, Wawu, Jimakir. 2026: tahun **Bé 1960**.
-- Hijriah aritmetis (hisab urfi, epoch sipil Jumat 16 Juli 622 Julian); dapat berbeda 1-2 hari dari penetapan resmi. 1 Muharram 1448 (urfi) = 17 Jun 2026 (cocok dengan Sura 1960 versi Jawa).
+- Hijriah aritmetis (hisab urfi, epoch sipil Jumat 16 Juli 622 Julian); dapat berbeda 1-2 hari dari penetapan resmi. 1 Muharam 1448 (urfi) = 17 Jun 2026 (cocok dengan Sura 1960 versi Jawa).
 - Jyotiṣa: tithi dari elongasi/12°, nakshatra dari bujur sidereal Bulan (ayanamsa Lahiri), bulan amanta dari rasi Matahari saat bulan baru. **Prasasti Laguna Copperplate: Saka 822, Waisakha, Krsnapaksa tithi 4, Senin = 21 April 900 (Julian)**: cocok persis.
 - ~~`calendar_service.py` dan `islamic_service.py` belum disambungkan~~ → **Diganti**: waktu salat, kiblat, rasydulqiblat kini dari `app/persis` (port JS pemilik, lihat bagian 10); `islamic_service.py` tinggal puasa sunah/tanggal penting; `calendar_service.py` tetap dipakai untuk weton/pawukon/Jyotiṣa dan Beranda.
 - Rasydulqiblat tahunan (UTC): ±28 Mei 09:18 dan ±16 Juli 09:27 (Ka'bah 21,42255°LU 39,82620°BT). [Dari modul awal proyek; belum diuji ulang.]
@@ -204,7 +204,7 @@ python -m catalog.generate 2026 2027            # alternatif terminal (ASTROLIFE
 ## 10. Port persis-times-js [Verifikasi]
 Sumber: `persis-times-js` (berkas dari pemilik; lisensi MIT Abu Sabda/PP PERSIS). Hasilnya di `app/persis/` (lihat `app/persis/README.md`).
 - Salat, kiblat, rasydulqiblat, istiwa, Hijriah aritmetis, kalender Jawa **cocok dengan JS asli** (uji `tests/test_persis.py` terhadap fixture dari Node; selisih < 1e-7 jam).
-- Acuan nyata 2026 (Yogyakarta): Rasydul 1 = 28 Mei 16:17:58 WIB (09:17:58 UTC), Rasydul 2 = 15 Jul 16:26:42 WIB; antipoda 14 Jan & 29 Nov. Cocok dengan fakta di 6.1. 1 Muharram 1448 (urfi) = 17 Jun 2026 = 1 Sura 1960.
+- Acuan nyata 2026 (Yogyakarta): Rasydul 1 = 28 Mei 16:17:58 WIB (09:17:58 UTC), Rasydul 2 = 15 Jul 16:26:42 WIB; antipoda 14 Jan & 29 Nov. Cocok dengan fakta di 6.1. 1 Muharam 1448 (urfi) = 17 Jun 2026 = 1 Sura 1960.
 - Kiblat Yogyakarta (bola) 294°42′40″, Vincenty 294°35′02″ (lazim dikutip ±294°43′ = bola).
 - Metode salat bawaan UI: Persatuan Islam (Subuh −20°, Isya −18°), ihtiyat 2 menit, imsak 10 menit; 9 metode tersedia. Jadwal = menit hisab dibulatkan ke bawah + ihtiyat.
 - **Tanggal Jawa** kini hanya satu: siklus kurup JS (`persis.kalender.jd_ke_jawa`). Versi lama Hijriah + 512 dibuang; weton/pawukon tetap dari `calendar_service`.

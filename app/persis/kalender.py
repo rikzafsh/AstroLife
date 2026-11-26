@@ -7,8 +7,8 @@ from .core import jdkm, kmjd, mod
 
 HARI_H = ('Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Ahad')
 PASARAN = ('Legi', 'Pahing', 'Pon', 'Wage', 'Kliwon')
-BULAN_H = ('Al-Muharram', 'Shafar', 'Rabiul Awwal', 'Rabiul Akhir', 'Jumadal Ula', 'Jumadal Akhirah', 'Rajab',
-           'Syaban', 'Ramadhan', 'Syawal', 'Zulqadah', 'Zulhijjah')
+BULAN_H = ('Muharam', 'Safar', 'Rabiulawal', 'Rabiulakhir', 'Jumadilawal', 'Jumadilakhir', 'Rajab',
+           'Syakban', 'Ramadan', 'Syawal', 'Zulkaidah', 'Zulhijah')   # ejaan KBBI
 
 # epoch: 1 = Kamis 15 Juli 622 M; 2 = Jumat 16 Juli 622 M.  kabisat (hCalL): 1 = 2,5,7,10,13,15,18,21,24,26,29;
 # 2 = 2,5,7,10,13,16,18,21,24,26,29 (bawaan); 3 = 2,5,8,10,13,16,19,21,24,27,29; 4 = 2,5,8,11,13,16,19,21,24,27,30

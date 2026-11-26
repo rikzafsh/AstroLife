@@ -70,6 +70,6 @@ def puasa():
         n = int(F._float(request.args.get('days'), 'Jumlah hari', 1, 120, 45))
         return jsonify({'status': 'success', 'dari': d.isoformat(), 'hari': n,
                         'jadwal': I.fasting_schedule(d, n),
-                        'catatan': 'Hijriah aritmetis (hisab urfi); awal Ramadan/Syawal/Zulhijjah resmi dapat berbeda 1–2 hari.'})
+                        'catatan': 'Hijriah aritmetis (hisab urfi); awal Ramadan/Syawal/Zulhijah resmi dapat berbeda 1–2 hari.'})
     except F.InputError as e:
         return _error(e)

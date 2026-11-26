@@ -15,11 +15,11 @@ from app.services import calendar_service as cs
 # Kalender Islam: tanggal penting dan puasa sunah
 # ---------------------------------------------------------------------------
 IMPORTANT_DATES = {
-    (1, 1): 'Tahun Baru Islam 1 Muharram',
-    (1, 10): "Hari Asyura (10 Muharram)",
+    (1, 1): 'Tahun Baru Islam 1 Muharam',
+    (1, 10): "Hari Asyura (10 Muharam)",
     (3, 12): 'Maulid Nabi Muhammad SAW',
     (7, 27): "Isra Mi'raj",
-    (8, 15): 'Nisfu Syaban',
+    (8, 15): 'Nisfu Syakban',
     (9, 1): 'Awal Ramadan',
     (9, 17): 'Nuzulul Quran',
     (10, 1): 'Idulfitri 1 Syawal',
@@ -55,7 +55,7 @@ def fasting_info(jdn: int) -> dict:
     if m == 10 and 2 <= d <= 30:
         out['sunah'].append('Syawal (6 hari)')
     if m == 8 and d == 15:
-        out['sunah'].append('Nisfu Syaban')
+        out['sunah'].append('Nisfu Syakban')
     return out
 
 
@@ -64,10 +64,10 @@ FASTING_NOTES = {
     'Kamis': 'Puasa Kamis: hari diangkatnya amal.',
     'Ayyamul Bidh': 'Puasa 13, 14, 15 setiap bulan Hijriah (hari-hari Bulan purnama).',
     'Arafah': 'Puasa Arafah (9 Zulhijah) bagi yang tidak sedang berhaji.',
-    'Tasua': 'Puasa Tasua (9 Muharram).',
-    'Asyura': 'Puasa Asyura (10 Muharram).',
+    'Tasua': 'Puasa Tasua (9 Muharam).',
+    'Asyura': 'Puasa Asyura (10 Muharam).',
     'Syawal (6 hari)': 'Puasa enam hari di bulan Syawal setelah 1 Syawal (boleh berurutan/tidak).',
-    'Nisfu Syaban': 'Sebagian ulama menganjurkan; termasuk Ayyamul Bidh bulan Syaban.',
+    'Nisfu Syakban': 'Sebagian ulama menganjurkan; termasuk Ayyamul Bidh bulan Syakban.',
 }
 
 

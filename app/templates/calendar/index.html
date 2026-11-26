@@ -81,7 +81,8 @@
       $('rows').innerHTML =
         row('Masehi', g.teks) + row('Hijriah (aritmetis)', h.teks, h.hari + ' ' + h.pasaran) +
         j.hijriah_kriteria.map(k => row(k.nama, k.teks || '—')).join('') +
-        row('Jawa (siklus kurup)', w.teks, 'neptu ' + w.neptu + ' (' + w.neptu_rincian + ') · sadwara ' + w.sadwara + ' · wuku ke-' + w.wuku_no) +
+        row('Jawa Mataraman', w.tanggal + ' ' + w.bulan + ' ' + w.tahun_windu + ' ' + w.tahun + ' AJ') +
+        row('Pawukon', w.hari + ' ' + w.pasaran + ' ' + w.sadwara + ' ' + w.wuku, 'neptu ' + w.neptu + ' (' + w.neptu_rincian + ') · wuku ke-' + w.wuku_no) +
         (jy ? row('Jyotiṣa', jy.teks, jy.fase_bulan + ' · yoga ' + jy.yoga + ' · karana ' + jy.karana) : '') +
         row('Julian Day (tengah malam)', j.jd.toFixed(1));
       $('note').textContent = j.catatan;
