@@ -43,6 +43,7 @@
   .checks label { display:flex; align-items:center; gap:8px; font-size:13.5px; padding:5px 2px; cursor:pointer; color:var(--text); }
   .checks .n { margin-left:auto; color:var(--muted); font-size:12px; }
   .checks input { accent-color:var(--accent); width:15px; height:15px; }
+  .loc-chip { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 12px; border:1px solid var(--line); border-radius:10px; background:var(--field); font-size:14px; }
   .hint { font-size:12px; color:var(--muted); line-height:1.5; margin-top:6px; }
 
   .cat-head { padding:20px 24px; border-radius:16px; margin-bottom:20px; display:flex; flex-wrap:wrap; gap:16px; align-items:flex-start; justify-content:space-between; }
@@ -154,6 +155,11 @@
       <button class="btn only-mobile" id="side-toggle" style="width:100%;margin-bottom:6px;">Pengaturan &amp; filter</button>
       <div class="side-body">
         <h2>Lokasi</h2>
+        <div class="loc-chip">
+          <div><b data-pref="lokasi"></b><span class="hint" style="display:block;margin:0"><span data-pref="koordinat"></span> · <span data-pref="zona"></span></span></div>
+          <button type="button" class="btn" data-open-settings>Ubah</button>
+        </div>
+        <div class="hidden" aria-hidden="true">
         <select id="preset" aria-label="Lokasi">
           <option value="-7.7956,110.3695">Yogyakarta</option>
           <option value="-6.2088,106.8456">Jakarta</option>
@@ -172,6 +178,8 @@
         </div>
         <button class="btn" id="geo-btn" style="margin-top:8px;width:100%;">Pakai lokasi saya</button>
         <div class="hint" id="loc-note"></div>
+
+        </div>
 
         <h2>Periode</h2>
         <div class="month-nav">
@@ -578,8 +586,17 @@
     $('side-toggle').addEventListener('click', () => $('side').classList.toggle('collapsed'));
     if (window.matchMedia('(max-width:1023px)').matches) $('side').classList.add('collapsed');
 
+    // Lokasi mengikuti menu Pengaturan (tersimpan di peramban; sama di semua halaman dan tab)
+    function lokasiDariPrefs() {
+        const l = AstroPrefs.get().lokasi, v = `${l.lat},${l.lon}`;
+        $('lat').value = l.lat; $('lon').value = l.lon;
+        $('preset').value = [...$('preset').options].some(o => o.value === v) ? v : 'custom';
+    }
+    document.addEventListener('astrolife:prefs', (e) => { if (e.detail.berubah.includes('lokasi')) { lokasiDariPrefs(); save(); load(); } });
+
     const genInitDone = genInit();
     restore();
+    lokasiDariPrefs();
     const now = new Date();
     $('month').value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
     load();

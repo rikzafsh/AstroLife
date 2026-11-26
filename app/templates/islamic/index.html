@@ -15,29 +15,17 @@
         </p>
     </div>
 
-    <!-- Lokasi & pengaturan -->
-    <form id="f" class="glass-panel rounded-2xl p-5 sm:p-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm" onsubmit="return false">
-        <label class="col-span-2 md:col-span-4 text-slate-400">Kota cepat
-            <select id="kota" class="mt-1 w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-ink">
-                <option value="{{ default_location.lat }},{{ default_location.lon }}">{{ default_location.name }} (bawaan)</option>
-                <option value="-6.2088,106.8456">Jakarta</option><option value="-6.9175,107.6191">Bandung</option>
-                <option value="-7.2575,112.7521">Surabaya</option><option value="3.5952,98.6722">Medan</option>
-                <option value="-5.1477,119.4327">Makassar</option><option value="-8.6500,115.2167">Denpasar</option>
-                <option value="-2.5337,140.7181">Jayapura</option><option value="21.4225,39.8262">Makkah</option>
-                <option value="custom">Koordinat sendiri</option>
-            </select></label>
-        <label class="text-slate-400">Lintang (°)<input id="lat" type="number" step="0.0001" value="{{ default_location.lat }}" class="mt-1 w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-ink"></label>
-        <label class="text-slate-400">Bujur (°)<input id="lon" type="number" step="0.0001" value="{{ default_location.lon }}" class="mt-1 w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-ink"></label>
-        <label class="text-slate-400">Elevasi (m)<input id="elev" type="number" step="1" value="0" class="mt-1 w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-ink"></label>
-        <label class="text-slate-400">Zona waktu (jam, kosong = otomatis)<input id="tz" type="number" step="0.5" placeholder="otomatis" class="mt-1 w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-ink"></label>
-        <label class="text-slate-400">Tanggal<input id="date" type="date" class="mt-1 w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-ink"></label>
-        <label class="text-slate-400">Metode salat
-            <select id="method" class="mt-1 w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-ink">
-                {% for m in metode %}<option value="{{ m.kunci }}">{{ m.nama }}</option>{% endfor %}
-            </select></label>
-        <label class="text-slate-400">Ihtiyat (menit)<input id="ihtiyat" type="number" min="0" max="10" value="2" class="mt-1 w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-ink"></label>
-        <label class="text-slate-400">Imsak (menit sebelum Subuh)<input id="imsak" type="number" min="0" max="60" value="10" class="mt-1 w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-ink"></label>
-        <div class="col-span-2 md:col-span-4 flex items-center gap-3">
+    <!-- Ringkasan pengaturan (lokasi, metode salat, kriteria Hijriah diatur lewat menu Pengaturan) -->
+    <form id="f" class="glass-panel rounded-2xl p-5 sm:p-6 space-y-4" onsubmit="return false">
+        <div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
+            <span class="ui-chip"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i> <b class="text-ink font-semibold" data-pref="lokasi"></b> <span data-pref="koordinat"></span> · <span data-pref="zona"></span></span>
+            <span class="ui-chip"><i data-lucide="clock" class="w-3.5 h-3.5"></i> Metode: <b id="ringkas-metode" class="text-ink font-semibold"></b></span>
+            <span class="ui-chip"><i data-lucide="calendar-days" class="w-3.5 h-3.5"></i> Hijriah: <b class="text-ink font-semibold" data-pref="hijriah"></b></span>
+            <button type="button" data-open-settings class="ui-btn ui-btn-sm"><i data-lucide="sliders-horizontal" class="w-4 h-4"></i> Ubah pengaturan</button>
+        </div>
+        <div class="flex flex-wrap items-end gap-3 text-sm">
+            <label class="text-slate-400">Tanggal<input id="date" type="date" class="mt-1 block ui-field"></label>
+            <button type="button" id="hari-ini" class="ui-btn">Hari ini</button>
             <button id="go" class="ui-btn ui-btn-primary" style="background:linear-gradient(135deg,#009339,#006b29)">Hitung</button>
             <span id="err" class="text-rose-300 text-xs"></span>
         </div>
@@ -83,6 +71,7 @@
 
     <div class="glass-panel rounded-2xl p-6 space-y-4">
         <h3 class="font-bold text-ink text-lg flex items-center gap-2"><i data-lucide="moon" class="w-5 h-5 text-emerald-400"></i> Puasa Sunah &amp; Hari Penting (45 hari ke depan)</h3>
+        <p class="text-sm text-slate-400 -mt-2">Tanggal Hijriah menurut kriteria <b class="text-ink" data-pref="hijriah"></b> — ubah lewat <button type="button" data-open-settings class="underline underline-offset-2 hover:text-ink">Pengaturan</button>.</p>
         <div id="puasa" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs"></div>
         <p id="puasa-note" class="text-[11px] text-slate-500"></p>
     </div>
@@ -96,11 +85,8 @@
   const today = new Date(); $('date').value = today.getFullYear() + '-' + pad(today.getMonth() + 1) + '-' + pad(today.getDate());
   $('rq-year').value = today.getFullYear();
 
-  function lokQS() {
-    const q = new URLSearchParams({ lat: $('lat').value, lon: $('lon').value, elev: $('elev').value || 0 });
-    if ($('tz').value !== '') q.set('tz', $('tz').value);
-    return q;
-  }
+  const P = window.AstroPrefs, lokQS = () => P.qsLokasi();
+  const namaMetode = () => { const m = {{ pref_metode|tojson }}.find(x => x.kunci === P.get().salat.metode); return m ? m.nama : P.get().salat.metode; };
   async function get(url, q) {
     const r = await fetch(url + '?' + q.toString()); const j = await r.json();
     if (!r.ok || j.status !== 'success') throw new Error(j.message || 'Gagal menghitung.');
@@ -109,7 +95,7 @@
   const row = (a, b, c, aktif) => '<div class="flex justify-between items-center px-3.5 py-2.5 rounded-xl border ' + (aktif ? 'bg-emerald-500/15 border-emerald-500/60 ring-1 ring-emerald-500/40' : 'bg-slate-900/60 border-slate-800') + '"><span class="text-slate-200 font-medium">' + a + (aktif ? ' <span class="ml-1.5 text-[10px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded bg-emerald-600 text-white">berikutnya</span>' : '') + '</span><span class="text-right">' + b + (c ? '<span class="block text-[11px] text-slate-400 font-mono">' + c + '</span>' : '') + '</span></div>';
 
   async function salat() {
-    const q = lokQS(); q.set('date', $('date').value); q.set('method', $('method').value); q.set('ihtiyat', $('ihtiyat').value); q.set('imsak', $('imsak').value);
+    const q = lokQS(); q.set('date', $('date').value); const sp = P.get().salat; q.set('method', sp.metode); q.set('ihtiyat', sp.ihtiyat); q.set('imsak', sp.imsak); $('ringkas-metode').textContent = namaMetode();
     const j = await get('{{ url_for("islamic.prayer_times") }}', q);
     $('salat-judul').textContent = j.tanggal + ' · ' + j.lokasi.tz_label + ' (UTC' + (j.lokasi.tz >= 0 ? '+' : '') + j.lokasi.tz + ')';
     // Tandai waktu salat berikutnya bila tanggal yang dihitung = hari ini di lokasi tersebut
@@ -148,7 +134,7 @@
     $('rq-note').textContent = j.catatan;
   }
   async function puasa() {
-    const q = lokQS(); q.set('date', $('date').value); q.set('days', 45);
+    const q = lokQS(); q.set('date', $('date').value); q.set('days', 45); q.set('kriteria', P.get().hijriah.kriteria);
     const j = await get('{{ url_for("islamic.puasa") }}', q);
     $('puasa').innerHTML = j.jadwal.map(p => '<div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800"><div class="flex justify-between"><b class="' + (p.status === 'wajib' ? 'text-amber-300' : p.status === 'haram' ? 'text-rose-300' : 'text-emerald-300') + '">' + esc(p.status === 'sunah' ? p.jenis.join(', ') : p.status) + '</b><span class="text-slate-400">' + esc(p.hari) + ', ' + p.tanggal + '</span></div><div class="text-slate-300">' + esc(p.hijriah) + (p.peristiwa ? ' — ' + esc(p.peristiwa) : '') + '</div></div>').join('') || '<p class="text-slate-400">Tidak ada.</p>';
     $('puasa-note').textContent = j.catatan;
@@ -158,10 +144,10 @@
     ['rq-tahunan', 'rq-harian'].forEach(id => { $(id).innerHTML = '<caption class="text-left text-slate-400 py-2">Menghitung…</caption>'; });
     try { await Promise.all([salat(), kiblat(), rasydul(), puasa()]); } catch (e) { $('err').textContent = e.message; }
   }
-  $('kota').addEventListener('change', () => { const v = $('kota').value; if (v !== 'custom') { const [la, lo] = v.split(','); $('lat').value = la; $('lon').value = lo; $('tz').value = ''; semua(); } });
-  ['lat', 'lon'].forEach(id => $(id).addEventListener('input', () => { $('kota').value = 'custom'; }));
-  ['date', 'method', 'ihtiyat', 'imsak', 'elev', 'tz'].forEach(id => $(id).addEventListener('change', semua));
+  ['date'].forEach(id => $(id).addEventListener('change', semua));
   ['rq-days', 'rq-year', 'rq-years', 'rq-q'].forEach(id => $(id).addEventListener('change', semua));
+  $('hari-ini').addEventListener('click', () => { const t = new Date(); $('date').value = t.getFullYear() + '-' + pad(t.getMonth() + 1) + '-' + pad(t.getDate()); semua(); });
+  document.addEventListener('astrolife:prefs', semua);          // lokasi / metode / kriteria diubah (di sini atau di tab lain)
   $('go').addEventListener('click', semua);
   semua();
   if (window.lucide) lucide.createIcons();

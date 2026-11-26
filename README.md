@@ -68,3 +68,10 @@ Tes cuaca memakai respons tiruan (tanpa internet). Tes khusus Skyfield dilewati 
 - Warna netral memakai variabel di `app/static/css/theme.css`; konfigurasi Tailwind bersama ada di `app/static/js/tailwind-config.js` (kelas lama seperti `slate-*`, `indigo-*`, `cyan-*` otomatis mengikuti palet dan tema). Teks judul memakai `text-ink` (bukan `text-white`).
 - Komponen bersama: `.ui-btn`, `.ui-btn-primary`, `.ui-field`, `.ui-label`, `.ui-chip`.
 - Tes: `tests/test_tema.py`.
+
+## Menu Pengaturan (lokasi, waktu salat, kalender Hijriah)
+- Tombol **Pengaturan** di header (atau tautan "Ubah" di bilah atas) membuka dialog berisi: lokasi (kota, koordinat, elevasi, zona waktu, "Pakai lokasi saya"), metode salat + ihtiyat + imsak, dan kriteria kalender Hijriah (Aritmetis, MABIMS, Ummul Qura, Wujudul Hilal, KHGT).
+- Disimpan di `localStorage` peramban (`astrolife.prefs.v1`) lewat `app/static/js/prefs.js`: tidak hilang saat halaman dimuat ulang, dan berubah serentak di semua halaman dan tab. Nilai rusak otomatis dibersihkan ke bawaan. Penyimpanan hanya per peramban/perangkat (tanpa akun).
+- Dipakai oleh: Beranda (lokasi, cuaca, event, tanggal Hijriah), Observasi, Katalog (lokasi), Salat & Kiblat (lokasi, metode, kriteria Hijriah), Lab Kalender (menandai kriteria pilihan).
+- Jadwal **Puasa Sunah & Hari Penting** mengikuti kriteria Hijriah pilihan: `GET /islamic/api/puasa?kriteria=aritmetis|mabims|ummulqura|wujudulhilal|turki`.
+- Tes: `tests/test_pengaturan.py`.

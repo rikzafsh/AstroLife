@@ -288,3 +288,10 @@ def perbandingan_kalender(d: date, sk: bool = True, ab: bool = True) -> dict:
             'catatan': 'Hisab (MABIMS, Ummul Qura, Wujudul Hilal, KHGT) memakai kriteria & lokasi bawaan tiap kalender, bukan lokasi di formulir. '
                        'Aritmetis I–IV = pola kabisat 1–4 (epoch Jumat). Mataraman memakai nomor bulan Jawa (Sura = Muharam) dan diwarnai dengan aturan puasa yang sama. '
                        'Prioritas: haram > wajib > makruh Syakban > sunah > Jumat (makruh bila tidak bertepatan puasa sunah).'}
+
+
+def nama_kriteria(kunci: str) -> str:
+    """Nama tampilan kriteria Hijriah (kunci: aritmetis | mabims | ummulqura | wujudulhilal | turki)."""
+    if kunci == 'aritmetis':
+        return 'Aritmetis (urfi)'
+    return dict(zip(hisab.KRITERIA, hisab.NAMA_KRITERIA))[kunci]

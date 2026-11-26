@@ -28,9 +28,10 @@ IMPORTANT_DATES = {
 }
 
 
-def fasting_info(jdn: int) -> dict:
-    """Status puasa untuk satu hari: wajib, haram, atau daftar puasa sunah yang berlaku."""
-    y, m, d = cs.jdn_to_hijri(jdn)
+def fasting_info(jdn: int, hijri: tuple | None = None) -> dict:
+    """Status puasa untuk satu hari: wajib, haram, atau daftar puasa sunah yang berlaku.
+    hijri = (tahun, bulan, tanggal) bila tanggal Hijriah sudah ditentukan kriteria tertentu; kosong = aritmetis."""
+    y, m, d = hijri or cs.jdn_to_hijri(jdn)
     wd = ac.weekday_index(jdn)
     out = {'wajib': False, 'haram': None, 'sunah': []}
     if m == 9:
@@ -71,13 +72,30 @@ FASTING_NOTES = {
 }
 
 
-def fasting_schedule(start: date, days: int = 30) -> list:
+KRITERIA_PUASA = ('aritmetis', 'mabims', 'ummulqura', 'wujudulhilal', 'turki')
+
+
+def hijri_menurut(jdn: int, kriteria: str = 'aritmetis') -> dict:
+    """Tanggal Hijriah satu hari menurut kriteria: aritmetis (hisab urfi) atau hisab awal bulan (app/persis/hisab.py)."""
+    if kriteria == 'aritmetis':
+        h = cs.hijri_info(jdn)
+        return {'tahun': h['tahun'], 'bulan': h['bulan'], 'tanggal': h['tanggal'], 'teks': h['teks']}
+    from app.persis import hisab
+    h = hisab.hijri_kriteria(jdn, kriteria)
+    if h is None:
+        raise ValueError('Tanggal di luar jangkauan hisab.')
+    return {'tahun': h['thn'], 'bulan': h['bln'], 'tanggal': h['tgl'], 'teks': f"{h['tgl']} {h['nama_bulan']} {h['thn']} H"}
+
+
+def fasting_schedule(start: date, days: int = 30, kriteria: str = 'aritmetis') -> list:
+    if kriteria not in KRITERIA_PUASA:
+        raise ValueError('Kriteria Hijriah tidak dikenal.')
     rows = []
     for i in range(days):
         d = start + timedelta(days=i)
         jdn = ac.to_jdn(d.year, d.month, d.day)
-        f = fasting_info(jdn)
-        h = cs.hijri_info(jdn)
+        h = hijri_menurut(jdn, kriteria)
+        f = fasting_info(jdn, (h['tahun'], h['bulan'], h['tanggal']))
         evt = IMPORTANT_DATES.get((h['bulan'], h['tanggal']))
         if f['sunah'] or f['wajib'] or f['haram'] or evt:
             rows.append({

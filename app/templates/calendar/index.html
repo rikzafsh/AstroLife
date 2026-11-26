@@ -68,7 +68,8 @@
 (function () {
   const $ = id => document.getElementById(id);
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  const row = (a, b, c) => '<div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800 flex justify-between gap-4"><span class="text-slate-400">' + a + '</span><span class="text-right text-ink font-semibold">' + esc(b) + (c ? '<br><span class="text-[11px] font-normal text-slate-400">' + esc(c) + '</span>' : '') + '</span></div>';
+  const pil = (k) => AstroPrefs.get().hijriah.kriteria === k ? ' <span class="ui-chip !text-[10px] !py-0 ml-1" style="color:rgb(var(--sky-400))">pilihan Anda</span>' : '';
+  const row = (a, b, c, aktif) => '<div class="p-3 rounded-xl border flex justify-between gap-4 ' + (aktif ? 'bg-sky-500/10 border-sky-500/50' : 'bg-slate-900/60 border-slate-800') + '"><span class="text-slate-400">' + a + '</span><span class="text-right text-ink font-semibold">' + esc(b) + (c ? '<br><span class="text-[11px] font-normal text-slate-400">' + esc(c) + '</span>' : '') + '</span></div>';
   function isiHariIni() { const t = new Date(); $('src').value = 'masehi'; $('d').value = t.getDate(); $('m').value = t.getMonth() + 1; $('y').value = t.getFullYear(); }
   async function konversi() {
     $('err').textContent = '';
@@ -77,10 +78,10 @@
         body: JSON.stringify({ source: $('src').value, year: $('y').value, month: $('m').value, day: $('d').value, epoch: $('epoch').value, kabisat: $('kab').value }) });
       const j = await r.json();
       if (!r.ok) throw new Error(j.message || 'Gagal.');
-      const g = j.gregorian, h = j.hijriah, w = j.jawa, jy = j.jyotisa;
+      const g = j.gregorian, h = j.hijriah, w = j.jawa, jy = j.jyotisa, pk = AstroPrefs.get().hijriah.kriteria;
       $('rows').innerHTML =
-        row('Masehi', g.teks) + row('Hijriah (aritmetis)', h.teks, h.hari + ' ' + h.pasaran) +
-        j.hijriah_kriteria.map(k => row(k.nama, k.teks || '—')).join('') +
+        row('Masehi', g.teks) + row('Hijriah (aritmetis)' + pil('aritmetis'), h.teks, h.hari + ' ' + h.pasaran, pk === 'aritmetis') +
+        j.hijriah_kriteria.map(k => row(k.nama + pil(k.kunci), k.teks || '—', '', pk === k.kunci)).join('') +
         row('Jawa Mataraman', w.tanggal + ' ' + w.bulan + ' ' + w.tahun_windu + ' ' + w.tahun + ' AJ') +
         row('Pawukon', w.hari + ' ' + w.pasaran + ' ' + w.sadwara + ' ' + w.wuku, 'neptu ' + w.neptu + ' (' + w.neptu_rincian + ') · wuku ke-' + w.wuku_no) +
         (jy ? row('Jyotiṣa', jy.teks, jy.fase_bulan + ' · yoga ' + jy.yoga + ' · karana ' + jy.karana) : '') +
@@ -96,6 +97,7 @@
   const WARNA = { wajib: ['#2a35e2', '#fff'], makruh: ['#f5c542', '#2b2000'], haram: ['#ed2124', '#fff'] }, SUNAH = ['#8fdcae', '#009339', '#005f24'];
   const pad = n => String(n).padStart(2, '0');
   let kc = null;
+  const NAMA_TABEL = { mabims: 'MABIMS', ummulqura: 'Ummul Qura', wujudulhilal: 'Wujudul Hilal', turki: 'KHGT (Turki)' };
   function warna(p) {
     if (!p || !p.k) return null;
     if (p.k === 'sunah') { const n = Math.min(p.n, 3); return [SUNAH[n - 1], n > 1 ? '#fff' : '#06361a']; }
@@ -118,7 +120,8 @@
       .map(a => '<span><span style="display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:4px;vertical-align:-1px;background:' + a[0] + '"></span>' + a[1] + '</span>').join('');
     let h = '<thead><tr><th class="px-2 py-1 text-left text-slate-400 sticky left-0 bg-slate-900">Kalender</th>' + j.kolom.map(k => '<th class="px-1 py-1 font-semibold text-slate-400" title="' + k.hari + ', ' + k.tgl + '/' + pad(k.bln) + '/' + k.thn + '">' + k.tgl + '/' + pad(k.bln) + '</th>').join('') + '</tr></thead><tbody>';
     j.baris.forEach(r => {
-      h += '<tr><th class="px-2 py-1 text-left whitespace-nowrap text-slate-200 sticky left-0 bg-slate-900">' + esc(r.nama) + '</th>';
+      const dipilih = NAMA_TABEL[AstroPrefs.get().hijriah.kriteria] === r.nama;
+      h += '<tr><th class="px-2 py-1 text-left whitespace-nowrap sticky left-0 ' + (dipilih ? 'text-ink bg-sky-500/20' : 'text-slate-200 bg-slate-900') + '">' + esc(r.nama) + (dipilih ? ' ★' : '') + '</th>';
       r.sel.forEach((x, i) => {
         const k = j.kolom[i];
         if (!x) { h += '<td class="px-1 py-1 text-slate-600">—</td>'; return; }
@@ -137,6 +140,7 @@
   ['kc-sk', 'kc-ab'].forEach(i => $(i).addEventListener('change', () => kc && banding($('kc-date').value)));
   { const t = new Date(); $('kc-date').value = t.getFullYear() + '-' + pad(t.getMonth() + 1) + '-' + pad(t.getDate()); }
   banding($('kc-date').value);
+  document.addEventListener('astrolife:prefs', (e) => { if (e.detail.berubah.includes('hijriah')) { konversi(); if (kc) tampil(kc); } });
   if (window.lucide) lucide.createIcons();
 })();
 </script>

@@ -219,3 +219,9 @@ Sumber: `persis-times-js` (berkas dari pemilik; lisensi MIT Abu Sabda/PP PERSIS)
 - Warna semantik puasa di Lab Kalender: wajib = 2a35e2, haram = ed2124, sunah = skala hijau 009339, makruh tetap kuning (palet tidak punya kuning).
 - Halaman Salat menandai waktu salat berikutnya bila tanggal = hari ini di lokasi terpilih.
 - Diperiksa lewat tangkapan layar (Chrome headless, Tailwind dibangun lokal dengan konfigurasi yang sama) pada 1366 px dan 390 px, mode terang dan gelap. Daftar event Katalog belum diperiksa visual karena butuh katalog yang sudah dibuat.
+
+## 12. Pengaturan pengguna
+- Satu sumber kebenaran: `AstroPrefs` (`prefs.js`) → lokasi, metode salat, kriteria Hijriah. Halaman hanya membaca dari sana dan mendengarkan peristiwa `astrolife:prefs`; kontrol lokasi/metode di halaman Katalog, Observasi, dan Salat sudah digantikan ringkasan + tombol "Ubah" (elemen lamanya disembunyikan agar JS halaman tetap bekerja).
+- Kriteria Hijriah bawaan = Aritmetis (perilaku lama). Kriteria hisab hanya berlaku untuk tahun 1700–2300 M.
+- Kriteria Hijriah tidak mengubah deteksi Ramadan untuk Isya Ummul Qura (selalu memakai kriteria Ummul Qura).
+- Opsi epoch/pola kabisat aritmetis tetap ada di Lab Kalender (tidak ikut disimpan di Pengaturan).

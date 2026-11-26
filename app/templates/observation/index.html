@@ -28,6 +28,11 @@
                     <span id="weather-source-badge" class="text-[11px] px-2 py-0.5 rounded bg-slate-900 text-slate-400 border border-slate-800">Mendeteksi...</span>
                 </div>
 
+                <div class="flex items-center justify-between gap-3 p-3 rounded-xl border border-slate-800 bg-slate-900/60">
+                    <div class="text-sm"><b class="text-ink" data-pref="lokasi"></b><span class="block text-[11px] text-slate-400"><span data-pref="koordinat"></span> · <span data-pref="zona"></span></span></div>
+                    <button type="button" data-open-settings class="ui-btn ui-btn-sm">Ubah lokasi</button>
+                </div>
+                <div class="hidden" aria-hidden="true">
                 <!-- Quick City Selector (Very human-friendly, no need to memorize coordinates!) -->
                 <div>
                     <label class="block text-xs text-slate-400 mb-1.5 font-medium">Pilih Kota Cepat (Indonesia):</label>
@@ -53,6 +58,8 @@
                         <label class="text-slate-400 text-[11px]">Longitude</label>
                         <input id="input-lon" type="number" step="0.0001" value="{{ default_location.lon }}" class="w-full bg-slate-900 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-ink text-xs focus:outline-none focus:border-cyan-500">
                     </div>
+                </div>
+
                 </div>
 
                 <!-- Instrument Setting -->
@@ -406,6 +413,16 @@
             const m = [...sel.options].find(o => o.value === `${l.lat},${l.lon}`);
             sel.value = m ? m.value : 'custom';
         })();
+        function lokasiDariPrefs() {
+            const l = AstroPrefs.get().lokasi, v = `${l.lat},${l.lon}`, sel = byId('quick-city-select');
+            byId('input-lat').value = l.lat; byId('input-lon').value = l.lon;
+            sel.value = [...sel.options].some(o => o.value === v) ? v : 'custom';
+        }
+        lokasiDariPrefs();
+        document.addEventListener('astrolife:prefs', (e) => {
+            if (!e.detail.berubah.includes('lokasi')) return;
+            lokasiDariPrefs(); updateTzNote(); renderEventContext(); checkFeasibility(); loadPlan();
+        });
         applyUrlParams();
         updateTzNote();
         renderEventContext();

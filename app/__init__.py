@@ -3,6 +3,15 @@ from flask import Flask
 from config import Config
 
 
+KET_KRITERIA = {
+    'aritmetis': 'Tabel hisab urfi, tanpa pengamatan hilal. Cepat dan tetap; bisa berbeda 1–2 hari dari penetapan resmi.',
+    'mabims': 'Elongasi ≥ 6,4° dan tinggi hilal ≥ 3° (titik acuan Indonesia/Asia Tenggara).',
+    'ummulqura': 'Ijtimak sebelum matahari terbenam di Makkah dan Bulan terbenam sesudahnya.',
+    'wujudulhilal': 'Ijtimak sebelum matahari terbenam dan hilal di atas ufuk (acuan Yogyakarta).',
+    'turki': 'KHGT: elongasi ≥ 8° dan tinggi ≥ 5° di titik mana pun di dunia (kalender global).',
+}
+
+
 def create_app(config_class=Config):
     """Factory function to initialize and configure the Flask app."""
     app = Flask(__name__)
@@ -16,7 +25,12 @@ def create_app(config_class=Config):
     def inject_defaults():
         from app.services.timezones import tz_from_lon, tz_label
         loc = app.config['DEFAULT_LOCATION']
-        return {'default_location': {**loc, 'tz_label': tz_label(tz_from_lon(loc['lon']))}}
+        from app.persis import salat
+        from app.services import falak_service as F
+        return {'default_location': {**loc, 'tz_label': tz_label(tz_from_lon(loc['lon']))},
+                'pref_metode': [{'kunci': k, 'nama': m.name} for k, m in salat.METODE.items()],
+                'pref_kriteria': [{'kunci': k, 'nama': F.nama_kriteria(k), 'ket': KET_KRITERIA[k]}
+                                  for k in ('aritmetis', 'mabims', 'ummulqura', 'wujudulhilal', 'turki')]}
 
     from app.routes.main import main_bp
     from app.routes.observation import observation_bp

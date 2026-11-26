@@ -23,7 +23,7 @@
       <ul>
         <li>Weton: <b>{{ today.weton }}</b> · Wuku {{ today.wuku }}</li>
         <li>Jawa: <b>{{ today.tahun_jawa }}</b></li>
-        <li>Hijriah: <b>{{ today.hijriah }}</b> <span title="Hisab urfi (aritmetis); dapat berbeda 1-2 hari dari penetapan resmi">· hisab urfi</span></li>
+        <li>Hijriah: <b id="hij-today">{{ today.hijriah }}</b> <span id="hij-ket" title="Dapat berbeda 1-2 hari dari penetapan resmi">· hisab urfi</span></li>
       </ul>
     </div>
     <div class="card">
@@ -86,19 +86,33 @@
     const SC = {emerald: 'rgb(var(--grn-400))', blue: 'rgb(var(--sky-400))', amber: 'rgb(var(--amb-400))', rose: 'rgb(var(--red-400))', slate: 'rgb(var(--sl-400))'};
     const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
 
-    // Lokasi: pilihan terakhir di halaman Katalog bila ada, selain itu lokasi bawaan.
-    let lat = {{ default_location.lat }}, lon = {{ default_location.lon }};
-    try {
-        const p = JSON.parse(localStorage.getItem('astrolife.catalog.v3') || 'null');
-        if (p && p.lat && p.lon && !isNaN(parseFloat(p.lat)) && !isNaN(parseFloat(p.lon))) {
-            lat = parseFloat(p.lat); lon = parseFloat(p.lon);
-            $('where').textContent = `Lokasi (pilihan terakhir di Katalog): ${Math.abs(lat).toFixed(2)}°${lat < 0 ? 'S' : 'N'}, ${Math.abs(lon).toFixed(2)}°${lon >= 0 ? 'E' : 'W'}`;
-        }
-    } catch (e) {}
+    // Lokasi & kriteria Hijriah mengikuti menu Pengaturan (tersimpan di peramban, sama di semua halaman)
+    const P = window.AstroPrefs;
+    let lat, lon, tzLok;
+    function bacaLokasi() {
+        const l = P.get().lokasi; lat = l.lat; lon = l.lon; tzLok = l.tz !== null ? l.tz : P.tzDariBujur(l.lon);
+        const r = P.ringkas();
+        $('where').textContent = `Lokasi: ${r.lokasi} (${r.koordinat}) · zona waktu ${r.zona}`;
+    }
+    bacaLokasi();
+
+    // ---- tanggal Hijriah menurut kriteria pilihan ----
+    const HIJ_AWAL = $('hij-today').textContent, HIJ_KET = $('hij-ket').textContent;
+    async function hijriah() {
+        const k = P.get().hijriah.kriteria;
+        if (k === 'aritmetis') { $('hij-today').textContent = HIJ_AWAL; $('hij-ket').textContent = HIJ_KET; return; }
+        try {
+            const t = new Date(Date.now() + tzLok * 3600e3);
+            const q = new URLSearchParams({source: 'masehi', year: t.getUTCFullYear(), month: t.getUTCMonth() + 1, day: t.getUTCDate()});
+            const j = await (await fetch('{{ url_for("calendar.convert") }}?' + q)).json();
+            const h = (j.hijriah_kriteria || []).find(x => x.kunci === k);
+            if (h && h.teks) { $('hij-today').textContent = h.teks; $('hij-ket').textContent = '· hisab ' + h.nama; }
+        } catch (e) {}
+    }
 
     // ---- cuaca malam ini (jam 20:00 lokal; bila sudah lewat 19:00 pakai sekarang) ----
-    (async function weather() {
-        const tz = {{ tz }};
+    async function weather() {
+        const tz = tzLok;
         const nowLocal = new Date(Date.now() + tz * 3600e3);                       // "waktu lokal" disimpan sebagai UTC-semu
         const iso = nowLocal.toISOString().slice(0, 16);
         const body = {lat, lon, difficulty: 'naked_eye', tz};
@@ -122,10 +136,10 @@
             $('wx-big').textContent = 'Prakiraan tidak tersedia';
             $('wx-list').innerHTML = '<li>Tidak dapat memuat prakiraan cuaca.</li>';
         }
-    })();
+    }
 
     // ---- event mendatang dari katalog ----
-    (async function upcoming() {
+    async function upcoming() {
         const box = $('upcoming');
         try {
             const r = await fetch(`${URL_UP}?lat=${lat}&lon=${lon}&days=14&limit=5`);
@@ -147,7 +161,13 @@
         } catch (e) {
             box.innerHTML = '<div class="note">Tidak dapat memuat event mendatang.</div>';
         }
-    })();
+    }
+
+    weather(); upcoming(); hijriah();
+    document.addEventListener('astrolife:prefs', (e) => {
+        if (e.detail.berubah.includes('lokasi')) { bacaLokasi(); weather(); upcoming(); hijriah(); }
+        else if (e.detail.berubah.includes('hijriah')) hijriah();
+    });
 })();
 </script>
 {% endblock %}

@@ -68,8 +68,16 @@ def puasa():
         lok = _lokasi()
         d = F.parse_tanggal(request.args.get('date'), _hari_ini(lok))
         n = int(F._float(request.args.get('days'), 'Jumlah hari', 1, 120, 45))
-        return jsonify({'status': 'success', 'dari': d.isoformat(), 'hari': n,
-                        'jadwal': I.fasting_schedule(d, n),
-                        'catatan': 'Hijriah aritmetis (hisab urfi); awal Ramadan/Syawal/Zulhijah resmi dapat berbeda 1–2 hari.'})
+        k = request.args.get('kriteria') or 'aritmetis'
+        if k not in I.KRITERIA_PUASA:
+            raise F.InputError('Kriteria Hijriah tidak dikenal.')
+        if k != 'aritmetis' and not 1700 <= d.year <= 2300:
+            raise F.InputError('Hisab kriteria tersedia untuk tahun 1700–2300 M.')
+        nama = F.nama_kriteria(k)
+        catatan = ('Hijriah aritmetis (hisab urfi); awal Ramadan/Syawal/Zulhijah resmi dapat berbeda 1–2 hari.' if k == 'aritmetis' else
+                   f'Tanggal Hijriah menurut kriteria {nama} (hisab ijtimak, tinggi hilal, dan Bulan terbenam di lokasi acuan kriteria itu); '
+                   'penetapan resmi dapat berbeda 1–2 hari.')
+        return jsonify({'status': 'success', 'dari': d.isoformat(), 'hari': n, 'kriteria': k, 'kriteria_nama': nama,
+                        'jadwal': I.fasting_schedule(d, n, k), 'catatan': catatan})
     except F.InputError as e:
         return _error(e)

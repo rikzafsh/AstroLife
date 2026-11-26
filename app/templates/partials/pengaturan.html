@@ -1,0 +1,126 @@
+<!-- Menu Pengaturan: lokasi, kriteria waktu salat, dan kriteria kalender Hijriah. Disimpan di peramban (AstroPrefs). -->
+<dialog id="dlg-pengaturan" class="pref-dialog" aria-labelledby="pref-judul">
+  <form method="dialog" class="pref-box" onsubmit="return false">
+    <div class="pref-head">
+      <div>
+        <h2 id="pref-judul" class="ui-title text-xl text-ink flex items-center gap-2"><i data-lucide="sliders-horizontal" class="w-5 h-5 text-sky-400"></i> Pengaturan</h2>
+        <p class="ui-hint mt-1">Disimpan di peramban ini dan berlaku untuk semua halaman dan tab. Perubahan langsung dipakai.</p>
+      </div>
+      <button type="button" class="ui-btn ui-btn-sm !px-2.5" data-pref-tutup aria-label="Tutup pengaturan"><i data-lucide="x" class="w-4 h-4"></i></button>
+    </div>
+
+    <div class="pref-body">
+      <section class="pref-sec" aria-labelledby="pref-h-lokasi">
+        <h3 id="pref-h-lokasi"><i data-lucide="map-pin" class="w-4 h-4"></i> Lokasi</h3>
+        <label class="ui-label" for="pref-kota">Kota</label>
+        <select id="pref-kota" class="ui-field"></select>
+        <div class="grid grid-cols-2 gap-3 mt-3">
+          <div><label class="ui-label" for="pref-lat">Lintang (°, selatan negatif)</label><input id="pref-lat" type="number" step="0.0001" class="ui-field"></div>
+          <div><label class="ui-label" for="pref-lon">Bujur (°, timur positif)</label><input id="pref-lon" type="number" step="0.0001" class="ui-field"></div>
+          <div><label class="ui-label" for="pref-elev">Elevasi (m)</label><input id="pref-elev" type="number" step="1" class="ui-field"></div>
+          <div><label class="ui-label" for="pref-tz">Zona waktu (jam)</label><input id="pref-tz" type="number" step="0.5" placeholder="otomatis" class="ui-field"></div>
+        </div>
+        <div class="flex flex-wrap items-center gap-3 mt-3">
+          <button type="button" id="pref-geo" class="ui-btn ui-btn-sm"><i data-lucide="locate-fixed" class="w-4 h-4"></i> Pakai lokasi saya</button>
+          <span id="pref-geo-note" class="ui-hint" aria-live="polite"></span>
+        </div>
+        <p class="ui-hint mt-2">Zona waktu kosong = otomatis dari bujur (<span id="pref-tz-info"></span>).</p>
+      </section>
+
+      <section class="pref-sec" aria-labelledby="pref-h-salat">
+        <h3 id="pref-h-salat"><i data-lucide="clock" class="w-4 h-4"></i> Waktu salat</h3>
+        <label class="ui-label" for="pref-metode">Kriteria / metode</label>
+        <select id="pref-metode" class="ui-field">
+          {% for m in pref_metode %}<option value="{{ m.kunci }}">{{ m.nama }}</option>{% endfor %}
+        </select>
+        <div class="grid grid-cols-2 gap-3 mt-3">
+          <div><label class="ui-label" for="pref-ihtiyat">Ihtiyat (menit)</label><input id="pref-ihtiyat" type="number" min="0" max="10" class="ui-field"></div>
+          <div><label class="ui-label" for="pref-imsak">Imsak (menit sebelum Subuh)</label><input id="pref-imsak" type="number" min="0" max="60" class="ui-field"></div>
+        </div>
+      </section>
+
+      <section class="pref-sec" aria-labelledby="pref-h-hijriah">
+        <h3 id="pref-h-hijriah"><i data-lucide="calendar-days" class="w-4 h-4"></i> Kalender Hijriah</h3>
+        <p class="ui-hint mb-2">Dipakai untuk tanggal Hijriah di Beranda, Lab Kalender, dan jadwal Puasa Sunah &amp; Hari Penting.</p>
+        <div role="radiogroup" aria-labelledby="pref-h-hijriah" class="grid gap-2">
+          {% for k in pref_kriteria %}
+          <label class="pref-radio">
+            <input type="radio" name="pref-hijriah" value="{{ k.kunci }}">
+            <span><b>{{ k.nama }}</b><small>{{ k.ket }}</small></span>
+          </label>
+          {% endfor %}
+        </div>
+      </section>
+    </div>
+
+    <div class="pref-foot">
+      <span id="pref-status" class="ui-hint" aria-live="polite"></span>
+      <div class="flex gap-2">
+        <button type="button" id="pref-reset" class="ui-btn ui-btn-sm">Kembalikan bawaan</button>
+        <button type="button" class="ui-btn ui-btn-sm ui-btn-primary" data-pref-tutup>Selesai</button>
+      </div>
+    </div>
+  </form>
+</dialog>
+
+<script>
+(function () {
+  var P = window.AstroPrefs, dlg = document.getElementById('dlg-pengaturan');
+  if (!P || !dlg) return;
+  var $ = function (id) { return document.getElementById(id); };
+  var kota = $('pref-kota'), status = $('pref-status'), tUi;
+
+  P.kota.forEach(function (k) { var o = document.createElement('option'); o.value = k[1] + ',' + k[2]; o.textContent = k[0]; o.dataset.nama = k[0]; kota.appendChild(o); });
+  var oc = document.createElement('option'); oc.value = 'custom'; oc.textContent = 'Koordinat sendiri…'; kota.appendChild(oc);
+
+  function tampil() {                                   // data -> formulir
+    var p = P.get(), l = p.lokasi;
+    $('pref-lat').value = l.lat; $('pref-lon').value = l.lon; $('pref-elev').value = l.elev; $('pref-tz').value = l.tz === null ? '' : l.tz;
+    var cocok = P.kota.filter(function (k) { return Math.abs(k[1] - l.lat) < 0.002 && Math.abs(k[2] - l.lon) < 0.002; })[0];
+    kota.value = cocok ? cocok[1] + ',' + cocok[2] : 'custom';
+    $('pref-tz-info').textContent = P.labelTz(P.tzDariBujur(l.lon)) + ' = UTC' + (P.tzDariBujur(l.lon) >= 0 ? '+' : '') + P.tzDariBujur(l.lon);
+    $('pref-metode').value = p.salat.metode; $('pref-ihtiyat').value = p.salat.ihtiyat; $('pref-imsak').value = p.salat.imsak;
+    dlg.querySelectorAll('input[name=pref-hijriah]').forEach(function (r) { r.checked = r.value === p.hijriah.kriteria; });
+  }
+  function simpanOk() { status.textContent = 'Tersimpan ✓'; clearTimeout(tUi); tUi = setTimeout(function () { status.textContent = ''; }, 2000); }
+
+  kota.addEventListener('change', function () {
+    if (kota.value === 'custom') { $('pref-lat').focus(); return; }
+    var o = kota.options[kota.selectedIndex], v = kota.value.split(',');
+    P.set({ lokasi: { nama: o.dataset.nama, lat: parseFloat(v[0]), lon: parseFloat(v[1]), tz: null } }); tampil(); simpanOk();
+  });
+  ['pref-lat', 'pref-lon', 'pref-elev', 'pref-tz'].forEach(function (id) {
+    $(id).addEventListener('change', function () {
+      var lat = parseFloat($('pref-lat').value), lon = parseFloat($('pref-lon').value);
+      if (!isFinite(lat) || lat < -90 || lat > 90 || !isFinite(lon) || lon < -180 || lon > 180) { status.textContent = 'Lintang harus −90…90 dan bujur −180…180.'; return; }
+      var tz = $('pref-tz').value.trim();
+      P.set({ lokasi: { nama: '', lat: lat, lon: lon, elev: parseFloat($('pref-elev').value) || 0, tz: tz === '' ? null : parseFloat(tz) } }); tampil(); simpanOk();
+    });
+  });
+  $('pref-geo').addEventListener('click', function () {
+    var n = $('pref-geo-note');
+    if (!navigator.geolocation) { n.textContent = 'Peramban tidak mendukung geolokasi.'; return; }
+    n.textContent = 'Mencari lokasi…';
+    navigator.geolocation.getCurrentPosition(function (pos) {
+      P.set({ lokasi: { nama: 'Lokasi saya', lat: +pos.coords.latitude.toFixed(4), lon: +pos.coords.longitude.toFixed(4), elev: pos.coords.altitude ? Math.round(pos.coords.altitude) : 0, tz: null } });
+      n.textContent = 'Lokasi diperbarui.'; tampil(); simpanOk();
+    }, function () { n.textContent = 'Izin lokasi ditolak atau tidak tersedia.'; }, { timeout: 10000 });
+  });
+  ['pref-metode', 'pref-ihtiyat', 'pref-imsak'].forEach(function (id) {
+    $(id).addEventListener('change', function () { P.set({ salat: { metode: $('pref-metode').value, ihtiyat: $('pref-ihtiyat').value, imsak: $('pref-imsak').value } }); tampil(); simpanOk(); });
+  });
+  dlg.querySelectorAll('input[name=pref-hijriah]').forEach(function (r) {
+    r.addEventListener('change', function () { if (r.checked) { P.set({ hijriah: { kriteria: r.value } }); simpanOk(); } });
+  });
+  $('pref-reset').addEventListener('click', function () { P.reset(); tampil(); status.textContent = 'Dikembalikan ke bawaan.'; });
+
+  function buka() { tampil(); if (!dlg.open) dlg.showModal(); if (window.lucide) lucide.createIcons(); }
+  function tutup() { dlg.close(); }
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('[data-open-settings]')) { e.preventDefault(); buka(); }
+    else if (e.target.closest('[data-pref-tutup]')) tutup();
+    else if (e.target === dlg) tutup();                  // klik di luar kotak
+  });
+  document.addEventListener('astrolife:prefs', function () { if (dlg.open) tampil(); });
+})();
+</script>
