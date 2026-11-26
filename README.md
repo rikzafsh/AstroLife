@@ -60,3 +60,11 @@ Tes cuaca memakai respons tiruan (tanpa internet). Tes khusus Skyfield dilewati 
 
 ## Dokumentasi tambahan
 `knowledge.md` (pengetahuan proyek), `catalog/README.md` (katalog, keterlihatan, kelangkaan), `prototype/README.md` (mesin posisi), `app/persis/README.md` (port falak, validasi, batasan).
+
+
+## Tampilan: tema terang/gelap & palet
+- Palet utama: `#001f8e`, `#2a35e2`, `#29aafe`, `#ed2124`, `#009339`. Skala warnanya dibuat oleh `python tools/gen_theme.py` → `app/static/css/theme-palette.css` (hasilnya sudah ada di repo).
+- Tombol tema (terang / ikut sistem / gelap) ada di header semua halaman; pilihan disimpan di `localStorage` (`astrolife.theme`) dan dibaca sebelum halaman digambar agar tidak berkedip.
+- Warna netral memakai variabel di `app/static/css/theme.css`; konfigurasi Tailwind bersama ada di `app/static/js/tailwind-config.js` (kelas lama seperti `slate-*`, `indigo-*`, `cyan-*` otomatis mengikuti palet dan tema). Teks judul memakai `text-ink` (bukan `text-white`).
+- Komponen bersama: `.ui-btn`, `.ui-btn-primary`, `.ui-field`, `.ui-label`, `.ui-chip`.
+- Tes: `tests/test_tema.py`.

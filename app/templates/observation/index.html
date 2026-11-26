@@ -7,7 +7,7 @@
     
     <!-- Judul -->
     <div class="border-b border-slate-800/80 pb-6">
-        <h1 class="font-display text-2xl sm:text-3xl font-bold text-white">Observasi Langit &amp; Cuaca</h1>
+        <h1 class="font-display text-2xl sm:text-3xl font-bold text-ink">Observasi Langit &amp; Cuaca</h1>
         <p class="text-xs sm:text-sm text-slate-400 mt-1 max-w-3xl leading-relaxed">
             Cek prakiraan awan, hujan, kelembapan, dan jarak pandang untuk waktu dan lokasi pilihan, lalu lihat event dari
             <a href="{{ url_for('catalog.index') }}" class="text-violet-300 hover:text-violet-200 underline">Katalog Event</a>
@@ -22,7 +22,7 @@
         <div class="lg:col-span-5 glass-card rounded-2xl p-5 sm:p-6 space-y-4 flex flex-col justify-between">
             <div class="space-y-4">
                 <div class="flex items-center justify-between">
-                    <h3 class="font-bold text-white text-sm sm:text-base flex items-center gap-2">
+                    <h3 class="font-bold text-ink text-sm sm:text-base flex items-center gap-2">
                         <i data-lucide="map-pin" class="w-4 h-4 text-cyan-400"></i> Lokasi Pengamatan Anda
                     </h3>
                     <span id="weather-source-badge" class="text-[11px] px-2 py-0.5 rounded bg-slate-900 text-slate-400 border border-slate-800">Mendeteksi...</span>
@@ -31,7 +31,7 @@
                 <!-- Quick City Selector (Very human-friendly, no need to memorize coordinates!) -->
                 <div>
                     <label class="block text-xs text-slate-400 mb-1.5 font-medium">Pilih Kota Cepat (Indonesia):</label>
-                    <select id="quick-city-select" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400">
+                    <select id="quick-city-select" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-3 py-2 text-xs text-ink focus:outline-none focus:border-cyan-400">
                         <option value="-6.2088,106.8456">Jakarta (-6.21°S, 106.85°E)</option>
                         <option value="-6.9175,107.6191">Bandung (-6.92°S, 107.62°E)</option>
                         <option value="-7.7956,110.3695">Yogyakarta (-7.80°S, 110.37°E)</option>
@@ -47,18 +47,18 @@
                 <div class="grid grid-cols-2 gap-3 text-xs">
                     <div>
                         <label class="text-slate-400 text-[11px]">Latitude</label>
-                        <input id="input-lat" type="number" step="0.0001" value="{{ default_location.lat }}" class="w-full bg-slate-900 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-white text-xs focus:outline-none focus:border-cyan-500">
+                        <input id="input-lat" type="number" step="0.0001" value="{{ default_location.lat }}" class="w-full bg-slate-900 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-ink text-xs focus:outline-none focus:border-cyan-500">
                     </div>
                     <div>
                         <label class="text-slate-400 text-[11px]">Longitude</label>
-                        <input id="input-lon" type="number" step="0.0001" value="{{ default_location.lon }}" class="w-full bg-slate-900 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-white text-xs focus:outline-none focus:border-cyan-500">
+                        <input id="input-lon" type="number" step="0.0001" value="{{ default_location.lon }}" class="w-full bg-slate-900 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-ink text-xs focus:outline-none focus:border-cyan-500">
                     </div>
                 </div>
 
                 <!-- Instrument Setting -->
                 <div>
                     <label class="text-slate-400 text-[11px] block mb-1">Alat yang Anda Siapkan:</label>
-                    <select id="input-instrument" class="w-full bg-slate-900 border border-slate-700/80 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-500">
+                    <select id="input-instrument" class="w-full bg-slate-900 border border-slate-700/80 rounded-lg px-3 py-1.5 text-xs text-ink focus:outline-none focus:border-cyan-500">
                         <option value="naked_eye">Mata Telanjang (Naked Eye)</option>
                         <option value="binoculars">Binokular (7x50 / 10x50)</option>
                         <option value="telescope">Teleskop (Optik > 70mm)</option>
@@ -69,14 +69,14 @@
                 <div>
                     <label class="text-slate-400 text-[11px] block mb-1">Waktu analisis (waktu lokal lokasi):</label>
                     <div class="flex gap-2">
-                        <input id="input-datetime" type="datetime-local" class="flex-1 min-w-0 bg-slate-900 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-white text-xs focus:outline-none focus:border-cyan-500">
+                        <input id="input-datetime" type="datetime-local" class="flex-1 min-w-0 bg-slate-900 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-ink text-xs focus:outline-none focus:border-cyan-500">
                         <button id="btn-now" type="button" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs">Sekarang</button>
                     </div>
                     <span id="tz-note" class="text-[11px] text-slate-500 block mt-1"></span>
                 </div>
             </div>
 
-            <button id="check-weather-btn" class="w-full mt-4 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs transition-colors flex items-center justify-center gap-2 shadow-lg shadow-cyan-600/20">
+            <button id="check-weather-btn" class="w-full mt-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition-colors flex items-center justify-center gap-2 shadow-lg shadow-cyan-600/20">
                 <i data-lucide="cloud-sun" class="w-4 h-4"></i> Cek Prakiraan Langit &amp; Cuaca
             </button>
         </div>
@@ -87,7 +87,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <span class="text-[11px] text-indigo-400 uppercase font-bold tracking-wider">Analisis Kondisi Pengamatan</span>
-                        <h3 class="font-bold text-white text-base mt-0.5 flex items-center gap-2">
+                        <h3 class="font-bold text-ink text-base mt-0.5 flex items-center gap-2">
                             <i data-lucide="gauge" class="w-4 h-4 text-cyan-400"></i> Indeks Kelayakan Langit
                         </h3>
                     </div>
@@ -96,7 +96,7 @@
 
                 <!-- Score Meter & Status -->
                 <div class="flex items-center gap-6 my-4">
-                    <div class="text-5xl font-black font-display text-white tracking-tight" id="score-number">--</div>
+                    <div class="text-5xl font-black font-display text-ink tracking-tight" id="score-number">--</div>
                     <div class="space-y-0.5">
                         <div class="text-[11px] uppercase tracking-wider text-slate-400">Status Langit</div>
                         <div class="text-base sm:text-lg font-bold text-cyan-300" id="status-text">Memuat analisis kondisi cuaca...</div>
@@ -113,23 +113,23 @@
             <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 text-xs">
                 <div class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80">
                     <span class="text-slate-400 text-[11px] block">Suhu Udara</span>
-                    <span id="val-temp" class="text-sm font-bold text-white">-- °C</span>
+                    <span id="val-temp" class="text-sm font-bold text-ink">-- °C</span>
                 </div>
                 <div class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80">
                     <span class="text-slate-400 text-[11px] block">Tutupan Awan</span>
-                    <span id="val-clouds" class="text-sm font-bold text-white">-- %</span>
+                    <span id="val-clouds" class="text-sm font-bold text-ink">-- %</span>
                 </div>
                 <div class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80">
                     <span class="text-slate-400 text-[11px] block">Kelembapan</span>
-                    <span id="val-humidity" class="text-sm font-bold text-white">-- %</span>
+                    <span id="val-humidity" class="text-sm font-bold text-ink">-- %</span>
                 </div>
                 <div class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80">
                     <span class="text-slate-400 text-[11px] block">Peluang Hujan</span>
-                    <span id="val-rain" class="text-sm font-bold text-white">-- %</span>
+                    <span id="val-rain" class="text-sm font-bold text-ink">-- %</span>
                 </div>
                 <div class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80">
                     <span class="text-slate-400 text-[11px] block">Jarak Pandang</span>
-                    <span id="val-visibility" class="text-sm font-bold text-white">-- km</span>
+                    <span id="val-visibility" class="text-sm font-bold text-ink">-- km</span>
                 </div>
             </div>
 
@@ -168,12 +168,12 @@
     <section class="space-y-4">
         <div class="flex flex-wrap items-end justify-between gap-3">
             <div>
-                <h2 class="font-display text-lg font-bold text-white">Rekomendasi pengamatan</h2>
+                <h2 class="font-display text-lg font-bold text-ink">Rekomendasi pengamatan</h2>
                 <p class="text-xs text-slate-400 max-w-2xl">Event katalog yang dapat diamati dari lokasi Anda, diurutkan menurut kecocokan cuaca pada waktu terbaiknya. Alat mengikuti pilihan di atas.</p>
             </div>
             <div class="flex items-center gap-2 text-xs">
                 <label for="plan-days" class="text-slate-400">Rentang</label>
-                <select id="plan-days" class="bg-slate-900 border border-slate-700/80 rounded-lg px-2 py-1.5 text-white">
+                <select id="plan-days" class="bg-slate-900 border border-slate-700/80 rounded-lg px-2 py-1.5 text-ink">
                     <option value="7">7 hari</option><option value="14" selected>14 hari</option><option value="15">15 hari</option>
                 </select>
             </div>
@@ -268,17 +268,17 @@
         if (!EVENT_CTX) { box.classList.add('hidden'); box.innerHTML = ''; return; }
         box.classList.remove('hidden');
         const cur = byId('input-datetime').value;
-        const btn = (label, val) => `<button type="button" data-dt="${esc(val)}" class="ctx-time px-2.5 py-1 rounded-lg text-[11px] ${cur === val ? 'bg-cyan-600 text-white font-semibold' : 'bg-slate-800 text-slate-300 hover:text-white'}">${label} ${esc(val.slice(11))}</button>`;
+        const btn = (label, val) => `<button type="button" data-dt="${esc(val)}" class="ctx-time px-2.5 py-1 rounded-lg text-[11px] ${cur === val ? 'bg-indigo-600 text-white font-semibold' : 'bg-slate-800 text-slate-300 hover:text-white'}">${label} ${esc(val.slice(11))}</button>`;
         const opts = [];
         if (EVENT_CTX.best) opts.push(btn('Waktu terbaik', EVENT_CTX.best));
         if (EVENT_CTX.peak && EVENT_CTX.peak !== EVENT_CTX.best) opts.push(btn('Waktu puncak event', EVENT_CTX.peak));
         box.innerHTML = `<div class="flex flex-wrap items-center justify-between gap-2">
             <div><span class="text-[11px] text-cyan-300 font-semibold uppercase tracking-wide">Analisis cuaca untuk event</span>
-                <div class="text-sm font-bold text-white">${esc(EVENT_CTX.title)}</div>
+                <div class="text-sm font-bold text-ink">${esc(EVENT_CTX.title)}</div>
                 <div class="text-[11px] text-slate-400">${esc(cur.replace('T', ' '))} ${tzLabel(currentTz())} (waktu lokal)</div></div>
             <div class="flex flex-wrap gap-1.5 items-center">${opts.join('')}
-                <a href="${CATALOG_URL}" class="text-[11px] text-slate-400 hover:text-white underline ml-1">&larr; Katalog</a>
-                <button type="button" id="ctx-clear" class="text-[11px] text-slate-500 hover:text-white underline">Lepas event</button></div></div>`;
+                <a href="${CATALOG_URL}" class="text-[11px] text-slate-400 hover:text-ink underline ml-1">&larr; Katalog</a>
+                <button type="button" id="ctx-clear" class="text-[11px] text-slate-500 hover:text-ink underline">Lepas event</button></div></div>`;
         box.querySelectorAll('.ctx-time').forEach(b => b.addEventListener('click', () => { byId('input-datetime').value = b.dataset.dt; renderEventContext(); checkFeasibility(); }));
         const c = byId('ctx-clear');
         if (c) c.addEventListener('click', () => { EVENT_CTX = null; renderEventContext(); checkFeasibility(); });
@@ -350,7 +350,7 @@
             <div class="flex items-start justify-between gap-3">
                 <div class="min-w-0">
                     <div class="text-[11px] text-slate-500"><span class="font-bold text-amber-400">#${idx + 1}</span> · ${esc(it.kategori_label)} · <span class="${TIER_TXT[it.rarity.tier]} font-semibold">${esc(it.rarity.label)}</span></div>
-                    <h3 class="font-bold text-white leading-snug">${esc(it.title)}</h3>
+                    <h3 class="font-bold text-ink leading-snug">${esc(it.title)}</h3>
                     <div class="text-xs text-cyan-300 font-mono">${esc(when)} ${esc(tzl)}</div>
                 </div>
                 <span class="shrink-0 px-2.5 py-1 rounded-full border text-xs font-bold ${c.join(' ')}">${has ? it.score : '--'}${has ? ' · ' + esc(it.status) : ' · cuaca n/a'}</span>
@@ -361,7 +361,7 @@
             </div>
             ${it.reasons.length ? `<p class="text-[11px] text-amber-200/80">${esc(it.reasons.join('; '))}</p>` : ''}
             <div class="flex flex-wrap gap-2 pt-1">
-                <button type="button" data-i="${idx}" class="plan-analyze px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-semibold">Analisis rinci</button>
+                <button type="button" data-i="${idx}" class="plan-analyze px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold">Analisis rinci</button>
                 <a href="${URL_CATALOG}" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs">Katalog</a>
             </div>
         </div>`;

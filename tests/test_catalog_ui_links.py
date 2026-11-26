@@ -137,7 +137,7 @@ class PageIds(unittest.TestCase):
     def test_catalog_page(self):
         self.check('/catalog/')
         html = client().get('/catalog/').get_data(as_text=True)
-        for needle in ('cat-wrap', 'seg-theme', 'data-theme="dark"', 'wx-mini', 'Analisis cuaca'):
+        for needle in ('cat-wrap', 'data-theme-set="light"', 'wx-mini', 'Analisis cuaca'):
             self.assertIn(needle, html)
 
     def test_observation_page(self):

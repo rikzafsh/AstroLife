@@ -1,0 +1,100 @@
+/* Tema AstroLife — mode gelap (bawaan) & terang. Palet utama: 001f8e, 2a35e2, 29aafe, ed2124, 009339.
+   Seluruh warna netral (kelas slate-*, space-*, text-ink) dibaca dari variabel di bawah, jadi cukup berganti kelas `dark` pada <html>. */
+:root, html.dark {
+  --sl-50:243 245 252; --sl-100:230 234 247; --sl-200:207 214 238; --sl-300:170 181 220; --sl-400:133 145 192; --sl-500:98 111 163;
+  --sl-600:68 79 130;  --sl-700:45 55 102;   --sl-800:27 36 80;    --sl-900:15 23 56;   --sl-950:8 13 36;
+  --ink:244 246 255;
+  --page:#080d24; --surface:rgba(15,23,56,.74); --surface-solid:#0f1738; --surface-2:rgba(27,36,80,.6);
+  --line:rgba(133,145,192,.20); --line-strong:rgba(133,145,192,.34);
+  --text:#e6eaf7; --muted:#9aa6cf; --accent:#29aafe; --accent-strong:#2a35e2; --link:#7cc8ff;
+  --shadow:0 1px 0 rgba(255,255,255,.03) inset, 0 12px 32px -16px rgba(0,0,0,.7);
+  --glow-a:rgba(42,53,226,.20); --glow-b:rgba(41,170,254,.12); --glow-c:rgba(0,31,142,.30);
+  --field-bg:rgba(8,13,36,.72); --header-bg:rgba(8,13,36,.82); --ok:#2fd27a; --bad:#ff6b6e;
+  color-scheme: dark;
+}
+html:not(.dark) {
+  --sl-50:10 18 48;   --sl-100:21 29 63;  --sl-200:38 48 85;   --sl-300:58 70 112;  --sl-400:85 98 143; --sl-500:120 134 173;
+  --sl-600:170 180 212; --sl-700:203 211 234; --sl-800:228 233 246; --sl-900:255 255 255; --sl-950:238 242 251;
+  --ink:10 18 48;
+  --page:#eef2fb; --surface:#ffffff; --surface-solid:#ffffff; --surface-2:#f4f6fd;
+  --line:rgba(20,35,100,.13); --line-strong:rgba(20,35,100,.26);
+  --text:#0a1230; --muted:#4a5780; --accent:#2a35e2; --accent-strong:#2a35e2; --link:#1b27c4;
+  --shadow:0 1px 2px rgba(10,18,48,.06), 0 10px 28px -14px rgba(10,18,48,.18);
+  --glow-a:rgba(42,53,226,.09); --glow-b:rgba(41,170,254,.10); --glow-c:rgba(0,31,142,.05);
+  --field-bg:#ffffff; --header-bg:rgba(255,255,255,.86); --ok:#007a30; --bad:#c4161a;
+  color-scheme: light;
+}
+
+html { scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+body { background-color:var(--page); color:var(--text); font-size:15px; line-height:1.6;
+  background-image:radial-gradient(900px 520px at 8% -6%, var(--glow-a), transparent 60%),
+                   radial-gradient(800px 480px at 96% 8%, var(--glow-b), transparent 60%),
+                   radial-gradient(900px 600px at 50% 112%, var(--glow-c), transparent 60%);
+  background-attachment:fixed; transition:background-color .2s, color .2s; }
+::selection { background:rgba(41,170,254,.35); }
+
+/* Kartu / panel */
+.glass-card, .glass-panel { background:var(--surface); border:1px solid var(--line); box-shadow:var(--shadow);
+  -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px); }
+.glass-card:hover { border-color:var(--line-strong); }
+.glass-panel-elevated { background:var(--surface); border:1px solid var(--line-strong); box-shadow:var(--shadow);
+  -webkit-backdrop-filter:blur(18px); backdrop-filter:blur(18px); }
+html:not(.dark) .glass-card, html:not(.dark) .glass-panel, html:not(.dark) .glass-panel-elevated { -webkit-backdrop-filter:none; backdrop-filter:none; }
+
+/* Fokus yang selalu terlihat (aksesibilitas papan ketik) */
+:focus { outline:none; }
+:focus-visible { outline:2px solid rgb(var(--sky-400)); outline-offset:2px; border-radius:6px; }
+input:focus-visible, select:focus-visible, textarea:focus-visible { outline-offset:0; }
+
+/* Kontrol formulir bawaan: nyaman disentuh, kontras jelas pada kedua mode */
+input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]), select, textarea {
+  min-height:2.5rem; border-radius:.75rem; transition:border-color .15s, box-shadow .15s; }
+input:not([type=checkbox]):not([type=radio]):hover, select:hover, textarea:hover { border-color:var(--line-strong); }
+input:not([type=checkbox]):not([type=radio]):focus, select:focus, textarea:focus { border-color:rgb(var(--sky-500)); box-shadow:0 0 0 3px rgba(41,170,254,.22); }
+input[type=checkbox], input[type=radio] { width:1.05rem; height:1.05rem; accent-color:#2a35e2; }
+::placeholder { color:rgb(var(--sl-500)); opacity:1; }
+button, a, summary { -webkit-tap-highlight-color:transparent; }
+button:not(:disabled), [role=button] { cursor:pointer; }
+button:disabled { opacity:.55; cursor:not-allowed; }
+
+/* Komponen bersama (dipakai lintas halaman) */
+.ui-btn { display:inline-flex; align-items:center; justify-content:center; gap:.5rem; min-height:2.5rem; padding:.5rem 1rem; border-radius:.75rem;
+  font-weight:600; font-size:.875rem; border:1px solid var(--line-strong); background:var(--surface-2); color:var(--text); text-decoration:none;
+  transition:background-color .15s, border-color .15s, transform .1s, filter .15s; }
+.ui-btn:hover { border-color:rgb(var(--sky-500)); }
+.ui-btn:active { transform:translateY(1px); }
+.ui-btn-primary { background:linear-gradient(135deg,#2a35e2,#001f8e); border-color:transparent; color:#fff; box-shadow:0 6px 16px -8px rgba(42,53,226,.8); }
+.ui-btn-primary:hover { filter:brightness(1.12); border-color:transparent; }
+.ui-btn-sm { min-height:2.1rem; padding:.3rem .75rem; font-size:.8rem; border-radius:.65rem; }
+.ui-label { display:block; font-size:.78rem; font-weight:600; color:var(--muted); margin-bottom:.3rem; }
+.ui-hint { font-size:.78rem; color:var(--muted); line-height:1.5; }
+.ui-field { width:100%; background:rgb(var(--sl-900)); color:rgb(var(--ink)); border:1px solid var(--line-strong); padding:.5rem .75rem; font-size:.9rem; }
+html.dark .ui-field { background:rgba(8,13,36,.7); }
+.ui-title { font-family:'Space Grotesk','Plus Jakarta Sans',sans-serif; font-weight:700; letter-spacing:-.01em; }
+.ui-chip { display:inline-flex; align-items:center; gap:.35rem; padding:.15rem .6rem; border-radius:999px; font-size:.72rem; font-weight:600;
+  border:1px solid var(--line-strong); color:var(--muted); background:var(--surface-2); }
+
+/* Navigasi */
+.nav-link { display:inline-flex; align-items:center; gap:.5rem; padding:.5rem .75rem; border-radius:.75rem; font-size:.82rem; font-weight:600;
+  color:rgb(var(--sl-300)); border:1px solid transparent; transition:background-color .15s, color .15s; white-space:nowrap; }
+.nav-link:hover { color:rgb(var(--ink)); background:rgb(var(--sl-800) / .7); }
+.nav-link[aria-current=page] { color:rgb(var(--ink)); background:rgb(var(--nav-c) / .16); border-color:rgb(var(--nav-c) / .38); }
+.nav-link[aria-current=page] svg { color:rgb(var(--nav-c)); }
+.skip-link { position:absolute; left:.75rem; top:-4rem; z-index:100; padding:.6rem 1rem; border-radius:.75rem; background:#2a35e2; color:#fff; font-weight:600; transition:top .15s; }
+.skip-link:focus { top:.75rem; }
+
+/* Pilihan tema */
+.theme-switch { display:inline-flex; padding:3px; gap:2px; border-radius:.85rem; background:rgb(var(--sl-800) / .8); border:1px solid var(--line); }
+.theme-switch button { width:2rem; height:2rem; display:inline-flex; align-items:center; justify-content:center; border-radius:.6rem; color:rgb(var(--sl-400)); border:0; background:transparent; }
+.theme-switch button:hover { color:rgb(var(--ink)); }
+.theme-switch button[aria-pressed=true] { background:rgb(var(--sl-900)); color:rgb(var(--sky-400)); box-shadow:0 1px 3px rgba(0,0,0,.25); }
+html:not(.dark) .theme-switch button[aria-pressed=true] { color:#2a35e2; }
+
+/* Bilah gulir */
+* { scrollbar-width:thin; scrollbar-color:rgb(var(--sl-600)) transparent; }
+::-webkit-scrollbar { width:9px; height:9px; } ::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:rgb(var(--sl-600)); border-radius:6px; border:2px solid transparent; background-clip:padding-box; }
+::-webkit-scrollbar-thumb:hover { background:rgb(var(--sl-500)); background-clip:padding-box; border:2px solid transparent; }
+
+@media (prefers-reduced-motion:reduce) { *, *::before, *::after { animation-duration:.01ms !important; transition-duration:.01ms !important; scroll-behavior:auto !important; } }
+@media print { header, footer, .theme-switch { display:none !important; } body { background:#fff; color:#000; } }

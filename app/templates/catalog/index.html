@@ -8,27 +8,17 @@
   @media (min-width:640px)  { .cat-wrap { padding-left:1.5rem; padding-right:1.5rem; } }
   @media (min-width:1024px) { .cat-wrap { padding-left:2rem;   padding-right:2rem; } }
 
-  /* ===== Tema (variabel CSS). Gelap = bawaan situs; Terang dipilih lewat data-theme ===== */
-  .cat { --text:#e2e8f0; --muted:#94a3b8; --line:rgba(148,163,184,.18); --field:#0b1324; --card:rgba(15,23,42,.62);
-         --card-open:rgba(30,41,59,.62); --sheet:transparent; --sheet-line:transparent; --time:#67e8f9; --note:#fde68a;
-         --accent:#8b5cf6; --seg-on-bg:rgba(139,92,246,.28); --seg-on-text:#ede9fe; --btn:#1e293b; --btn-hover:#273449;
-         --link:#c4b5fd; --warn-bg:rgba(245,158,11,.1); --warn-line:rgba(245,158,11,.3); --warn-text:#fcd34d; --shadow:none;
-         --t-common:#94a3b8; --t-uncommon:#34d399; --t-rare:#38bdf8; --t-epic:#a78bfa; --t-legendary:#fbbf24;
-         --s-visible:#34d399; --s-twilight:#fbbf24; --s-low:#fb923c; --s-daylight:#facc15; --s-off:#64748b;
-         --k-total:#f1f5f9; --k-ok:#34d399; --k-naked:#a5b4fc; --k-rare:#c4b5fd; --wx:#0891b2; --wx-text:#ecfeff;
-         color-scheme:dark; color:var(--text); background:var(--sheet); border:1px solid var(--sheet-line);
-         border-radius:24px; padding:clamp(14px,2.2vw,28px); }
-  .cat[data-theme="light"] { --text:#0f172a; --muted:#475569; --line:rgba(15,23,42,.14); --field:#ffffff; --card:#ffffff;
-         --card-open:#f1f5f9; --sheet:linear-gradient(180deg,#f8fafc,#eef2f7); --sheet-line:rgba(15,23,42,.10); --time:#0e7490;
-         --note:#92400e; --accent:#7c3aed; --seg-on-bg:#ede9fe; --seg-on-text:#5b21b6; --btn:#e2e8f0; --btn-hover:#cbd5e1;
-         --link:#6d28d9; --warn-bg:#fffbeb; --warn-line:#fcd34d; --warn-text:#92400e; --shadow:0 1px 2px rgba(15,23,42,.06);
-         --t-common:#64748b; --t-uncommon:#059669; --t-rare:#0284c7; --t-epic:#7c3aed; --t-legendary:#b45309;
-         --s-visible:#059669; --s-twilight:#b45309; --s-low:#c2410c; --s-daylight:#a16207; --s-off:#94a3b8;
-         --k-total:#0f172a; --k-ok:#059669; --k-naked:#4f46e5; --k-rare:#7c3aed; --wx:#0e7490; --wx-text:#ffffff;
-         color-scheme:light; }
+  /* ===== Warna halaman ini mengikuti tema global (tombol terang/gelap di header) ===== */
+  .cat { --field:var(--field-bg); --card:var(--surface); --card-open:var(--surface-2); --sheet:transparent; --sheet-line:transparent;
+         --time:rgb(var(--sky-400)); --note:rgb(var(--amb-300)); --seg-on-bg:rgb(var(--pri-500) / .25); --seg-on-text:rgb(var(--ink));
+         --btn:rgb(var(--sl-800)); --btn-hover:rgb(var(--sl-700));
+         --warn-bg:rgb(var(--amb-500) / .12); --warn-line:rgb(var(--amb-500) / .4); --warn-text:rgb(var(--amb-300));
+         --t-common:rgb(var(--sl-400)); --t-uncommon:rgb(var(--grn-400)); --t-rare:rgb(var(--sky-400)); --t-epic:rgb(var(--deep-300)); --t-legendary:rgb(var(--amb-400));
+         --s-visible:rgb(var(--grn-400)); --s-twilight:rgb(var(--amb-400)); --s-low:rgb(var(--amb-500)); --s-daylight:rgb(var(--amb-300)); --s-off:rgb(var(--sl-500));
+         --k-total:rgb(var(--ink)); --k-ok:rgb(var(--grn-400)); --k-naked:rgb(var(--sky-400)); --k-rare:rgb(var(--deep-300));
+         --wx:rgb(var(--sky-700)); --wx-text:#fff; }
   .cat * { box-sizing:border-box; }
-  .cat .glass-card { background:var(--card) !important; border:1px solid var(--line) !important; box-shadow:var(--shadow);
-         -webkit-backdrop-filter:none; backdrop-filter:none; }
+  .cat .glass-card { background:var(--card) !important; border:1px solid var(--line) !important; box-shadow:var(--shadow); }
 
   .cat-layout { display:grid; grid-template-columns:300px minmax(0,1fr); gap:24px; align-items:start; }
   .cat-side { position:sticky; top:92px; max-height:calc(100vh - 108px); overflow:auto; padding:18px; border-radius:16px; }
@@ -58,10 +48,8 @@
   .cat-head { padding:20px 24px; border-radius:16px; margin-bottom:20px; display:flex; flex-wrap:wrap; gap:16px; align-items:flex-start; justify-content:space-between; }
   .cat-head h1 { font-size:26px; font-weight:700; margin:0 0 4px; }
   .cat-head p { color:var(--muted); font-size:14px; margin:0; max-width:680px; line-height:1.55; }
-  .theme-box { min-width:230px; }
-  .theme-box .lbl { margin-bottom:6px; }
   .warn { margin-top:10px; font-size:12.5px; color:var(--warn-text); background:var(--warn-bg); border:1px solid var(--warn-line); border-radius:10px; padding:8px 12px; flex-basis:100%; }
-  .hidden { display:none !important; }
+  .cat .hidden { display:none !important; }
 
   .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:0 0 18px; }
   .stat { padding:12px 14px; border-radius:12px; }
@@ -120,13 +108,13 @@
   .gen-engine input { margin-top:3px; accent-color:var(--accent); }
   .gen-opts { grid-column:1 / -1; display:flex; flex-wrap:wrap; gap:14px; align-items:center; margin-top:2px; font-size:13px; }
   .gen-opts label { display:flex; gap:6px; align-items:center; cursor:pointer; color:var(--muted); }
-  .btn.go { background:var(--accent); border-color:transparent; color:#fff; font-weight:600; }
+  .btn.go { background:linear-gradient(135deg,#2a35e2,#001f8e); border-color:transparent; color:#fff; font-weight:600; }
   .btn.go:disabled { opacity:.5; cursor:not-allowed; }
   .progress { height:10px; border-radius:999px; background:var(--field); border:1px solid var(--line); overflow:hidden; margin:14px 0 8px; }
-  .progress > div { height:100%; width:0; background:linear-gradient(90deg,#6366f1,#22d3ee); transition:width .4s; }
+  .progress > div { height:100%; width:0; background:linear-gradient(90deg,#2a35e2,#29aafe); transition:width .4s; }
   .gen-msg { font-size:13px; color:var(--text); }
   .gen-sub { font-size:12px; color:var(--muted); margin-top:2px; }
-  .gen-err { margin-top:10px; padding:10px 12px; border-radius:10px; font-size:12.5px; color:#fda4af; background:rgba(244,63,94,.1); border:1px solid rgba(244,63,94,.3); }
+  .gen-err { margin-top:10px; padding:10px 12px; border-radius:10px; font-size:12.5px; color:rgb(var(--red-300)); background:rgb(var(--red-500) / .1); border:1px solid rgb(var(--red-500) / .35); }
   .gen-err pre { margin:8px 0 0; white-space:pre-wrap; font-size:11.5px; color:var(--muted); max-height:160px; overflow:auto; }
   .gen-note { margin-top:10px; font-size:12.5px; color:var(--warn-text); background:var(--warn-bg); border:1px solid var(--warn-line); border-radius:10px; padding:8px 12px; }
   .rar-inline { display:none; font-weight:600; }
@@ -151,17 +139,11 @@
 </style>
 
 <div class="cat-wrap">
-<div class="cat" id="cat" data-theme="dark">
+<div class="cat" id="cat">
   <div class="cat-head glass-card">
     <div>
       <h1 class="font-display">Katalog Event Astronomi</h1>
       <p>Semua peristiwa dihitung sendiri dari posisi Matahari, Bulan, dan planet. Keterlihatan (ufuk, langit gelap, magnitudo, cahaya Bulan) dan seluruh waktu dihitung dalam <b>waktu lokal lokasi Anda</b>.</p>
-    </div>
-    <div class="theme-box">
-      <label class="lbl">Tema halaman</label>
-      <div class="seg" id="seg-theme" role="group" aria-label="Tema">
-        <button data-v="auto">Otomatis</button><button data-v="dark" class="on">Gelap</button><button data-v="light">Terang</button>
-      </div>
     </div>
     <div id="engine-warning" class="warn hidden">Katalog ini dibuat dengan mesin sementara (galat planet ~2 menit busur). Untuk hasil akhir buat ulang dengan <code>ASTROLIFE_ENGINE=skyfield</code>.</div>
   </div>
@@ -232,7 +214,7 @@
     </aside>
 
     <!-- ================= KONTEN ================= -->
-    <main>
+    <div class="cat-main">
       <section class="gen glass-card hidden" id="gen" aria-live="polite">
         <h2 id="gen-title">Buat katalog event</h2>
         <p id="gen-desc">Katalog dihitung langsung oleh aplikasi dari posisi Matahari, Bulan, dan planet. Prosesnya berjalan di latar belakang; halaman ini menampilkan progresnya.</p>
@@ -273,7 +255,7 @@
       </div>
       <div class="count" id="count"></div>
       <div id="list"></div>
-    </main>
+    </div>
   </div>
 </div>
 </div>
@@ -291,26 +273,10 @@
     const TIERS = ['common', 'uncommon', 'rare', 'epic', 'legendary'];
     const RANK = {naked_eye: 0, binoculars: 1, small_telescope: 2, telescope_4inch: 3, large_telescope: 4};
     const ICON = {fase_bulan: '🌙', konjungsi: '✨', okultasi: '🌑', gerhana_bulan: '🌘', gerhana_matahari: '☀️', elongasi: '⭐', oposisi: '🔭', fase_planet: '🪐', hujan_meteor: '☄️'};
-    const STORE = 'astrolife.catalog.v3', THEME = 'astrolife.theme';
+    const STORE = 'astrolife.catalog.v3';
 
     const S = {view: 'obs', gear: 4, tier: 0, cats: new Set(), q: '', sort: 'time'};
-    let data = null, themePref = 'dark';
-
-    // ---------- tema ----------
-    const mqLight = window.matchMedia ? window.matchMedia('(prefers-color-scheme: light)') : null;
-    function applyTheme() {
-        const eff = themePref === 'auto' ? (mqLight && mqLight.matches ? 'light' : 'dark') : themePref;
-        $('cat').dataset.theme = eff;
-        document.querySelectorAll('#seg-theme button').forEach(b => { b.classList.toggle('on', b.dataset.v === themePref); b.setAttribute('aria-pressed', b.dataset.v === themePref); });
-    }
-    try { themePref = localStorage.getItem(THEME) || 'dark'; } catch (e) {}
-    $('seg-theme').addEventListener('click', (e) => {
-        const b = e.target.closest('button'); if (!b) return;
-        themePref = b.dataset.v; try { localStorage.setItem(THEME, themePref); } catch (err) {}
-        applyTheme();
-    });
-    if (mqLight && mqLight.addEventListener) mqLight.addEventListener('change', () => { if (themePref === 'auto') applyTheme(); });
-    applyTheme();
+    let data = null;
 
     // ---------- preferensi (kenyamanan saja) ----------
     function save() {
@@ -493,7 +459,7 @@
             if (!j.events.length && retry && j.meta.dari_tahun) { $('month').value = `${j.meta.dari_tahun}-01`; return load(false); }
             renderAll();
         } catch (err) {
-            $('list').innerHTML = '<div class="empty glass-card" style="color:#e11d48">Tidak dapat menghubungi server.</div>';
+            $('list').innerHTML = '<div class="empty glass-card" style="color:rgb(var(--red-500))">Tidak dapat menghubungi server.</div>';
         }
     }
 

@@ -82,8 +82,8 @@
     const $ = (id) => document.getElementById(id);
     const esc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     const URL_UP = "{{ url_for('catalog.api_upcoming') }}", URL_FEAS = "{{ url_for('observation.api_feasibility') }}", URL_CAT = "{{ url_for('catalog.index') }}";
-    const TIER = {common: '#94a3b8', uncommon: '#34d399', rare: '#38bdf8', epic: '#a78bfa', legendary: '#fbbf24'};
-    const SC = {emerald: '#34d399', blue: '#60a5fa', amber: '#fbbf24', rose: '#fb7185', slate: '#94a3b8'};
+    const TIER = {common: 'rgb(var(--sl-400))', uncommon: 'rgb(var(--grn-400))', rare: 'rgb(var(--sky-400))', epic: 'rgb(var(--deep-300))', legendary: 'rgb(var(--amb-400))'};
+    const SC = {emerald: 'rgb(var(--grn-400))', blue: 'rgb(var(--sky-400))', amber: 'rgb(var(--amb-400))', rose: 'rgb(var(--red-400))', slate: 'rgb(var(--sl-400))'};
     const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
 
     // Lokasi: pilihan terakhir di halaman Katalog bila ada, selain itu lokasi bawaan.

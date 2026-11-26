@@ -212,3 +212,10 @@ Sumber: `persis-times-js` (berkas dari pemilik; lisensi MIT Abu Sabda/PP PERSIS)
 - Lab Kalender: tabel perbandingan (`/calendar/api/compare`) memakai lokasi/kriteria bawaan tiap kalender; tampilan halaman belum diperiksa visual (hanya sintaks JS dan API).
 - Tidak diverifikasi: tampilan halaman di peramban (Tailwind CDN tak ada di sandbox); skrip halaman hanya diperiksa sintaksnya dan endpoint-nya diuji.
 - Pemakaian: `python -m unittest discover -s tests` (tes `test_persis` ±17 detik karena 192 jadwal × ~8 waktu).
+
+
+## 11. Tampilan (UI)
+- Tema terang/gelap global (`html.dark`), variabel CSS di `theme.css` + `theme-palette.css`; palet 001f8e, 2a35e2, 29aafe, ed2124, 009339. Halaman Katalog tidak lagi punya pemilih tema sendiri (ikut global).
+- Warna semantik puasa di Lab Kalender: wajib = 2a35e2, haram = ed2124, sunah = skala hijau 009339, makruh tetap kuning (palet tidak punya kuning).
+- Halaman Salat menandai waktu salat berikutnya bila tanggal = hari ini di lokasi terpilih.
+- Diperiksa lewat tangkapan layar (Chrome headless, Tailwind dibangun lokal dengan konfigurasi yang sama) pada 1366 px dan 390 px, mode terang dan gelap. Daftar event Katalog belum diperiksa visual karena butuh katalog yang sudah dibuat.

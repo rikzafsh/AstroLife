@@ -3,257 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark light">
     <title>{% block title %}AstroLife - Platform Eksplorasi Astronomi & Kalender{% endblock %}</title>
-    
-    <!-- Google Fonts: Plus Jakarta Sans & Space Grotesk -->
+
+    <!-- Tema: dibaca sebelum halaman digambar agar tidak berkedip. Pilihan: terang | gelap | auto (ikut sistem) -->
+    <script>
+        (function () {
+            var p = 'auto';
+            try { p = localStorage.getItem('astrolife.theme') || 'auto'; } catch (e) {}
+            var gelap = p === 'dark' || (p !== 'light' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            var h = document.documentElement;
+            h.classList.toggle('dark', gelap);
+            h.dataset.themePref = p;
+        })();
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS (CDN) -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme-palette.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
+    <!-- Tailwind CSS (CDN) + konfigurasi bersama -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                        display: ['"Space Grotesk"', 'sans-serif']
-                    },
-                    colors: {
-                        space: {
-                            950: '#060814',
-                            900: '#0b1023',
-                            850: '#101733',
-                            800: '#172044',
-                            700: '#222f60',
-                            accent: '#6366f1',
-                            cyan: '#06b6d4',
-                            gold: '#f59e0b',
-                            emerald: '#10b981'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    
-    <!-- Lucide Icons -->
+    <script src="{{ url_for('static', filename='js/tailwind-config.js') }}"></script>
+
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Chart.js for Visualization -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <style>
-        body {
-            background-color: #060814;
-            color: #e2e8f0;
-            background-image: 
-                radial-gradient(circle at 12% 10%, rgba(99, 102, 241, 0.08) 0%, transparent 45%),
-                radial-gradient(circle at 88% 25%, rgba(6, 182, 212, 0.07) 0%, transparent 50%),
-                radial-gradient(circle at 50% 90%, rgba(139, 92, 246, 0.05) 0%, transparent 60%);
-            background-attachment: fixed;
-        }
-        .glass-card {
-            background: rgba(16, 23, 51, 0.65);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-        }
-        .glass-card:hover {
-            border-color: rgba(255, 255, 255, 0.12);
-        }
-        .glass-panel-elevated {
-            background: rgba(23, 32, 68, 0.85);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(99, 102, 241, 0.2);
-        }
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #060814;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #1e2952;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #31427b;
-        }
-    </style>
     {% block head %}{% endblock %}
 </head>
-<body class="min-h-screen flex flex-col font-sans selection:bg-indigo-500/30 selection:text-indigo-200 antialiased">
+<body class="min-h-screen flex flex-col font-sans antialiased">
+    <a href="#konten" class="skip-link">Lewati ke konten utama</a>
 
-    <!-- Top Announcement & Live Time Ticker -->
-    <div class="bg-space-950/90 border-b border-slate-800/60 text-xs py-1.5 px-4 text-slate-400">
+    <!-- Bilah info: lokasi bawaan, tanggal & jam -->
+    <div class="border-b border-slate-800/70 bg-slate-950/60 text-xs py-1.5 px-4 text-slate-400">
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-1">
             <div class="flex items-center gap-2">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span>Posisi Pengamatan Default: <strong>{{ default_location.name }} ({{ '%.2f'|format(default_location.lat|abs) }}°{{ 'S' if default_location.lat < 0 else 'N' }}, {{ '%.2f'|format(default_location.lon|abs) }}°{{ 'E' if default_location.lon >= 0 else 'W' }}, {{ default_location.tz_label }})</strong></span>
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true"></span>
+                <span>Lokasi bawaan: <strong class="text-slate-200 font-semibold">{{ default_location.name }} ({{ '%.2f'|format(default_location.lat|abs) }}°{{ 'S' if default_location.lat < 0 else 'N' }}, {{ '%.2f'|format(default_location.lon|abs) }}°{{ 'E' if default_location.lon >= 0 else 'W' }}, {{ default_location.tz_label }})</strong></span>
             </div>
-            <div class="flex items-center gap-3 text-[11px]">
-                <span id="live-date" class="text-slate-300 font-medium">Memuat tanggal...</span>
-                <span>•</span>
-                <span id="live-clock" class="text-cyan-400 font-mono font-bold tracking-wider">--:--:-- WIB</span>
+            <div class="flex items-center gap-3">
+                <span id="live-date" class="text-slate-300 font-medium">Memuat tanggal…</span>
+                <span aria-hidden="true">•</span>
+                <span id="live-clock" class="text-cyan-400 font-mono font-bold tracking-wider" aria-live="off">--:--:-- WIB</span>
             </div>
         </div>
     </div>
 
-    <!-- Main Navigation Bar -->
-    <header class="sticky top-0 z-50 glass-card border-b border-slate-800/80 shadow-lg shadow-black/20">
+    <!-- Navigasi utama -->
+    <header class="sticky top-0 z-50 border-b border-slate-800/80" style="background:var(--header-bg);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)">
+        {% set cp = request.path %}
+        {% set nav = [
+            ('main.index', 'Beranda', 'home', '--pri-500', cp == '/'),
+            ('observation.index', 'Observasi', 'sparkles', '--sky-500', '/observation' in cp),
+            ('catalog.index', 'Katalog Event', 'telescope', '--deep-300', '/catalog' in cp),
+            ('calendar.index', 'Lab Kalender', 'calendar', '--red-500', '/calendar' in cp),
+            ('islamic.index', 'Salat & Kiblat', 'compass', '--grn-500', '/islamic' in cp),
+            ('bot.index', 'AstroBot', 'bot', '--pri-400', '/bot' in cp),
+        ] %}
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                
-                <!-- Brand / Logo -->
-                <a href="{{ url_for('main.index') }}" class="flex items-center space-x-3 group">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 flex items-center justify-center shadow-lg shadow-indigo-600/25 group-hover:scale-105 transition-all duration-300">
-                        <i data-lucide="telescope" class="w-5 h-5 text-white"></i>
+            <div class="flex items-center justify-between h-16 gap-3">
+                <a href="{{ url_for('main.index') }}" class="flex items-center gap-3 group shrink-0" aria-label="AstroLife, ke beranda">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform"
+                         style="background:linear-gradient(135deg,#001f8e 0%,#2a35e2 55%,#29aafe 100%);box-shadow:0 8px 20px -8px rgba(42,53,226,.7)">
+                        <i data-lucide="telescope" class="w-5 h-5" style="color:#fff"></i>
                     </div>
-                    <div>
-                        <div class="flex items-center gap-1.5">
-                            <span class="font-display text-xl font-bold tracking-tight text-white group-hover:text-cyan-300 transition-colors">AstroLife</span>
-                            <span class="text-[10px] px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 font-semibold border border-indigo-500/30">v1.0</span>
-                        </div>
-                        <span class="text-[11px] text-slate-400 block -mt-0.5 tracking-wide">Astronomi, Falak &amp; Penanggalan</span>
+                    <div class="leading-tight">
+                        <span class="font-display text-xl font-bold tracking-tight text-ink">AstroLife</span>
+                        <span class="hidden md:block text-[11px] text-slate-400">Astronomi, Falak &amp; Penanggalan</span>
                     </div>
                 </a>
 
-                <!-- Desktop Navigation Menu -->
-                <nav class="hidden lg:flex items-center space-x-1.5 text-xs font-semibold">
-                    {% set current_path = request.path %}
-                    
-                    <a href="{{ url_for('main.index') }}" 
-                       class="px-3 py-2 rounded-xl transition-all flex items-center gap-2 {{ 'bg-indigo-600/20 text-indigo-300 border border-indigo-500/30 shadow-sm' if current_path == '/' else 'text-slate-300 hover:text-white hover:bg-slate-800/50' }}">
-                        <i data-lucide="home" class="w-4 h-4"></i> Beranda
+                <nav class="hidden lg:flex items-center gap-1" aria-label="Menu utama">
+                    {% for ep, label, icon, c, aktif in nav %}
+                    <a href="{{ url_for(ep) }}" class="nav-link" style="--nav-c: var({{ c }})"{% if aktif %} aria-current="page"{% endif %}>
+                        <i data-lucide="{{ icon }}" class="w-4 h-4"></i>{{ label }}
                     </a>
-
-                    <a href="{{ url_for('observation.index') }}" 
-                       class="px-3 py-2 rounded-xl transition-all flex items-center gap-2 {{ 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 shadow-sm' if '/observation' in current_path else 'text-slate-300 hover:text-white hover:bg-slate-800/50' }}">
-                        <i data-lucide="sparkles" class="w-4 h-4 text-cyan-400"></i> Observasi Langit
-                    </a>
-
-                    <a href="{{ url_for('catalog.index') }}" 
-                       class="px-3 py-2 rounded-xl transition-all flex items-center gap-2 {{ 'bg-violet-500/20 text-violet-300 border border-violet-500/30 shadow-sm' if '/catalog' in current_path else 'text-slate-300 hover:text-white hover:bg-slate-800/50' }}">
-                        <i data-lucide="telescope" class="w-4 h-4 text-violet-400"></i> Katalog Event
-                    </a>
-
-                    <a href="{{ url_for('calendar.index') }}" 
-                       class="px-3 py-2 rounded-xl transition-all flex items-center gap-2 {{ 'bg-amber-500/20 text-amber-300 border border-amber-500/30 shadow-sm' if '/calendar' in current_path else 'text-slate-300 hover:text-white hover:bg-slate-800/50' }}">
-                        <i data-lucide="calendar" class="w-4 h-4 text-amber-400"></i> Lab Kalender
-                    </a>
-
-                    <a href="{{ url_for('islamic.index') }}" 
-                       class="px-3 py-2 rounded-xl transition-all flex items-center gap-2 {{ 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shadow-sm' if '/islamic' in current_path else 'text-slate-300 hover:text-white hover:bg-slate-800/50' }}">
-                        <i data-lucide="compass" class="w-4 h-4 text-emerald-400"></i> Waktu Salat &amp; Kiblat
-                    </a>
-
-                    <a href="{{ url_for('bot.index') }}" 
-                       class="px-3 py-2 rounded-xl transition-all flex items-center gap-2 {{ 'bg-pink-500/20 text-pink-300 border border-pink-500/30 shadow-sm' if '/bot' in current_path else 'text-slate-300 hover:text-white hover:bg-slate-800/50' }}">
-                        <i data-lucide="bot" class="w-4 h-4 text-pink-400"></i> AstroBot
-                    </a>
+                    {% endfor %}
                 </nav>
 
-                <!-- Right Quick Utilities -->
-                <div class="hidden sm:flex items-center gap-2.5">
-                    <a href="{{ url_for('bot.index') }}" class="px-3.5 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors flex items-center gap-1.5">
-                        <i data-lucide="help-circle" class="w-3.5 h-3.5 text-indigo-400"></i>
-                        <span>Bantuan</span>
+                <div class="flex items-center gap-2">
+                    <div class="theme-switch" role="group" aria-label="Tema tampilan">
+                        <button type="button" data-theme-set="light" aria-pressed="false" title="Mode terang" aria-label="Mode terang"><i data-lucide="sun" class="w-4 h-4"></i></button>
+                        <button type="button" data-theme-set="auto" aria-pressed="false" title="Ikuti sistem" aria-label="Ikuti pengaturan sistem"><i data-lucide="monitor" class="w-4 h-4"></i></button>
+                        <button type="button" data-theme-set="dark" aria-pressed="false" title="Mode gelap" aria-label="Mode gelap"><i data-lucide="moon" class="w-4 h-4"></i></button>
+                    </div>
+                    <a href="{{ url_for('bot.index') }}" class="hidden sm:inline-flex ui-btn ui-btn-sm" title="Tanya AstroBot">
+                        <i data-lucide="help-circle" class="w-4 h-4 text-sky-400"></i><span>Bantuan</span>
                     </a>
-                </div>
-
-                <!-- Mobile Menu Toggle Button -->
-                <div class="lg:hidden flex items-center">
-                    <button id="mobile-menu-btn" class="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 focus:outline-none transition-colors">
+                    <button id="mobile-menu-btn" type="button" class="lg:hidden ui-btn ui-btn-sm !px-2.5" aria-label="Buka menu" aria-expanded="false" aria-controls="mobile-menu">
                         <i data-lucide="menu" class="w-5 h-5"></i>
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Mobile Navigation Menu Dropdown -->
-        <div id="mobile-menu" class="hidden lg:hidden px-4 pt-2 pb-4 space-y-1.5 bg-space-900 border-b border-slate-800 shadow-2xl">
-            <a href="{{ url_for('main.index') }}" class="block px-3 py-2 rounded-xl text-slate-200 hover:bg-slate-800 text-sm">Beranda</a>
-            <a href="{{ url_for('observation.index') }}" class="block px-3 py-2 rounded-xl text-slate-200 hover:bg-slate-800 text-sm">Observasi &amp; Cuaca</a>
-            <a href="{{ url_for('catalog.index') }}" class="block px-3 py-2 rounded-xl text-slate-200 hover:bg-slate-800 text-sm">Katalog Event</a>
-            <a href="{{ url_for('calendar.index') }}" class="block px-3 py-2 rounded-xl text-slate-200 hover:bg-slate-800 text-sm">Lab Kalender</a>
-            <a href="{{ url_for('islamic.index') }}" class="block px-3 py-2 rounded-xl text-slate-200 hover:bg-slate-800 text-sm">Astronomi Islam &amp; Kiblat</a>
-            <a href="{{ url_for('bot.index') }}" class="block px-3 py-2 rounded-xl text-slate-200 hover:bg-slate-800 text-sm">AstroBot &amp; Edukasi</a>
+        <div id="mobile-menu" class="hidden lg:hidden border-t border-slate-800/80 px-4 pt-3 pb-4 grid gap-1 bg-slate-900">
+            {% for ep, label, icon, c, aktif in nav %}
+            <a href="{{ url_for(ep) }}" class="nav-link !py-3 !text-sm" style="--nav-c: var({{ c }})"{% if aktif %} aria-current="page"{% endif %}>
+                <i data-lucide="{{ icon }}" class="w-4 h-4"></i>{{ label }}
+            </a>
+            {% endfor %}
         </div>
     </header>
 
-    <!-- Main Dynamic Content -->
-    <main class="flex-grow">
+    <main id="konten" class="flex-grow" tabindex="-1">
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Footer -->
-    <footer class="border-t border-slate-800/80 bg-space-950/90 py-10 mt-16 text-xs text-slate-500">
+    <footer class="border-t border-slate-800/80 bg-slate-950/50 py-10 mt-16 text-xs text-slate-400">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
             <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-                <div class="flex items-center space-x-3">
-                    <div class="w-8 h-8 rounded-lg bg-indigo-600/30 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
-                        <i data-lucide="moon-star" class="w-4 h-4"></i>
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background:linear-gradient(135deg,#001f8e,#2a35e2)">
+                        <i data-lucide="moon-star" class="w-4 h-4" style="color:#fff"></i>
                     </div>
                     <div>
                         <span class="font-display font-bold text-slate-200 text-sm">AstroLife Platform</span>
-                        <p class="text-[11px] text-slate-400">Eksplorasi Astronomi Modern, Kalender Historis, dan Perencanaan Pengamatan Fenomena Langit.</p>
+                        <p class="text-[11px] text-slate-400">Eksplorasi astronomi, kalender historis, dan perencanaan pengamatan fenomena langit.</p>
                     </div>
                 </div>
-                
-                <div class="flex flex-wrap items-center gap-4 text-[11px] text-slate-400">
-                    <a href="{{ url_for('catalog.index') }}" class="hover:text-violet-400 transition-colors">Katalog Event</a>
-                    <span>•</span>
-                    <a href="{{ url_for('observation.index') }}" class="hover:text-cyan-400 transition-colors">Observasi</a>
-                    <span>•</span>
-                    <a href="{{ url_for('calendar.index') }}" class="hover:text-amber-400 transition-colors">Kalender</a>
-                    <span>•</span>
-                    <a href="{{ url_for('islamic.index') }}" class="hover:text-emerald-400 transition-colors">Falak</a>
-                    <span>•</span>
-                    <a href="{{ url_for('main.about') }}" class="hover:text-white transition-colors">Tentang Proyek</a>
-                </div>
+                <nav class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[12px]" aria-label="Tautan kaki">
+                    <a href="{{ url_for('catalog.index') }}" class="hover:text-ink">Katalog Event</a>
+                    <a href="{{ url_for('observation.index') }}" class="hover:text-ink">Observasi</a>
+                    <a href="{{ url_for('calendar.index') }}" class="hover:text-ink">Kalender</a>
+                    <a href="{{ url_for('islamic.index') }}" class="hover:text-ink">Falak</a>
+                    <a href="{{ url_for('main.about') }}" class="hover:text-ink">Tentang Proyek</a>
+                </nav>
             </div>
-            
-            <div class="pt-6 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-2 text-slate-500">
+            <div class="pt-6 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-2 text-slate-500">
                 <p>&copy; 2026 AstroLife. Proyek Aplikasi Web Berbasis Python Flask.</p>
                 <p>Sumber data: efemeris NASA JPL (DE440, via Skyfield), prakiraan cuaca Open-Meteo, dan perhitungan falak.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Scripts: Live Clock & UI Elements -->
     <script>
-        lucide.createIcons();
+        if (window.lucide) lucide.createIcons();
 
-        // Mobile Menu Toggle
-        const menuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        if (menuBtn && mobileMenu) {
-            menuBtn.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
+        // Menu seluler
+        (function () {
+            var b = document.getElementById('mobile-menu-btn'), m = document.getElementById('mobile-menu');
+            if (!b || !m) return;
+            b.addEventListener('click', function () {
+                var buka = m.classList.toggle('hidden') === false;
+                b.setAttribute('aria-expanded', buka);
             });
-        }
+        })();
 
-        // Live Astronomical Clock
+        // Pilihan tema (terang / ikut sistem / gelap), disimpan di peramban
+        (function () {
+            var h = document.documentElement, mq = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+            function terapkan(p) {
+                var gelap = p === 'dark' || (p !== 'light' && mq && mq.matches);
+                h.classList.toggle('dark', gelap);
+                h.dataset.themePref = p;
+                document.querySelectorAll('[data-theme-set]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.themeSet === p); });
+                document.dispatchEvent(new CustomEvent('astrolife:theme', { detail: { pref: p, dark: gelap } }));
+            }
+            document.querySelectorAll('[data-theme-set]').forEach(function (b) {
+                b.addEventListener('click', function () {
+                    try { localStorage.setItem('astrolife.theme', b.dataset.themeSet); } catch (e) {}
+                    terapkan(b.dataset.themeSet);
+                });
+            });
+            if (mq && mq.addEventListener) mq.addEventListener('change', function () { if (h.dataset.themePref === 'auto') terapkan('auto'); });
+            terapkan(h.dataset.themePref || 'auto');
+        })();
+
+        // Jam & tanggal
         function updateLiveClock() {
-            const now = new Date();
-            const clockEl = document.getElementById('live-clock');
-            const dateEl = document.getElementById('live-date');
-            
-            if (clockEl) {
-                const hours = String(now.getHours()).padStart(2, '0');
-                const minutes = String(now.getMinutes()).padStart(2, '0');
-                const seconds = String(now.getSeconds()).padStart(2, '0');
-                clockEl.innerText = `${hours}:${minutes}:${seconds} WIB`;
-            }
-
-            if (dateEl) {
-                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-                dateEl.innerText = now.toLocaleDateString('id-ID', options);
-            }
+            var now = new Date(), c = document.getElementById('live-clock'), d = document.getElementById('live-date');
+            if (c) c.textContent = [now.getHours(), now.getMinutes(), now.getSeconds()].map(function (n) { return String(n).padStart(2, '0'); }).join(':') + ' WIB';
+            if (d) d.textContent = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
         }
         setInterval(updateLiveClock, 1000);
         updateLiveClock();
