@@ -1,165 +1,234 @@
 {% extends "base.html" %}
 
-{% block title %}AstroBot & Knowledge Center - AstroLife{% endblock %}
+{% block title %}AstroBot & Pusat Artikel - AstroLife{% endblock %}
 
 {% block content %}
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-    <!-- Header -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
     <div>
         <h1 class="text-3xl font-bold text-ink flex items-center gap-3">
-            <i data-lucide="bot" class="w-8 h-8 text-pink-400"></i>
-            AstroBot &amp; Knowledge Center
+            <i data-lucide="bot" class="w-8 h-8 text-sky-400"></i>
+            AstroBot
         </h1>
-        <p class="text-sm text-slate-400 mt-1">
-            Asisten chatbot interaktif seputar astronomi, fenomena langit, kalender historis, dan dasar ilmu falak, serta pusat artikel edukasi.
+        <p class="text-sm text-slate-400 mt-1 max-w-3xl">
+            Tanya jadwal salat, arah kiblat, tanggal Hijriah/Jawa, puasa sunah, atau konsep falak dan astronomi. Hitungan memakai
+            lokasi dan kriteria dari <b class="text-ink font-semibold">Pengaturan</b>; penjelasan konsep diambil dari artikel di samping.
+            Berjalan lokal tanpa AI eksternal, jadi cakupannya terbatas pada topik yang saya kenal.
         </p>
     </div>
 
-    <!-- Main Layout: Chat on Left/Top, Articles on Right -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Interactive Chat Window -->
-        <div class="lg:col-span-2 glass-panel rounded-2xl flex flex-col h-[540px] border border-slate-800">
-            <!-- Chat Header -->
-            <div class="p-4 border-b border-slate-800 flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-pink-500/20 text-pink-400 flex items-center justify-center font-bold">
-                        <i data-lucide="bot" class="w-5 h-5"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-bold text-ink">AstroBot Assistant</h3>
-                        <span class="text-[11px] text-emerald-400 flex items-center gap-1">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Siap Menjawab
-                        </span>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+        <section class="lg:col-span-2 glass-panel rounded-2xl flex flex-col" style="height:min(680px,calc(100vh - 14rem));min-height:420px" aria-label="Percakapan AstroBot">
+            <header class="px-4 py-3 border-b border-slate-800 flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-3 min-w-0">
+                    <div class="w-9 h-9 rounded-xl bg-sky-500/20 text-sky-400 flex items-center justify-center shrink-0"><i data-lucide="bot" class="w-5 h-5"></i></div>
+                    <div class="min-w-0">
+                        <h2 class="text-sm font-bold text-ink">AstroBot</h2>
+                        <span class="ui-chip" title="Diatur lewat menu Pengaturan"><i data-lucide="map-pin" class="w-3 h-3"></i> <span data-pref="ringkas"></span></span>
                     </div>
                 </div>
-                <span class="text-xs text-slate-500">Retrieval &amp; Rule Engine</span>
-            </div>
-
-            <!-- Messages Stream -->
-            <div id="chat-messages" class="flex-grow p-4 overflow-y-auto space-y-3 text-sm">
-                <!-- Bot Intro Bubble -->
-                <div class="flex items-start gap-3">
-                    <div class="w-7 h-7 rounded-lg bg-pink-500/20 text-pink-400 flex items-center justify-center flex-shrink-0 text-xs">
-                        <i data-lucide="bot" class="w-4 h-4"></i>
-                    </div>
-                    <div class="bg-slate-800/80 rounded-2xl rounded-tl-none p-3.5 max-w-md text-slate-200 text-xs sm:text-sm">
-                        Halo! Saya <strong>AstroBot</strong>. Anda dapat bertanya tentang gerhana, jadwal salat, fenomena hujan meteor, konversi kalender Jawa/Hijriah, atau cara penggunaan fitur AstroLife. Apa yang ingin Anda ketahui?
-                    </div>
+                <div class="flex items-center gap-2">
+                    <button type="button" data-open-settings class="ui-btn ui-btn-sm" title="Ubah lokasi, metode, kriteria"><i data-lucide="sliders-horizontal" class="w-4 h-4"></i><span class="hidden sm:inline"> Pengaturan</span></button>
+                    <button type="button" id="bot-clear" class="ui-btn ui-btn-sm" title="Hapus riwayat percakapan"><i data-lucide="trash-2" class="w-4 h-4"></i><span class="hidden sm:inline"> Bersihkan</span></button>
                 </div>
-            </div>
+            </header>
 
-            <!-- Chat Input Bar -->
-            <div class="p-3 border-t border-slate-800 bg-space-900/60 rounded-b-2xl">
-                <form id="chat-form" class="flex gap-2">
-                    <input id="chat-input" type="text" placeholder="Tanyakan seputar astronomi atau kalender..." class="flex-grow bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-ink focus:outline-none focus:border-pink-500" autocomplete="off">
-                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm transition-colors flex items-center gap-1.5">
-                        <span>Kirim</span>
-                        <i data-lucide="send" class="w-4 h-4"></i>
-                    </button>
-                </form>
-            </div>
-        </div>
+            <div id="bot-log" class="flex-grow overflow-y-auto p-4 space-y-3 text-sm" role="log" aria-live="polite"></div>
 
-        <!-- Knowledge Center & Articles Sidebar -->
-        <div class="glass-panel rounded-2xl p-6 space-y-5 flex flex-col justify-between">
-            <div class="space-y-4">
-                <h3 class="font-bold text-ink text-base flex items-center gap-2">
-                    <i data-lucide="book-open" class="w-5 h-5 text-indigo-400"></i> Artikel &amp; Glosarium
-                </h3>
-                
-                <div class="space-y-3">
-                    <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800 hover:border-indigo-500/30 transition-colors cursor-pointer">
-                        <div class="text-xs text-indigo-400 font-semibold uppercase">Astronomi Islam</div>
-                        <div class="text-sm font-bold text-ink mt-0.5">Memahami Perhitungan Rasydulqiblat</div>
-                        <p class="text-xs text-slate-400 mt-1 line-clamp-2">Bagaimana posisi deklinasi matahari sejajar dengan lintang Makkah untuk meluruskan saf kiblat.</p>
-                    </div>
+            <div id="bot-chips" class="px-4 pb-2 flex flex-wrap gap-2"></div>
 
-                    <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800 hover:border-amber-500/30 transition-colors cursor-pointer">
-                        <div class="text-xs text-amber-400 font-semibold uppercase">Etnosains &amp; Budaya</div>
-                        <div class="text-sm font-bold text-ink mt-0.5">Siklus Windu &amp; Wuku Kalender Jawa</div>
-                        <p class="text-xs text-slate-400 mt-1 line-clamp-2">Perpaduan sistem matahari-bulan (lunisolar) dalam kalender Sultan Agungan.</p>
-                    </div>
+            <form id="bot-form" class="p-3 border-t border-slate-800 flex gap-2" autocomplete="off">
+                <label for="bot-input" class="sr-only">Pertanyaan</label>
+                <input id="bot-input" class="ui-field rounded-xl" maxlength="500" placeholder="Ketik pertanyaan, mis. “jadwal salat besok di Surabaya”" enterkeyhint="send">
+                <button id="bot-send" class="ui-btn ui-btn-primary rounded-xl px-4" type="submit"><i data-lucide="send" class="w-4 h-4"></i><span class="sr-only">Kirim</span></button>
+            </form>
+        </section>
 
-                    <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800 hover:border-cyan-500/30 transition-colors cursor-pointer">
-                        <div class="text-xs text-cyan-400 font-semibold uppercase">Observasi</div>
-                        <div class="text-sm font-bold text-ink mt-0.5">Panduan Membaca Kondisi Langit &amp; Cuaca</div>
-                        <p class="text-xs text-slate-400 mt-1 line-clamp-2">Pengaruh tutupan awan, polusi cahaya, dan fase bulan terhadap pengamatan teleskopik.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-xs text-slate-400 text-center">
-                Materi artikel dapat terus ditambah ke direktori <code class="text-indigo-300">data/knowledge_base</code>.
-            </div>
-        </div>
+        <aside class="glass-panel rounded-2xl p-4 space-y-3" aria-label="Artikel">
+            <h2 class="text-sm font-bold text-ink flex items-center gap-2"><i data-lucide="book-open" class="w-4 h-4 text-sky-400"></i> Artikel &amp; glosarium <span id="art-n" class="ui-chip"></span></h2>
+            <label class="sr-only" for="art-q">Cari artikel</label>
+            <input id="art-q" class="ui-field rounded-xl" placeholder="Cari artikel…" type="search">
+            <div id="art-cat" class="flex flex-wrap gap-1.5"></div>
+            <ul id="art-list" class="space-y-2 overflow-y-auto pr-1" style="max-height:min(460px,calc(100vh - 22rem))"></ul>
+        </aside>
     </div>
 </div>
+
+<div id="art-modal" class="hidden fixed inset-0 z-[70] flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="art-title">
+    <div class="absolute inset-0 bg-black/60" data-close></div>
+    <div class="relative glass-panel-elevated rounded-2xl w-full max-w-2xl max-h-[85vh] flex flex-col">
+        <div class="px-5 py-3 border-b border-slate-800 flex items-start justify-between gap-3">
+            <div><span id="art-kat" class="ui-chip"></span><h3 id="art-title" class="text-lg font-bold text-ink mt-1"></h3></div>
+            <button type="button" class="ui-btn ui-btn-sm" data-close aria-label="Tutup"><i data-lucide="x" class="w-4 h-4"></i></button>
+        </div>
+        <div id="art-body" class="p-5 overflow-y-auto text-sm text-slate-300 space-y-2"></div>
+        <div id="art-foot" class="px-5 py-3 border-t border-slate-800 flex gap-2 flex-wrap"></div>
+    </div>
+</div>
+
+<style>
+  .bot-bub { max-width:92%; padding:.6rem .85rem; border-radius:1rem; line-height:1.55; word-wrap:break-word; }
+  .bot-bub.me { margin-left:auto; background:linear-gradient(135deg,#2a35e2,#001f8e); color:#fff; border-bottom-right-radius:.3rem; }
+  .bot-bub.ai { background:rgb(var(--sl-900)); border:1px solid var(--line); color:rgb(var(--ink)); border-bottom-left-radius:.3rem; }
+  .bot-bub h4 { font-weight:700; margin:.4rem 0 .15rem; }
+  .bot-bub ul { list-style:disc; padding-left:1.2rem; margin:.25rem 0; }
+  .bot-bub li { margin:.1rem 0; }
+  .bot-bub a { color:#29aafe; text-decoration:underline; }
+  .bot-bub.me a { color:#fff; }
+  .bot-tbl { width:100%; font-size:.8rem; border-collapse:collapse; margin-top:.5rem; }
+  .bot-tbl caption { text-align:left; font-weight:700; padding-bottom:.25rem; }
+  .bot-tbl th, .bot-tbl td { text-align:left; padding:.3rem .5rem; border-bottom:1px solid var(--line); vertical-align:top; }
+  .bot-tbl th { color:rgb(var(--sl-400)); font-weight:600; }
+  .bot-dot span { display:inline-block; width:.4rem; height:.4rem; margin:0 .12rem; border-radius:50%; background:rgb(var(--sl-400)); animation:botd 1s infinite; }
+  .bot-dot span:nth-child(2){animation-delay:.15s}.bot-dot span:nth-child(3){animation-delay:.3s}
+  @keyframes botd{0%,60%,100%{opacity:.25}30%{opacity:1}}
+  @media (prefers-reduced-motion:reduce){.bot-dot span{animation:none}}
+</style>
 {% endblock %}
 
 {% block scripts %}
 <script>
-    const form = document.getElementById('chat-form');
-    const input = document.getElementById('chat-input');
-    const container = document.getElementById('chat-messages');
+(function () {
+  'use strict';
+  var KEY = 'astrolife.bot.v1', MAKS = 60;
+  var log = document.getElementById('bot-log'), form = document.getElementById('bot-form'), inp = document.getElementById('bot-input'),
+      chips = document.getElementById('bot-chips'), send = document.getElementById('bot-send');
+  var state = { msgs: [], slots: {} }, sibuk = false;
 
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const text = input.value.trim();
-        if (!text) return;
-
-        // Append User Message
-        appendMessage('user', text);
-        input.value = '';
-
-        // Append Thinking placeholder
-        const thinkingId = 'thinking-' + Date.now();
-        appendMessage('bot', 'AstroBot sedang memproses...', thinkingId);
-
-        try {
-            const res = await fetch("{{ url_for('bot.chat') }}", {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({message: text})
-            });
-            const data = await res.json();
-            
-            const thinkingEl = document.getElementById(thinkingId);
-            if (thinkingEl) {
-                thinkingEl.innerText = data.reply || 'Maaf, terjadi kendala respons.';
-            }
-        } catch (err) {
-            const thinkingEl = document.getElementById(thinkingId);
-            if (thinkingEl) {
-                thinkingEl.innerText = 'Gagal menghubungi server AstroBot.';
-            }
-        }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function inline(s) {
+    s = esc(s);
+    s = s.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>').replace(/\*([^*\s][^*]*)\*/g, '<i>$1</i>');
+    return s.replace(/\[([^\]]+)\]\((\/[^)\s]*)\)/g, '<a href="$2">$1</a>');          // hanya tautan internal
+  }
+  function md(t) {                                                                       // markdown-lite aman: HTML di-escape dulu
+    var out = [], ul = false;
+    String(t).split('\n').forEach(function (ln) {
+      var m;
+      if ((m = /^\s*(?:-|\d+\.)\s+(.*)$/.exec(ln))) { if (!ul) { out.push('<ul>'); ul = true; } out.push('<li>' + inline(m[1]) + '</li>'); return; }
+      if (ul) { out.push('</ul>'); ul = false; }
+      if ((m = /^#{1,4}\s+(.*)$/.exec(ln))) out.push('<h4>' + inline(m[1]) + '</h4>');
+      else if (ln.trim() === '') out.push('<div style="height:.4rem"></div>');
+      else out.push('<div>' + inline(ln) + '</div>');
     });
+    if (ul) out.push('</ul>');
+    return out.join('');
+  }
+  function tabel(c) {
+    var h = '<table class="bot-tbl">' + (c.judul ? '<caption>' + esc(c.judul) + '</caption>' : '') + '<thead><tr>';
+    (c.kolom || []).forEach(function (k) { h += '<th>' + esc(k) + '</th>'; });
+    h += '</tr></thead><tbody>';
+    (c.baris || []).forEach(function (r) { h += '<tr>' + r.map(function (x) { return '<td>' + esc(x) + '</td>'; }).join('') + '</tr>'; });
+    return h + '</tbody></table>';
+  }
+  function simpan() { try { localStorage.setItem(KEY, JSON.stringify({ msgs: state.msgs.slice(-MAKS), slots: state.slots })); } catch (e) {} }
+  function muat() { try { var d = JSON.parse(localStorage.getItem(KEY) || 'null'); if (d && Array.isArray(d.msgs)) { state.msgs = d.msgs; state.slots = d.slots || {}; } } catch (e) {} }
 
-    function appendMessage(sender, text, elementId = null) {
-        const msgDiv = document.createElement('div');
-        msgDiv.className = sender === 'user' ? 'flex items-start justify-end gap-3' : 'flex items-start gap-3';
-        
-        const bubble = document.createElement('div');
-        bubble.className = sender === 'user' 
-            ? 'bg-gradient-to-r from-pink-600 to-indigo-600 rounded-2xl rounded-tr-none p-3.5 max-w-md text-white text-xs sm:text-sm'
-            : 'bg-slate-800/80 rounded-2xl rounded-tl-none p-3.5 max-w-md text-slate-200 text-xs sm:text-sm';
-        
-        if (elementId) bubble.id = elementId;
-        bubble.innerText = text;
-
-        if (sender === 'user') {
-            msgDiv.appendChild(bubble);
-        } else {
-            const icon = document.createElement('div');
-            icon.className = 'w-7 h-7 rounded-lg bg-pink-500/20 text-pink-400 flex items-center justify-center flex-shrink-0 text-xs';
-            icon.innerHTML = `<i data-lucide="bot" class="w-4 h-4"></i>`;
-            msgDiv.appendChild(icon);
-            msgDiv.appendChild(bubble);
-        }
-
-        container.appendChild(msgDiv);
-        container.scrollTop = container.scrollHeight;
-        lucide.createIcons();
+  function gelembung(m) {
+    var d = document.createElement('div');
+    d.className = 'bot-bub ' + (m.dari === 'me' ? 'me' : 'ai');
+    if (m.dari === 'me') { d.textContent = m.teks; return d; }
+    var h = md(m.teks);
+    (m.cards || []).forEach(function (c) { if (c.tipe === 'tabel') h += tabel(c); });
+    if ((m.links || []).length) h += '<div class="mt-2 flex flex-wrap gap-2">' + m.links.map(function (l) { return /^\//.test(l.url) ? '<a class="ui-chip" href="' + esc(l.url) + '">' + esc(l.teks) + ' →</a>' : ''; }).join('') + '</div>';
+    if ((m.sources || []).length) h += '<div class="mt-2 text-[11px] text-slate-400">Sumber: ' + m.sources.map(esc).join('; ') + '</div>';
+    h += '<div class="mt-1"><button type="button" class="text-[11px] text-slate-400 hover:text-ink underline" data-salin>Salin</button></div>';
+    d.innerHTML = h;
+    d.querySelector('[data-salin]').addEventListener('click', function () { try { navigator.clipboard.writeText(m.teks); this.textContent = 'Tersalin'; } catch (e) {} });
+    return d;
+  }
+  function gulir() { log.scrollTop = log.scrollHeight; requestAnimationFrame(function () { log.scrollTop = log.scrollHeight; }); }
+  window.addEventListener('load', function () { setTimeout(gulir, 300); });
+  function tampilSaran(list) {
+    chips.innerHTML = '';
+    (list || []).slice(0, 5).forEach(function (s) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'ui-chip hover:brightness-110 cursor-pointer'; b.textContent = s;
+      b.addEventListener('click', function () { tanya(s); }); chips.appendChild(b);
+    });
+  }
+  var SARAN0 = ['Jadwal salat hari ini', 'Arah kiblat dari lokasi saya', 'Kapan 1 Ramadan 1448?', 'Puasa sunah minggu ini', 'Apa itu rasydulqiblat?'];
+  function render() {
+    log.innerHTML = '';
+    if (!state.msgs.length) {
+      log.appendChild(gelembung({ dari: 'bot', teks: 'Assalamualaikum! Saya **AstroBot**. Silakan tanya jadwal salat, arah kiblat, tanggal Hijriah/Jawa, puasa sunah, atau konsep falak dan astronomi. Hitungan memakai lokasi di **Pengaturan**.' }));
+      tampilSaran(SARAN0);
+    } else {
+      state.msgs.forEach(function (m) { log.appendChild(gelembung(m)); });
+      tampilSaran((state.msgs[state.msgs.length - 1].saran) || SARAN0);
     }
+    gulir();
+  }
+  function konteks() {
+    var p = window.AstroPrefs ? window.AstroPrefs.get() : {};
+    return { lokasi: p.lokasi || null, salat: p.salat || null, hijriah: p.hijriah || null };
+  }
+  function tanya(teks) {
+    teks = (teks || '').trim();
+    if (!teks || sibuk) return;
+    sibuk = true; send.disabled = true; inp.value = '';
+    state.msgs.push({ dari: 'me', teks: teks }); render();
+    var t = document.createElement('div'); t.className = 'bot-bub ai bot-dot'; t.setAttribute('aria-label', 'AstroBot sedang mengetik'); t.innerHTML = '<span></span><span></span><span></span>';
+    log.appendChild(t); gulir(); chips.innerHTML = '';
+    fetch('/bot/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: teks, context: konteks(), slots: state.slots }) })
+      .then(function (r) { return r.json().catch(function () { return { reply: 'Respons server tidak terbaca.', status: 'error' }; }); })
+      .catch(function () { return { status: 'error', reply: 'Tidak dapat menghubungi server. Periksa koneksi lalu coba lagi.' }; })
+      .then(function (d) {
+        if (d.slots && Object.keys(d.slots).length) state.slots = d.slots;
+        state.msgs.push({ dari: 'bot', teks: d.reply || '(tanpa jawaban)', cards: d.cards, links: d.links, sources: d.sources, saran: d.suggestions });
+        sibuk = false; send.disabled = false; simpan(); render(); inp.focus();
+      });
+  }
+  form.addEventListener('submit', function (e) { e.preventDefault(); tanya(inp.value); });
+  document.getElementById('bot-clear').addEventListener('click', function () { state = { msgs: [], slots: {} }; simpan(); render(); });
+
+  /* ── artikel ── */
+  var arts = [], kat = '';
+  var list = document.getElementById('art-list'), aq = document.getElementById('art-q'), acat = document.getElementById('art-cat');
+  function filter() {
+    var q = aq.value.toLowerCase().trim();
+    var hasil = arts.filter(function (a) { return (!kat || a.kategori === kat) && (!q || (a.judul + ' ' + a.ringkas).toLowerCase().indexOf(q) >= 0); });
+    list.innerHTML = '';
+    hasil.forEach(function (a) {
+      var li = document.createElement('li');
+      li.innerHTML = '<button type="button" class="w-full text-left rounded-xl p-2.5 border border-slate-800 hover:border-sky-500/60 transition"><span class="block text-[11px] text-sky-400 font-semibold">' + esc(a.kategori) + '</span><span class="block text-sm font-semibold text-ink">' + esc(a.judul) + '</span><span class="block text-xs text-slate-400 mt-0.5">' + esc(a.ringkas) + '</span></button>';
+      li.firstChild.addEventListener('click', function () { buka(a.id); }); list.appendChild(li);
+    });
+    if (!hasil.length) list.innerHTML = '<li class="text-xs text-slate-400 p-2">Tidak ada artikel yang cocok.</li>';
+  }
+  function buka(id) {
+    fetch('/bot/api/artikel/' + encodeURIComponent(id)).then(function (r) { return r.json(); }).then(function (d) {
+      if (d.status !== 'success') return;
+      var a = d.artikel;
+      document.getElementById('art-kat').textContent = a.kategori; document.getElementById('art-title').textContent = a.judul;
+      document.getElementById('art-body').innerHTML = md(a.isi);
+      var f = document.getElementById('art-foot'); f.innerHTML = '';
+      var tanyaBtn = document.createElement('button'); tanyaBtn.type = 'button'; tanyaBtn.className = 'ui-btn ui-btn-sm'; tanyaBtn.textContent = 'Tanya AstroBot tentang ini';
+      tanyaBtn.addEventListener('click', function () { tutup(); tanya('Jelaskan ' + a.judul); }); f.appendChild(tanyaBtn);
+      if (a.tautan && /^\//.test(a.tautan)) { var l = document.createElement('a'); l.className = 'ui-btn ui-btn-sm'; l.href = a.tautan; l.textContent = 'Buka fitur terkait'; f.appendChild(l); }
+      document.getElementById('art-modal').classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+    });
+  }
+  function tutup() { document.getElementById('art-modal').classList.add('hidden'); }
+  document.querySelectorAll('#art-modal [data-close]').forEach(function (b) { b.addEventListener('click', tutup); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') tutup(); });
+  aq.addEventListener('input', filter);
+  fetch('/bot/api/artikel').then(function (r) { return r.json(); }).then(function (d) {
+    arts = d.artikel || []; document.getElementById('art-n').textContent = arts.length;
+    var ks = []; arts.forEach(function (a) { if (ks.indexOf(a.kategori) < 0) ks.push(a.kategori); });
+    ['Semua'].concat(ks).forEach(function (k) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'ui-chip cursor-pointer'; b.textContent = k;
+      b.addEventListener('click', function () { kat = k === 'Semua' ? '' : k; filter(); }); acat.appendChild(b);
+    });
+    filter();
+    var p = new URLSearchParams(location.search);
+    if (p.get('artikel')) buka(p.get('artikel'));
+  });
+
+  muat(); render();
+  var qs = new URLSearchParams(location.search).get('q');
+  if (qs) tanya(qs);
+  document.addEventListener('astrolife:prefs', function () { state.slots = {}; });   // lokasi baru: lanjutan lama tidak relevan
+  if (window.lucide) lucide.createIcons();
+})();
 </script>
 {% endblock %}

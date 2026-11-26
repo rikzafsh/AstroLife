@@ -225,3 +225,12 @@ Sumber: `persis-times-js` (berkas dari pemilik; lisensi MIT Abu Sabda/PP PERSIS)
 - Kriteria Hijriah bawaan = Aritmetis (perilaku lama). Kriteria hisab hanya berlaku untuk tahun 1700–2300 M.
 - Kriteria Hijriah tidak mengubah deteksi Ramadan untuk Isya Ummul Qura (selalu memakai kriteria Ummul Qura).
 - Opsi epoch/pola kabisat aritmetis tetap ada di Lab Kalender (tidak ikut disimpan di Pengaturan).
+
+
+## 13. AstroBot
+- Alur `jawab()`: sapaan/bantuan → (jika bukan pertanyaan konsep) intent operasional → perbandingan kriteria → retrieval BM25. Pertanyaan berpola "apa itu/kenapa/bedanya/jelaskan" selalu ke artikel.
+- Slot lanjutan (`kota`, `tanggal`, `intent`) dikembalikan ke klien dan dikirim lagi; hanya dipakai untuk pesan pendek tanpa kata kunci intent lain. Slot dikosongkan saat Pengaturan berubah.
+- Evaluasi retrieval (`tests/test_bot.py`, 54 soal): top-1 98%, top-3 100%. Soal ditulis oleh pengembang yang sama dengan artikel, jadi angka ini **optimistis**; uji dengan pertanyaan pengguna nyata.
+- Batas: tidak memahami kalimat bebas di luar pola/artikel; kota hanya yang ada di `kota.py` (±70); tanggal Hijriah per kriteria memakai pindai ±4 hari dari perkiraan aritmetis; tahun Hijriah 1300–1800.
+- Artikel KB ditulis ringkas dan perlu ditinjau ahli falak sebelum dipakai rujukan; angka hujan meteor dan sudut metode bersifat perkiraan umum.
+- Pertanyaan yang tak terjawab tidak dicatat (privasi).

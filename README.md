@@ -12,7 +12,7 @@ Skyfield), menilai keterlihatannya dari lokasi pengguna, lalu memeriksa prakiraa
 | Beranda (`/`) | siap: tanggal, fase Bulan, cuaca malam ini, event mendatang (semuanya dihitung, bukan data tetap) |
 | Waktu Salat & Kiblat (`/islamic/`) | siap: jadwal salat 9 metode (hisab berdetik + ihtiyat), imsak, fajar/senja, istiwa, ⅓ malam, arah kiblat (bola/elipsoid/Vincenty), rasydulqiblat harian & tahunan, puasa sunah |
 | Lab Kalender (`/calendar/`) | siap: Masehi ↔ Hijriah (aritmetis + hisab MABIMS/Ummul Qura/Wujudul Hilal/KHGT) ↔ Jawa (siklus kurup) + weton/pawukon + Jyotiṣa, plus tabel perbandingan kalender Hijriah & Jawa |
-| AstroBot | dalam pengembangan |
+| AstroBot | berjalan: intent + perhitungan nyata + retrieval BM25 atas 29 artikel (tanpa LLM luar) |
 
 ## Menjalankan
 ```powershell
@@ -75,3 +75,9 @@ Tes cuaca memakai respons tiruan (tanpa internet). Tes khusus Skyfield dilewati 
 - Dipakai oleh: Beranda (lokasi, cuaca, event, tanggal Hijriah), Observasi, Katalog (lokasi), Salat & Kiblat (lokasi, metode, kriteria Hijriah), Lab Kalender (menandai kriteria pilihan).
 - Jadwal **Puasa Sunah & Hari Penting** mengikuti kriteria Hijriah pilihan: `GET /islamic/api/puasa?kriteria=aritmetis|mabims|ummulqura|wujudulhilal|turki`.
 - Tes: `tests/test_pengaturan.py`.
+
+## AstroBot
+- Mesin lokal di `app/bot/` (tanpa LLM/API luar): `teks.py` (normalisasi, sinonim ejaan, stemming ringan), `pengetahuan.py` (BM25 atas `app/bot/kb/*.md`; artikel tambahan dapat ditaruh di `data/knowledge_base`), `kota.py` (gazetir kota), `mesin.py` (intent + slot lanjutan).
+- Pertanyaan operasional (jadwal salat, kiblat, rasydulqiblat, tanggal/konversi, awal bulan Hijriah per kriteria, puasa sunah, fase Bulan) dijawab dari hitungan aplikasi memakai Pengaturan; pertanyaan konsep dijawab dari artikel.
+- API: `POST /bot/api/chat` `{message, context:{lokasi,salat,hijriah}, slots}` → `{status, reply, intent, slots, cards, links, sources, suggestions}`; `GET /bot/api/artikel[/<id>]`.
+- Riwayat percakapan disimpan di localStorage peramban (`astrolife.bot.v1`); server tidak menyimpan pertanyaan.
