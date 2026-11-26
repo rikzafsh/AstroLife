@@ -1,7 +1,7 @@
 """
 Observation Planner Service
 ===========================
-Menggabungkan fenomena astronomi (scraper_service) + prakiraan cuaca (weather_service)
+Menggabungkan event katalog (catalog.service) + prakiraan cuaca (weather_service)
 menjadi skor kelayakan pengamatan 0-100 untuk lokasi, alat, dan waktu tertentu.
 
 Faktor penalti (semuanya transparan dan dikembalikan sebagai 'breakdown'):
@@ -16,19 +16,7 @@ import math
 from datetime import datetime, timedelta
 
 from app.services import astro_core as ac
-from app.services.scraper_service import scrape_in_the_sky_events
-from app.services.weather_service import get_weather_at
-
-WIB_OFFSET = timedelta(hours=7)
-# 'telescope' (pilihan pengguna: optik > 70 mm) dianggap setara teleskop 4-inci.
-INSTRUMENT_RANK = {'naked_eye': 0, 'binoculars': 1, 'small_telescope': 2, 'telescope': 3, 'telescope_4inch': 3, 'large_telescope': 4}
-INSTRUMENT_LABEL = {'naked_eye': 'Mata Telanjang', 'binoculars': 'Binokular', 'small_telescope': 'Teleskop Kecil',
-                    'telescope': 'Teleskop', 'telescope_4inch': 'Teleskop 4-Inci', 'large_telescope': 'Teleskop Besar'}
-
-
-def wib_to_utc(iso_wib: str) -> datetime:
-    return datetime.strptime(iso_wib, '%Y-%m-%dT%H:%M') - WIB_OFFSET
-
+from app.services.weather_service import fetch_hourly_forecast, get_weather_at
 
 def moon_illumination(when_utc: datetime) -> float:
     """Fraksi cahaya Bulan 0..1 dari elongasi Bulan-Matahari (aproksimasi fase)."""
@@ -150,62 +138,41 @@ def calculate_observation_feasibility(weather: dict, difficulty: str = 'naked_ey
 
 
 # ---------------------------------------------------------------------------
-# Perencana per fenomena
+# Perencana berbasis katalog
 # ---------------------------------------------------------------------------
-def evaluate_event(event: dict, lat: float, lon: float, instrument: str = None, now_utc: datetime = None) -> dict:
-    """Skor untuk satu fenomena memakai alat pengguna (atau alat yang dibutuhkan fenomena)."""
+GEAR_RANK = {'naked_eye': 0, 'binoculars': 1, 'telescope': 3, 'all': 4}
+FORECAST_MAX_DAYS = 15                       # prakiraan per jam Open-Meteo: 16 hari
+
+
+def plan(doc: dict, lat: float, lon: float, sky: str, tz: float, instrument: str = 'all',
+         now_utc: datetime = None, days: int = 14, limit: int = 12) -> dict:
+    """
+    Event katalog yang DAPAT DIAMATI dari lokasi dalam `days` hari ke depan, masing-masing diberi skor kelayakan cuaca
+    pada WAKTU TERBAIKNYA, diurutkan dari skor tertinggi. Bila prakiraan tidak dapat diambil, skor tidak dikarang (None).
+    """
+    from catalog import service as S
     now_utc = now_utc or datetime.utcnow()
-    needed_key = event.get('difficulty_detail') or event.get('difficulty') or 'naked_eye'
-    if needed_key not in INSTRUMENT_RANK:
-        needed_key = 'naked_eye'
-    use = instrument if instrument in INSTRUMENT_RANK else needed_key
-    needs_more = INSTRUMENT_RANK[use] < INSTRUMENT_RANK[needed_key]
-    # Skor memakai keluarga alat yang dibutuhkan fenomena; pengamat dengan alat lebih sederhana tetap dinilai sesuai target.
-    scoring_diff = 'telescope' if 'telescope' in needed_key else needed_key
-    needed = needed_key
-
-    obs_iso = event.get('obs_time')
-    if not obs_iso:
-        return {'id': event['id'], 'feasibility': calculate_observation_feasibility(
-            {'available': False, 'reason': 'Waktu pengamatan tidak diketahui.'}), 'weather': None}
-    when = wib_to_utc(obs_iso)
-    weather = get_weather_at(lat, lon, when, now_utc)
-    illum = moon_illumination(when)
-    malt = moon_altitude_at(when, lat, lon)
-    feas = calculate_observation_feasibility(weather, scoring_diff, event.get('type', ''), illum,
-                                             event.get('involves_moon', False), malt)
-    return {
-        'id': event['id'], 'obs_time_wib': obs_iso, 'moon_illumination_pct': round(illum * 100), 'moon_altitude_deg': round(malt),
-        'needs_better_instrument': needs_more, 'required_instrument': INSTRUMENT_LABEL.get(needed, needed),
-        'is_past': when < now_utc - timedelta(hours=1), 'weather': weather, 'feasibility': feas,
-    }
-
-
-def plan(lat: float, lon: float, instrument: str = None, year: int = None, month: int = None,
-         now_utc: datetime = None, top_n: int = 3) -> dict:
-    """Skor seluruh fenomena + daftar rekomendasi terbaik (hanya yang belum lewat & alatnya memadai)."""
-    now_utc = now_utc or datetime.utcnow()
-    events = scrape_in_the_sky_events(year=year, month=month)
-    items = []
-    for ev in events:
-        r = evaluate_event(ev, lat, lon, instrument, now_utc)
-        f = r['feasibility']
-        items.append({
-            'id': ev['id'], 'title': ev['title'], 'type': ev['type'], 'date': ev['date'],
-            'obs_time_wib': r.get('obs_time_wib'), 'obs_assumed': ev.get('obs_assumed', False), 'is_past': r.get('is_past', False),
-            'needs_better_instrument': r.get('needs_better_instrument', False),
-            'required_instrument': r.get('required_instrument'),
-            'score': f['score'], 'status': f['status'], 'color': f['color'], 'confidence': f['confidence'],
-            'reasons': f['reasons'][:2], 'cloud_cover_pct': (r.get('weather') or {}).get('cloud_cover_pct'),
-            'weather_kind': (r.get('weather') or {}).get('kind'),
+    days = max(1, min(int(days), FORECAST_MAX_DAYS))
+    items = S.upcoming(doc, lat, lon, sky, tz, now_utc, days, observable_only=True, max_rank=GEAR_RANK.get(instrument, 4))
+    forecast_ok = fetch_hourly_forecast(lat, lon) is not None if items else False
+    rows = []
+    for it in items:
+        v = it['visibility']
+        when = datetime.strptime(v['best_time_utc'][:19], '%Y-%m-%dT%H:%M:%S')
+        weather = get_weather_at(lat, lon, when, now_utc) if forecast_ok else {'available': False, 'reason': 'Prakiraan cuaca tidak dapat dimuat.'}
+        illum = moon_illumination(when)
+        feas = calculate_observation_feasibility(weather, v['instrument'] or 'naked_eye', it['kategori_label'], illum,
+                                                 'moon' in it['bodies'], v.get('moon_altitude'))
+        rows.append({
+            'id': it['id'], 'title': it['title'], 'category': it['category'], 'kategori_label': it['kategori_label'],
+            'time_local': it['time_local'], 'best_local': it['wx']['best'], 'wx': it['wx'], 'headline': v['headline'],
+            'rarity': {'tier': it['rarity']['tier'], 'label': it['rarity']['label']},
+            'instrument': v['instrument'], 'instrument_label': v['instrument_label'], 'bodies': it['bodies'],
+            'score': feas['score'], 'status': feas['status'], 'color': feas['color'], 'confidence': feas['confidence'],
+            'reasons': feas['reasons'][:2], 'weather_kind': weather.get('kind'),
+            'cloud_cover_pct': weather.get('cloud_cover_pct'), 'rain_prob': weather.get('precipitation_prob'),
         })
-    candidates = [i for i in items if i['score'] is not None and not i['is_past']
-                  and not i['needs_better_instrument']]
-    candidates.sort(key=lambda i: (-i['score'], i['obs_time_wib'] or ''))
-    # satu rekomendasi per hari/objek serupa tidak diperlukan; ambil teratas apa adanya
-    return {
-        'lokasi': {'lat': lat, 'lon': lon}, 'instrument': instrument,
-        'dihitung_utc': now_utc.strftime('%Y-%m-%dT%H:%M'),
-        'items': items, 'top': [c['id'] for c in candidates[:top_n]],
-        'weather_available': any(i['score'] is not None for i in items),
-    }
+    tier_rank = {'common': 0, 'uncommon': 1, 'rare': 2, 'epic': 3, 'legendary': 4}
+    rows.sort(key=lambda r: (r['score'] is None, -(r['score'] or 0), -tier_rank[r['rarity']['tier']], r['time_local']))
+    return {'dihitung_utc': now_utc.strftime('%Y-%m-%dT%H:%M'), 'days': days, 'weather_available': forecast_ok,
+            'total_observable': len(rows), 'items': rows[:limit]}

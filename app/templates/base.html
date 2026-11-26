@@ -93,7 +93,7 @@
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-1">
             <div class="flex items-center gap-2">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span>Posisi Pengamatan Default: <strong>Jakarta (-6.21°S, 106.85°E)</strong></span>
+                <span>Posisi Pengamatan Default: <strong>{{ default_location.name }} ({{ '%.2f'|format(default_location.lat|abs) }}°{{ 'S' if default_location.lat < 0 else 'N' }}, {{ '%.2f'|format(default_location.lon|abs) }}°{{ 'E' if default_location.lon >= 0 else 'W' }}, {{ default_location.tz_label }})</strong></span>
             </div>
             <div class="flex items-center gap-3 text-[11px]">
                 <span id="live-date" class="text-slate-300 font-medium">Memuat tanggal...</span>
@@ -151,11 +151,6 @@
                         <i data-lucide="compass" class="w-4 h-4 text-emerald-400"></i> Waktu Salat &amp; Kiblat
                     </a>
 
-                    <a href="{{ url_for('analytics.index') }}" 
-                       class="px-3 py-2 rounded-xl transition-all flex items-center gap-2 {{ 'bg-violet-500/20 text-violet-300 border border-violet-500/30 shadow-sm' if '/analytics' in current_path else 'text-slate-300 hover:text-white hover:bg-slate-800/50' }}">
-                        <i data-lucide="bar-chart-2" class="w-4 h-4 text-violet-400"></i> Analitik Data
-                    </a>
-
                     <a href="{{ url_for('bot.index') }}" 
                        class="px-3 py-2 rounded-xl transition-all flex items-center gap-2 {{ 'bg-pink-500/20 text-pink-300 border border-pink-500/30 shadow-sm' if '/bot' in current_path else 'text-slate-300 hover:text-white hover:bg-slate-800/50' }}">
                         <i data-lucide="bot" class="w-4 h-4 text-pink-400"></i> AstroBot
@@ -186,7 +181,6 @@
             <a href="{{ url_for('catalog.index') }}" class="block px-3 py-2 rounded-xl text-slate-200 hover:bg-slate-800 text-sm">Katalog Event</a>
             <a href="{{ url_for('calendar.index') }}" class="block px-3 py-2 rounded-xl text-slate-200 hover:bg-slate-800 text-sm">Lab Kalender</a>
             <a href="{{ url_for('islamic.index') }}" class="block px-3 py-2 rounded-xl text-slate-200 hover:bg-slate-800 text-sm">Astronomi Islam &amp; Kiblat</a>
-            <a href="{{ url_for('analytics.index') }}" class="block px-3 py-2 rounded-xl text-slate-200 hover:bg-slate-800 text-sm">Analitik Data &amp; ML</a>
             <a href="{{ url_for('bot.index') }}" class="block px-3 py-2 rounded-xl text-slate-200 hover:bg-slate-800 text-sm">AstroBot &amp; Edukasi</a>
         </div>
     </header>
@@ -211,13 +205,13 @@
                 </div>
                 
                 <div class="flex flex-wrap items-center gap-4 text-[11px] text-slate-400">
+                    <a href="{{ url_for('catalog.index') }}" class="hover:text-violet-400 transition-colors">Katalog Event</a>
+                    <span>•</span>
                     <a href="{{ url_for('observation.index') }}" class="hover:text-cyan-400 transition-colors">Observasi</a>
                     <span>•</span>
                     <a href="{{ url_for('calendar.index') }}" class="hover:text-amber-400 transition-colors">Kalender</a>
                     <span>•</span>
                     <a href="{{ url_for('islamic.index') }}" class="hover:text-emerald-400 transition-colors">Falak</a>
-                    <span>•</span>
-                    <a href="{{ url_for('analytics.index') }}" class="hover:text-violet-400 transition-colors">Machine Learning</a>
                     <span>•</span>
                     <a href="{{ url_for('main.about') }}" class="hover:text-white transition-colors">Tentang Proyek</a>
                 </div>
@@ -225,7 +219,7 @@
             
             <div class="pt-6 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-2 text-slate-500">
                 <p>&copy; 2026 AstroLife. Proyek Aplikasi Web Berbasis Python Flask.</p>
-                <p>Sumber Data: in-the-sky.org, Weather API, dan Perhitungan Falak Ilmiah.</p>
+                <p>Sumber data: efemeris NASA JPL (DE440, via Skyfield), prakiraan cuaca Open-Meteo, dan perhitungan falak.</p>
             </div>
         </div>
     </footer>

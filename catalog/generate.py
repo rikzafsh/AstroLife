@@ -37,20 +37,39 @@ def _month_events(year: int, month: int, cache_dir: Path, force: bool, log) -> l
     return raw
 
 
-def generate(y0: int, y1: int, out: Path = None, force: bool = False, log=print) -> dict:
-    CATALOG_DIR.mkdir(parents=True, exist_ok=True)
-    cache_dir = CATALOG_DIR / 'cache'
+def generate(y0: int, y1: int, out: Path = None, force: bool = False, log=print, progress=None, catalog_dir=None) -> dict:
+    """
+    Membuat katalog untuk tahun y0..y1. progress(done, total, pesan) dipanggil tiap langkah (bulan/tahun/penulisan).
+    catalog_dir: folder keluaran/cache (bawaan data/catalog).
+    """
+    cdir = Path(catalog_dir) if catalog_dir else CATALOG_DIR
+    cdir.mkdir(parents=True, exist_ok=True)
+    cache_dir = cdir / 'cache'
     cache_dir.mkdir(parents=True, exist_ok=True)
-    out = Path(out) if out else CATALOG_DIR / 'events.json'
+    out = Path(out) if out else cdir / 'events.json'
+    years = list(range(y0, y1 + 1))
+    total = len(years) * 13 + 1                     # 12 bulan + (gerhana & meteor) per tahun, + penulisan
+    done = 0
+
+    def step(msg):
+        nonlocal done
+        done += 1
+        if progress:
+            progress(done, total, msg)
+
+    if progress:
+        progress(0, total, 'Mulai menghitung…')
     if ENGINE_KEY != 'skyfield':
         log('[PERINGATAN] Mesin sementara (ephem_lite): galat planet ~2 menit busur. Untuk rilis jalankan dengan ASTROLIFE_ENGINE=skyfield.')
     raw = []
-    for y in range(y0, y1 + 1):
+    for y in years:
         log(f'Tahun {y}')
         for m in range(1, 13):
             raw += _month_events(y, m, cache_dir, force, log)
+            step(f'Menghitung {y}-{m:02d}')
         t0, t1 = F.wib_to_jd(y, 1, 1), F.wib_to_jd(y + 1, 1, 1)
         raw += C.lunar_eclipses(t0, t1) + C.solar_eclipses(t0, t1) + C.meteor_showers(y)
+        step(f'Gerhana dan hujan meteor {y}')
     events = C.normalize(raw)
     by_cat = {}
     for e in events:
@@ -62,6 +81,7 @@ def generate(y0: int, y1: int, out: Path = None, force: bool = False, log=print)
     tmp = out.with_suffix('.json.tmp')
     tmp.write_text(json.dumps(doc, ensure_ascii=False, indent=1), encoding='utf-8')
     tmp.replace(out)
+    step('Katalog tersimpan')
     log(f'[SUKSES] {len(events)} event -> {out}  {by_cat}')
     return doc
 

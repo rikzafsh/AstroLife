@@ -1,4 +1,4 @@
-"""Tes regresi prototipe pencari event terhadap data in-the-sky.org (WIB). Mesin sementara: toleransi sengaja longgar."""
+"""Tes regresi pencari event terhadap nilai acuan hasil validasi (WIB; lihat knowledge.md). Mesin sementara: toleransi sengaja longgar."""
 import json
 import os
 import unittest
@@ -36,7 +36,7 @@ class Prototype(unittest.TestCase):
         self.assertLess(near('greatest_elongation_west', ['mercury'], datetime(2026, 11, 21, 7, 33))[0], 10)
 
     def test_jakarta_occultation_of_jupiter(self):
-        """Sumber (screenshot): hilang 04:39 WIB, muncul 06:08 WIB."""
+        """Acuan validasi: hilang 04:39 WIB, muncul 06:08 WIB."""
         occ = [e for e in EV if e['kind'] == 'occultation' and 'jupiter' in e['bodies']]
         self.assertEqual(len(occ), 1)
         o = occ[0]
@@ -51,34 +51,6 @@ class Prototype(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
-
-class Parsing(unittest.TestCase):
-    def test_event_time_formats(self):
-        from app.services.scraper_service import parse_event_time as P
-        r = P('Mon, 02 Nov 2026 at 20:39 WIB · 5 days ago')
-        self.assertEqual((r['start'], r['tz'], r['end']), (datetime(2026, 11, 2, 20, 39), 'WIB', None))
-        for t in ['TUE, 03 NOV 2026 FROM 03:45 WIB (20:45 UTC) TO 07:45 WIB 14 DAYS AGO',
-                  'Tue, 03 Nov 2026from03:45 WIB(20:45 UTC)to07:45 WIB']:
-            r = P(t)
-            self.assertEqual((r['start'], r['end'], r['tz']), (datetime(2026, 11, 3, 3, 45), datetime(2026, 11, 3, 7, 45), 'WIB'))
-            self.assertEqual(r['mid'], datetime(2026, 11, 3, 5, 45))
-        self.assertIsNone(P('Wed, 18 Nov 2026'))        # tanpa jam -> tidak ditebak
-        self.assertEqual(P('Tue 03 November 2026 at 05:45 UTC')['tz'], 'UTC')
-
-    def test_occultation_paragraph_is_parsed(self):
-        from app.services.detail_parser import parse_in_the_sky_detail_html as D
-        html = ('<p class="widetitle">Lunar occultation of Jupiter - In-The-Sky.org</p>'
-                '<div class="link_green">TUE, 03 NOV 2026 FROM 03:45 WIB (20:45 UTC) TO 07:45 WIB</div>'
-                '<div class="newsbody"><p>The Moon will pass in front of Jupiter, creating a lunar occultation visible '
-                'from countries and territories including Indonesia.</p><p>The occultation will be visible from Jakarta. '
-                'It will begin with the disappearance of Jupiter behind the Moon at 04:39 WIB in the north-eastern sky at an '
-                'altitude of 51.5 degrees. Its reappearance will be visible at 06:08 WIB, though in daylight.</p></div>')
-        r = D(html)
-        self.assertEqual((r['occultation_ingress'], r['occultation_egress']), ('04:39 (WIB)', '06:08 (WIB)'))
-        self.assertEqual(r['occultation_altitude'], '51.5')
-        self.assertIn('visible from Jakarta', r['visibility_summary'])
-        self.assertTrue(r['description'].startswith('The Moon will pass'))
 
 
 class Occultations(unittest.TestCase):

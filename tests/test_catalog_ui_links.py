@@ -12,10 +12,11 @@ from pathlib import Path
 from unittest import mock
 
 import test_catalog as TC          # menyediakan katalog hasil hitung (lite) di folder sementara
-import test_observation as T       # pembantu: net(), payload()
+import helpers as T                # pembantu: net(), payload(), fake_now()
 from app import create_app
 from app.services.timezones import tz_from_lon, tz_label
 import app.routes.observation as O
+from helpers import fake_now
 
 
 def client():
@@ -80,14 +81,6 @@ class EventTimePreferred(unittest.TestCase):
         v = V.evaluate(e, -6.2088, 106.8456)
         u0, u1 = e['details']['umbra_mulai_utc'], e['details']['umbra_selesai_utc']
         self.assertTrue(u0 <= v['best_time_utc'] <= u1)                                          # bukan fase penumbra
-
-
-def fake_now(now):
-    class _DT(datetime):
-        @classmethod
-        def utcnow(cls):
-            return now
-    return _DT
 
 
 class FeasibilityLocalTime(unittest.TestCase):

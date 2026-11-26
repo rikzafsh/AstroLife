@@ -1,7 +1,7 @@
 """
 Tes katalog event (pencari gerhana/meteor, penormal, generator, keterlihatan, kelangkaan, API).
 Memakai mesin sementara ephem_lite agar cepat dan tidak butuh internet; acuan: tabel gerhana NASA 2026
-dan data in-the-sky.org November 2026 (WIB).
+dan nilai acuan hasil validasi November 2026 (WIB; lihat knowledge.md).
 """
 import os
 os.environ['ASTROLIFE_ENGINE'] = 'lite'     # harus sebelum prototype.engine diimpor (abjad: test_catalog dimuat lebih dulu)
@@ -72,8 +72,8 @@ class Normalization(unittest.TestCase):
 
     def test_conjunction_has_both_reference_times(self):
         e = find('Konjungsi Bulan–Saturnus', '11')[0]
-        self.assertLess(minutes(e['details']['pendekatan_terdekat_utc'], '2026-11-20T20:02:00'), 12)         # 03:02 WIB (in-the-sky); mesin sementara: galat Saturnus ~9 menit
-        self.assertLess(minutes(e['details']['konjungsi_asensio_rekta_utc'], '2026-11-21T01:26:00'), 12)     # 08:26 WIB
+        self.assertLess(minutes(e['details']['pendekatan_terdekat_utc'], '2026-11-20T20:02:00'), 12)         # 03:02 WIB (acuan validasi); mesin sementara: galat Saturnus ~9 menit
+        self.assertLess(minutes(e['details']['konjungsi_asensio_rekta_utc'], '2026-11-21T01:26:00'), 12)     # 08:26 WIB (acuan validasi)
 
     def test_merged_pair_is_not_duplicated(self):
         mars = [e for e in EV if e['bodies'] == ['moon', 'mars'] and e['time_utc'].startswith('2026-11-02')]
@@ -95,7 +95,7 @@ class Visibility(unittest.TestCase):
         local = [(e['title'], e['time_utc'][:10]) for e in occ if V.evaluate(e, *JKT)['local_occultation']['terjadi']]
         self.assertEqual(local, [('Okultasi Jupiter oleh Bulan', '2026-11-02')])
         lo = V.evaluate(find('Okultasi Jupiter', '11')[0], *JKT)['local_occultation']
-        self.assertLess(minutes(lo['hilang_utc'], '2026-11-02T21:39:00'), 10)        # 04:39 WIB (in-the-sky)
+        self.assertLess(minutes(lo['hilang_utc'], '2026-11-02T21:39:00'), 10)        # 04:39 WIB (acuan validasi)
         self.assertLess(minutes(lo['muncul_utc'], '2026-11-02T23:08:00'), 10)        # 06:08 WIB
 
     def test_best_time_inside_occultation(self):

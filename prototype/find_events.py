@@ -217,7 +217,7 @@ def opposition_events(body, t0, t1, G=None):
 
 def inner_planet_events(body, t0, t1):
     ev = []
-    # Elongasi = selisih BUJUR EKLIPTIKA terhadap Matahari (definisi yang cocok dengan in-the-sky.org;
+    # Elongasi = selisih BUJUR EKLIPTIKA terhadap Matahari (definisi konvensional pada almanak astronomi;
     # jarak sudut geosentris memberi waktu berbeda ~1 jam karena puncaknya sangat datar).
     signed = lambda t: E.wrap180(E.ecl(body, t)[0] - E.ecl('sun', t)[0])
     if USE_BATCH:
@@ -266,7 +266,7 @@ def occultations(close_events, lat, lon):
 def occultation_windows(close_events):
     """
     Okultasi yang terjadi di SUATU TEMPAT di Bumi: jarak sudut geosentris < semidiameter Bulan + paralaks horizontal.
-    Jendela waktunya = saat kondisi itu terpenuhi (diperkirakan sama dengan 'FROM ... TO' di in-the-sky.org).
+    Jendela waktunya = saat kondisi itu terpenuhi (jendela keterlihatan global okultasi).
     """
     out = []
     for c in close_events:

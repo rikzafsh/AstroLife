@@ -1,29 +1,28 @@
 from flask import Flask
+
 from config import Config
+
 
 def create_app(config_class=Config):
     """Factory function to initialize and configure the Flask app."""
     app = Flask(__name__)
     app.config.from_object(config_class)
 
-    # Ensure necessary runtime data directories exist
-    for directory in [
-        app.config['DATA_DIR'],
-        app.config['CACHE_DIR'],
-        app.config['DATASETS_DIR'],
-        app.config['CATALOG_DIR'],
-        app.config['KNOWLEDGE_BASE_DIR'],
-        app.config['MODELS_DIR']
-    ]:
-        directory.mkdir(parents=True, exist_ok=True)
+    # Pastikan direktori data runtime ada
+    for key in ('DATA_DIR', 'CATALOG_DIR', 'KNOWLEDGE_BASE_DIR'):
+        app.config[key].mkdir(parents=True, exist_ok=True)
 
-    # Register Blueprints
+    @app.context_processor
+    def inject_defaults():
+        from app.services.timezones import tz_from_lon, tz_label
+        loc = app.config['DEFAULT_LOCATION']
+        return {'default_location': {**loc, 'tz_label': tz_label(tz_from_lon(loc['lon']))}}
+
     from app.routes.main import main_bp
     from app.routes.observation import observation_bp
     from app.routes.catalog import catalog_bp
     from app.routes.calendar import calendar_bp
     from app.routes.islamic import islamic_bp
-    from app.routes.analytics import analytics_bp
     from app.routes.bot import bot_bp
 
     app.register_blueprint(main_bp)
@@ -31,7 +30,6 @@ def create_app(config_class=Config):
     app.register_blueprint(catalog_bp, url_prefix='/catalog')
     app.register_blueprint(calendar_bp, url_prefix='/calendar')
     app.register_blueprint(islamic_bp, url_prefix='/islamic')
-    app.register_blueprint(analytics_bp, url_prefix='/analytics')
     app.register_blueprint(bot_bp, url_prefix='/bot')
 
     return app

@@ -1,0 +1,221 @@
+"""Layanan falak untuk antarmuka web: jadwal salat, kiblat, rasydulqiblat, dan konversi kalender.
+Semua perhitungan dilakukan oleh app/persis (port persis-times-js); modul ini hanya memeriksa masukan dan
+memformat hasil menjadi struktur JSON-siap-pakai."""
+from __future__ import annotations
+
+from datetime import date, timedelta
+
+from app.persis import core, kalender, kiblat, salat
+from app.services import astro_core as ac
+from app.services import calendar_service as cs
+from app.services.timezones import tz_from_lon, tz_label
+
+NAMA_WAKTU = (('imsak', 'Imsak'), ('subuh', 'Subuh'), ('syuruk', 'Syuruk (terbit)'), ('duha', 'Duha'), ('zuhur', 'Zuhur'),
+              ('asar', 'Asar'), ('magrib', 'Magrib'), ('isya', 'Isya'), ('nisfuLail', 'Tengah malam (nisfu lail)'))
+NAMA_ASTRO = (('fajarAstro', 'Fajar astronomis (−18°)'), ('fajarNaut', 'Fajar nautis (−12°)'), ('fajarSipil', 'Fajar sipil (−6°)'),
+              ('senjaSipil', 'Senja sipil (−6°)'), ('senjaNaut', 'Senja nautis (−12°)'), ('senjaAstro', 'Senja astronomis (−18°)'),
+              ('lamaSiang', 'Lama siang'), ('lamaMalam', 'Lama malam'))
+
+
+class InputError(ValueError):
+    pass
+
+
+# ── masukan ─────────────────────────────────────────────────────────
+def _float(v, nama, lo, hi, default=None):
+    if v in (None, ''):
+        if default is None:
+            raise InputError(f'{nama} wajib diisi.')
+        return default
+    try:
+        x = float(v)
+    except (TypeError, ValueError):
+        raise InputError(f'{nama} harus berupa angka.')
+    if not lo <= x <= hi:
+        raise InputError(f'{nama} harus di antara {lo:g} dan {hi:g}.')
+    return x
+
+
+def parse_lokasi(args, default: dict) -> dict:
+    lat = _float(args.get('lat'), 'Lintang', -90, 90, default['lat'])
+    lon = _float(args.get('lon'), 'Bujur', -180, 180, default['lon'])
+    elev = _float(args.get('elev'), 'Elevasi', -400, 9000, 0.0)
+    tz = _float(args.get('tz'), 'Zona waktu', -12, 14, tz_from_lon(lon))
+    return {'lat': lat, 'lon': lon, 'elev': elev, 'tz': tz, 'tz_label': tz_label(tz)}
+
+
+def parse_tanggal(s, default: date | None = None) -> date:
+    if not s:
+        if default is None:
+            raise InputError('Tanggal wajib diisi.')
+        return default
+    try:
+        return date.fromisoformat(str(s))
+    except ValueError:
+        raise InputError('Format tanggal harus YYYY-MM-DD.')
+
+
+def parse_metode(key) -> salat.PrayerMethod:
+    key = key or 'persatuanIslam'
+    if key not in salat.METODE:
+        raise InputError('Metode salat tidak dikenal.')
+    return salat.METODE[key]
+
+
+# ── pemformat ───────────────────────────────────────────────────────
+def hms(h: float | None, detik: bool = True) -> str | None:
+    if h is None:
+        return None
+    total = round((h % 24) * 3600) if detik else int((h % 24) * 60 + 1e-9) * 60
+    total %= 86400
+    jam, sisa = divmod(total, 3600)
+    mnt, dtk = divmod(sisa, 60)
+    return f'{jam:02d}:{mnt:02d}:{dtk:02d}' if detik else f'{jam:02d}:{mnt:02d}'
+
+
+def _durasi(h):
+    if h is None:
+        return None
+    return '24:00:00' if h >= 24 - 1e-9 else hms(h)
+
+
+def dms(derajat: float) -> str:
+    d = int(derajat)
+    m = int((derajat - d) * 60)
+    s = ((derajat - d) * 60 - m) * 60
+    return f"{d}° {m:02d}′ {s:04.1f}″"
+
+
+def mata_angin(az: float) -> str:
+    n = ('utara', 'utara-timur laut', 'timur laut', 'timur-timur laut', 'timur', 'timur-tenggara', 'tenggara',
+         'selatan-tenggara', 'selatan', 'selatan-barat daya', 'barat daya', 'barat-barat daya', 'barat',
+         'barat-barat laut', 'barat laut', 'utara-barat laut')
+    return n[int((az % 360 + 11.25) // 22.5) % 16]
+
+
+def _nilai(v: salat.SalatValue, detik=True):
+    return {'jam': hms(v.time, detik), 'status': v.status,
+            'keterangan': None if v.is_normal else salat.KETERANGAN_STATUS.get(v.status, v.status)}
+
+
+# ── jadwal salat ────────────────────────────────────────────────────
+def jadwal_salat(d: date, lok: dict, metode: salat.PrayerMethod, ihtiyat: int = 2, imsak: int = 10) -> dict:
+    if not 0 <= ihtiyat <= 10:
+        raise InputError('Ihtiyat harus 0–10 menit.')
+    if not 0 <= imsak <= 60:
+        raise InputError('Imsak harus 0–60 menit sebelum Subuh.')
+    r = salat.jadwal_lengkap(d.day, d.month, d.year, lok['lon'], lok['lat'], lok['elev'], lok['tz'], metode,
+                             ihtiyat_menit=ihtiyat, imsak_menit=imsak)
+    baris = [{'kunci': k, 'nama': n, 'jadwal': _nilai(r['jadwal'][k], False), 'hisab': _nilai(r['hisab'][k])}
+             for k, n in NAMA_WAKTU]
+    astro = []
+    for k, n in NAMA_ASTRO:
+        v = r['astro'][k]
+        astro.append({'kunci': k, 'nama': n, 'jam': _durasi(v) if k.startswith('lama') else hms(v)})
+    ist = kiblat.istiwa(d.day, d.month, d.year, lok['lon'], lok['lat'], lok['tz'])
+    sm = kiblat.sepertiga_malam(d.day, d.month, d.year, lok['lon'], lok['lat'], lok['elev'], lok['tz'], metode)
+    isya = (f'{metode.isya_menit} menit setelah Magrib' + (f' ({metode.isya_menit_ramadan} menit pada Ramadan)' if metode.isya_menit_ramadan else '')
+            if metode.isya_interval else f'Matahari {metode.hm_isya:g}°')
+    return {
+        'tanggal': d.isoformat(), 'lokasi': lok, 'metode': {'kunci': metode.key, 'nama': metode.name,
+                                                            'subuh': f'Matahari {metode.hm_subuh:g}°', 'isya': isya},
+        'ihtiyat_menit': ihtiyat, 'imsak_menit': imsak, 'ramadan': r['ramadan'],
+        'waktu': baris, 'astronomis': astro,
+        'istiwa': {'jam': hms(ist['jam']), 'tafawut_menit': round(ist['tafawut'] * 60, 2), 'kwd_menit': round(ist['kwd'] * 60, 2),
+                   'tinggi': round(ist['tinggi'], 2)},
+        'sepertiga_malam': None if sm is None else {k: _durasi(v) if k == 'lama' else hms(v) for k, v in sm.items()},
+        'catatan': 'Jadwal = menit hisab dibulatkan ke bawah + ihtiyat; kolom hisab = nilai mentah berdetik. '
+                   'Bulan terbit/terbenam belum tersedia.',
+    }
+
+
+# ── kiblat ──────────────────────────────────────────────────────────
+def info_kiblat(lok: dict) -> dict:
+    lon, lat = lok['lon'], lok['lat']
+    bola, elp, vin = kiblat.arah_bola(lon, lat), kiblat.arah_elipsoid(lon, lat), kiblat.vincenty(lon, lat, 'PtoQ')
+    return {'lokasi': lok, 'bola': {'derajat': round(bola, 4), 'dms': dms(bola)}, 'elipsoid': {'derajat': round(elp, 4), 'dms': dms(elp)},
+            'vincenty': {'derajat': round(vin, 4), 'dms': dms(vin)}, 'mata_angin': mata_angin(vin),
+            'jarak_km': round(kiblat.vincenty(lon, lat, 'Dist') / 1000, 1),
+            'kabah': {'lat': kiblat.LAT_KABAH, 'lon': kiblat.LON_KABAH}}
+
+
+# ── rasydulqiblat ───────────────────────────────────────────────────
+def _fmt_jd(jd: float, tz: float) -> dict:
+    k = core.jdkm(jd, tz)
+    mk = core.jdkm(jd, 3.0)
+    return {'tanggal': f"{k['tgl']:02d}-{k['bln']:02d}-{k['thn']}", 'hari': k['hari'], 'jam': hms(k['jam_des']),
+            'jam_makkah': hms(mk['jam_des']), 'jd': round(jd, 6)}
+
+
+def rasydulqiblat(d: date, lok: dict, metode_arah: str = 'vincenty', hari: int = 7, tahun: int | None = None, jumlah_tahun: int = 1) -> dict:
+    if metode_arah not in ('bola', 'elipsoid', 'vincenty'):
+        raise InputError('Metode arah kiblat tidak dikenal.')
+    if not 1 <= hari <= 31:
+        raise InputError('Jumlah hari harus 1–31.')
+    if not 1 <= jumlah_tahun <= 10:
+        raise InputError('Jumlah tahun harus 1–10.')
+    tz, lat, lon = lok['tz'], lok['lat'], lok['lon']
+    q = kiblat.arah_kiblat(lon, lat, metode_arah)
+    harian = []
+    for i in range(hari):
+        t = d + timedelta(days=i)
+        ev = kiblat.rasydulqiblat_harian(t.day, t.month, t.year, lat, lon, tz, q)
+        harian.append({'tanggal': t.isoformat(), 'hari': core.jdkm(core.kmjd(t.day, t.month, t.year, 12, 0), 0)['hari'],
+                       'bayangan_ke_kiblat': [_ev(e) for e in ev if e['jenis'] == 1],
+                       'matahari_di_kiblat': [_ev(e) for e in ev if e['jenis'] == 0]})
+    y0 = tahun or d.year
+    tahunan = []
+    for y in range(y0, y0 + jumlah_tahun):
+        tahunan.append({'tahun': y,
+                        'rasydul1': _tahunan(kiblat.rasydulqiblat(y, tz, 1), lok), 'rasydul2': _tahunan(kiblat.rasydulqiblat(y, tz, 2), lok),
+                        'antipoda1': _tahunan(kiblat.antipoda_kabah(y, tz, 1), lok), 'antipoda2': _tahunan(kiblat.antipoda_kabah(y, tz, 2), lok)})
+    return {'lokasi': lok, 'arah_kiblat': {'derajat': round(q, 4), 'dms': dms(q), 'metode': metode_arah},
+            'azimut_bayangan': round((q + 180) % 360, 4), 'harian': harian, 'tahunan': tahunan,
+            'catatan': 'Harian: tegakkan tongkat pada jam tertera; bayangan menuju kiblat (kolom 1) atau Matahari berada di arah kiblat (kolom 2). '
+                       'Tahunan: Matahari tepat di atas Ka\'bah (rasydul) atau di bawahnya (antipoda). Tinggi tanpa refraksi.'}
+
+
+def _ev(e):
+    return {'jam': hms(e['jam']), 'tinggi': round(e['tinggi'], 1), 'azimut': round(e['azimut'], 2), 'dekat_zenit': e['tinggi'] > 85}
+
+
+def _tahunan(e, lok):
+    a = kiblat.tinggi_azimut_matahari(e['jd'], lok['lat'], lok['lon'])
+    return {**_fmt_jd(e['jd'], lok['tz']), 'deklinasi': round(e['deklinasi'], 4),
+            'matahari_di_lokasi': {'tinggi': round(a['tinggi'], 1), 'terlihat': a['tinggi'] > 0}}
+
+
+# ── konversi kalender ───────────────────────────────────────────────
+def konversi(sumber: str, tahun: int, bulan: int, hari: int, epoch: int = 2, kabisat: int = 2) -> dict:
+    """sumber: masehi | hijriah | jawa. Hasil: padanan di semua sistem (hari dihitung sebagai tanggal sipil)."""
+    s = (sumber or '').lower()
+    if s in ('masehi', 'gregorian'):
+        if not 1 <= bulan <= 12 or not 1 <= hari <= 31 or ac.from_jdn(ac.to_jdn(tahun, bulan, hari))[:3] != (tahun, bulan, hari):
+            raise InputError('Tanggal Masehi tidak valid (hari tidak ada di bulan itu atau jatuh di celah 1582).')
+        cjdn = ac.to_jdn(tahun, bulan, hari)
+    elif s in ('hijriah', 'hijri'):
+        if not 1 <= bulan <= 12 or not 1 <= hari <= 30:
+            raise InputError('Tanggal Hijriah tidak valid.')
+        cjdn = kalender.hijri_ke_cjdn(hari, bulan, tahun, epoch, kabisat)
+        if kalender.cjdn_ke_hijri(cjdn, epoch, kabisat)['tgl'] != hari:
+            raise InputError('Tanggal Hijriah tidak valid (bulan itu hanya 29 hari pada tahun tersebut).')
+    elif s == 'jawa':
+        if not 1 <= bulan <= 12 or not 1 <= hari <= 30:
+            raise InputError('Tanggal Jawa tidak valid.')
+        cjdn = int(kalender.jawa_ke_jd(hari, bulan, tahun) + 0.5)
+        if kalender.jd_ke_jawa(cjdn - 0.5)['tanggal'] != hari:
+            raise InputError('Tanggal Jawa tidak valid (bulan itu hanya 29 hari pada tahun tersebut).')
+    else:
+        raise InputError("Sistem kalender harus 'masehi', 'hijriah', atau 'jawa'.")
+    if not 1 <= ac.from_jdn(cjdn)[0] <= 3000:
+        raise InputError('Rentang tahun yang didukung: 1–3000 M.')
+    out = cs.describe(cjdn)                                    # masehi, Jawa (Hijriah+512), pawukon, Jyotisa
+    h = kalender.cjdn_ke_hijri(cjdn, epoch, kabisat)
+    out['hijriah'] = {'tahun': h['thn'], 'bulan': h['bln'], 'tanggal': h['tgl'], 'nama_bulan': h['nama_bulan'],
+                      'hari': h['hari'], 'pasaran': h['pasaran'], 'teks': f"{h['tgl']} {h['nama_bulan']} {h['thn']} H"}
+    jw = kalender.jawa_info(cjdn - 0.5)
+    out['jawa_hitung'] = {**jw, 'teks': f"{jw['tanggal']} {jw['nama_bulan']} {jw['nama_tahun']} {jw['tahun']} AJ"}
+    out['jd'] = cjdn - 0.5
+    out['catatan'] = ('Hijriah = hisab urfi (aritmetis), dapat berbeda 1–2 hari dari penetapan resmi. '
+                      '"Jawa (hitung)" memakai siklus Sultan Agungan/kurup dari persis-times-js; "Jawa" lain = Hijriah + 512.')
+    return out

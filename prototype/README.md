@@ -1,34 +1,28 @@
-# Prototipe: menghitung event astronomi sendiri
+# Mesin posisi & pencari event
 
-Tujuan: menguji apakah AstroLife bisa menghitung katalog event tanpa scraping (lihat diskusi di chat).
+Paket ini menghitung posisi benda langit dan mencari peristiwa darinya. Dipakai oleh `catalog/` (generator katalog dan
+keterlihatan).
 
-## Menjalankan
-    python -m prototype.find_events 2026 11          # daftar event (WIB, Jakarta untuk okultasi)
-    python -m prototype.compare                      # bandingkan dengan data/datasets/astronomy_events.json
-    python -m prototype.compare path/baru.json 2026 11   # bandingkan dengan hasil scraping Anda yang baru (termasuk level 2+)
-    python -m unittest tests.test_prototype -v
+| Berkas | Isi |
+|---|---|
+| `ephem_skyfield.py` | mesin akurat: Skyfield + JPL DE440s (unduhan ±32 MB sekali); API vektor `eq_many`, `ecl_many`, `moon_radii_many` |
+| `ephem_lite.py` | mesin cepat tanpa data eksternal (Meeus untuk Bulan/Matahari, elemen Keplerian JPL untuk planet); galat planet ~2 menit busur |
+| `engine.py` | memilih mesin dari `ASTROLIFE_ENGINE` (`lite` bawaan | `skyfield`) |
+| `find_events.py` | pencari fase, konjungsi/pendekatan terdekat, okultasi, oposisi, elongasi, dikotomi/kecerahan; alat akar/minimum vektor |
+| `magnitudes.py` | magnitudo tampak planet/Bulan dan bintang tetap |
+| `verify_engine.py` | bandingkan mesin cepat vs Skyfield, konsistensi jalur vektor vs skalar, dan kecepatan |
 
-Hasil perbandingan tersimpan di `prototype/output/compare_2026-11.md`.
+## Perintah
+```powershell
+python -m prototype.verify_engine                         # butuh Skyfield terpasang
+python -m prototype.find_events 2026 11                   # daftar event sebulan (WIB)
+$env:ASTROLIFE_ENGINE = "skyfield"                        # pilih mesin akurat untuk perintah berikutnya
+python -m unittest discover -s tests
+```
 
-## Status mesin
-`ephem_lite.py` adalah mesin SEMENTARA (Meeus untuk Bulan/Matahari; elemen Keplerian JPL Standish untuk planet)
-karena Skyfield/DE440 tidak tersedia di lingkungan pengembangan tanpa internet. Antarmukanya (`eq`, `ecl`,
-`topo_moon`, dst.) dibuat agar bisa diganti Skyfield tanpa mengubah `find_events.py`.
-
-## Temuan
-- Definisi in-the-sky.org yang teridentifikasi: *Conjunction* = konjungsi asensio rekta; *Close approach* = jarak sudut
-  geosentris minimum; elongasi maksimum Merkurius = selisih bujur ekliptika.
-- Galat posisi planet mesin ini ~2 menit busur: Bulan-planet meleset <= ~10 menit, planet-planet lambat bisa ~2 jam.
-- Belum dicakup: hujan meteor (butuh tabel IMO), "well placed", "highest altitude in morning sky".
-
-
-## Mesin Skyfield + JPL DE440s (disarankan untuk hasil akhir)
-    pip install -r requirements-prototype.txt
-    python -m prototype.verify_engine                         # cek adapter: selisih vs ephem_lite (menit busur)
-    $env:ASTROLIFE_ENGINE = "skyfield"                        # PowerShell; Linux/macOS: export ASTROLIFE_ENGINE=skyfield
-    python -m prototype.compare data/datasets/astronomy_events.json 2026 11
-    python -m unittest tests.test_skyfield -v                 # dilewati otomatis bila Skyfield belum ada
-
-Unduhan pertama (de440s.bsp, ~32 MB) disimpan di `data/ephemeris/` (diabaikan git). Pencarian sebulan penuh dengan
-Skyfield lebih lambat daripada ephem_lite (puluhan detik) dan hanya perlu dijalankan sekali untuk membuat katalog.
-STATUS: adapter belum pernah dijalankan oleh penulisnya; hasil `verify_engine` adalah ujian pertamanya.
+## Catatan
+- Definisi yang dipakai: *konjungsi* = konjungsi asensio rekta; *pendekatan terdekat* = jarak sudut geosentris minimum;
+  elongasi maksimum Merkurius/Venus = selisih bujur ekliptika; jendela okultasi global = jarak sudut < semidiameter Bulan + paralaks horizontal.
+- Jalur vektor mereproduksi hasil jalur skalar (acuan beku di `tests/fixtures/find_window_reference.json`).
+  `ASTROLIFE_BATCH=0` memaksa jalur skalar.
+- Belum dicakup: komet, "well placed" gugus bintang, Merkurius tertinggi di langit pagi, dan hujan meteor di luar tabel kurasi.

@@ -5,22 +5,17 @@ from dotenv import load_dotenv
 BASE_DIR = Path(__file__).resolve().parent
 load_dotenv(BASE_DIR / '.env')
 
+
 class Config:
-    """Base application configuration."""
+    """Konfigurasi dasar aplikasi."""
     SECRET_KEY = os.getenv('SECRET_KEY', 'astrolife-dev-secret-key-default')
     DEBUG = os.getenv('FLASK_DEBUG', '1') == '1'
-    
-    # Path Directories
+
+    # Direktori
     BASE_DIR = BASE_DIR
     DATA_DIR = BASE_DIR / 'data'
-    CACHE_DIR = DATA_DIR / 'cache'
-    DATASETS_DIR = DATA_DIR / 'datasets'
-    CATALOG_DIR = DATA_DIR / 'catalog'
+    CATALOG_DIR = DATA_DIR / 'catalog'          # katalog event hasil hitung (events.json, status pembuatan)
     KNOWLEDGE_BASE_DIR = DATA_DIR / 'knowledge_base'
-    MODELS_DIR = DATA_DIR / 'trained_models'
-    
-    # External API Configuration
-    GOOGLE_WEATHER_API_KEY = os.getenv('GOOGLE_WEATHER_API_KEY', '')
-    
-    # Cache settings (seconds)
-    CACHE_EXPIRY_SECONDS = 3600 * 6  # 6 hours default cache for scraped data
+
+    # Lokasi pengamat bawaan (dipakai di bilah atas, beranda, katalog, dan observasi)
+    DEFAULT_LOCATION = {'name': 'Yogyakarta', 'lat': -7.7956, 'lon': 110.3695}

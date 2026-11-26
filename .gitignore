@@ -1,4 +1,23 @@
+# Lingkungan & cache Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+.env
+.pytest_cache/
 
-# Ephemeris JPL yang diunduh Skyfield (besar)
-data/ephemeris/
+# Hasil yang dibuat aplikasi (dibuat ulang dari halaman Katalog)
+data/catalog/events.json
+data/catalog/status.json
+data/catalog/generate.log
 data/catalog/cache/
+data/catalog/*.tmp
+
+# Efemeris JPL yang diunduh Skyfield (besar)
+data/ephemeris/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

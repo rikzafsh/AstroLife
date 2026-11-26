@@ -1,77 +1,62 @@
 # AstroLife 🌌
-**Platform Web untuk Eksplorasi Astronomi Modern, Sistem Kalender Historis, dan Perencanaan Pengamatan Fenomena Langit**
+**Platform web untuk eksplorasi astronomi modern, sistem kalender historis, dan perencanaan pengamatan langit.**
 
----
+AstroLife menghitung sendiri peristiwa langit dari posisi Matahari, Bulan, dan planet (efemeris NASA JPL DE440 lewat
+Skyfield), menilai keterlihatannya dari lokasi pengguna, lalu memeriksa prakiraan cuacanya (Open-Meteo).
 
-## 📌 Ringkasan Proyek
-AstroLife adalah platform web berbasis Python Flask yang menggabungkan:
-1. **Astronomy Explorer & Observation Planner**: Scraping peristiwa astronomi dari `in-the-sky.org` dan prakiraan cuaca (Google Weather API / fallback) untuk scoring kelayakan observasi langit.
-2. **Calendar Laboratory**: Konversi dan komparasi kalender Masehi, Hijriah Aritmetis, Jawa Mataraman (Pasaran, Wuku, Windu), dan Jyotiṣa / Jawa Kuno.
-3. **Islamic Astronomy & Timekeeping**: Jadwal salat, rekomendasi puasa sunah, dan perhitungan presisi Rasydulqiblat tahunan (27-28 Mei & 15-16 Juli) serta harian.
-4. **Data Analytics & Machine Learning**: Linear Regression kecenderungan cuaca, K-Means Clustering kondisi langit, dan Sentiment Analysis persepsi publik.
-5. **AstroBot & Knowledge Center**: Chatbot interaktif edukasi astronomi dan ensiklopedia materi falak/budaya.
+## Status modul
+| Modul | Status |
+|---|---|
+| Katalog Event (`/catalog/`) | siap: fase Bulan, konjungsi, okultasi, gerhana, elongasi, oposisi, hujan meteor; label keterlihatan & kelangkaan |
+| Observasi & Cuaca (`/observation/`) | siap: skor kelayakan per waktu/lokasi + rekomendasi event berdasarkan cuaca |
+| Beranda (`/`) | siap: tanggal, fase Bulan, cuaca malam ini, event mendatang (semuanya dihitung, bukan data tetap) |
+| Waktu Salat & Kiblat (`/islamic/`) | siap: jadwal salat 9 metode (hisab berdetik + ihtiyat), imsak, fajar/senja, istiwa, ⅓ malam, arah kiblat (bola/elipsoid/Vincenty), rasydulqiblat harian & tahunan, puasa sunah |
+| Lab Kalender (`/calendar/`) | siap: Masehi ↔ Hijriah aritmetis ↔ Jawa (Sultan Agungan) + weton/pawukon + Jyotiṣa |
+| AstroBot | dalam pengembangan |
 
----
+## Menjalankan
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+python run.py
+```
+Buka `http://127.0.0.1:5000/catalog/`. Pada pemakaian pertama tekan **Buat katalog**: prosesnya berjalan di latar belakang
+dari halaman itu sendiri (tanpa terminal) dan progresnya tampil. Mesin **Akurat** (Skyfield + JPL DE440) mengunduh ±32 MB
+data efemeris sekali saja (butuh internet); mesin **Cepat** dipakai untuk mencoba.
 
-## 📂 Struktur Direktori
+Alternatif lewat terminal: `python -m catalog.generate 2026 2027` (set `ASTROLIFE_ENGINE=skyfield` untuk mesin akurat).
 
+## Struktur
 ```text
 astrolife/
 ├── app/
-│   ├── __init__.py                 # Application Factory & Blueprint Registration
-│   ├── routes/                     # Blueprint Endpoints
-│   │   ├── main.py                 # Landing page
-│   │   ├── observation.py          # Observation planner & in-the-sky scraper API
-│   │   ├── calendar.py             # Calendar Laboratory routes
-│   │   ├── islamic.py              # Prayer times & Rasydulqiblat routes
-│   │   ├── analytics.py            # Machine learning & data visual routes
-│   │   └── bot.py                  # AstroBot assistant endpoints
-│   ├── services/                   # Business Logic & Algorithms
-│   │   ├── scraper_service.py      # Scraper in-the-sky.org with caching
-│   │   ├── weather_service.py      # Weather API & observation feasibility scoring
-│   │   ├── calendar_service.py     # Ported calendar engines
-│   │   ├── islamic_service.py      # Ported falak & Rasydulqiblat logic
-│   │   └── analytics_service.py    # Regression, clustering, sentiment
-│   └── templates/                  # Jinja2 UI Templates (Tailwind CSS Dark Theme)
-├── config.py                       # Application configuration
-├── requirements.txt                # Python dependencies
-├── run.py                          # Application entry point
-├── .env.example                    # Sample environment variables
-└── README.md
+│   ├── routes/            main (beranda, tentang), catalog, observation, calendar, islamic, bot
+│   ├── persis/            port persis-times-js (MIT): core (JD, ΔT, nutasi, Matahari VSOP87D), salat, kiblat, kalender, _data/
+│   ├── services/          astro_core, planner_service, weather_service, home_service, timezones, calendar_service, islamic_service (puasa), falak_service
+│   ├── templates/         halaman Jinja2
+│   └── static/css/        gaya halaman beranda & tentang
+├── catalog/               generator katalog (generate, job_runner, jobs), events, visibility, rarity, service
+├── prototype/             mesin posisi (ephem_lite, ephem_skyfield), pencari event (find_events), magnitudo, verifikasi
+├── data/
+│   ├── catalog/           events.json (dibuat aplikasi), meteor_showers.json (tabel kurasi), status.json, cache/
+│   └── ephemeris/         de440s.bsp (diunduh Skyfield)
+├── tools/                 persis_golden.js (pembuat fixture dari JS asli), gen_persis_nutation.py
+├── tests/                 unittest (python -m unittest discover -s tests)
+├── config.py   run.py   requirements.txt   .env.example   knowledge.md
 ```
 
----
+## Konfigurasi
+- Lokasi bawaan: `Config.DEFAULT_LOCATION` di `config.py` (dipakai bilah atas, beranda, katalog, observasi).
+- `ASTROLIFE_ENGINE` = `lite` (bawaan) | `skyfield`: mesin posisi untuk keterlihatan saat aplikasi berjalan.
+  Pembuatan katalog dari antarmuka memilih mesinnya sendiri lewat formulir.
+- `ASTROLIFE_BATCH=0` mematikan jalur vektor pencari event (jalur skalar lama).
 
-## 🚀 Panduan Menjalankan Proyek
-
-### 1. Masuk ke Direktori Proyek
-```bash
-cd "C:\Users\USER\.gemini\antigravity\scratch\astrolife"
+## Tes
+```powershell
+python -m unittest discover -s tests
 ```
+Tes cuaca memakai respons tiruan (tanpa internet). Tes khusus Skyfield dilewati otomatis bila Skyfield/DE440s belum ada.
 
-### 2. Pasang Dependensi Python
-```bash
-pip install -r requirements.txt
-```
-
-### 3. Konfigurasi Variabel Lingkungan (.env)
-Salin `.env.example` menjadi `.env` dan masukkan API Key jika tersedia:
-```env
-GOOGLE_WEATHER_API_KEY=your_key_here
-```
-*(Catatan: Jika API Key Google Weather belum diisi, sistem otomatis menggunakan fallback service sehingga aplikasi tetap berjalan lancar untuk pengembangan).*
-
-### 4. Jalankan Server Flask
-```bash
-python run.py
-```
-Buka browser di `http://127.0.0.1:5000`.
-
-## Observation Planner (fenomena + prakiraan cuaca)
-
-- `app/services/weather_service.py`: prakiraan per jam Open-Meteo (awan rendah/menengah/tinggi, kelembapan, peluang hujan, jarak pandang). Di luar 16 hari memakai klimatologi (ditandai "indikatif"). Jika semua gagal: skor tidak dihitung (tidak ada data mock).
-- `app/services/planner_service.py`: skor kelayakan 0-100 + rincian pengurang (awan, hujan, kelembapan, jarak pandang, cahaya Bulan bila Bulan di atas ufuk, siang hari) dan rekomendasi terbaik.
-- Endpoint: `POST /observation/api/feasibility`, `POST /observation/api/event-forecast`, `GET /observation/api/plan?lat=&lon=&instrument=`.
-- Uji: `python -m unittest discover -s tests -v` (cuaca ditiru, tidak butuh internet).
-
-Catatan: `calendar_service.py`, `islamic_service.py`, `astro_core.py` sudah berisi mesin perhitungan (teruji terhadap tanggal acuan) tetapi rute/UI-nya belum disambungkan.
+## Dokumentasi tambahan
+`knowledge.md` (pengetahuan proyek), `catalog/README.md` (katalog, keterlihatan, kelangkaan), `prototype/README.md` (mesin posisi), `app/persis/README.md` (port falak, validasi, batasan).

@@ -29,7 +29,7 @@ from prototype.ephem_lite import FIXED, PLANETS, wrap180, separation, separation
 from prototype.ephem_lite import SUN_SD_1AU_DEG, SUN_PARALLAX_1AU_DEG  # noqa: F401
 
 NAME = 'skyfield + JPL DE440s'
-# False: rumus Astronomical Almanac (sepadan dengan in-the-sky.org; puncak 'paling terang' Venus jatuh pada tanggal yang sama).
+# False: rumus Astronomical Almanac (hasil validasi: puncak 'paling terang' Venus jatuh pada tanggal yang cocok dengan almanak populer).
 # True : model Mallama & Hilton bawaan Skyfield (lebih akurat secara fisik, tetapi puncak Venus bergeser ~3 hari).
 USE_MALLAMA = False
 _DIR = Path(__file__).resolve().parent.parent / 'data' / 'ephemeris'
