@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from datetime import date, timedelta
 
-from app.persis import core, kalender, kiblat, salat
+from app.persis import core, hisab, kalender, kiblat, salat
 from app.services import astro_core as ac
 from app.services import calendar_service as cs
 from app.services.timezones import tz_from_lon, tz_label
@@ -213,9 +213,79 @@ def konversi(sumber: str, tahun: int, bulan: int, hari: int, epoch: int = 2, kab
     h = kalender.cjdn_ke_hijri(cjdn, epoch, kabisat)
     out['hijriah'] = {'tahun': h['thn'], 'bulan': h['bln'], 'tanggal': h['tgl'], 'nama_bulan': h['nama_bulan'],
                       'hari': h['hari'], 'pasaran': h['pasaran'], 'teks': f"{h['tgl']} {h['nama_bulan']} {h['thn']} H"}
-    jw = kalender.jawa_info(cjdn - 0.5)
-    out['jawa_hitung'] = {**jw, 'teks': f"{jw['tanggal']} {jw['nama_bulan']} {jw['nama_tahun']} {jw['tahun']} AJ"}
+    out['hijriah_kriteria'] = []
+    for kunci, nama in zip(hisab.KRITERIA, hisab.NAMA_KRITERIA):
+        h2 = hisab.hijri_kriteria(cjdn, kunci)
+        out['hijriah_kriteria'].append({'kunci': kunci, 'nama': nama,
+                                        'teks': f"{h2['tgl']} {h2['nama_bulan']} {h2['thn']} H" if h2 else None})
     out['jd'] = cjdn - 0.5
-    out['catatan'] = ('Hijriah = hisab urfi (aritmetis), dapat berbeda 1–2 hari dari penetapan resmi. '
-                      '"Jawa (hitung)" memakai siklus Sultan Agungan/kurup dari persis-times-js; "Jawa" lain = Hijriah + 512.')
+    out['catatan'] = ('Hijriah aritmetis = hisab urfi. MABIMS, Ummul Qura, Wujudul Hilal, dan KHGT dihitung dari ijtimak, tinggi/elongasi hilal, '
+                      'dan Bulan terbenam menurut kriteria & lokasi acuan masing-masing; hasilnya dapat berbeda 1–2 hari dari penetapan resmi. '
+                      'Tanggal Jawa memakai siklus kurup (Sultan Agungan).')
     return out
+
+
+# ── perbandingan kalender Hijriah & Jawa ────────────────────────────
+HARI_SEKUEN = ('Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu')       # indeks = CJDN mod 7
+
+
+def hukum_puasa(d: int, m: int, hari: int, panjang_bulan: int | None, sk: bool, ab: bool) -> dict:
+    """Hukum puasa pada satu hari (tab_hilal.js: hukumPuasa). hari: CJDN mod 7 (0 Senin … 4 Jumat).
+    Hasil: {k: wajib|sunah|makruh|haram|'', t: keterangan, n: jumlah sebab sunah}."""
+    haram = []
+    if m == 10 and d == 1: haram.append('Idulfitri')
+    if m == 12 and d == 10: haram.append('Iduladha')
+    if m == 12 and 11 <= d <= 13: haram.append('Hari Tasyrik')
+    if haram:
+        return {'k': 'haram', 't': 'Haram: ' + ', '.join(haram), 'n': 0}
+    if m == 9:
+        return {'k': 'wajib', 't': 'Puasa wajib Ramadan', 'n': 0}
+    if m == 8 and panjang_bulan and d >= 16:
+        return {'k': 'makruh', 'n': 0, 't': 'Makruh: Hari Syak (akhir Syaban)' if d == panjang_bulan else 'Makruh: puasa setelah pertengahan Syaban'}
+    sunah = []
+    if sk:
+        if hari == 0: sunah.append('Senin')
+        if hari == 3: sunah.append('Kamis')
+    if ab and 13 <= d <= 15: sunah.append('Ayyamulbid')
+    if m == 1 and d == 9: sunah.append('Tasua')
+    if m == 1 and d == 10: sunah.append('Asyura')
+    if m == 10 and 2 <= d <= 7: sunah.append('Syawal')
+    if m == 12 and 1 <= d <= 7: sunah.append('Awal Zulhijah')
+    if m == 12 and d == 8: sunah.append('Tarwiah')
+    if m == 12 and d == 9: sunah.append('Arafah')
+    if sunah:
+        return {'k': 'sunah', 'n': len(sunah), 't': 'Sunah' + (f' ({len(sunah)} sebab)' if len(sunah) > 1 else '') + ': ' + ', '.join(sunah)}
+    if hari == 4:
+        return {'k': 'makruh', 't': 'Makruh: Jumat', 'n': 0}
+    return {'k': '', 't': '', 'n': 0}
+
+
+def perbandingan_kalender(d: date, sk: bool = True, ab: bool = True) -> dict:
+    """Tabel perbandingan: kolom = tanggal Masehi (satu bulan Hijriah penuh di sekitar d), baris = MABIMS, Ummul Qura, Wujudul Hilal,
+    KHGT, Aritmetis I–IV, Mataraman; tiap sel memuat tanggal/bulan/tahun dan hukum puasa (kecuali baris Mataraman)."""
+    if not 1700 <= d.year <= 2300:
+        raise InputError('Perbandingan hisab tersedia untuk tahun 1700–2300 M.')
+    c0 = ac.to_jdn(d.year, d.month, d.day)
+    t = hisab.banding(c0)
+    kolom = []
+    for c in range(t['cjdn_awal'], t['cjdn_akhir'] + 1):
+        y, m, dd, _ = ac.from_jdn(c)
+        kolom.append({'cjdn': c, 'tgl': dd, 'bln': m, 'thn': y, 'hari': HARI_SEKUEN[c % 7], 'hari_no': c % 7})
+    baris = []
+    for r in t['baris']:
+        sel = []
+        for c, x in zip(range(t['cjdn_awal'], t['cjdn_akhir'] + 1), r['sel']):
+            if x is None:
+                sel.append(None)
+                continue
+            nama_bln = (hisab.BULAN_JAWA if r['jawa'] else kalender.BULAN_H)[x['m'] - 1]
+            e = {'d': x['d'], 'm': x['m'], 'y': x['y'], 'bulan': nama_bln}
+            if not r['jawa']:
+                e['puasa'] = hukum_puasa(x['d'], x['m'], c % 7, x['panjang_bulan'], sk, ab)
+            sel.append(e)
+        baris.append({'nama': r['nama'], 'jawa': r['jawa'], 'sel': sel})
+    return {'tanggal': d.isoformat(), 'bulan_acuan': {'no': t['bulan_acuan'], 'nama': kalender.BULAN_H[t['bulan_acuan'] - 1]},
+            'kolom': kolom, 'baris': baris, 'awal': t['cjdn_awal'], 'akhir': t['cjdn_akhir'],
+            'catatan': 'Hisab (MABIMS, Ummul Qura, Wujudul Hilal, KHGT) memakai kriteria & lokasi bawaan tiap kalender, bukan lokasi di formulir. '
+                       'Aritmetis I–IV = pola kabisat 1–4 (epoch Jumat). Mataraman memakai nomor bulan Jawa (Sura = Muharram). '
+                       'Prioritas: haram > wajib > makruh Syaban > sunah > Jumat (makruh bila tidak bertepatan puasa sunah).'}

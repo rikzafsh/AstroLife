@@ -11,7 +11,7 @@ Skyfield), menilai keterlihatannya dari lokasi pengguna, lalu memeriksa prakiraa
 | Observasi & Cuaca (`/observation/`) | siap: skor kelayakan per waktu/lokasi + rekomendasi event berdasarkan cuaca |
 | Beranda (`/`) | siap: tanggal, fase Bulan, cuaca malam ini, event mendatang (semuanya dihitung, bukan data tetap) |
 | Waktu Salat & Kiblat (`/islamic/`) | siap: jadwal salat 9 metode (hisab berdetik + ihtiyat), imsak, fajar/senja, istiwa, ⅓ malam, arah kiblat (bola/elipsoid/Vincenty), rasydulqiblat harian & tahunan, puasa sunah |
-| Lab Kalender (`/calendar/`) | siap: Masehi ↔ Hijriah aritmetis ↔ Jawa (Sultan Agungan) + weton/pawukon + Jyotiṣa |
+| Lab Kalender (`/calendar/`) | siap: Masehi ↔ Hijriah (aritmetis + hisab MABIMS/Ummul Qura/Wujudul Hilal/KHGT) ↔ Jawa (siklus kurup) + weton/pawukon + Jyotiṣa, plus tabel perbandingan kalender Hijriah & Jawa |
 | AstroBot | dalam pengembangan |
 
 ## Menjalankan

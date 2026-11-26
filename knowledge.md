@@ -180,7 +180,7 @@ Open-Meteo (tanpa kunci API): `forecast` per jam hingga 16 hari (awan total/rend
 ---
 
 ## 8. Daftar tugas ke depan
-1. ~~Port JS pemilik: salat, kiblat, rasydulqiblat, Hijriah aritmetis, Jawa~~ **selesai** (bagian 10). **Sisa port**: butuh efemeris Bulan ELP-MPP02 (Bulan terbit/terbenam, rasydul Bulan, hisab awal bulan MABIMS/WH/Turki, peta hilal, gerhana versi JS, fase/tithi/pañcāṅga JS). Putuskan: port data ELP (±4 MB) atau pakai Skyfield/DE440 yang sudah ada.
+1. ~~Port JS pemilik: salat, kiblat, rasydulqiblat, Hijriah aritmetis, Jawa~~ **selesai** (bagian 10). **Sisa port**: butuh efemeris Bulan ELP-MPP02 (Bulan terbit/terbenam, rasydul Bulan, hisab awal bulan MABIMS/WH/Turki, peta hilal, gerhana versi JS, fase/tithi/pañcāṅga JS). (Bulan & hisab awal bulan sudah diport dengan ELP ringkas; sisa: peta hilal, gerhana, fase/tithi/pañcāṅga JS, rasydul Bulan.)
 2. AstroBot (retrieval/rule-based) dan pusat pengetahuan.
 3. Ukur kecepatan jalur vektor Skyfield di komputer pemilik (`verify_engine`, `tests.test_skyfield`).
 4. Verifikasi tabel hujan meteor `data/catalog/meteor_showers.json` ke kalender IMO; tambah Taurid, α-Monocerotid, Orionid November.
@@ -207,7 +207,8 @@ Sumber: `persis-times-js` (berkas dari pemilik; lisensi MIT Abu Sabda/PP PERSIS)
 - Acuan nyata 2026 (Yogyakarta): Rasydul 1 = 28 Mei 16:17:58 WIB (09:17:58 UTC), Rasydul 2 = 15 Jul 16:26:42 WIB; antipoda 14 Jan & 29 Nov. Cocok dengan fakta di 6.1. 1 Muharram 1448 (urfi) = 17 Jun 2026 = 1 Sura 1960.
 - Kiblat Yogyakarta (bola) 294°42′40″, Vincenty 294°35′02″ (lazim dikutip ±294°43′ = bola).
 - Metode salat bawaan UI: Persatuan Islam (Subuh −20°, Isya −18°), ihtiyat 2 menit, imsak 10 menit; 9 metode tersedia. Jadwal = menit hisab dibulatkan ke bawah + ihtiyat.
-- **Dua versi tanggal Jawa**: `calendar_service` (Hijriah + 512) dan `persis.kalender.jd_ke_jawa` (siklus Sultan Agungan/kurup JS) sama sejak Jul 2024 tetapi berbeda 1 hari pada ±190 hari di 2024 (Jan-Jun, tahun 1957). UI menampilkan keduanya; pemilik perlu memutuskan mana yang jadi acuan.
-- Ramadan (Isya Ummul Qura) dideteksi dari kalender aritmetis, bukan Ummul Qura resmi.
+- **Tanggal Jawa** kini hanya satu: siklus kurup JS (`persis.kalender.jd_ke_jawa`). Versi lama Hijriah + 512 dibuang; weton/pawukon tetap dari `calendar_service`.
+- Ramadan (Isya Ummul Qura) memakai kriteria Ummul Qura hasil hisab (`hisab.ramadan_malam_uq`), bukan tabel resmi Umm al-Qura; dapat beda 1 hari dari kalender cetak resmi.
+- Lab Kalender: tabel perbandingan (`/calendar/api/compare`) memakai lokasi/kriteria bawaan tiap kalender; tampilan halaman belum diperiksa visual (hanya sintaks JS dan API).
 - Tidak diverifikasi: tampilan halaman di peramban (Tailwind CDN tak ada di sandbox); skrip halaman hanya diperiksa sintaksnya dan endpoint-nya diuji.
 - Pemakaian: `python -m unittest discover -s tests` (tes `test_persis` ±17 detik karena 192 jadwal × ~8 waktu).

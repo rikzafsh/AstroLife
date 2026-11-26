@@ -297,3 +297,35 @@ class Sun:
         if abs(e) * 4 < 20:
             return e / 15
         return e / 15 - 24 if e > 0 else e / 15 + 24
+
+    # ── paralaks, refraksi, ghurub (dipakai Bulan & hisab awal bulan) ──
+    @staticmethod
+    def term_u(glat): return math.atan(0.99664719 * math.tan(rad(glat)))
+
+    def term_x(self, glat, elev): return math.cos(self.term_u(glat)) + (elev / 6378140) * math.cos(rad(glat))
+
+    def term_y(self, glat, elev):
+        return 0.99664719 * math.sin(self.term_u(glat)) + (elev / 6378140) * math.sin(rad(glat))
+
+    @staticmethod
+    def refraksi_tanpa_atmosfer(h, pres, temp):
+        """Refraksi (derajat) dari tinggi tanpa atmosfer."""
+        return (1.02 / math.tan(rad(h + 10.3 / (h + 5.11))) * pres / 1010 * 283 / (273 + temp) + 0.0019279204034639303) / 60
+
+    def jd_ghurub(self, jd_nm, glat, glon, galt, tz, ikut_zona: bool = True) -> float:
+        """JD UT Matahari terbenam pada hari sipil (zona tz) yang memuat jd_nm (jdGhurubSyams). ikut_zona=False = jdGhurubSyams2
+        (hari dihitung pada zona UTC, dipakai KHGT)."""
+        cjdn = math.floor(jd_nm + 0.5 + (tz / 24.0 if ikut_zona else 0.0))
+        jd_gs, j_set = 0.0, 17.0
+        for _ in range(2):
+            jd_gs = cjdn - 0.5 + (j_set - tz) / 24.0
+            jde = jd_gs + delta_t(jd_gs) / 86400.0
+            dlt, sd, eot = self.declination(jde, 0), self.semidiameter(jde, 0), self.equation_of_time(jde, 0)
+            alt = -(sd + 34.16 / 60.0 + 2.1 * math.sqrt(galt) / 60.0 - 0.0024)
+            cosha = (math.sin(rad(alt)) - math.sin(rad(glat)) * math.sin(rad(dlt))) / (math.cos(rad(glat)) * math.cos(rad(dlt)))
+            if abs(cosha) < 1:
+                j_set = deg(math.acos(cosha)) / 15.0 + 12.0 - eot - (glon / 15.0 - tz)
+                jd_gs = cjdn - 0.5 + (j_set - tz) / 24.0
+            else:
+                jd_gs = 0.0
+        return jd_gs

@@ -55,7 +55,9 @@ class FalakRoutes(unittest.TestCase):
             return self.c.post('/calendar/api/convert', json=kw)
         j = post(source='hijriah', year=1448, month=1, day=1).get_json()
         self.assertEqual(j['gregorian']['teks'], 'Rabu, 17 Juni 2026')
-        self.assertEqual(j['jawa_hitung']['teks'], '1 Sura Bé 1960 AJ')
+        self.assertTrue(j['jawa']['teks'].endswith('1 Sura Bé 1960 AJ, Wuku Dungulan'))
+        self.assertEqual([k['kunci'] for k in j['hijriah_kriteria']], ['mabims', 'ummulqura', 'wujudulhilal', 'turki'])
+        self.assertTrue(all(k['teks'] for k in j['hijriah_kriteria']))
         j = post(source='masehi', year=1945, month=8, day=17).get_json()
         self.assertEqual((j['hijriah']['hari'], j['hijriah']['pasaran']), ('Jumat', 'Legi'))
         self.assertEqual(post(source='masehi', year=2026, month=2, day=30).status_code, 400)
@@ -63,7 +65,23 @@ class FalakRoutes(unittest.TestCase):
         self.assertEqual(post(source='maya', year=1, month=1, day=1).status_code, 400)
         self.assertEqual(post(source='masehi', year='x', month=1, day=1).status_code, 400)
 
-    def test_puasa(self):
+    def test_perbandingan_kalender(self):
+        j = self.c.get('/calendar/api/compare?date=2026-11-26').get_json()
+        self.assertEqual(j['status'], 'success')
+        self.assertEqual(j['bulan_acuan']['nama'], 'Jumadal Akhirah')
+        self.assertEqual([b['nama'] for b in j['baris']][-1], 'Mataraman')
+        self.assertEqual(len(j['baris']), 9)
+        self.assertTrue(all(len(b['sel']) == len(j['kolom']) for b in j['baris']))
+        mat = j['baris'][-1]['sel'][0]
+        self.assertNotIn('puasa', mat)                                  # Mataraman tanpa hukum puasa
+        # opsi puasa: matikan Senin-Kamis dan Ayyamulbid -> tidak ada sunah di Jumadal Akhirah
+        j2 = self.c.get('/calendar/api/compare?date=2026-11-26&sk=0&ab=0').get_json()
+        self.assertFalse(any(x and x['puasa']['k'] == 'sunah' for x in j2['baris'][0]['sel']))
+        self.assertTrue(any(x and x['puasa']['k'] == 'sunah' for x in j['baris'][0]['sel']))
+        self.assertEqual(self.c.get('/calendar/api/compare?date=1200-01-01').status_code, 400)
+        self.assertEqual(self.c.get('/calendar/api/compare?date=xx').status_code, 400)
+
+    def test_puasa_harian(self):
         j = self.c.get('/islamic/api/puasa?date=2026-11-26&days=14').get_json()
         self.assertEqual(j['status'], 'success')
         self.assertTrue(any('Senin' in p['jenis'] for p in j['jadwal']))

@@ -144,9 +144,10 @@ class WaktuSalat:
 
 
 def ramadan_malam(tgl: int, bln: int, thn: int) -> bool:
-    """Malam ini termasuk Ramadan? (hari berikutnya bulan Hijriah 9, kalender aritmetis; Ummul Qura resmi bisa 1 hari berbeda)."""
-    from .kalender import hijri_dari_jd
-    return hijri_dari_jd(kmjd(tgl + 1, bln, thn, 12, 0))['bln'] == 9
+    """Malam ini termasuk Ramadan? Hari berikutnya jatuh di bulan Hijriah 9 menurut kriteria Ummul Qura
+    (hisab ijtimak + Bulan terbenam sesudah Matahari di Makkah, app/persis/hisab.py), bukan tabel aritmetis."""
+    from .hisab import ramadan_malam_uq
+    return ramadan_malam_uq(tgl, bln, thn)
 
 
 class SalatService:

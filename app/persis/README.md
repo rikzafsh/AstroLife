@@ -17,7 +17,12 @@ dibuat oleh `node tools/persis_golden.js <folder persis-times-js> tests/fixtures
 × 8 waktu (8 lokasi termasuk Tromsø/Sydney, 6 tanggal, 4 metode), Matahari di 7 JD, ΔT 16 tahun, kiblat 10 lokasi,
 rasydulqiblat tahunan/antipoda/harian, istiwa, kalender Jawa & Hijriah. Selisih < 1e-7 jam (≈ 0,4 ms).
 
-## Belum diport (butuh efemeris Bulan ELP-MPP02, ±4 MB data)
-Bulan terbit/terbenam, rasydulqiblat Bulan, hisab awal bulan (ijtimak, MABIMS/Wujudul Hilal/Turki, peta visibilitas hilal),
-gerhana, fase/tithi/pañcāṅga versi JS. Ramadan untuk Isya Ummul Qura di sini memakai kalender aritmetis (JS memakai
-`Intl` Ummul Qura peramban), jadi bisa berbeda 1 hari pada malam batas.
+## Bulan & hisab awal bulan
+`bulan.py` (efemeris Bulan ELPMPP02, terbit/transit/terbenam, ijtimak) dan `hisab.py` (awal bulan MABIMS, Ummul Qura, Wujudul Hilal, KHGT/Turki;
+tabel perbandingan kalender). Agar ringan, deret ELPMPP02 diringkas menurut amplitudo (1.036 suku, ±41 KB, `_data/moon_elp_ringkas.npz`,
+dibuat oleh `tools/gen_persis_moon.py`). Terhadap JS (deret penuh): bujur ≤0,19″, lintang ≤0,07″, ijtimak ≤0,52 detik, awal bulan identik
+pada 1.008 kombinasi bulan-kriteria (Hijriah 1440–1460). Di luar rentang itu belum diuji.
+Ramadan untuk Isya Ummul Qura memakai kriteria Ummul Qura (ijtimak sebelum matahari terbenam di Makkah dan Bulan terbenam sesudahnya).
+
+## Belum diport
+Peta visibilitas hilal, gerhana, fase/tithi/pañcāṅga versi JS, rasydulqiblat Bulan (`rashdulQiblatBulan`).

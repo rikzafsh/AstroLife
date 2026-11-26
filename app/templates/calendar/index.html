@@ -9,7 +9,7 @@
             <i data-lucide="calendar" class="w-8 h-8 text-amber-400"></i> Lab Kalender
         </h1>
         <p class="text-sm text-slate-400 mt-1 max-w-3xl">
-            Konversi antara Masehi, Hijriah aritmetis, Jawa (Sultan Agungan), pawukon/weton, dan unsur Jyotiṣa. Isi tanggal di salah satu sistem lalu lihat padanannya.
+            Konversi antara Masehi, Hijriah (aritmetis dan hisab MABIMS, Ummul Qura, Wujudul Hilal, KHGT), Jawa (siklus kurup), pawukon/weton, dan unsur Jyotiṣa, plus tabel perbandingan kalender dalam satu bulan.
         </p>
     </div>
 
@@ -44,6 +44,24 @@
             <p id="note" class="text-[11px] text-slate-500 pt-2"></p>
         </div>
     </div>
+
+    <div class="glass-panel rounded-2xl p-6 space-y-4">
+        <h3 class="font-bold text-white text-lg flex items-center gap-2"><i data-lucide="table-2" class="w-5 h-5 text-amber-400"></i> Perbandingan kalender Hijriah &amp; Jawa</h3>
+        <p class="text-xs text-slate-400">Satu bulan Hijriah penuh, dari tanggal 1 variasi paling awal sampai akhir bulan variasi paling akhir, di sekitar tanggal Masehi yang dipilih.</p>
+        <div class="flex flex-wrap items-end gap-4 text-xs text-slate-300">
+            <label class="text-slate-400">Tanggal acuan<input id="kc-date" type="date" class="mt-1 block bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white"></label>
+            <label class="flex items-center gap-1.5"><input type="checkbox" id="kc-sk" checked> Puasa Senin–Kamis</label>
+            <label class="flex items-center gap-1.5"><input type="checkbox" id="kc-ab" checked> Puasa Ayyamulbid</label>
+            <button id="kc-go" class="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-semibold text-sm">Bandingkan kalender</button>
+            <button id="kc-prev" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm" disabled>◀ Bulan sebelumnya</button>
+            <button id="kc-next" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm" disabled>Bulan berikutnya ▶</button>
+            <span id="kc-err" class="text-rose-300"></span>
+        </div>
+        <p id="kc-judul" class="text-sm text-slate-200"></p>
+        <div id="kc-legenda" class="text-[11px] text-slate-300 flex flex-wrap gap-x-4 gap-y-1"></div>
+        <div class="overflow-x-auto"><table id="kc-tabel" class="text-[11px] text-center border-collapse"></table></div>
+        <p id="kc-note" class="text-[11px] text-slate-500"></p>
+    </div>
 </div>
 
 <script>
@@ -59,11 +77,11 @@
         body: JSON.stringify({ source: $('src').value, year: $('y').value, month: $('m').value, day: $('d').value, epoch: $('epoch').value, kabisat: $('kab').value }) });
       const j = await r.json();
       if (!r.ok) throw new Error(j.message || 'Gagal.');
-      const g = j.gregorian, h = j.hijriah, w = j.jawa, jh = j.jawa_hitung, jy = j.jyotisa;
+      const g = j.gregorian, h = j.hijriah, w = j.jawa, jy = j.jyotisa;
       $('rows').innerHTML =
         row('Masehi', g.teks) + row('Hijriah (aritmetis)', h.teks, h.hari + ' ' + h.pasaran) +
-        row('Jawa (Sultan Agungan)', jh.teks, 'windu: tahun ke-' + jh.no_tahun_windu) +
-        row('Jawa (Hijriah + 512)', w.teks, 'neptu ' + w.neptu + ' (' + w.neptu_rincian + ') · sadwara ' + w.sadwara + ' · wuku ke-' + w.wuku_no) +
+        j.hijriah_kriteria.map(k => row(k.nama, k.teks || '—')).join('') +
+        row('Jawa (siklus kurup)', w.teks, 'neptu ' + w.neptu + ' (' + w.neptu_rincian + ') · sadwara ' + w.sadwara + ' · wuku ke-' + w.wuku_no) +
         (jy ? row('Jyotiṣa', jy.teks, jy.fase_bulan + ' · yoga ' + jy.yoga + ' · karana ' + jy.karana) : '') +
         row('Julian Day (tengah malam)', j.jd.toFixed(1));
       $('note').textContent = j.catatan;
@@ -72,6 +90,52 @@
   $('go').addEventListener('click', konversi);
   $('hari-ini').addEventListener('click', () => { isiHariIni(); konversi(); });
   isiHariIni(); konversi();
+
+  // ---- perbandingan kalender ----
+  const WARNA = { wajib: ['#3b82d6', '#fff'], makruh: ['#f2c744', '#222'], haram: ['#d9534f', '#fff'] }, SUNAH = ['#8fd3a6', '#2f9e5a', '#14703a'];
+  const pad = n => String(n).padStart(2, '0');
+  let kc = null;
+  function warna(p) {
+    if (!p || !p.k) return null;
+    if (p.k === 'sunah') { const n = Math.min(p.n, 3); return [SUNAH[n - 1], n > 1 ? '#fff' : '#10381f']; }
+    return WARNA[p.k];
+  }
+  async function banding(tanggal) {
+    $('kc-err').textContent = ''; $('kc-tabel').innerHTML = ''; $('kc-judul').textContent = 'Menghitung…';
+    ['kc-go', 'kc-prev', 'kc-next'].forEach(i => { $(i).disabled = true; });
+    try {
+      const q = new URLSearchParams({ date: tanggal, sk: $('kc-sk').checked ? 1 : 0, ab: $('kc-ab').checked ? 1 : 0 });
+      const r = await fetch('{{ url_for("calendar.compare") }}?' + q), j = await r.json();
+      if (!r.ok) throw new Error(j.message || 'Gagal.');
+      kc = j; $('kc-date').value = tanggal; tampil(j);
+    } catch (e) { $('kc-err').textContent = e.message; $('kc-judul').textContent = ''; }
+    $('kc-go').disabled = false; $('kc-prev').disabled = $('kc-next').disabled = !kc;
+  }
+  function tampil(j) {
+    $('kc-judul').innerHTML = '<b>' + esc(j.bulan_acuan.nama) + '</b>';
+    $('kc-legenda').innerHTML = [[WARNA.wajib[0], 'Puasa wajib (Ramadan)'], [SUNAH[0], 'Sunah'], [SUNAH[1], 'Sunah ganda (2 sebab)'], [SUNAH[2], 'Sunah 3 sebab'], [WARNA.makruh[0], 'Makruh'], [WARNA.haram[0], 'Haram']]
+      .map(a => '<span><span style="display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:4px;vertical-align:-1px;background:' + a[0] + '"></span>' + a[1] + '</span>').join('');
+    let h = '<thead><tr><th class="px-2 py-1 text-left text-slate-400 sticky left-0 bg-slate-900">Kalender</th>' + j.kolom.map(k => '<th class="px-1 py-1 font-semibold text-slate-400" title="' + k.hari + ', ' + k.tgl + '/' + pad(k.bln) + '/' + k.thn + '">' + k.tgl + '/' + pad(k.bln) + '</th>').join('') + '</tr></thead><tbody>';
+    j.baris.forEach(r => {
+      h += '<tr><th class="px-2 py-1 text-left whitespace-nowrap text-slate-200 sticky left-0 bg-slate-900">' + esc(r.nama) + '</th>';
+      r.sel.forEach((x, i) => {
+        const k = j.kolom[i];
+        if (!x) { h += '<td class="px-1 py-1 text-slate-600">—</td>'; return; }
+        const w = warna(x.puasa), tip = k.hari + ', ' + k.tgl + '/' + pad(k.bln) + '/' + k.thn + ' M = ' + x.d + ' ' + x.bulan + ' ' + x.y + (r.jawa ? ' J' : ' H') + ' (' + r.nama + ')' + (x.puasa && x.puasa.t ? ' — ' + x.puasa.t : '');
+        h += '<td title="' + esc(tip) + '" class="px-1.5 py-1 border border-slate-800" style="' + (w ? 'background:' + w[0] + ';color:' + w[1] + ';' : 'color:#cbd5e1;') + (x.d === 1 ? 'font-weight:700;border-left:2px solid #f59e0b;' : '') + '">' + x.d + '</td>';
+      });
+      h += '</tr>';
+    });
+    $('kc-tabel').innerHTML = h + '</tbody>';
+    $('kc-note').textContent = j.catatan + ' Sorot sel untuk tanggal lengkap dan keterangan; garis oranye = tanggal 1.';
+  }
+  const geser = (k, n) => { const t = new Date(Date.UTC(k.thn, k.bln - 1, k.tgl + n)); return t.getUTCFullYear() + '-' + pad(t.getUTCMonth() + 1) + '-' + pad(t.getUTCDate()); };
+  $('kc-go').addEventListener('click', () => banding($('kc-date').value || new Date().toISOString().slice(0, 10)));
+  $('kc-prev').addEventListener('click', () => kc && banding(geser(kc.kolom[0], -5)));
+  $('kc-next').addEventListener('click', () => kc && banding(geser(kc.kolom[kc.kolom.length - 1], 5)));
+  ['kc-sk', 'kc-ab'].forEach(i => $(i).addEventListener('change', () => kc && banding($('kc-date').value)));
+  { const t = new Date(); $('kc-date').value = t.getFullYear() + '-' + pad(t.getMonth() + 1) + '-' + pad(t.getDate()); }
+  banding($('kc-date').value);
   if (window.lucide) lucide.createIcons();
 })();
 </script>

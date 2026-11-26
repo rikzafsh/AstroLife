@@ -4,7 +4,7 @@ Calendar Laboratory Service
 Sistem yang didukung:
 1. Masehi (Gregorian; otomatis Julian sebelum 15 Okt 1582)
 2. Hijriah Aritmetis (tabular, epoch sipil Jumat 16 Juli 622 M Julian, siklus 30 tahun)
-3. Jawa Mataraman / Sultan Agungan (pasaran, wuku/pawukon, neptu, windu, tahun Jawa = H + 512)
+3. Jawa Mataraman / Sultan Agungan (pasaran, wuku/pawukon, neptu; tanggal/bulan/tahun Jawa dari siklus kurup persis-times-js)
 4. Jyotisa / Saka (tithi, paksa, nakshatra, yoga, karana, bulan lunar amanta, tahun Saka)
    + pencari kandidat tanggal dari unsur prasasti (tahun Saka, bulan, paksa, tithi, wara)
 
@@ -104,13 +104,15 @@ def pawukon_day(jdn: int) -> int:
 
 
 def javanese_info(jdn: int) -> dict:
+    """Weton, wuku, neptu (pasaran & pawukon) dan tanggal Jawa Sultan Agungan menurut siklus kurup (app/persis, port persis-times-js)."""
+    from app.persis import kalender as pk
     wd = HARI[ac.weekday_index(jdn)]
     pas = PASARAN[pasaran_index(jdn)]
     pd = pawukon_day(jdn)
     wuku = WUKU[pd // 7]
-    hy, hm, hd = jdn_to_hijri(jdn)
-    aj = hy + JAWA_OFFSET
-    windu_idx = (aj - JAWA_ALIP_BASE) % 8
+    j = pk.jd_ke_jawa(jdn - 0.5)
+    hd, hm, aj = j['tanggal'], j['bulan'], j['tahun']
+    windu_idx = pk.no_tahun_jawa(aj) - 1
     return {
         'hari': wd,
         'pasaran': pas,
@@ -255,10 +257,12 @@ def convert_date(source_calendar: str, date_data: dict, target_calendar: str = '
             raise ValueError('Tanggal Hijriah tidak valid.')
         jdn = hijri_to_jdn(y, m, d)
     elif src in ('jawa', 'jawa_mataraman'):
-        hy = y - JAWA_OFFSET
-        if not 1 <= m <= 12 or not 1 <= d <= hijri_month_length(hy, m):
+        from app.persis import kalender as pk
+        if not 1 <= m <= 12 or not 1 <= d <= 30:
             raise ValueError('Tanggal Jawa tidak valid.')
-        jdn = hijri_to_jdn(hy, m, d)
+        jdn = int(pk.jawa_ke_jd(d, m, y) + 0.5)
+        if pk.jd_ke_jawa(jdn - 0.5)['tanggal'] != d:
+            raise ValueError('Tanggal Jawa tidak valid (bulan itu hanya 29 hari pada tahun tersebut).')
     else:
         raise ValueError(f"Sistem kalender '{source_calendar}' tidak dikenal.")
     out = describe(jdn)
