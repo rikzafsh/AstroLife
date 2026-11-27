@@ -252,3 +252,6 @@ Sumber: `persis-times-js` (berkas dari pemilik; lisensi MIT Abu Sabda/PP PERSIS)
 - `fase_berikut` (bulan baru/purnama/kuartal berikutnya dari `prototype.find_events.moon_phases`), `gerhana` (gerhana Matahari/Bulan 6 tahun ke depan dihitung langsung oleh `catalog.events` — tidak perlu katalog sudah dibangun — lalu dinilai keterlihatannya dari lokasi lewat `catalog.service.decorate`), `tahun` (Masehi, Hijriah per kriteria, Jawa, Saka), `banding_salat` (selisih waktu salat dua kota pada saat sebenarnya; jam hisab tanpa ihtiyat).
 - Pemeriksaan silang: bulan baru 6 Feb 2027 16:00 UTC (gerhana cincin) dan 2 Agt 2027 (total), 26 Jan 2028 (cincin), 22 Jul 2028 (total) cocok dengan data gerhana yang saya ketahui; waktu puncak lokal belum divalidasi terhadap almanak resmi.
 - Belum didukung: istilah "Tubin" dan "Tulat" (tidak ada di kode proyek ini maupun di sumber yang saya temukan; butuh definisi dari pemilik proyek).
+
+### Istilah hari relatif
+Dari pemilik proyek: H-4 dst. senantu; H-3 kila mulai; H-2 selumbari/basarai/kemarin dulu/kemarin lusa; H-1 kemarin; H+1 besok/esok; H+2 lusa/besok lusa; H+3 tulat/langkat; H+4 tubin/tungging; H+5 cekelong; H+6 dst. embute. Dipakai oleh semua intent bertanggal (`REL` di `app/bot/mesin.py`) dan dijelaskan di artikel `istilah-hari-relatif`. Istilah terbuka (senantu, embute) dijawab dengan tanggal terdekatnya.

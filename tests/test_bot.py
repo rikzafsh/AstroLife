@@ -344,6 +344,38 @@ class TesLagi(unittest.TestCase):
         self.assertGreater(len(r['cards'][0]['baris']), 3)
 
 
+class TesHariRelatif(unittest.TestCase):
+    NOW = datetime(2026, 11, 27, 6, 19, tzinfo=timezone.utc)                                # Jumat 27 Nov 2026 (H)
+
+    def j(self, q, slots=None):
+        return jawab(q, None, slots, self.NOW)
+
+    def test_istilah_dan_selisih(self):
+        casos = {'kila mulai': 'Selasa, 24 November', 'selumbari': 'Rabu, 25 November', 'basarai': 'Rabu, 25 November',
+                 'kemarin dulu': 'Rabu, 25 November', 'kemarin lusa': 'Rabu, 25 November', 'kemarin': 'Kamis, 26 November',
+                 'besok': 'Sabtu, 28 November', 'lusa': 'Minggu, 29 November', 'besok lusa': 'Minggu, 29 November',
+                 'tulat': 'Senin, 30 November', 'langkat': 'Senin, 30 November', 'tubin': 'Selasa, 1 Desember',
+                 'tungging': 'Selasa, 1 Desember', 'cekelong': 'Rabu, 2 Desember', 'embute': 'Kamis, 3 Desember'}
+        for kata, hari in casos.items():
+            r = self.j(f'{kata} hari apa?')
+            self.assertEqual(r['intent'], 'tanggal', kata)
+            self.assertIn(hari, r['reply'], kata)
+
+    def test_lanjutan_dan_intent_lain(self):
+        r1 = self.j('Tubin hari apa?')
+        r2 = self.j('Kalau tulat?', r1['slots'])
+        self.assertIn('H+3', r2['reply'])
+        self.assertIn('Senin, 30 November', r2['reply'])
+        self.assertIn('30 November 2026', self.j('jadwal salat tulat')['reply'])
+        self.assertIn('Selasa, 1 Desember', self.j('weton tubin')['reply'])
+        self.assertIn('terdekat', self.j('senantu hari apa')['reply'])
+
+    def test_istilah_dijelaskan_dari_artikel(self):
+        r = self.j('apa itu tubin')
+        self.assertEqual(r['slots']['artikel'], 'istilah-hari-relatif')
+        self.assertIn('H+4', r['reply'])
+
+
 class TesApi(unittest.TestCase):
     def setUp(self):
         self.c = create_app().test_client()

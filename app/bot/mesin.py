@@ -68,20 +68,39 @@ def _sekarang(ctx) -> datetime:
 
 
 # ── ekstraksi entitas ───────────────────────────────────────────────
+# istilah hari relatif terhadap hari ini (H): (pola, selisih hari, nama baku, keterangan H)
+REL = [(r'\bbesok lusa\b', 2, 'besok lusa'), (r'\bkemarin lusa\b', -2, 'kemarin lusa'), (r'\bkemarin dulu\b', -2, 'kemarin dulu'),
+       (r'\bselumbari\b', -2, 'selumbari'), (r'\bbasarai\b', -2, 'basarai'), (r'\bkila mulai\b|\bkila\b', -3, 'kila mulai'),
+       (r'\bsenantu\b', -4, 'senantu'), (r'\bhari h\b', 0, 'hari-H'),
+       (r'\bkemarin\b', -1, 'kemarin'), (r'\bbesok\b|\besok\b', 1, 'besok'), (r'\blusa\b', 2, 'lusa'),
+       (r'\btulat\b', 3, 'tulat'), (r'\blangkat\b', 3, 'langkat'), (r'\btubin\b', 4, 'tubin'), (r'\btungging\b', 4, 'tungging'),
+       (r'\bcekelong\b', 5, 'cekelong'), (r'\bembute\b', 6, 'embute')]
+REL_KET = {'senantu': 'H-4 dan sebelumnya', 'embute': 'H+6 dan seterusnya'}
+
+
 def _tgl_relatif(t: str, hari_ini: date):
+    """Kembalikan (tanggal, nama istilah). Mendukung besok/lusa/kemarin dan istilah Jawa/Melayu: kila mulai (H-3), selumbari/basarai (H-2),
+    tulat/langkat (H+3), tubin/tungging (H+4), cekelong (H+5), embute (H+6 dst.), senantu (H-4 dst.)."""
     if re.search(r'\b(hari ini|sekarang|nanti|malam ini|pagi ini|siang ini|sore ini)\b', t):
         return hari_ini, 'hari ini'
-    if re.search(r'\bbesok\b', t):
-        return hari_ini + timedelta(days=1), 'besok'
-    if re.search(r'\blusa\b', t):
-        return hari_ini + timedelta(days=2), 'lusa'
-    if re.search(r'\bkemarin\b', t):
-        return hari_ini - timedelta(days=1), 'kemarin'
+    for pola, off, nama in REL:
+        if re.search(pola, t):
+            return hari_ini + timedelta(days=off), nama
     m = re.search(r'\b(\d{1,3}) hari (lagi|lalu|yang lalu|ke depan)\b', t)
     if m:
         n = int(m.group(1)) * (-1 if m.group(2) in ('lalu', 'yang lalu') else 1)
         return hari_ini + timedelta(days=n), None
     return None, None
+
+
+def _awalan_rel(label, d, hari_ini):
+    if label in (None, 'hari ini'):
+        return ''
+    n = (d - hari_ini).days
+    if label in REL_KET:                                     # istilah terbuka: tampilkan tanggal terdekat
+        return f"**{label.capitalize()}** = {REL_KET[label]}; ini tanggal terdekatnya (H{n:+d}). "
+    ket = f'H{n:+d}' if n else 'H'
+    return f"**{label.capitalize()}** = {ket} ({'+' if n > 0 else ''}{n} hari dari hari ini). "
 
 
 def _tgl_masehi(t: str):
@@ -374,7 +393,7 @@ def _i_konversi(t, ctx, hari_ini):
     return _ringkas_tanggal(d, ctx, 'konversi')
 
 
-def _ringkas_tanggal(d: date, ctx, intent):
+def _ringkas_tanggal(d: date, ctx, intent, awalan=''):
     jdn = _jdn(d)
     try:
         g, j = cs.gregorian_info(jdn), cs.javanese_info(jdn)
@@ -383,7 +402,7 @@ def _ringkas_tanggal(d: date, ctx, intent):
         return _r(f'Maaf, gagal menghitung tanggal itu: {e}', intent, status='error')
     baris = [['Masehi', _fmt_tgl(d)], [f"Hijriah ({KRIT_NAMA[ctx['krit']]})", hij['teks']],
              ['Jawa Mataraman', f"{j['tanggal']} {j['bulan']} {j['tahun_windu']} {j['tahun']} AJ"], ['Weton', j['weton']], ['Wuku', j['wuku']]]
-    return _r(f"Tanggal **{_fmt_tgl(d)}** dalam berbagai kalender:", intent, {'intent': 'konversi', 'tanggal': d.isoformat()},
+    return _r(f"{awalan}Tanggal **{_fmt_tgl(d)}** dalam berbagai kalender:", intent, {'intent': 'konversi', 'tanggal': d.isoformat()},
               [{'tipe': 'tabel', 'judul': 'Padanan tanggal', 'kolom': ['Kalender', 'Tanggal'], 'baris': baris}],
               [{'teks': 'Lab Kalender', 'url': '/calendar/'}], ['calendar_service, hisab'], ['Besok?', 'Kapan 1 Ramadan 1448?'])
 
@@ -394,7 +413,7 @@ def _i_hari_ini(t, ctx, hari_ini, now):
     d, label = _tgl_relatif(t, hari_ini)
     if d is None and re.search(r'\b(hari ini|tanggal|weton|hari apa|pasaran)\b', t):
         d = hari_ini
-    return _ringkas_tanggal(d, ctx, 'tanggal') if d else None
+    return _ringkas_tanggal(d, ctx, 'tanggal', _awalan_rel(label, d, hari_ini)) if d else None
 
 
 def _i_bulan(t, ctx, now_utc):
@@ -792,9 +811,9 @@ def jawab(pesan: str, context: dict | None = None, slots: dict | None = None, se
             if r:
                 return r
         if asal in ('konversi', 'hijri_ke_masehi'):
-            d, _ = _tgl_relatif(t, date.fromisoformat(slots['tanggal']) if slots.get('tanggal') else hari_ini)
+            d, label = _tgl_relatif(t, hari_ini)
             if d:
-                return _ringkas_tanggal(d, ctx, 'tanggal')
+                return _ringkas_tanggal(d, ctx, 'tanggal', _awalan_rel(label, d, hari_ini))
     if not konsep:
         for fn in (lambda: _i_banding_salat(t, pesan, ctx, hari_ini), lambda: _i_gerhana(t, pesan, ctx, slots, now_utc),
                    lambda: _i_fase_berikut(t, ctx, now_utc), lambda: _i_tahun(t, ctx, hari_ini), lambda: _i_jumlah_hari(t, ctx, hari_ini), lambda: _i_cuaca(t, pesan, ctx, slots, hari_ini, now_utc.replace(tzinfo=None), False),
