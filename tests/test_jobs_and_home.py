@@ -127,7 +127,7 @@ class Home(unittest.TestCase):
         self.assertEqual(c.get('/').status_code, 200)
         for gone in ('Pembaruan realtime', '84/100', 'Hujan Meteor Leonid', 'Skor Langit'):
             self.assertNotIn(gone, html)
-        for need in ('Langit hari ini', 'Event mendatang', 'catalog', 'observation', 'Dalam pengembangan'):
+        for need in ('Langit hari ini', 'Event mendatang', 'catalog', 'observation', 'AstroBot'):
             self.assertIn(need, html)
         self.assertIn('Yogyakarta', html)                                                          # lokasi bawaan dari konfigurasi
 

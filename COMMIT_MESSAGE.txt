@@ -1,10 +1,9 @@
-Lab Kalender: Padanan ringkas AD/AH/AJ/AS dengan rincian yang dapat dibuka
+Beranda: ikon modul seragam, cuaca pada event, pencarian kota & koordinat seksagesimal
 
-- Masehi: tanggal + AD; rincian Gregorian dan Julian
-- Hijriah: satu tanggal sesuai kriteria pilihan + AH; rincian aritmetis I-IV dan kriteria astronomis lain
-- Jawa Mataraman: tanggal + AJ; rincian nama tahun, windu, kurup
-- Jawa Kuno: tithi + paksa (š/k) + bulan Saka + AS; rincian jyotisa lengkap
-- API /calendar/api/convert menambah kunci "padanan"; tes ditambah (175 lulus)
+- Kartu Modul memakai ikon Lucide seperti menu atas; label "Siap"/"Dalam pengembangan" dihapus (Beranda dan Tentang Proyek)
+- Event mendatang menampilkan cuaca pada waktu event (awan, hujan, skor; historis/tidak tersedia ditandai)
+- Pengaturan lokasi: autocomplete kota dari gazetir (GET /api/kota) dan input koordinat desimal atau seksagesimal
+- Tes ditambah (saran kota, beranda tanpa label/emoji modul)
 
 Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_016uW7hyNHrdGrJ8wL2ymEgv

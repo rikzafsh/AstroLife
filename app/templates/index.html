@@ -9,8 +9,8 @@
     <h1 class="font-display">Pantau langit, <em>rencanakan pengamatan</em>.</h1>
     <p>AstroLife menghitung sendiri peristiwa langit dari posisi Matahari, Bulan, dan planet (efemeris NASA JPL), menilai keterlihatannya dari lokasi Anda, lalu memeriksa prakiraan cuacanya.</p>
     <div class="cta">
-      <a class="btn-p" href="{{ url_for('catalog.index') }}">🔭 Jelajahi Katalog Event</a>
-      <a class="btn-s" href="{{ url_for('observation.index') }}">☁ Cek Cuaca Pengamatan</a>
+      <a class="btn-p" href="{{ url_for('catalog.index') }}"><i data-lucide="telescope" class="w-4 h-4"></i> Jelajahi Katalog Event</a>
+      <a class="btn-s" href="{{ url_for('observation.index') }}"><i data-lucide="sparkles" class="w-4 h-4"></i> Cek Cuaca Pengamatan</a>
     </div>
     <div class="where" id="where">Lokasi: {{ default_location.name }} ({{ '%.2f'|format(default_location.lat|abs) }}°{{ 'S' if default_location.lat < 0 else 'N' }}, {{ '%.2f'|format(default_location.lon|abs) }}°{{ 'E' if default_location.lon >= 0 else 'W' }}) · zona waktu {{ tz_label }}</div>
   </section>
@@ -48,27 +48,27 @@
   <div class="sec"><h2>Modul</h2></div>
   <section class="mods">
     <a class="card mod" href="{{ url_for('catalog.index') }}">
-      <div class="top"><span class="ico">🔭</span><span class="badge ok">Siap</span></div>
+      <div class="top"><span class="ico" style="color:rgb(var(--deep-300))"><i data-lucide="telescope" class="w-6 h-6"></i></span></div>
       <h3>Katalog Event</h3>
       <p>Fase Bulan, konjungsi, okultasi, gerhana, elongasi, oposisi, dan hujan meteor, lengkap dengan label keterlihatan dan kelangkaan untuk lokasi Anda.</p>
     </a>
     <a class="card mod" href="{{ url_for('observation.index') }}">
-      <div class="top"><span class="ico">☁</span><span class="badge ok">Siap</span></div>
+      <div class="top"><span class="ico" style="color:rgb(var(--sky-500))"><i data-lucide="sparkles" class="w-6 h-6"></i></span></div>
       <h3>Observasi &amp; Cuaca</h3>
       <p>Skor kelayakan dari awan, hujan, kelembapan, jarak pandang, dan cahaya Bulan pada waktu pilihan, plus rekomendasi event berdasarkan cuaca.</p>
     </a>
     <a class="card mod" href="{{ url_for('calendar.index') }}">
-      <div class="top"><span class="ico">🗓</span><span class="badge ok">Siap</span></div>
+      <div class="top"><span class="ico" style="color:rgb(var(--red-500))"><i data-lucide="calendar" class="w-6 h-6"></i></span></div>
       <h3>Lab Kalender</h3>
       <p>Konversi Masehi, Hijriah aritmetis, Jawa (Sultan Agungan), weton/pawukon, dan unsur Jyotiṣa.</p>
     </a>
     <a class="card mod" href="{{ url_for('islamic.index') }}">
-      <div class="top"><span class="ico">🕌</span><span class="badge ok">Siap</span></div>
+      <div class="top"><span class="ico" style="color:rgb(var(--grn-500))"><i data-lucide="compass" class="w-6 h-6"></i></span></div>
       <h3>Waktu Salat &amp; Kiblat</h3>
       <p>Jadwal salat (9 metode), arah kiblat, rasydulqiblat harian dan tahunan, serta puasa sunah, dihitung dari posisi Matahari.</p>
     </a>
     <a class="card mod" href="{{ url_for('bot.index') }}">
-      <div class="top"><span class="ico">🤖</span><span class="badge dev">Dalam pengembangan</span></div>
+      <div class="top"><span class="ico" style="color:rgb(var(--pri-400))"><i data-lucide="bot" class="w-6 h-6"></i></span></div>
       <h3>AstroBot</h3>
       <p>Asisten tanya-jawab seputar astronomi, kalender, dan fitur AstroLife.</p>
     </a>
@@ -138,6 +138,24 @@
         }
     }
 
+
+    // ---- cuaca pada saat event (prakiraan per jam Open-Meteo; di luar 16 hari = rata-rata historis) ----
+    async function cuacaEvent(lok) {
+        const els = [...document.querySelectorAll('#upcoming .evw')];
+        await Promise.all(els.map(async (el) => {
+            try {
+                const r = await fetch(URL_FEAS, {method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({lat: lok.lat, lon: lok.lon, tz: lok.tz, difficulty: 'naked_eye', event_type: el.dataset.cat, datetime_local: el.dataset.w})});
+                const j = await r.json();
+                if (!r.ok) throw new Error(j.message || 'gagal');
+                const w = j.weather;
+                if (!w.available) { el.textContent = 'Cuaca: tidak tersedia' + (w.reason ? ' (' + w.reason + ')' : ''); return; }
+                const jam = j.when_local.slice(11);
+                el.innerHTML = `Cuaca pukul ${esc(jam)}: awan <b>${Math.round(w.cloud_cover_pct)}%</b> · hujan <b>${Math.round(w.precipitation_prob ?? 0)}%</b> · skor ${j.feasibility.score ?? '–'} (${esc(j.feasibility.status)})` + (w.kind === 'forecast' ? '' : ' · <i>rata-rata historis</i>');
+            } catch (e) { el.textContent = 'Cuaca: tidak tersedia'; }
+        }));
+    }
+
     // ---- event mendatang dari katalog ----
     async function upcoming() {
         const box = $('upcoming');
@@ -151,13 +169,15 @@
             if (!r.ok) throw new Error(j.message);
             const notes = j.covered ? '' : `<div class="note">Katalog Anda tidak mencakup seluruh 14 hari ke depan (rentang ${j.meta.dari_tahun}–${j.meta.sampai_tahun}). <a class="link" href="${URL_CAT}">Perbarui katalog</a>.</div>`;
             if (!j.events.length) { box.innerHTML = notes || '<div class="note">Tidak ada event yang dapat diamati dari lokasi ini dalam 14 hari ke depan.</div>'; return; }
-            box.innerHTML = j.events.map(e => {
+            box.innerHTML = j.events.map((e, i) => {
                 const c = TIER[e.rarity.tier], t = e.time_local;
                 return `<a class="ev" style="--c:${c}" href="${URL_CAT}">
                     <div class="t">${Number(t.slice(8, 10))} ${MON[Number(t.slice(5, 7)) - 1]}<small>${esc(t.slice(11))} ${esc(j.lokasi.tz_label)}</small></div>
-                    <div><div class="n">${esc(e.title)}</div><div class="h">${esc(e.visibility.headline)}</div></div>
+                    <div><div class="n">${esc(e.title)}</div><div class="h">${esc(e.visibility.headline)}</div><div class="h evw" data-i="${i}" data-w="${esc(e.wx.default)}" data-cat="${esc(e.category)}">Cuaca: memuat…</div></div>
                     <span class="r">${esc(e.rarity.label)}</span></a>`;
             }).join('') + notes;
+            if (window.lucide) lucide.createIcons();
+            cuacaEvent(j.lokasi);
         } catch (e) {
             box.innerHTML = '<div class="note">Tidak dapat memuat event mendatang.</div>';
         }

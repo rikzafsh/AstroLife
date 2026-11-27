@@ -12,14 +12,48 @@
     <div class="pref-body">
       <section class="pref-sec" aria-labelledby="pref-h-lokasi">
         <h3 id="pref-h-lokasi"><i data-lucide="map-pin" class="w-4 h-4"></i> Lokasi</h3>
-        <label class="ui-label" for="pref-kota">Kota</label>
-        <select id="pref-kota" class="ui-field"></select>
-        <div class="grid grid-cols-2 gap-3 mt-3">
-          <div><label class="ui-label" for="pref-lat">Lintang (°, selatan negatif)</label><input id="pref-lat" type="number" step="0.0001" class="ui-field"></div>
-          <div><label class="ui-label" for="pref-lon">Bujur (°, timur positif)</label><input id="pref-lon" type="number" step="0.0001" class="ui-field"></div>
-          <div><label class="ui-label" for="pref-elev">Elevasi (m)</label><input id="pref-elev" type="number" step="1" class="ui-field"></div>
-          <div><label class="ui-label" for="pref-tz">Zona waktu (jam)</label><input id="pref-tz" type="number" step="0.5" placeholder="otomatis" class="ui-field"></div>
+        <label class="ui-label" for="pref-kota">Cari kota / kabupaten</label>
+        <div class="relative">
+          <input id="pref-kota" type="text" class="ui-field" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="pref-kota-list" aria-autocomplete="list" placeholder="Ketik nama kota, mis. Lubuklinggau">
+          <ul id="pref-kota-list" role="listbox" class="hidden absolute z-10 left-0 right-0 mt-1 max-h-56 overflow-auto rounded-xl border border-slate-700 shadow-xl" style="background:var(--header-bg,#0b1020);backdrop-filter:blur(12px)"></ul>
         </div>
+        <p id="pref-lok-aktif" class="ui-hint mt-1"></p>
+
+        <fieldset class="mt-3">
+          <legend class="ui-label">Koordinat manual</legend>
+          <div class="flex gap-4 text-sm mb-2" role="radiogroup" aria-label="Format koordinat">
+            <label class="flex items-center gap-1.5"><input type="radio" name="pref-fmt" value="des" checked> Desimal (°)</label>
+            <label class="flex items-center gap-1.5"><input type="radio" name="pref-fmt" value="dms"> Seksagesimal (° ′ ″)</label>
+          </div>
+          <div id="pref-des" class="grid grid-cols-2 gap-3">
+            <div><label class="ui-label" for="pref-lat">Lintang (°, selatan negatif)</label><input id="pref-lat" type="number" step="0.0001" class="ui-field"></div>
+            <div><label class="ui-label" for="pref-lon">Bujur (°, timur positif)</label><input id="pref-lon" type="number" step="0.0001" class="ui-field"></div>
+          </div>
+          <div id="pref-dms" class="hidden grid gap-3">
+            <div>
+              <span class="ui-label">Lintang</span>
+              <div class="grid grid-cols-[1fr_1fr_1.3fr_auto] gap-2">
+                <input id="pref-lat-d" type="number" min="0" max="90" step="1" class="ui-field" aria-label="Lintang derajat" placeholder="°">
+                <input id="pref-lat-m" type="number" min="0" max="59" step="1" class="ui-field" aria-label="Lintang menit" placeholder="′">
+                <input id="pref-lat-s" type="number" min="0" max="59.9999" step="0.01" class="ui-field" aria-label="Lintang detik" placeholder="″">
+                <select id="pref-lat-h" class="ui-field" aria-label="Belahan lintang"><option value="1">LU</option><option value="-1">LS</option></select>
+              </div>
+            </div>
+            <div>
+              <span class="ui-label">Bujur</span>
+              <div class="grid grid-cols-[1fr_1fr_1.3fr_auto] gap-2">
+                <input id="pref-lon-d" type="number" min="0" max="180" step="1" class="ui-field" aria-label="Bujur derajat" placeholder="°">
+                <input id="pref-lon-m" type="number" min="0" max="59" step="1" class="ui-field" aria-label="Bujur menit" placeholder="′">
+                <input id="pref-lon-s" type="number" min="0" max="59.9999" step="0.01" class="ui-field" aria-label="Bujur detik" placeholder="″">
+                <select id="pref-lon-h" class="ui-field" aria-label="Belahan bujur"><option value="1">BT</option><option value="-1">BB</option></select>
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-3 mt-3">
+            <div><label class="ui-label" for="pref-elev">Elevasi (m)</label><input id="pref-elev" type="number" step="1" class="ui-field"></div>
+            <div><label class="ui-label" for="pref-tz">Zona waktu (jam)</label><input id="pref-tz" type="number" step="0.5" placeholder="otomatis" class="ui-field"></div>
+          </div>
+        </fieldset>
         <div class="flex flex-wrap items-center gap-3 mt-3">
           <button type="button" id="pref-geo" class="ui-btn ui-btn-sm"><i data-lucide="locate-fixed" class="w-4 h-4"></i> Pakai lokasi saya</button>
           <span id="pref-geo-note" class="ui-hint" aria-live="polite"></span>
@@ -68,34 +102,93 @@
   var P = window.AstroPrefs, dlg = document.getElementById('dlg-pengaturan');
   if (!P || !dlg) return;
   var $ = function (id) { return document.getElementById(id); };
-  var kota = $('pref-kota'), status = $('pref-status'), tUi;
+  var kota = $('pref-kota'), daftar = $('pref-kota-list'), status = $('pref-status'), tUi, tCari, hasil = [], aktif = -1, fmt = 'des', URL_KOTA = '{{ url_for("main.api_kota") }}';
 
-  P.kota.forEach(function (k) { var o = document.createElement('option'); o.value = k[1] + ',' + k[2]; o.textContent = k[0]; o.dataset.nama = k[0]; kota.appendChild(o); });
-  var oc = document.createElement('option'); oc.value = 'custom'; oc.textContent = 'Koordinat sendiri…'; kota.appendChild(oc);
-
+  function pecah(x) {                                    // derajat desimal -> {d, m, s}
+    var a = Math.abs(x), d = Math.floor(a + 1e-9), mm = (a - d) * 60, m = Math.floor(mm + 1e-9), s = +((mm - m) * 60).toFixed(2);
+    if (s >= 60) { s = 0; m += 1; } if (m >= 60) { m = 0; d += 1; }
+    return { d: d, m: m, s: s };
+  }
+  function dmsKe(prefix, x, positif) {
+    var p = pecah(x); $(prefix + '-d').value = p.d; $(prefix + '-m').value = p.m; $(prefix + '-s').value = p.s; $(prefix + '-h').value = x < 0 ? '-1' : '1';
+  }
+  function dmsDari(prefix, maks) {                       // -> derajat desimal atau NaN
+    var d = parseFloat($(prefix + '-d').value) || 0, m = parseFloat($(prefix + '-m').value) || 0, s = parseFloat($(prefix + '-s').value) || 0;
+    if (d < 0 || m < 0 || m >= 60 || s < 0 || s >= 60 || d > maks || ($(prefix + '-d').value === '' && $(prefix + '-m').value === '' && $(prefix + '-s').value === '')) return NaN;
+    return parseInt($(prefix + '-h').value, 10) * (d + m / 60 + s / 3600);
+  }
+  function aturFmt(f) {
+    fmt = f; $('pref-des').classList.toggle('hidden', f !== 'des'); $('pref-dms').classList.toggle('hidden', f !== 'dms');
+    dlg.querySelectorAll('input[name=pref-fmt]').forEach(function (r) { r.checked = r.value === f; });
+  }
   function tampil() {                                   // data -> formulir
-    var p = P.get(), l = p.lokasi;
+    var p = P.get(), l = p.lokasi, r = P.ringkas();
     $('pref-lat').value = l.lat; $('pref-lon').value = l.lon; $('pref-elev').value = l.elev; $('pref-tz').value = l.tz === null ? '' : l.tz;
-    var cocok = P.kota.filter(function (k) { return Math.abs(k[1] - l.lat) < 0.002 && Math.abs(k[2] - l.lon) < 0.002; })[0];
-    kota.value = cocok ? cocok[1] + ',' + cocok[2] : 'custom';
+    dmsKe('pref-lat', l.lat); dmsKe('pref-lon', l.lon);
+    if (document.activeElement !== kota) kota.value = '';
+    $('pref-lok-aktif').textContent = 'Lokasi aktif: ' + r.lokasi + ' (' + r.koordinat + ') · ' + r.zona;
     $('pref-tz-info').textContent = P.labelTz(P.tzDariBujur(l.lon)) + ' = UTC' + (P.tzDariBujur(l.lon) >= 0 ? '+' : '') + P.tzDariBujur(l.lon);
     $('pref-metode').value = p.salat.metode; $('pref-ihtiyat').value = p.salat.ihtiyat; $('pref-imsak').value = p.salat.imsak;
     dlg.querySelectorAll('input[name=pref-hijriah]').forEach(function (r) { r.checked = r.value === p.hijriah.kriteria; });
   }
   function simpanOk() { status.textContent = 'Tersimpan ✓'; clearTimeout(tUi); tUi = setTimeout(function () { status.textContent = ''; }, 2000); }
 
-  kota.addEventListener('change', function () {
-    if (kota.value === 'custom') { $('pref-lat').focus(); return; }
-    var o = kota.options[kota.selectedIndex], v = kota.value.split(',');
-    P.set({ lokasi: { nama: o.dataset.nama, lat: parseFloat(v[0]), lon: parseFloat(v[1]), tz: null } }); tampil(); simpanOk();
-  });
-  ['pref-lat', 'pref-lon', 'pref-elev', 'pref-tz'].forEach(function (id) {
-    $(id).addEventListener('change', function () {
-      var lat = parseFloat($('pref-lat').value), lon = parseFloat($('pref-lon').value);
-      if (!isFinite(lat) || lat < -90 || lat > 90 || !isFinite(lon) || lon < -180 || lon > 180) { status.textContent = 'Lintang harus −90…90 dan bujur −180…180.'; return; }
-      var tz = $('pref-tz').value.trim();
-      P.set({ lokasi: { nama: '', lat: lat, lon: lon, elev: parseFloat($('pref-elev').value) || 0, tz: tz === '' ? null : parseFloat(tz) } }); tampil(); simpanOk();
+  // ---- pencarian kota sambil mengetik ----
+  function tutupDaftar() { daftar.classList.add('hidden'); kota.setAttribute('aria-expanded', 'false'); aktif = -1; }
+  function gambarDaftar() {
+    daftar.innerHTML = '';
+    if (!hasil.length) {
+      var li = document.createElement('li'); li.className = 'px-3 py-2 text-sm text-slate-400'; li.textContent = 'Kota tidak ditemukan. Gunakan koordinat manual di bawah.'; daftar.appendChild(li);
+    }
+    hasil.forEach(function (h, i) {
+      var li = document.createElement('li'); li.setAttribute('role', 'option'); li.id = 'pref-kota-' + i; li.dataset.i = i;
+      li.className = 'px-3 py-2 text-sm cursor-pointer flex justify-between gap-3 hover:bg-sky-500/15' + (i === aktif ? ' bg-sky-500/20' : '');
+      var a = document.createElement('span'); a.className = 'text-ink'; a.textContent = h.nama;
+      var b = document.createElement('span'); b.className = 'text-slate-400 text-xs'; b.textContent = h.provinsi;
+      li.appendChild(a); li.appendChild(b); daftar.appendChild(li);
     });
+    daftar.classList.remove('hidden'); kota.setAttribute('aria-expanded', 'true');
+  }
+  function pilih(h) {
+    P.set({ lokasi: { nama: h.nama, lat: h.lat, lon: h.lon, elev: h.elev || 0, tz: h.tz } });
+    kota.value = ''; tutupDaftar(); tampil(); simpanOk();
+  }
+  kota.addEventListener('input', function () {
+    clearTimeout(tCari); var q = kota.value.trim();
+    if (q.length < 2) { tutupDaftar(); return; }
+    tCari = setTimeout(function () {
+      fetch(URL_KOTA + '?q=' + encodeURIComponent(q)).then(function (r) { return r.json(); }).then(function (j) {
+        if (kota.value.trim() !== q) return; hasil = j.hasil || []; aktif = hasil.length ? 0 : -1; gambarDaftar();
+      }).catch(function () { hasil = []; gambarDaftar(); });
+    }, 150);
+  });
+  kota.addEventListener('keydown', function (e) {
+    if (daftar.classList.contains('hidden')) return;
+    if (e.key === 'ArrowDown') { e.preventDefault(); aktif = Math.min(hasil.length - 1, aktif + 1); gambarDaftar(); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); aktif = Math.max(0, aktif - 1); gambarDaftar(); }
+    else if (e.key === 'Enter') { e.preventDefault(); if (hasil[aktif]) pilih(hasil[aktif]); }
+    else if (e.key === 'Escape') { e.stopPropagation(); e.preventDefault(); tutupDaftar(); }
+    if (aktif >= 0) kota.setAttribute('aria-activedescendant', 'pref-kota-' + aktif);
+  });
+  daftar.addEventListener('mousedown', function (e) {    // mousedown agar terpilih sebelum input kehilangan fokus
+    var li = e.target.closest('li[data-i]'); if (li) { e.preventDefault(); pilih(hasil[+li.dataset.i]); }
+  });
+  kota.addEventListener('blur', function () { setTimeout(tutupDaftar, 120); });
+
+  // ---- koordinat manual (desimal / seksagesimal) ----
+  dlg.querySelectorAll('input[name=pref-fmt]').forEach(function (r) { r.addEventListener('change', function () { if (r.checked) aturFmt(r.value); }); });
+  function terapkanKoordinat() {
+    var lat, lon;
+    if (fmt === 'des') { lat = parseFloat($('pref-lat').value); lon = parseFloat($('pref-lon').value); }
+    else { lat = dmsDari('pref-lat', 90); lon = dmsDari('pref-lon', 180); }
+    if (!isFinite(lat) || lat < -90 || lat > 90 || !isFinite(lon) || lon < -180 || lon > 180) {
+      status.textContent = fmt === 'des' ? 'Lintang harus −90…90 dan bujur −180…180.' : 'Isi derajat/menit/detik (menit & detik 0–59,99; lintang ≤ 90°, bujur ≤ 180°).'; return;
+    }
+    var tz = $('pref-tz').value.trim();
+    P.set({ lokasi: { nama: '', lat: +lat.toFixed(6), lon: +lon.toFixed(6), elev: parseFloat($('pref-elev').value) || 0, tz: tz === '' ? null : parseFloat(tz) } }); tampil(); simpanOk();
+  }
+  ['pref-lat', 'pref-lon', 'pref-elev', 'pref-tz', 'pref-lat-d', 'pref-lat-m', 'pref-lat-s', 'pref-lat-h', 'pref-lon-d', 'pref-lon-m', 'pref-lon-s', 'pref-lon-h'].forEach(function (id) {
+    $(id).addEventListener('change', terapkanKoordinat);
   });
   $('pref-geo').addEventListener('click', function () {
     var n = $('pref-geo-note');

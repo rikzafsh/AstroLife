@@ -263,3 +263,9 @@ Empat baris, masing-masing satu tanggal ringkas dengan tombol rincian (`falak_se
 - **Jawa Mataraman (AJ)**: tanggal tanpa nama tahun; rincian: nama tahun, nama windu, kurup.
   Kurup = singkatan hari+pasaran 1 Sura tahun Alip pertama siklus 120 tahun (1867 → Asapon, 1747 → Aboge). Nama windu (Kuntara, Sengara, Sancaya, Adi; bergilir 4) **dijangkarkan pada contoh pengguna (1960 = Sancaya)**, belum dicocokkan dengan sumber lain.
 - **Jawa Kuno (AS)**: `{tithi}{š|k} {bulan Saka} {tahun Saka} AS`; rincian: jyotisa lengkap. Ejaan "Karttika" hanya untuk baris ini.
+
+## Beranda & Pengaturan lokasi (pembaruan)
+- Kartu Modul memakai ikon Lucide yang sama dengan menu atas (telescope, sparkles, calendar, compass, bot); label status ("Siap"/"Dalam pengembangan") dihapus di Beranda dan Tentang Proyek.
+- Event mendatang menampilkan cuaca pada waktu event (`wx.default` = waktu terbaik atau puncak) lewat `POST /observation/api/feasibility` per event: awan, peluang hujan, skor. Di luar jangkauan prakiraan (~16 hari) tertulis "rata-rata historis"; bila layanan tak terjangkau tertulis "tidak tersedia".
+- Pengaturan > Lokasi: kolom cari kota (autocomplete dari gazetir `kota_data.csv` lewat `GET /api/kota?q=`, minimal 2 huruf, nama/provinsi, spasi diabaikan; panah/Enter/Esc didukung). Memilih kota mengisi lintang, bujur, elevasi, dan zona waktu dari CSV.
+- Koordinat manual: format Desimal atau Seksagesimal (° ′ ″ dengan LU/LS dan BT/BB); kedua format saling sinkron.

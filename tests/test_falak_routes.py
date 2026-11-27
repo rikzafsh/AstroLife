@@ -121,3 +121,29 @@ class TesPadananRingkas(unittest.TestCase):
         self.assertEqual(p['ad']['ringkas'], '1 Maret 1500 AD (Julian)')
         self.assertEqual(p['ad']['rincian'][0]['teks'], 'Minggu, 11 Maret 1500 (proleptik)')
         self.assertEqual(F.tanggal_julian(2299161), (1582, 10, 5))
+
+
+class TesBerandaDanLokasi(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.c = create_app().test_client()
+
+    def test_saran_kota(self):
+        j = self.c.get('/api/kota?q=lubuk').get_json()['hasil']
+        self.assertIn('Lubuklinggau', [h['nama'] for h in j])
+        h = [x for x in j if x['nama'] == 'Lubuklinggau'][0]
+        self.assertEqual((h['provinsi'], h['tz']), ('Sumatera Selatan', 7.0))
+        self.assertEqual(self.c.get('/api/kota?q=l').get_json()['hasil'], [])             # minimal 2 huruf
+        self.assertEqual(self.c.get('/api/kota?q=zzzzqq').get_json()['hasil'], [])
+        self.assertEqual(self.c.get('/api/kota?q=Lubuk%20Linggau').get_json()['hasil'][0]['nama'], 'Lubuklinggau')   # spasi diabaikan
+
+    def test_beranda_tanpa_label_status_dan_emoji_modul(self):
+        html = self.c.get('/').get_data(as_text=True)
+        for kata in ('badge ok', 'badge dev', 'Dalam pengembangan', '>Siap<'):
+            self.assertNotIn(kata, html)
+        for emoji in ('🔭', '🗓', '🕌', '🤖'):
+            self.assertNotIn(emoji, html.split('<h2>Modul</h2>')[1])
+        self.assertGreaterEqual(html.split('<h2>Modul</h2>')[1].count('data-lucide'), 5)
+        about = self.c.get('/about').get_data(as_text=True)
+        self.assertNotIn('dalam pengembangan', about.lower())
+        self.assertNotIn('Status modul', about)

@@ -153,3 +153,32 @@ def cari_semua_lokasi(teks: str) -> list:
             break
         i += maju
     return hasil
+
+
+def saran_kota(q: str, batas: int = 8) -> list:
+    """Pencarian-sambil-mengetik untuk menu Pengaturan: nama kota/kabupaten (spasi & huruf besar diabaikan), lalu provinsi.
+    Urutan: awalan nama > memuat nama > cocok provinsi. Tanpa duplikat (alias menunjuk ke entri yang sama)."""
+    kunci = bersih(q or '').replace(' ', '')
+    if len(kunci) < 2:
+        return []
+    kota, _ = _muat()
+    skor, terlihat = [], set()
+    for k, daftar in kota.items():
+        for e in daftar:
+            if id(e) in terlihat:
+                continue
+            nama_k = bersih(e['nama']).replace(' ', '')
+            prov_k = bersih(e['provinsi']).replace(' ', '')
+            if k.startswith(kunci) or nama_k.startswith(kunci):
+                s = 0
+            elif kunci in k or kunci in nama_k:
+                s = 1
+            elif kunci in prov_k:
+                s = 2
+            else:
+                continue
+            terlihat.add(id(e))
+            skor.append((s, len(nama_k), e['nama'], e))
+    skor.sort(key=lambda x: x[:3])
+    return [{'nama': e['nama'], 'provinsi': e['provinsi'], 'lat': round(e['lat'], 5), 'lon': round(e['lon'], 5),
+             'elev': e['elev'], 'tz': e['tz']} for *_, e in skor[:batas]]
