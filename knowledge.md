@@ -269,3 +269,6 @@ Empat baris, masing-masing satu tanggal ringkas dengan tombol rincian (`falak_se
 - Event mendatang menampilkan cuaca pada waktu event (`wx.default` = waktu terbaik atau puncak) lewat `POST /observation/api/feasibility` per event: awan, peluang hujan, skor. Di luar jangkauan prakiraan (~16 hari) tertulis "rata-rata historis"; bila layanan tak terjangkau tertulis "tidak tersedia".
 - Pengaturan > Lokasi: kolom cari kota (autocomplete dari gazetir `kota_data.csv` lewat `GET /api/kota?q=`, minimal 2 huruf, nama/provinsi, spasi diabaikan; panah/Enter/Esc didukung). Memilih kota mengisi lintang, bujur, elevasi, dan zona waktu dari CSV.
 - Koordinat manual: format Desimal atau Seksagesimal (° ′ ″ dengan LU/LS dan BT/BB); kedua format saling sinkron.
+
+## Cuaca otomatis di Katalog Event
+Tiap baris event mendatang menampilkan cuaca ringkas tanpa klik (awan, peluang hujan, kondisi pada waktu terbaik/puncak yang sama dengan tombol "Cuaca"). Satu panggilan `POST /observation/api/weather-batch` (maks. 300 event) memakai satu pengambilan prakiraan Open-Meteo yang dicache 1 jam. Hanya prakiraan per jam: event > ~15 hari ke depan ditulis "prakiraan belum tersedia", event yang sudah lewat tidak diberi cuaca, dan bila layanan mati tertulis "tidak tersedia". Klimatologi sengaja tidak dipakai di sini (lambat untuk banyak event); analisis lengkap tetap lewat tombol Cuaca.

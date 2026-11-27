@@ -274,7 +274,7 @@
 (function () {
     const API = "{{ url_for('catalog.api_events') }}";
     const API_GEN = "{{ url_for('catalog.api_generate_start') }}", API_GEN_OPT = "{{ url_for('catalog.api_generate_options') }}", API_GEN_ST = "{{ url_for('catalog.api_generate_status') }}";
-    const OBS = "{{ url_for('observation.index') }}";
+    const OBS = "{{ url_for('observation.index') }}", WXB = "{{ url_for('observation.api_weather_batch') }}";
     const $ = (id) => document.getElementById(id);
     const esc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
@@ -317,6 +317,45 @@
         if (w.best) p.set('best', w.best);
         if (e.bodies.includes('moon')) p.set('moon', '1');
         return `${OBS}?${p.toString()}`;
+    }
+
+    // ---------- cuaca ringkas otomatis (prakiraan per jam; detail tetap lewat tombol Cuaca) ----------
+    const WXC = new Map();                                   // kunci lokasi+id -> hasil
+    const wxKey = (e) => `${data.lokasi.lat},${data.lokasi.lon},${e.id}`;
+    const wxHari = (e) => (Date.parse(e.time_utc.slice(0, 19) + 'Z') - Date.now()) / 864e5;
+    function wxText(r, e) {
+        if (!r) return 'Cuaca: memuat…';
+        if (r.status === 'ok') return `Cuaca ${r.jam}: ${r.kondisi} · awan <b>${r.awan}%</b> · hujan <b>${r.hujan}%</b>`;
+        if (r.status === 'jauh') return 'Cuaca: prakiraan belum tersedia (> 15 hari)';
+        if (r.status === 'tak_tersedia') return 'Cuaca: tidak tersedia';
+        return '';
+    }
+    const wxVal = (e) => wxHari(e) > 15.5 ? {status: 'jauh'} : WXC.get(wxKey(e));
+    function wxSlot(e) {
+        const d = wxHari(e);
+        if (d < -1 / 24) return '';                                              // sudah lewat
+        const r = wxVal(e);
+        return `<span class="wxi" data-id="${esc(e.id)}" style="color:rgb(var(--sky-400))">☁ ${wxText(r, e)}</span>`;
+    }
+    let wxBusy = false, wxLast = [];
+    async function isiCuaca(items) {
+        wxLast = items;
+        const perlu = items.filter(e => { const d = wxHari(e); return d >= -1 / 24 && d <= 15.5 && !WXC.has(wxKey(e)); }).slice(0, 300);
+        if (!perlu.length || wxBusy) return;
+        wxBusy = true;
+        const lok = data.lokasi;
+        try {
+            const r = await fetch(WXB, {method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({lat: lok.lat, lon: lok.lon, tz: lok.tz, items: perlu.map(e => ({id: e.id, dt: e.wx.default}))})});
+            const j = await r.json();
+            if (!r.ok) throw new Error(j.message || 'gagal');
+            perlu.forEach(e => WXC.set(wxKey(e), j.hasil[e.id] || {status: 'tak_tersedia'}));
+        } catch (err) { perlu.forEach(e => WXC.set(wxKey(e), {status: 'tak_tersedia'})); }
+        wxBusy = false;
+        if (wxLast !== items) isiCuaca(wxLast);
+        document.querySelectorAll('#list .wxi').forEach(el => {
+            const e = data.events.find(x => x.id === el.dataset.id); if (e) el.innerHTML = '☁ ' + wxText(wxVal(e), e);
+        });
     }
 
     function passes(e) {
@@ -363,7 +402,7 @@
               <div class="ev-time">${esc(e.time_local.slice(11))}<small>${esc(z)}</small></div>
               <div>
                 <div class="ev-title">${ICON[e.category] || '•'} ${esc(e.title)}</div>
-                <div class="ev-sub"><span><i class="dot"></i>${esc(stateTxt)}</span><span>${esc(v.headline)}</span><span class="rar-inline" style="color:${tcol(r)}">${esc(r.label)}</span></div>
+                <div class="ev-sub"><span><i class="dot"></i>${esc(stateTxt)}</span><span>${esc(v.headline)}</span><span class="rar-inline" style="color:${tcol(r)}">${esc(r.label)}</span>${wxSlot(e)}</div>
               </div>
               <span class="pill">${esc(r.label)}</span>
               <a class="wx-mini" href="${esc(wxHref(e, 'default'))}" title="Analisis cuaca untuk event ini">☁ Cuaca</a>
@@ -435,6 +474,7 @@
         } else {
             $('list').innerHTML = items.map(rowHTML).join('');
         }
+        isiCuaca(items);
     }
 
     function renderSpot() {

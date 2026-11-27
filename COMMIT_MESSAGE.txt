@@ -1,9 +1,9 @@
-Beranda: ikon modul seragam, cuaca pada event, pencarian kota & koordinat seksagesimal
+Katalog Event: tampilkan cuaca ringkas otomatis pada tiap event
 
-- Kartu Modul memakai ikon Lucide seperti menu atas; label "Siap"/"Dalam pengembangan" dihapus (Beranda dan Tentang Proyek)
-- Event mendatang menampilkan cuaca pada waktu event (awan, hujan, skor; historis/tidak tersedia ditandai)
-- Pengaturan lokasi: autocomplete kota dari gazetir (GET /api/kota) dan input koordinat desimal atau seksagesimal
-- Tes ditambah (saran kota, beranda tanpa label/emoji modul)
+- Endpoint POST /observation/api/weather-batch: banyak event sekaligus, hanya prakiraan per jam (tanpa klimatologi)
+- Baris event menampilkan kondisi, awan, dan peluang hujan; event jauh/lewat/layanan mati ditandai jujur
+- Tombol Cuaca tetap untuk analisis rinci
+- Tes ditambah (batch normal dan layanan mati)
 
 Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_016uW7hyNHrdGrJ8wL2ymEgv

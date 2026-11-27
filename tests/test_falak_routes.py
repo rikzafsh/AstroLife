@@ -147,3 +147,41 @@ class TesBerandaDanLokasi(unittest.TestCase):
         about = self.c.get('/about').get_data(as_text=True)
         self.assertNotIn('dalam pengembangan', about.lower())
         self.assertNotIn('Status modul', about)
+
+
+class TesCuacaBatch(unittest.TestCase):
+    """POST /observation/api/weather-batch: hanya prakiraan, tanpa jaringan (Open-Meteo ditiru)."""
+    def setUp(self):
+        self.c = create_app().test_client()
+
+    def test_batch(self):
+        from datetime import datetime, timedelta
+        from unittest import mock
+        now = datetime.utcnow()
+        jam = lambda dt: (dt + timedelta(hours=7)).strftime('%Y-%m-%dT%H:00')
+        hours = {jam(now + timedelta(hours=h)): {'temp_c': 25, 'humidity_pct': 80, 'precipitation_prob': 20, 'precipitation_mm': 0,
+                                                 'cloud_cover_pct': 40, 'cloud_low': 10, 'cloud_mid': 10, 'cloud_high': 20, 'visibility_m': 20000}
+                 for h in range(-3, 24 * 16)}
+        fc = {'offset': 7 * 3600, 'hours': hours}
+        items = [{'id': 'dekat', 'dt': jam(now + timedelta(hours=30))}, {'id': 'lewat', 'dt': jam(now - timedelta(days=3))},
+                 {'id': 'jauh', 'dt': jam(now + timedelta(days=40))}, {'id': 'rusak', 'dt': 'bukan-tanggal'}]
+        with mock.patch('app.services.weather_service.fetch_hourly_forecast', return_value=fc), \
+             mock.patch('app.routes.observation.get_weather_at', wraps=None) as gw:
+            from app.services import weather_service as W
+            gw.side_effect = lambda lat, lon, when, now_=None: W.get_weather_at(lat, lon, when, now_)
+            j = self.c.post('/observation/api/weather-batch', json={'lat': -7.8, 'lon': 110.4, 'tz': 7, 'items': items}).get_json()
+        h = j['hasil']
+        self.assertEqual(h['dekat']['status'], 'ok')
+        self.assertEqual((h['dekat']['awan'], h['dekat']['hujan']), (40, 20))
+        self.assertEqual(h['lewat']['status'], 'lewat')
+        self.assertEqual(h['jauh']['status'], 'jauh')
+        self.assertNotIn('rusak', h)
+
+    def test_batch_layanan_mati(self):
+        from datetime import datetime, timedelta
+        from unittest import mock
+        dt = (datetime.utcnow() + timedelta(hours=47)).strftime('%Y-%m-%dT%H:00')
+        with mock.patch('app.services.weather_service.fetch_hourly_forecast', return_value=None), \
+             mock.patch('app.routes.observation.fetch_hourly_forecast', create=True, return_value=None):
+            j = self.c.post('/observation/api/weather-batch', json={'lat': -7.8, 'lon': 110.4, 'tz': 7, 'items': [{'id': 'a', 'dt': dt}]}).get_json()
+        self.assertEqual(j['hasil']['a']['status'], 'tak_tersedia')            # tidak mengarang data

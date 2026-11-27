@@ -86,3 +86,42 @@ def api_plan():
     result = planner.plan(doc, lat, lon, sky, tz, instrument, now, days, limit)
     return jsonify({'status': 'success', 'lokasi': {'lat': lat, 'lon': lon, 'tz': tz, 'tz_label': tz_label(tz)},
                     'covered': S.covers(doc, now, result['days']), 'meta': doc['meta'], **result})
+
+
+@observation_bp.route('/api/weather-batch', methods=['POST'])
+def api_weather_batch():
+    """Cuaca ringkas untuk banyak event sekaligus (Katalog Event). Hanya prakiraan per jam (satu pemanggilan Open-Meteo);
+    klimatologi sengaja tidak dipakai di sini karena lambat untuk banyak item. Masukan: lat, lon, tz, items=[{id, dt}] (dt = waktu lokal ISO)."""
+    from app.services.weather_service import FORECAST_DAYS, fetch_hourly_forecast
+    data = request.get_json(silent=True) or {}
+    try:
+        lat, lon = _coords(data)
+        tz = float(data['tz']) if data.get('tz') not in (None, '') else tz_from_lon(lon)
+    except (TypeError, ValueError) as e:
+        return _error(str(e))
+    items = data.get('items') or []
+    if not isinstance(items, list) or len(items) > 300:
+        return _error('items harus berupa daftar (maksimal 300).')
+    now = datetime.utcnow()
+    fc = None
+    hasil = {}
+    for it in items:
+        try:
+            eid, dt = str(it['id']), str(it['dt'])[:16]
+            when = datetime.strptime(dt, '%Y-%m-%dT%H:%M') - timedelta(hours=tz)
+        except (KeyError, TypeError, ValueError):
+            continue
+        if when < now - timedelta(hours=1):
+            hasil[eid] = {'status': 'lewat'}
+        elif (when - now).total_seconds() / 86400.0 > FORECAST_DAYS - 0.5:
+            hasil[eid] = {'status': 'jauh'}
+        else:
+            if fc is None:
+                fc = fetch_hourly_forecast(lat, lon) or False
+            w = get_weather_at(lat, lon, when, now) if fc else None
+            if not w or w.get('kind') != 'forecast':
+                hasil[eid] = {'status': 'tak_tersedia'}
+            else:
+                hasil[eid] = {'status': 'ok', 'awan': round(w['cloud_cover_pct']), 'hujan': round(w.get('precipitation_prob') or 0),
+                              'kondisi': w['condition'], 'jam': w['valid_local'][11:16]}
+    return jsonify({'status': 'success', 'hasil': hasil, 'tz_label': tz_label(tz)})
