@@ -77,7 +77,7 @@ Tes cuaca memakai respons tiruan (tanpa internet). Tes khusus Skyfield dilewati 
 - Tes: `tests/test_pengaturan.py`.
 
 ## AstroBot
-- Mesin lokal di `app/bot/` (tanpa LLM/API luar): `teks.py` (normalisasi, sinonim ejaan, stemming ringan), `pengetahuan.py` (BM25 atas `app/bot/kb/*.md`; artikel tambahan dapat ditaruh di `data/knowledge_base`), `kota.py` (gazetir kota), `mesin.py` (intent + slot lanjutan).
+- Mesin lokal di `app/bot/` (tanpa LLM/API luar): `teks.py` (normalisasi, sinonim ejaan, stemming ringan), `pengetahuan.py` (BM25 atas `app/bot/kb/*.md`; artikel tambahan dapat ditaruh di `data/knowledge_base`), `kota.py` + `kota_data.csv` (gazetir ±500 kota/kabupaten: titik acuan masjid, elevasi, zona waktu), `mesin.py` (intent + slot lanjutan).
 - Pertanyaan operasional (jadwal salat, kiblat, rasydulqiblat, tanggal/konversi, awal bulan Hijriah per kriteria, puasa sunah, fase Bulan) dijawab dari hitungan aplikasi memakai Pengaturan; pertanyaan konsep dijawab dari artikel.
 - API: `POST /bot/api/chat` `{message, context:{lokasi,salat,hijriah}, slots}` → `{status, reply, intent, slots, cards, links, sources, suggestions}`; `GET /bot/api/artikel[/<id>]`.
 - Riwayat percakapan disimpan di localStorage peramban (`astrolife.bot.v1`); server tidak menyimpan pertanyaan.

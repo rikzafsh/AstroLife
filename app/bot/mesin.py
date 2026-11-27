@@ -14,7 +14,7 @@ from app.services import islamic_service as isl
 from app.services.home_service import today_summary
 from app.services.timezones import tz_from_lon, tz_label
 
-from .kota import cari_kota
+from .kota import cari_lokasi
 from .pengetahuan import basis
 from .teks import bersih, token
 
@@ -190,15 +190,35 @@ def _i_bantuan(t):
 
 
 def _lokasi_dari_teks(t_asli, ctx, slots):
-    """Lokasi untuk pertanyaan: kota disebut > slot sebelumnya > Pengaturan."""
-    k = cari_kota(t_asli)
-    if k:
-        nama, lat, lon = k
-        return {'lat': lat, 'lon': lon, 'elev': 0.0, 'tz': tz_from_lon(lon), 'tz_label': tz_label(tz_from_lon(lon))}, nama, True
+    """Lokasi untuk pertanyaan: kota/koordinat yang disebut > slot sebelumnya > Pengaturan.
+    Kembalian (lok, nama, galat, rujukan); galat berisi balasan siap kirim bila kota ambigu/tidak dikenal (tidak diam-diam memakai Pengaturan)."""
+    r = cari_lokasi(t_asli)
+    if r and r['status'] == 'ambigu':
+        pil = ', '.join(r['pilihan'])
+        return None, None, _r(f"Ada beberapa **{r['nama']}**: {pil}. Sebutkan provinsinya, misalnya “{r['nama']} {r['pilihan'][0]}”.", 'lokasi_ambigu',
+                              suggestions=[f"{r['nama']} {p}" for p in r['pilihan']][:4]), None
+    if r and r['status'] == 'tak_dikenal':
+        return None, None, _r(f"Saya belum mengenal lokasi **{r['nama']}**. Coba tulis nama kota/kabupaten lain, tulis koordinat (mis. “-3.2954, 102.8655”), "
+                              "atau atur lokasi lewat menu **Pengaturan** lalu tanyakan tanpa menyebut kota.", 'lokasi_tak_dikenal',
+                              suggestions=['Jadwal salat hari ini', 'Arah kiblat dari lokasi saya']), None
+    if r:
+        tz = r['tz']
+        lok = {'lat': r['lat'], 'lon': r['lon'], 'elev': r['elev'], 'tz': tz, 'tz_label': tz_label(tz)}
+        rujuk = None
+        if r['sumber'] == 'csv':
+            rujuk = f"Titik acuan: {r['pusat'] or 'pusat kota'}, {r['provinsi']} ({r['lat']:.4f}, {r['lon']:.4f}; elevasi {r['elev']:.0f} m)."
+        elif r['sumber'] == 'koordinat':
+            rujuk = f"Koordinat: {r['lat']:.4f}, {r['lon']:.4f} (zona waktu {lok['tz_label']} diperkirakan dari bujur, elevasi 0 m)."
+        return lok, r['nama'], None, rujuk
     if slots.get('kota') and slots.get('lat') is not None:
         lon = slots['lon']
-        return {'lat': slots['lat'], 'lon': lon, 'elev': 0.0, 'tz': tz_from_lon(lon), 'tz_label': tz_label(tz_from_lon(lon))}, slots['kota'], False
-    return ctx['lok'], ctx['nama'], False
+        tz = slots.get('tz') if slots.get('tz') is not None else tz_from_lon(lon)
+        return {'lat': slots['lat'], 'lon': lon, 'elev': slots.get('elev') or 0.0, 'tz': tz, 'tz_label': tz_label(tz)}, slots['kota'], None, slots.get('rujuk')
+    return ctx['lok'], ctx['nama'], None, None
+
+
+def _slot_lok(lok, nama, rujuk):
+    return {'kota': nama, 'lat': lok['lat'], 'lon': lok['lon'], 'elev': lok['elev'], 'tz': lok['tz'], 'rujuk': rujuk}
 
 
 def _i_salat(t, t_asli, ctx, slots, hari_ini, lanjut):
@@ -219,7 +239,10 @@ def _i_salat(t, t_asli, ctx, slots, hari_ini, lanjut):
         except ValueError:
             return _r('Tanggal itu tidak valid. Coba tulis seperti "17 Agustus 2026".', 'salat', status='error')
     d = d or (date.fromisoformat(slots['tanggal']) if slots.get('tanggal') and lanjut else hari_ini)
-    lok, nama, baru = _lokasi_dari_teks(t_asli, ctx, slots if lanjut else {})
+    lok, nama, galat, rujuk = _lokasi_dari_teks(t_asli, ctx, slots if lanjut else {})
+    if galat:
+        galat['slots'] = {'intent': 'salat', 'tanggal': d.isoformat()}
+        return galat
     m = salat.METODE[ctx['metode']]
     try:
         j = F.jadwal_salat(d, lok, m, ctx['ihtiyat'], ctx['imsak'])
@@ -227,7 +250,7 @@ def _i_salat(t, t_asli, ctx, slots, hari_ini, lanjut):
         return _r(str(e), 'salat', status='error')
     rows = {x['kunci']: x for x in j['waktu']}
     minta = [WAKTU_SALAT[k] for k in re.findall(r'\b(imsak|subuh|terbit|duha|zuhur|asar|magrib|isya)\b', t)]
-    slot = {'intent': 'salat', 'tanggal': d.isoformat(), 'kota': nama, 'lat': lok['lat'], 'lon': lok['lon']}
+    slot = {'intent': 'salat', 'tanggal': d.isoformat(), **_slot_lok(lok, nama, rujuk)}
     judul = f"{nama}, {_fmt_tgl(d)}"
     if len(minta) == 1:
         x = rows[minta[0]]['jadwal']
@@ -239,6 +262,8 @@ def _i_salat(t, t_asli, ctx, slots, hari_ini, lanjut):
         txt = f"Jadwal salat **{nama}**, {_fmt_tgl(d)} ({lok['tz_label']}), metode **{m.name}**, ihtiyat {ctx['ihtiyat']} menit:"
         kartu = [{'tipe': 'tabel', 'judul': judul, 'kolom': ['Waktu', 'Jam'],
                   'baris': [[x['nama'], x['jadwal']['jam'] or '—'] for x in j['waktu'] if x['kunci'] != 'nisfuLail']}]
+    if rujuk:
+        txt += '\n\n' + rujuk
     if j.get('ramadan'):
         txt += '\n\nTanggal ini terdeteksi masuk **Ramadan** menurut Ummul Qura untuk penyesuaian Isya.'
     return _r(txt, 'salat', slot, kartu, [{'teks': 'Buka Salat & Kiblat', 'url': '/islamic/'}], ['Perhitungan: app/persis (port persis-times-js)'],
@@ -248,7 +273,10 @@ def _i_salat(t, t_asli, ctx, slots, hari_ini, lanjut):
 def _i_kiblat(t, t_asli, ctx, slots, hari_ini, lanjut):
     if not re.search(r'\b(kiblat|rasydulkiblat)\b', t):
         return None
-    lok, nama, _ = _lokasi_dari_teks(t_asli, ctx, slots if lanjut else {})
+    lok, nama, galat, rujuk = _lokasi_dari_teks(t_asli, ctx, slots if lanjut else {})
+    if galat:
+        galat['slots'] = {'intent': 'kiblat'}
+        return galat
     if re.search(r'\brasydulkiblat\b', t) or re.search(r'\bbayangan\b', t):
         try:
             r = F.rasydulqiblat(hari_ini, lok, 'vincenty', 7, hari_ini.year, 1)
@@ -268,14 +296,15 @@ def _i_kiblat(t, t_asli, ctx, slots, hari_ini, lanjut):
             return _r('Data rasydulqiblat tidak tersedia untuk lokasi ini. Buka halaman Salat & Kiblat untuk detailnya.', 'rasydulqiblat',
                       links=[{'teks': 'Buka Salat & Kiblat', 'url': '/islamic/'}])
         return _r(f'Rasydulqiblat **tahunan** untuk **{nama}** tahun {hari_ini.year} (saat bayangan benda tegak menunjuk arah kiblat):',
-                  'rasydulqiblat', {'intent': 'kiblat', 'kota': nama, 'lat': lok['lat'], 'lon': lok['lon']},
+                  'rasydulqiblat', {'intent': 'kiblat', **_slot_lok(lok, nama, rujuk)},
                   [{'tipe': 'tabel', 'judul': f'Rasydulqiblat {nama}', 'kolom': ['Peristiwa', 'Tanggal', 'Jam'], 'baris': baris}],
                   [{'teks': 'Rasydulqiblat & kompas', 'url': '/islamic/'}], ['app/persis/kiblat'], ['Apa itu rasydulqiblat?', 'Arah kiblat di Medan'])
     k = F.info_kiblat(lok)
     v = k['vincenty']
+    jarak = f"{k['jarak_km']:,.0f}".replace(',', '.')
     txt = (f"Arah kiblat dari **{nama}**: **{v['dms']}** dari utara searah jarum jam (**{v['derajat']:.2f}°**, arah **{k['mata_angin']}**).\n"
-           f"Jarak ke Ka'bah ±{k['jarak_km']:,.0f} km.\nModel bola: {k['bola']['dms']}; elipsoid: {k['elipsoid']['dms']}.").replace(',', '.')
-    return _r(txt, 'kiblat', {'intent': 'kiblat', 'kota': nama, 'lat': lok['lat'], 'lon': lok['lon']}, [],
+           f"Jarak ke Ka'bah ±{jarak} km.\nModel bola: {k['bola']['dms']}; elipsoid: {k['elipsoid']['dms']}." + (f"\n\n{rujuk}" if rujuk else ''))
+    return _r(txt, 'kiblat', {'intent': 'kiblat', **_slot_lok(lok, nama, rujuk)}, [],
               [{'teks': 'Kompas kiblat & peta', 'url': '/islamic/'}], ['app/persis/kiblat (Vincenty)'],
               ['Rasydulqiblat tahun ini', 'Kalau di Medan?', 'Cara menghitung arah kiblat'])
 
@@ -435,8 +464,9 @@ def jawab(pesan: str, context: dict | None = None, slots: dict | None = None, se
     if re.search(r'\d{4}-\d{1,2}-\d{1,2}', bersih(pesan)):
         t += ' ' + re.search(r'\d{4}-\d{1,2}-\d{1,2}', bersih(pesan)).group(0)
     kunci_lain = bool(re.search(r'\b(fase|puasa|kiblat|rasydulkiblat|salat|jadwal|apa|kapan|hijriah|ramadan|syawal|bantuan|gerhana|meteor)\b', t))
-    pendek = len(toks) <= 4 and bool(slots.get('intent')) and not kunci_lain
-    lanjut = pendek and bool(re.search(r'\b(besok|lusa|kemarin|kalau|bagaimana|gimana|di|untuk)\b', t) or cari_kota(pesan) or _tgl_relatif(t, hari_ini)[0])
+    ada_lok = cari_lokasi(pesan) is not None
+    pendek = (len(toks) <= 4 or (ada_lok and len(toks) <= 8)) and bool(slots.get('intent')) and not kunci_lain
+    lanjut = pendek and bool(re.search(r'\b(besok|lusa|kemarin|kalau|bagaimana|gimana|di|untuk)\b', t) or cari_lokasi(pesan) or _tgl_relatif(t, hari_ini)[0])
 
     for fn in (_i_sapaan, _i_bantuan):
         r = fn(t)

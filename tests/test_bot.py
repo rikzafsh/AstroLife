@@ -80,7 +80,7 @@ class TesIntent(unittest.TestCase):
         self.assertIn('Yogyakarta', r['reply'])
         self.assertEqual(r['cards'][0]['baris'][0][0], 'Imsak')
         r = self.j('magrib jam berapa di Medan')
-        self.assertIn('18:12', r['reply'])
+        self.assertIn('18:13', r['reply'])      # koordinat+elevasi Masjid Agung Medan (data kota_data.csv)
 
     def test_slot_lanjutan_kota_dan_tanggal(self):
         r1 = self.j('jadwal salat hari ini')
@@ -152,6 +152,73 @@ class TesIntent(unittest.TestCase):
             r = self.j(q, {'lokasi': {'lat': 'x', 'lon': 999}}, {'intent': 'salat', 'lat': 'bukan', 'lon': None})
             self.assertIn(r['status'], ('success', 'error'))
             self.assertIn('reply', r)
+
+
+class TesKota(unittest.TestCase):
+    def j(self, q, slots=None, ctx=None):
+        return jawab(q, ctx, slots, NOW)
+
+    def test_csv_utuh(self):
+        from app.bot.kota import _muat
+        kota, _ = _muat()
+        n = len({id(e) for v in kota.values() for e in v if e['sumber'] == 'csv'})
+        self.assertEqual(n, 499)                                   # 500 baris dikurangi "Limapuluh" yang ditolak
+
+    def test_kiblat_kota_disebut_bukan_pengaturan(self):
+        r = self.j('Arah kiblat di Lubuklinggau')
+        self.assertEqual(r['intent'], 'kiblat')
+        self.assertIn('Lubuklinggau', r['reply'])
+        self.assertIn('294.99', r['reply'])
+        self.assertNotIn('Yogyakarta', r['reply'])
+        r2 = self.j('arah kiblat di lubuk linggau')                 # spasi diabaikan
+        self.assertIn('Lubuklinggau', r2['reply'])
+
+    def test_salat_memakai_elevasi_dan_zona_data(self):
+        r = self.j('jadwal salat di Tarakan')
+        self.assertIn('WITA', r['reply'])
+        self.assertIn('elevasi 1 m', r['reply'])
+        r = self.j('jadwal salat di Lubuklinggau')
+        self.assertIn('elevasi 135 m', r['reply'])
+
+    def test_ambigu_dan_lanjutan_provinsi(self):
+        r = self.j('jadwal salat di Martapura')
+        self.assertEqual(r['intent'], 'lokasi_ambigu')
+        r2 = self.j('Martapura Kalimantan Selatan', r['slots'])
+        self.assertEqual(r2['intent'], 'salat')
+        self.assertIn('WITA', r2['reply'])
+        r3 = self.j('Martapura Sumatera Selatan', r['slots'])
+        self.assertIn('WIB', r3['reply'])
+
+    def test_kota_tak_dikenal_tidak_diam_diam_pakai_pengaturan(self):
+        for q in ('arah kiblat di Xyzkota', 'jadwal salat untuk Qwertyville besok'):
+            r = self.j(q)
+            self.assertEqual(r['intent'], 'lokasi_tak_dikenal')
+            self.assertNotIn('Yogyakarta', r['reply'])
+
+    def test_tanpa_kota_tetap_pengaturan(self):
+        for q in ('arah kiblat dari lokasi saya', 'jadwal salat di sini', 'jadwal salat hari ini'):
+            r = self.j(q, None, {'lokasi': {'nama': 'Medan', 'lat': 3.5952, 'lon': 98.6722, 'tz': 7}})
+            self.assertIn('Medan', r['reply'])
+
+    def test_koordinat_dan_kata_biasa(self):
+        r = self.j('kiblat -3.2954, 102.8655')
+        self.assertIn('294.99', r['reply'])
+        r = self.j('apa itu sumber data astrolife')                 # "sumber" bukan kota tanpa penunjuk
+        self.assertNotIn('Titik acuan', r['reply'])
+
+    def test_koreksi_data_sumber(self):
+        from app.bot.kota import cari_lokasi
+        self.assertGreater(cari_lokasi('kiblat di Tarakan')['lat'], 3)    # lintang sumber bertanda minus
+        self.assertEqual(cari_lokasi('kiblat di Limapuluh')['status'], 'tak_dikenal')
+
+    def test_lanjutan_kota_dan_tanggal_tetap_jalan(self):
+        r1 = self.j('arah kiblat di Lubuklinggau')
+        r2 = self.j('kalau di Medan?', r1['slots'])
+        self.assertIn('Medan', r2['reply'])
+        r3 = self.j('jadwal salat di Lubuklinggau')
+        r4 = self.j('besok?', r3['slots'])
+        self.assertIn('Lubuklinggau', r4['reply'])
+        self.assertIn('Jumat, 27 November 2026', r4['reply'])
 
 
 class TesApi(unittest.TestCase):

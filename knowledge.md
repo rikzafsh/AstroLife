@@ -234,3 +234,10 @@ Sumber: `persis-times-js` (berkas dari pemilik; lisensi MIT Abu Sabda/PP PERSIS)
 - Batas: tidak memahami kalimat bebas di luar pola/artikel; kota hanya yang ada di `kota.py` (±70); tanggal Hijriah per kriteria memakai pindai ±4 hari dari perkiraan aritmetis; tahun Hijriah 1300–1800.
 - Artikel KB ditulis ringkas dan perlu ditinjau ahli falak sebelum dipakai rujukan; angka hujan meteor dan sudut metode bersifat perkiraan umum.
 - Pertanyaan yang tak terjawab tidak dicatat (privasi).
+
+### Gazetir kota (kota_data.csv)
+- Sumber: data pemilik proyek (500 baris; Provinsi, Kota_Kabupaten, Pusat_Koordinat, Lintang, Bujur, Elevasi, Zona_Waktu; desimal koma). Dibaca apa adanya; pencocokan tanpa spasi/huruf besar ("Lubuk Linggau" = "Lubuklinggau").
+- Bot memakai lintang, bujur, **elevasi**, dan **zona waktu** dari data ini (bukan perkiraan dari bujur). Nama ganda (Martapura, Sukadana, Tanjung) ditanyakan ulang atau dibedakan lewat nama provinsi.
+- Kota yang disebut tetapi tidak ada di data dilaporkan "belum dikenal"; bot tidak lagi diam-diam memakai lokasi Pengaturan. Koordinat langsung ("-3.2954, 102.8655") juga diterima.
+- Koreksi di kode (`kota.py`): Tarakan lintang bertanda minus di sumber → dibalik ke +3,298°; "Limapuluh" (lintang 3,17 untuk Sumatera Barat) ditolak, gunakan "Sarilamak". Belum dikoreksi: Langsa elevasi 610 m (kemungkinan keliru), "Dolok" berlabel Papua Barat padahal di wilayah Papua Selatan.
+- Kata biasa yang juga nama tempat (sumber, tanjung, batu, pati, serang, ...) baru dianggap kota bila didahului "di/dari/untuk/kota/...".
