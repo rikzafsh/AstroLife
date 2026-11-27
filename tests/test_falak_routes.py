@@ -90,3 +90,34 @@ class FalakRoutes(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class TesPadananRingkas(unittest.TestCase):
+    """Padanan Lab Kalender: AD/AH/AJ/AS ringkas + rincian."""
+    @classmethod
+    def setUpClass(cls):
+        from app import create_app
+        cls.c = create_app().test_client()
+
+    def pad(self, **kw):
+        return self.c.post('/calendar/api/convert', json=kw).get_json()['padanan']
+
+    def test_27_nov_2026(self):
+        p = self.pad(source='masehi', year=2026, month=11, day=27)
+        self.assertEqual(p['ad']['ringkas'], '27 November 2026 AD')
+        self.assertEqual(p['ad']['rincian'][1]['teks'], 'Jumat, 14 November 2026')      # selisih Julian–Gregorian 13 hari
+        self.assertEqual(p['aj']['ringkas'], '16 Jumadilakir 1960 AJ')
+        self.assertEqual({x['nama']: x['teks'] for x in p['aj']['rincian']}, {'Nama tahun': 'Bé', 'Nama windu': 'Sancaya', 'Kurup': 'Asapon'})
+        self.assertEqual(p['as']['ringkas'], '3k Karttika 1948 AS')
+        self.assertEqual(p['ah']['kriteria'][-1]['teks'], '18 Jumadilakhir 1448 AH')     # KHGT
+        self.assertEqual(len(p['ah']['aritmetis']), 4)
+        self.assertEqual(sum(x['aktif'] for x in p['ah']['aritmetis']), 1)
+
+    def test_kurup_dan_sebelum_1582(self):
+        from app.services import falak_service as F
+        self.assertEqual(F.kurup_jawa(1747)['nama'], 'Aboge')
+        self.assertEqual(F.kurup_jawa(1867)['nama'], 'Asapon')
+        p = self.pad(source='masehi', year=1500, month=3, day=1)
+        self.assertEqual(p['ad']['ringkas'], '1 Maret 1500 AD (Julian)')
+        self.assertEqual(p['ad']['rincian'][0]['teks'], 'Minggu, 11 Maret 1500 (proleptik)')
+        self.assertEqual(F.tanggal_julian(2299161), (1582, 10, 5))

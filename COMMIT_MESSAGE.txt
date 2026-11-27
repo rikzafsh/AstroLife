@@ -1,0 +1,10 @@
+Lab Kalender: Padanan ringkas AD/AH/AJ/AS dengan rincian yang dapat dibuka
+
+- Masehi: tanggal + AD; rincian Gregorian dan Julian
+- Hijriah: satu tanggal sesuai kriteria pilihan + AH; rincian aritmetis I-IV dan kriteria astronomis lain
+- Jawa Mataraman: tanggal + AJ; rincian nama tahun, windu, kurup
+- Jawa Kuno: tithi + paksa (š/k) + bulan Saka + AS; rincian jyotisa lengkap
+- API /calendar/api/convert menambah kunci "padanan"; tes ditambah (175 lulus)
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_016uW7hyNHrdGrJ8wL2ymEgv

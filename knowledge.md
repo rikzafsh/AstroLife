@@ -255,3 +255,11 @@ Sumber: `persis-times-js` (berkas dari pemilik; lisensi MIT Abu Sabda/PP PERSIS)
 
 ### Istilah hari relatif
 Dari pemilik proyek: H-4 dst. senantu; H-3 kila mulai; H-2 selumbari/basarai/kemarin dulu/kemarin lusa; H-1 kemarin; H+1 besok/esok; H+2 lusa/besok lusa; H+3 tulat/langkat; H+4 tubin/tungging; H+5 cekelong; H+6 dst. embute. Dipakai oleh semua intent bertanggal (`REL` di `app/bot/mesin.py`) dan dijelaskan di artikel `istilah-hari-relatif`. Istilah terbuka (senantu, embute) dijawab dengan tanggal terdekatnya.
+
+## Padanan Lab Kalender (ringkas + rincian)
+Empat baris, masing-masing satu tanggal ringkas dengan tombol rincian (`falak_service.padanan`, kunci `padanan` pada `/calendar/api/convert`):
+- **Masehi (AD)**: tanggal saja (`27 November 2026 AD`); rincian: Gregorian dan Julian (`tanggal_julian`, proleptik; sebelum 15 Okt 1582 baris utama memakai Julian dan diberi tanda).
+- **Hijriah (AH)**: satu tanggal menurut kriteria di Pengaturan; rincian: aritmetis tipe I–IV (epoch sesuai form) dan kriteria astronomis lainnya.
+- **Jawa Mataraman (AJ)**: tanggal tanpa nama tahun; rincian: nama tahun, nama windu, kurup.
+  Kurup = singkatan hari+pasaran 1 Sura tahun Alip pertama siklus 120 tahun (1867 → Asapon, 1747 → Aboge). Nama windu (Kuntara, Sengara, Sancaya, Adi; bergilir 4) **dijangkarkan pada contoh pengguna (1960 = Sancaya)**, belum dicocokkan dengan sumber lain.
+- **Jawa Kuno (AS)**: `{tithi}{š|k} {bulan Saka} {tahun Saka} AS`; rincian: jyotisa lengkap. Ejaan "Karttika" hanya untuk baris ini.

@@ -186,6 +186,71 @@ def _tahunan(e, lok):
 
 
 # ── konversi kalender ───────────────────────────────────────────────
+# ── padanan ringkas + rincian (Lab Kalender) ────────────────────────
+WINDU_NAMA = ('Kuntara', 'Sengara', 'Sancaya', 'Adi')       # urutan windu ke-n mod 4 (terjangkar: tahun Jawa 1960 = windu Sancaya)
+_SING_HARI = {'Senin': 'nen', 'Selasa': 'sa', 'Rabu': 'bo', 'Kamis': 'mis', 'Jumat': 'jem', 'Sabtu': 'tu', 'Minggu': 'ha'}
+_SING_PASARAN = {'Legi': 'gi', 'Pahing': 'hing', 'Pon': 'pon', 'Wage': 'ge', 'Kliwon': 'won'}
+_SAKA_TAMPIL = {'Kartika': 'Karttika'}                      # ejaan menurut permintaan antarmuka Lab Kalender
+
+
+def tanggal_julian(cjdn: int) -> tuple:
+    """CJDN → (tahun, bulan, hari) kalender Julian (proleptik, juga untuk tanggal modern)."""
+    c = cjdn + 1524
+    d = int((c - 122.1) // 365.25)
+    e = int(365.25 * d)
+    g = int((c - e) // 30.6001)
+    hari = c - e - int(30.6001 * g)
+    bulan = g - 1 if g < 14 else g - 13
+    return (d - 4716 if bulan > 2 else d - 4715), bulan, hari
+
+
+def kurup_jawa(tahun_jawa: int) -> dict:
+    """Kurup (siklus 120 tahun) = singkatan hari-pasaran 1 Sura tahun Alip pertamanya: 1867 → Asapon, 1747 → Aboge."""
+    awal = tahun_jawa - ((tahun_jawa - 427) % 120)
+    cj = int(kalender.jawa_ke_jd(1, 1, awal) + 0.5)
+    hari, pas = cs.HARI[ac.weekday_index(cj)], cs.PASARAN[cs.pasaran_index(cj)]
+    return {'nama': 'A' + _SING_HARI[hari] + _SING_PASARAN[pas], 'awal': awal, 'dasar': f'1 Sura {awal} jatuh pada {hari} {pas}'}
+
+
+def padanan(cjdn: int, out: dict, epoch: int, kabisat: int) -> dict:
+    """Struktur siap-tampil untuk empat baris Padanan: AD, AH, AJ, AS (masing-masing ringkas + rincian)."""
+    y, m, d, cal = ac.from_jdn(cjdn)
+    bm = cs.BULAN_MASEHI
+    gy, gm, gd, _ = ac.from_jdn(cjdn, True)
+    jy_, jm_, jd_ = tanggal_julian(cjdn)
+    def mas(yy, mm, dd): return f"{dd} {bm[mm - 1]} {yy}"
+    hari = cs.HARI[ac.weekday_index(cjdn)]
+    ad = {'ringkas': mas(y, m, d) + ' AD' + ('' if cal == 'Gregorian' else ' (Julian)'),
+          'rincian': [{'nama': 'Kalender Gregorian', 'teks': f"{hari}, {mas(gy, gm, gd)}" + (' (proleptik)' if cal != 'Gregorian' else '')},
+                      {'nama': 'Kalender Julian', 'teks': f"{hari}, {mas(jy_, jm_, jd_)}"}]}
+    arit = []
+    for kab in (1, 2, 3, 4):
+        h = kalender.cjdn_ke_hijri(cjdn, epoch, kab)
+        arit.append({'kunci': f'aritmetis-{kab}', 'nama': f'Aritmetis tipe {"I" * kab if kab < 4 else "IV"}', 'teks': f"{h['tgl']} {h['nama_bulan']} {h['thn']} AH",
+                     'aktif': kab == kabisat})
+    ah = {'aritmetis': arit,
+          'kriteria': [{'kunci': k['kunci'], 'nama': k['nama'], 'teks': (k['teks'][:-2] + ' AH') if k['teks'] else None} for k in out['hijriah_kriteria']],
+          'hari_pasaran': f"{out['hijriah']['hari']} {out['hijriah']['pasaran']}"}
+    w = out['jawa']
+    ku = kurup_jawa(w['tahun'])
+    windu = WINDU_NAMA[((w['tahun'] - cs.JAWA_ALIP_BASE) // 8) % 4]
+    aj = {'ringkas': f"{w['tanggal']} {w['bulan']} {w['tahun']} AJ",
+          'rincian': [{'nama': 'Nama tahun', 'teks': w['tahun_windu']}, {'nama': 'Nama windu', 'teks': windu}, {'nama': 'Kurup', 'teks': ku['nama'], 'ket': ku['dasar']}]}
+    jy = out.get('jyotisa')
+    if jy:
+        pk = 'š' if jy['paksa_pendek'].lower().startswith('s') else 'k'
+        bulan = _SAKA_TAMPIL.get(jy['bulan_saka'], jy['bulan_saka'])
+        a_s = {'ringkas': f"{jy['tithi_paksa']}{pk} {bulan} {jy['tahun_saka']} AS",
+               'rincian': [{'nama': 'Tithi', 'teks': f"{jy['tithi']}, tithi ke-{jy['tithi_paksa']} paksa {jy['paksa']} (ke-{jy['tithi_no']} dari 30 dalam bulan sinodis)"},
+                           {'nama': 'Bulan Saka', 'teks': bulan}, {'nama': 'Nakshatra', 'teks': f"{jy['nakshatra']} (ke-{jy['nakshatra_no']})"},
+                           {'nama': 'Yoga', 'teks': jy['yoga']}, {'nama': 'Karana', 'teks': jy['karana']},
+                           {'nama': 'Rasi Matahari', 'teks': jy['rasi_matahari']}, {'nama': 'Fase Bulan', 'teks': jy['fase_bulan']},
+                           {'nama': 'Elongasi Bulan–Matahari', 'teks': f"{jy['elongasi']}°"}, {'nama': 'Ayanamsa (Lahiri)', 'teks': f"{jy['ayanamsa']}°"}]}
+    else:
+        a_s = None
+    return {'ad': ad, 'ah': ah, 'aj': aj, 'as': a_s}
+
+
 def konversi(sumber: str, tahun: int, bulan: int, hari: int, epoch: int = 2, kabisat: int = 2) -> dict:
     """sumber: masehi | hijriah | jawa. Hasil: padanan di semua sistem (hari dihitung sebagai tanggal sipil)."""
     s = (sumber or '').lower()
@@ -219,6 +284,7 @@ def konversi(sumber: str, tahun: int, bulan: int, hari: int, epoch: int = 2, kab
         out['hijriah_kriteria'].append({'kunci': kunci, 'nama': nama,
                                         'teks': f"{h2['tgl']} {h2['nama_bulan']} {h2['thn']} H" if h2 else None})
     out['jd'] = cjdn - 0.5
+    out['padanan'] = padanan(cjdn, out, epoch, kabisat)
     out['catatan'] = ('Hijriah aritmetis = hisab urfi. MABIMS, Ummul Qura, Wujudul Hilal, dan KHGT dihitung dari ijtimak, tinggi/elongasi hilal, '
                       'dan Bulan terbenam menurut kriteria & lokasi acuan masing-masing; hasilnya dapat berbeda 1–2 hari dari penetapan resmi. '
                       'Tanggal Jawa memakai siklus kurup (Sultan Agungan).')
