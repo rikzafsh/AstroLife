@@ -241,3 +241,14 @@ Sumber: `persis-times-js` (berkas dari pemilik; lisensi MIT Abu Sabda/PP PERSIS)
 - Kota yang disebut tetapi tidak ada di data dilaporkan "belum dikenal"; bot tidak lagi diam-diam memakai lokasi Pengaturan. Koordinat langsung ("-3.2954, 102.8655") juga diterima.
 - Koreksi di kode (`kota.py`): Tarakan lintang bertanda minus di sumber → dibalik ke +3,298°; "Limapuluh" (lintang 3,17 untuk Sumatera Barat) ditolak, gunakan "Sarilamak". Belum dikoreksi: Langsa elevasi 610 m (kemungkinan keliru), "Dolok" berlabel Papua Barat padahal di wilayah Papua Selatan.
 - Kata biasa yang juga nama tempat (sumber, tanjung, batu, pati, serang, ...) baru dianggap kota bila didahului "di/dari/untuk/kota/...".
+
+### Intent tambahan (setelah masukan pengguna)
+- `jumlah_hari` (umur bulan Hijriah per kriteria: selisih 1 bulan itu dan 1 bulan berikutnya), `weton` (weton, neptu, pawukon, wuku), `cuaca` (ringkasan per bagian hari dari Open-Meteo), `observasi` (7 malam ke depan: fase/penerangan/tinggi Bulan pukul 20.00 + skor kelayakan bila prakiraan ada; event Katalog bila katalog sudah dibuat).
+- Cuaca dan skor **memerlukan internet dari server**. Tanpa itu bot berkata jujur tidak dapat memuat dan (untuk observasi) hanya merekomendasikan dari cahaya Bulan. Jalur ini diuji dengan prakiraan buatan; **panggilan Open-Meteo sungguhan tidak dapat diuji di sandbox**.
+- "hari ini" saja tidak lagi memicu intent tanggal; harus ada kata tanggal/weton/kalender/dsb.
+- Artikel baru: `keamanan-pengamatan` (hujan meteor, gerhana, mitos).
+
+### Intent tambahan (ronde 3)
+- `fase_berikut` (bulan baru/purnama/kuartal berikutnya dari `prototype.find_events.moon_phases`), `gerhana` (gerhana Matahari/Bulan 6 tahun ke depan dihitung langsung oleh `catalog.events` — tidak perlu katalog sudah dibangun — lalu dinilai keterlihatannya dari lokasi lewat `catalog.service.decorate`), `tahun` (Masehi, Hijriah per kriteria, Jawa, Saka), `banding_salat` (selisih waktu salat dua kota pada saat sebenarnya; jam hisab tanpa ihtiyat).
+- Pemeriksaan silang: bulan baru 6 Feb 2027 16:00 UTC (gerhana cincin) dan 2 Agt 2027 (total), 26 Jan 2028 (cincin), 22 Jul 2028 (total) cocok dengan data gerhana yang saya ketahui; waktu puncak lokal belum divalidasi terhadap almanak resmi.
+- Belum didukung: istilah "Tubin" dan "Tulat" (tidak ada di kode proyek ini maupun di sumber yang saya temukan; butuh definisi dari pemilik proyek).

@@ -1,6 +1,7 @@
 """Tes AstroBot: intent operasional, slot lanjutan, retrieval (akurasi top-1/top-3), kontrak API, keamanan masukan."""
 import unittest
 from datetime import datetime, timezone
+from unittest import mock
 
 from app import create_app
 from app.bot import jawab
@@ -219,6 +220,128 @@ class TesKota(unittest.TestCase):
         r4 = self.j('besok?', r3['slots'])
         self.assertIn('Lubuklinggau', r4['reply'])
         self.assertIn('Jumat, 27 November 2026', r4['reply'])
+
+
+def _prakiraan_palsu(offset=7 * 3600):
+    """Prakiraan Open-Meteo buatan (tanpa jaringan) untuk 26-30 Nov 2026: berawan sebagian, hujan sore hari 27 Nov."""
+    jam = {}
+    for n in range(11):
+        bln, hari = (11, 25 + n) if 25 + n <= 30 else (12, 25 + n - 30)
+        for h in range(24):
+            hujan = 80 if (bln == 11 and hari == 27 and 15 <= h <= 18) else 10
+            awan = 90 if (bln == 11 and hari == 28) else 30
+            jam[f'2026-{bln:02d}-{hari:02d}T{h:02d}:00'] = {'temp_c': 26.0, 'humidity_pct': 80, 'precipitation_prob': hujan, 'precipitation_mm': 0.0,
+                                                   'cloud_cover_pct': awan, 'cloud_low': 10, 'cloud_mid': 10, 'cloud_high': 10, 'visibility_m': 20000}
+    return {'offset': offset, 'hours': jam}
+
+
+class TesBaru(unittest.TestCase):
+    def j(self, q, ctx=None, slots=None):
+        return jawab(q, ctx, slots, datetime(2026, 11, 27, 0, 30, tzinfo=timezone.utc))        # Jumat 27 Nov 2026, 07.30 WIB
+
+    def test_jumlah_hari_ramadan(self):
+        r = self.j('Jumlah hari bulan Ramadan 1448')
+        self.assertEqual(r['intent'], 'jumlah_hari')
+        self.assertIn('Ramadan 1448 H', r['reply'])
+        self.assertEqual(len(r['cards'][0]['baris']), 5)
+        umur = {b[0]: b[3] for b in r['cards'][0]['baris']}
+        self.assertEqual(umur['Aritmetis'], '30 hari')                 # bulan ke-9 aritmetis = 30 hari
+        for v in umur.values():
+            self.assertIn(v, ('29 hari', '30 hari'))
+        r = self.j('berapa hari bulan syawal 1448 menurut mabims')
+        self.assertIn('MABIMS', r['reply'])
+
+    def test_weton_hari_ini(self):
+        r = self.j('Weton hari ini berapa?')
+        self.assertEqual(r['intent'], 'weton')
+        self.assertIn('Jumat Pon', r['reply'])
+        self.assertIn('neptu **13**', r['reply'])
+        self.assertIn('Kurantil', r['reply'])
+        self.assertIn('Kamis Pahing', self.j('weton 26 november 2026')['reply'])
+
+    def test_hujan_meteor_berbahaya_ke_artikel_keselamatan(self):
+        r = self.j('Apakah hujan meteor berbahaya?')
+        self.assertEqual(r['intent'], 'pengetahuan')
+        self.assertEqual(r['slots']['artikel'], 'keamanan-pengamatan')
+        self.assertIn('Tidak berbahaya', r['reply'])
+
+    def test_cuaca_tanpa_jaringan_jujur(self):
+        with mock.patch('app.services.weather_service.fetch_hourly_forecast', return_value=None):
+            r = self.j('Bagaimana cuaca hari ini di Batang?')
+        self.assertEqual(r['intent'], 'cuaca')
+        self.assertIn('Batang', r['reply'])
+        self.assertIn('tidak dapat dihubungi', r['reply'])
+        self.assertEqual(r['cards'], [])
+
+    def test_cuaca_dengan_prakiraan(self):
+        with mock.patch('app.services.weather_service.fetch_hourly_forecast', return_value=_prakiraan_palsu()):
+            r = self.j('Bagaimana cuaca hari ini di Batang?')
+            self.assertEqual(r['intent'], 'cuaca')
+            baris = {b[0].split()[0]: b for b in r['cards'][0]['baris']}
+            self.assertEqual(baris['Sore'][3], '80%')                  # peluang hujan sore
+            self.assertEqual(baris['Pagi'][3], '10%')
+            self.assertIn('Batang', r['reply'])
+            r2 = self.j('cuaca hari ini di tempatku', {'lokasi': {'nama': 'Medan', 'lat': 3.59, 'lon': 98.67, 'tz': 7}})
+            self.assertIn('Medan', r2['reply'])                         # "tempatku" = lokasi Pengaturan, bukan kota tak dikenal
+
+    def test_rekomendasi_observasi(self):
+        with mock.patch('app.services.weather_service.fetch_hourly_forecast', return_value=None):
+            r = self.j('Rekomendasi observasi langit minggu ini')
+            self.assertEqual(r['intent'], 'observasi')
+            self.assertEqual(len(r['cards'][0]['baris']), 7)
+            self.assertIn('Prakiraan cuaca tidak dapat dimuat', r['reply'])
+        with mock.patch('app.services.weather_service.fetch_hourly_forecast', return_value=_prakiraan_palsu()):
+            r = self.j('Rekomendasi observasi langit minggu ini')
+            self.assertIn('Malam terbaik', r['reply'])
+            skor = [b[3] for b in r['cards'][0]['baris']]
+            self.assertTrue(any(x != '—' for x in skor))
+
+    def test_hari_ini_saja_bukan_tanggal(self):
+        with mock.patch('app.services.weather_service.fetch_hourly_forecast', return_value=None):
+            self.assertEqual(self.j('bagaimana cuaca hari ini')['intent'], 'cuaca')
+        self.assertEqual(self.j('tanggal hari ini')['intent'], 'tanggal')
+
+
+class TesLagi(unittest.TestCase):
+    def j(self, q, ctx=None, slots=None):
+        return jawab(q, ctx, slots, datetime(2026, 11, 27, 2, 30, tzinfo=timezone.utc))        # Jumat 27 Nov 2026, 09.30 WIB
+
+    def test_bulan_baru_berikutnya(self):
+        r = self.j('Kapan fase bulan baru berikutnya?')
+        self.assertEqual(r['intent'], 'fase_berikut')
+        self.assertIn('9 Desember 2026', r['reply'])               # ijtimak 9 Des 2026 00:52 UTC = 07:52 WIB
+        self.assertIn('07:52', r['reply'])
+        self.assertIn('9 Desember', self.j('kapan bulan baru berikutnya')['reply'])
+        self.assertIn('24 Desember 2026', self.j('kapan purnama berikutnya?')['reply'])
+
+    def test_gerhana_terdekat_cocok_dengan_data_nasa(self):
+        r = self.j('Kapan gerhana matahari terdekat?')
+        self.assertEqual(r['intent'], 'gerhana')
+        self.assertIn('cincin', r['reply'])
+        self.assertIn('6 Februari 2027', r['reply'])               # gerhana cincin 6 Feb 2027 (puncak global 16:00 UTC)
+        self.assertEqual(r['cards'][0]['baris'][1][0], 'Gerhana Matahari total')   # 2 Agt 2027
+        self.assertIn('Jangan menatap Matahari', r['reply'])
+        r = self.j('kapan gerhana bulan berikutnya')
+        self.assertIn('21 Februari 2027', r['reply'])
+
+    def test_tahun_saka_dan_jawa(self):
+        r = self.j('Berapa tahun Saka sekarang?')
+        self.assertEqual(r['intent'], 'tahun')
+        self.assertIn('1948 Saka', r['reply'])
+        self.assertNotEqual(r['intent'], 'salat')
+        r = self.j('Berapa tahun Jawa sekarang?')
+        self.assertIn('Bé 1960 AJ', r['reply'])
+        r = self.j('sekarang tahun berapa')
+        self.assertEqual(len(r['cards'][0]['baris']), 4)
+
+    def test_selisih_zuhur_dua_kota(self):
+        r = self.j('Selisih waktu zuhur di Lubuklinggau dan Yogyakarta berapa?')
+        self.assertEqual(r['intent'], 'banding_salat')
+        self.assertIn('29 mnt', r['reply'])                        # 7,497° bujur ≈ 29,99 menit
+        self.assertIn('Yogyakarta lebih awal', r['reply'])
+        r = self.j('selisih waktu salat Medan dan Jayapura')       # beda zona: selisih pada saat sebenarnya
+        self.assertIn('Zona waktu berbeda', r['reply'])
+        self.assertGreater(len(r['cards'][0]['baris']), 3)
 
 
 class TesApi(unittest.TestCase):

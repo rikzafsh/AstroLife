@@ -14,7 +14,8 @@ from app.services import islamic_service as isl
 from app.services.home_service import today_summary
 from app.services.timezones import tz_from_lon, tz_label
 
-from .kota import cari_lokasi
+from . import cuaca as cu
+from .kota import cari_lokasi, cari_semua_lokasi
 from .pengetahuan import basis
 from .teks import bersih, token
 
@@ -388,7 +389,7 @@ def _ringkas_tanggal(d: date, ctx, intent):
 
 
 def _i_hari_ini(t, ctx, hari_ini, now):
-    if not re.search(r'\b(tanggal|hari apa|hari ini|weton|wuku|pasaran|kalender)\b', t) or re.search(r'\b(salat|jadwal|puasa)\b', t):
+    if not re.search(r'\b(tanggal|hari apa|weton|wuku|pasaran|kalender|hijriah|jawa)\b', t) or re.search(r'\b(salat|jadwal|puasa|cuaca)\b', t):
         return None
     d, label = _tgl_relatif(t, hari_ini)
     if d is None and re.search(r'\b(hari ini|tanggal|weton|hari apa|pasaran)\b', t):
@@ -413,6 +414,308 @@ def _i_event(t):
         return _r('Daftar peristiwa langit mendatang (gerhana, konjungsi, hujan meteor, dan lainnya) dihitung per lokasi di **Katalog Event**. Bangun katalog sekali, lalu semua event dinilai keterlihatannya dari lokasi Anda.',
                   'event', links=[{'teks': 'Buka Katalog Event', 'url': '/catalog/'}], suggestions=['Apa itu hujan meteor?', 'Kenapa gerhana tidak terjadi tiap bulan?'])
     return None
+
+
+
+def _i_weton(t, ctx, hari_ini):
+    if not re.search(r'\b(weton|neptu|pasaran|wuku|pawukon)\b', t):
+        return None
+    d, _ = _tgl_relatif(t, hari_ini)
+    tm = _tgl_masehi(t)
+    if isinstance(tm, date):
+        d = tm
+    elif tm:
+        try:
+            d = date(tm[2] or hari_ini.year, tm[1], tm[0])
+        except ValueError:
+            return _r('Tanggal itu tidak valid. Coba tulis seperti "17 Agustus 2026".', 'weton', status='error')
+    d = d or hari_ini
+    j = cs.javanese_info(_jdn(d))
+    txt = (f"Weton **{_fmt_tgl(d)}** adalah **{j['weton']}**, neptu **{j['neptu']}** ({j['neptu_rincian']}).\n"
+           f"Pawukon: {j['hari']} {j['pasaran']} {j['sadwara']} {j['wuku']} (wuku ke-{j['wuku_no']}, hari ke-{j['hari_pawukon']} dari 210).\n"
+           f"Tanggal Jawa Mataraman: {j['tanggal']} {j['bulan']} {j['tahun_windu']} {j['tahun']} AJ.")
+    return _r(txt, 'weton', {'intent': 'konversi', 'tanggal': d.isoformat()}, [], [{'teks': 'Lab Kalender', 'url': '/calendar/'}],
+              ['calendar_service (neptu, pawukon)'], ['Besok?', 'Apa itu weton?', 'Apa itu pawukon?'])
+
+
+def _i_jumlah_hari(t, ctx, hari_ini):
+    h = _hijri_dalam(t)
+    if not h or not re.search(r'\b(jumlah hari|berapa hari|panjang|umur bulan|lama bulan|berapa lama)\b', t):
+        return None
+    bln, _, thn = h
+    if thn is None:
+        jdn = _jdn(hari_ini)
+        try:
+            now_h = isl.hijri_menurut(jdn, ctx['krit'])
+        except Exception:
+            now_h = cs.hijri_info(jdn)
+        thn = now_h['tahun'] if bln >= now_h['bulan'] else now_h['tahun'] + 1
+    if not 1300 <= thn <= 1800:
+        return _r('Tahun Hijriah di luar rentang yang saya dukung (1300–1800 H).', 'jumlah_hari', status='error')
+    nb, nt = (bln + 1, thn) if bln < 12 else (1, thn + 1)
+    baris, hasil = [], {}
+    for kk in ('aritmetis', 'mabims', 'ummulqura', 'wujudulhilal', 'turki'):
+        a, b = _cari_masehi(1, bln, thn, kk), _cari_masehi(1, nb, nt, kk)
+        n = (b - a).days if a and b else None
+        hasil[kk] = n
+        baris.append([KRIT_NAMA[kk], f"{a.day} {BULAN_ID_NAMA[a.month]} {a.year}" if a else '—', f"{b.day} {BULAN_ID_NAMA[b.month]} {b.year}" if b else '—',
+                      f'{n} hari' if n else '—'])
+    krit = _krit_dalam(t) or ctx['krit']
+    n0 = hasil.get(krit)
+    asal = '' if _krit_dalam(t) else ' (pilihan di Pengaturan)'
+    awal = f"**{HIJRI_NAMA[bln]} {thn} H** berumur **{n0} hari** menurut kriteria **{KRIT_NAMA[krit]}**{asal}." if n0 else \
+        f"Umur **{HIJRI_NAMA[bln]} {thn} H** menurut kriteria {KRIT_NAMA[krit]} tidak dapat dihitung (di luar jangkauan hisab)."
+    nilai = {v for v in hasil.values() if v}
+    ket = '\n\nUmur bulan Hijriah selalu 29 atau 30 hari.'
+    if len(nilai) > 1:
+        ket += ' Umurnya berbeda antarkriteria karena awal bulan berikutnya berbeda (lihat tabel).'
+    ket += ' Ini hasil hisab, **bukan penetapan resmi** (sidang isbat).'
+    return _r(awal + ket, 'jumlah_hari', {'intent': 'jumlah_hari'},
+              [{'tipe': 'tabel', 'judul': f'Umur {HIJRI_NAMA[bln]} {thn} H per kriteria', 'kolom': ['Kriteria', f'1 {HIJRI_NAMA[bln]}', f'1 {HIJRI_NAMA[nb]}', 'Umur'], 'baris': baris}],
+              [{'teks': 'Bandingkan kalender', 'url': '/calendar/'}], ['app/persis/hisab'], [f'Kapan 1 {HIJRI_NAMA[bln]} {thn}?', 'Apa beda MABIMS dan Ummul Qura?'])
+
+
+def _i_cuaca(t, t_asli, ctx, slots, hari_ini, now_utc, lanjut):
+    if not re.search(r'\b(cuaca|hujan|mendung|cerah|berawan|awan|suhu|panas|dingin|gerimis)\b', t) or re.search(r'\b(meteor|skor|kelayakan)\b', t):
+        return None
+    if not re.search(r'\b(hari ini|sekarang|nanti|malam ini|sore ini|pagi ini|siang ini|di|tempat|tempatku|sini|lokasi|besok)\b', t):
+        return None
+    lok, nama, galat, rujuk = _lokasi_dari_teks(t_asli, ctx, slots if lanjut else {})
+    if galat:
+        galat['slots'] = {'intent': 'cuaca'}
+        return galat
+    if re.search(r'\bbesok\b', t):
+        return _r('Untuk saat ini saya hanya meringkas cuaca **hari ini**. Prakiraan beberapa hari ke depan ada di halaman **Observasi**.', 'cuaca',
+                  {'intent': 'cuaca', **_slot_lok(lok, nama, rujuk)}, links=[{'teks': 'Buka Observasi', 'url': '/observation/'}])
+    c = cu.cuaca_hari_ini(lok['lat'], lok['lon'], now_utc)
+    slot = {'intent': 'cuaca', **_slot_lok(lok, nama, rujuk)}
+    if not c:
+        return _r(f"Maaf, layanan prakiraan cuaca (Open-Meteo) tidak dapat dihubungi dari server saat ini, jadi saya tidak dapat menampilkan cuaca **{nama}**. "
+                  "Saya tidak menebak. Coba lagi beberapa saat lagi.", 'cuaca', slot, links=[{'teks': 'Buka Observasi', 'url': '/observation/'}], sources=['Open-Meteo'])
+    fmt = lambda x, d='': '—' if x is None else f'{x:.0f}{d}'
+    baris = [[f"{b['nama']} ({b['rentang']})", b['kondisi'], fmt(b['awan'], '%'), fmt(b['hujan'], '%'), fmt(b['suhu'], '°C')] for b in c['blok']]
+    k = c['sekarang']
+    awal = f"Cuaca **{nama}** hari ini ({c['tanggal']}, pukul {c['jam_lokal']} waktu setempat)"
+    if k:
+        awal += f": sekarang **{W_label(k)}**, awan {fmt(k['cloud_cover_pct'], '%')}, suhu {fmt(k['temp_c'], '°C')}, kelembapan {fmt(k['humidity_pct'], '%')}."
+    else:
+        awal += ':'
+    return _r(awal + ('\n\n' + rujuk if rujuk else ''), 'cuaca', slot,
+              [{'tipe': 'tabel', 'judul': 'Prakiraan per bagian hari', 'kolom': ['Waktu', 'Kondisi', 'Awan', 'Peluang hujan', 'Suhu'], 'baris': baris}],
+              [{'teks': 'Observasi & skor langit', 'url': '/observation/'}], ['Open-Meteo (prakiraan per jam)'],
+              ['Rekomendasi observasi langit minggu ini', 'Kalau di Surabaya?'])
+
+
+def W_label(row):
+    from app.services.weather_service import _condition_label
+    return _condition_label(row.get('cloud_cover_pct'), row.get('precipitation_prob'))
+
+
+def _i_observasi(t, t_asli, ctx, slots, hari_ini, now_utc, lanjut):
+    if not (re.search(r'\b(rekomendasi|saran|sebaiknya|terbaik|bagus|cocok|layak)\b', t) and re.search(r'\b(observasi|amati|mengamati|pengamatan|langit|bintang|stargazing)\b', t)):
+        return None
+    lok, nama, galat, rujuk = _lokasi_dari_teks(t_asli, ctx, slots if lanjut else {})
+    if galat:
+        galat['slots'] = {'intent': 'observasi'}
+        return galat
+    n = 1 if re.search(r'\bmalam ini\b|\bhari ini\b', t) else 7
+    m = cu.malam_minggu(lok['lat'], lok['lon'], lok['tz'], now_utc, n)
+    malam = m['malam']
+    baris = []
+    for x in malam:
+        d = x['tanggal']
+        cuaca_t = '—' if x['kondisi'] is None else f"{x['kondisi']} (awan {x['awan']:.0f}%)" if x['awan'] is not None else x['kondisi']
+        baris.append([f"{HARI_ID[d.weekday()]}, {d.day} {BULAN_ID_NAMA[d.month][:3]}", f"{x['fase']} {x['terang'] * 100:.0f}%" + (', di bawah ufuk' if x['tinggi_bulan'] < 0 else f", tinggi {x['tinggi_bulan']:.0f}°"),
+                      cuaca_t, '—' if x['skor'] is None else f"{x['skor']:.0f}"])
+    skor = [x for x in malam if x['skor'] is not None]
+    if skor:
+        b = max(skor, key=lambda x: x['skor'])
+        d = b['tanggal']
+        rek = f"Malam terbaik untuk mata telanjang di **{nama}**: **{HARI_ID[d.weekday()]}, {d.day} {BULAN_ID_NAMA[d.month]}** (skor {b['skor']:.0f}/100; {b['fase']} {b['terang'] * 100:.0f}%)."
+        if any(x.get('jenis') == 'climatology' for x in malam):
+            rek += ' Sebagian malam memakai rata-rata historis, bukan prakiraan.'
+    else:
+        b = min(malam, key=lambda x: x['terang'])
+        d = b['tanggal']
+        rek = (f"Prakiraan cuaca tidak dapat dimuat, jadi rekomendasi ini hanya dari **cahaya Bulan**: Bulan paling redup di **{nama}** pada **{HARI_ID[d.weekday()]}, {d.day} {BULAN_ID_NAMA[d.month]}** "
+               f"({b['fase']} {b['terang'] * 100:.0f}%). Cek awan sebelum berangkat.")
+    teks = rek + '\n\nTips: pilih lokasi jauh dari lampu, tunggu ±20 menit agar mata beradaptasi, dan lihat awan sebelum berangkat.'
+    kartu = [{'tipe': 'tabel', 'judul': f"Malam-malam ke depan (pukul 20.00 waktu setempat)", 'kolom': ['Malam', 'Bulan', 'Cuaca', 'Skor'], 'baris': baris}]
+    ev = cu.event_katalog(lok['lat'], lok['lon'], lok['tz'], now_utc, 7, 5) if n > 1 else None
+    if ev and ev.get('items'):
+        kartu.append({'tipe': 'tabel', 'judul': 'Event katalog yang dapat diamati', 'kolom': ['Event', 'Waktu terbaik', 'Skor'],
+                      'baris': [[i['title'], i['best_local'], '—' if i['score'] is None else f"{i['score']:.0f}"] for i in ev['items']]})
+    else:
+        teks += '\n\nUntuk event spesifik (gerhana, konjungsi, hujan meteor) bangun dulu **Katalog Event**.'
+    return _r(teks, 'observasi', {'intent': 'observasi', **_slot_lok(lok, nama, rujuk)}, kartu,
+              [{'teks': 'Observasi & skor langit', 'url': '/observation/'}, {'teks': 'Katalog Event', 'url': '/catalog/'}],
+              ['planner_service (skor kelayakan)', 'Open-Meteo'] if skor else ['planner_service'], ['Bagaimana cuaca hari ini?', 'Apakah hujan meteor berbahaya?', 'Fase Bulan malam ini'])
+
+
+def _utc_ke_lokal(jd_utc, tz):
+    from catalog import events as C
+    return C.jd_to_utc(jd_utc) + timedelta(hours=tz)
+
+
+def _tgl_jam(teks_lokal):
+    """'2027-02-06 23:00' -> 'Sabtu, 6 Februari 2027 pukul 23:00'."""
+    dt = datetime.strptime(teks_lokal[:16], '%Y-%m-%d %H:%M')
+    return f"{HARI_ID[dt.weekday()]}, {dt.day} {BULAN_ID_NAMA[dt.month]} {dt.year} pukul {dt:%H:%M}"
+
+
+def _jam_lokal(dt, tz):
+    return f"{HARI_ID[dt.weekday()]}, {dt.day} {BULAN_ID_NAMA[dt.month]} {dt.year}, pukul {dt:%H:%M} {tz_label(tz)}"
+
+
+FASE_KATA = {'new_moon': ('bulan baru', 'Bulan baru (ijtimak)'), 'full_moon': ('purnama', 'Purnama'),
+             'first_quarter': ('kuartal pertama', 'Kuartal pertama'), 'last_quarter': ('kuartal akhir', 'Kuartal akhir')}
+
+
+def _i_fase_berikut(t, ctx, now_utc):
+    if not re.search(r'\b(kapan|berikutnya|selanjutnya|terdekat|jadwal)\b', t):
+        return None
+    if re.search(r'\bbulan baru\b|\bijtimak\b|\bkonjungsi bulan\b', t):
+        kind = 'new_moon'
+    elif re.search(r'\bpurnama\b|\bbulan penuh\b', t):
+        kind = 'full_moon'
+    elif re.search(r'\bkuartal pertama\b|\bparuh pertama\b', t):
+        kind = 'first_quarter'
+    elif re.search(r'\bkuartal akhir\b|\bkuartal ketiga\b|\bparuh akhir\b', t):
+        kind = 'last_quarter'
+    else:
+        return None
+    from catalog import events as C
+    from prototype import find_events as F
+    jd0 = 2440587.5 + now_utc.timestamp() / 86400.0
+    fase = sorted(F.moon_phases(jd0 - 1, jd0 + 45), key=lambda e: e['jd'])
+    fase = [e for e in fase if e['jd'] > jd0]
+    tz = ctx['lok']['tz']
+    mau = next(e for e in fase if e['kind'] == kind)
+    baris = [[FASE_KATA[e['kind']][1], _jam_lokal(_utc_ke_lokal(e['jd'], tz), tz)] for e in fase[:5]]
+    dt = _utc_ke_lokal(mau['jd'], tz)
+    sisa = (mau['jd'] - jd0)
+    txt = (f"**{FASE_KATA[kind][1]}** berikutnya: **{_jam_lokal(dt, tz)}** ({sisa:.1f} hari lagi).\n"
+           "Waktu dihitung dari bujur ekliptika Bulan dan Matahari; hari Hijriah baru ditentukan oleh kriteria hilal, bukan saat ijtimak.")
+    return _r(txt, 'fase_berikut', {'intent': 'fase_berikut'}, [{'tipe': 'tabel', 'judul': 'Fase Bulan berikutnya', 'kolom': ['Fase', 'Waktu'], 'baris': baris}],
+              [{'teks': 'Beranda', 'url': '/'}], ['prototype.find_events (mesin Bulan katalog)'], ['Kapan gerhana matahari terdekat?', 'Kapan 1 Ramadan 1448?'])
+
+
+def _i_gerhana(t, t_asli, ctx, slots, now_utc):
+    if not re.search(r'\bgerhana\b', t) or not re.search(r'\b(kapan|terdekat|berikutnya|selanjutnya|mendatang|akan datang|nanti)\b', t):
+        return None
+    jenis = 'matahari' if re.search(r'\bmatahari\b', t) else 'bulan' if re.search(r'\bbulan\b', t) else 'semua'
+    lok, nama, galat, rujuk = _lokasi_dari_teks(t_asli, ctx, {})
+    if galat:
+        return galat
+    from catalog import events as C
+    from catalog import service as S
+    from prototype import find_events as F
+    jd0 = 2440587.5 + now_utc.timestamp() / 86400.0
+    raw = []
+    if jenis in ('matahari', 'semua'):
+        raw += C.solar_eclipses(jd0, jd0 + 365.25 * 6)
+    if jenis in ('bulan', 'semua'):
+        raw += C.lunar_eclipses(jd0, jd0 + 365.25 * 6)
+    ev = sorted(C.normalize(raw), key=lambda e: e['time_utc'])
+    tz = lok['tz']
+    kat = {'matahari': 'gerhana_matahari', 'bulan': 'gerhana_bulan'}
+    baris, pertama_terlihat, pertama = [], None, None
+    for e in ev:
+        if jenis != 'semua' and e['category'] != kat[jenis]:
+            continue
+        d = S.decorate(e, lok['lat'], lok['lon'], 'pinggiran', tz)
+        v = d['visibility']
+        if pertama is None:
+            pertama = d
+        if v.get('observable') and pertama_terlihat is None:
+            pertama_terlihat = d
+        if len(baris) < 6:
+            baris.append([d['title'], d['time_local'], 'Terlihat' if v.get('observable') else 'Tidak terlihat'])
+    if not pertama:
+        return _r('Tidak ada gerhana yang ditemukan dalam 6 tahun ke depan.', 'gerhana')
+    label = {'matahari': 'Gerhana Matahari', 'bulan': 'Gerhana Bulan', 'semua': 'Gerhana'}[jenis]
+    v = pertama['visibility']
+    txt = f"**{label} terdekat (global)**: {pertama['title']} pada **{_tgl_jam(pertama['time_local'])} {tz_label(tz)}** (puncak). Dari **{nama}**: **{v['headline']}**."
+    if pertama_terlihat and pertama_terlihat is not pertama:
+        txt += f"\n\nYang **pertama terlihat dari {nama}**: {pertama_terlihat['title']} (global), {_tgl_jam(pertama_terlihat['time_local'])} {tz_label(tz)}; dari sini: {pertama_terlihat['visibility']['headline'].lower()}."
+    elif not pertama_terlihat:
+        txt += f"\n\nTidak ada {label.lower()} yang terlihat dari {nama} dalam 6 tahun ke depan."
+    if jenis in ('matahari', 'semua'):
+        txt += '\n\n⚠️ Jangan menatap Matahari tanpa filter surya bersertifikat, termasuk saat gerhana sebagian.'
+    txt += '\nWaktu puncak perkiraan mesin katalog (belum divalidasi terhadap almanak resmi).'
+    return _r(txt + (('\n\n' + rujuk) if rujuk else ''), 'gerhana', {'intent': 'gerhana', **_slot_lok(lok, nama, rujuk)},
+              [{'tipe': 'tabel', 'judul': f'{label} 6 tahun ke depan (dari {nama})', 'kolom': ['Gerhana', f'Puncak ({tz_label(tz)})', 'Dari lokasi'], 'baris': baris}],
+              [{'teks': 'Katalog Event', 'url': '/catalog/'}], ['catalog.events (mesin Bulan/Matahari)'], ['Apakah gerhana berbahaya dilihat?', 'Kenapa gerhana tidak terjadi tiap bulan?'])
+
+
+def _i_tahun(t, ctx, hari_ini):
+    if not re.search(r'\btahun\b', t) or not re.search(r'\b(sekarang|ini|saat ini|berapa)\b', t) or re.search(r'\b(kabisat|depan|lalu|kemarin|besok|kiblat|rasydulkiblat|salat|puasa|jadwal|gerhana|meteor|cuaca|ramadan|syawal)\b', t):
+        return None
+    if not re.search(r'\b(saka|jyotisa|hindu|jawa|aj|mataram|hijriah|hijri|islam|masehi)\b|tahun berapa', t):
+        return None
+    d, _ = _tgl_relatif(t, hari_ini)
+    d = d or hari_ini
+    jdn = _jdn(d)
+    j, k = cs.javanese_info(jdn), F.konversi('masehi', d.year, d.month, d.day, None, None)
+    hij = isl.hijri_menurut(jdn, ctx['krit'])
+    sk = k['jyotisa']
+    ada = {'saka': bool(re.search(r'\b(saka|jyotisa|hindu)\b', t)), 'jawa': bool(re.search(r'\b(jawa|aj|sultan agung|mataram)\b', t)),
+           'hijriah': bool(re.search(r'\b(hijriah|islam|hijri)\b', t)), 'masehi': bool(re.search(r'\bmasehi\b', t))}
+    nilai = {'masehi': f"{d.year} M", 'hijriah': f"{hij['tahun']} H ({KRIT_NAMA[ctx['krit']]})", 'jawa': f"{j['tahun_windu']} {j['tahun']} AJ (Anno Javanico)",
+             'saka': f"{sk['tahun_saka']} Saka"}
+    fokus = [k_ for k_, v in ada.items() if v]
+    if len(fokus) == 1:
+        f = fokus[0]
+        nm = {'masehi': 'Masehi', 'hijriah': 'Hijriah', 'jawa': 'Jawa', 'saka': 'Saka'}[f]
+        ket = {'jawa': ' Tahun Jawa berganti pada 1 Sura (1 Muharam).', 'hijriah': ' Tahun Hijriah berganti pada 1 Muharam.',
+               'saka': ' Tahun Saka (pañcāṅga Jyotiṣa) mengikuti perhitungan lunisolar; pergantiannya di sekitar Maret–April.', 'masehi': ''}[f]
+        txt = f"Tahun {nm} sekarang (**{_fmt_tgl(d)}**): **{nilai[f]}**.{ket}"
+    else:
+        txt = f"Tahun pada **{_fmt_tgl(d)}** dalam berbagai penanggalan:"
+    baris = [['Masehi', nilai['masehi']], ['Hijriah', nilai['hijriah']], ['Jawa', nilai['jawa']], ['Saka', nilai['saka']]]
+    return _r(txt, 'tahun', {'intent': 'tahun'}, [{'tipe': 'tabel', 'judul': 'Penanggalan', 'kolom': ['Kalender', 'Tahun'], 'baris': baris}],
+              [{'teks': 'Lab Kalender', 'url': '/calendar/'}], ['calendar_service, hisab'], ['Weton hari ini berapa?', 'Tanggal hari ini'])
+
+
+def _i_banding_salat(t, t_asli, ctx, hari_ini):
+    if not re.search(r'\b(selisih|beda|perbedaan|bedanya|lebih awal|lebih cepat|lebih lambat|lebih akhir)\b', t):
+        return None
+    lokasi = cari_semua_lokasi(t_asli)
+    if len(lokasi) < 2 or not re.search(r'\b(salat|imsak|subuh|zuhur|asar|magrib|isya|duha|terbit|waktu|jadwal)\b', t):
+        return None
+    for l in lokasi:
+        if l['status'] == 'ambigu':
+            return _r(f"Ada beberapa **{l['nama']}**: {', '.join(l['pilihan'])}. Sebutkan provinsinya.", 'lokasi_ambigu', suggestions=[f"{l['nama']} {p}" for p in l['pilihan']][:4])
+    a, b = lokasi[0], lokasi[1]
+    d, _ = _tgl_relatif(t, hari_ini)
+    d = d or hari_ini
+    minta = [WAKTU_SALAT[k] for k in dict.fromkeys(re.findall(r'\b(imsak|subuh|terbit|duha|zuhur|asar|magrib|isya)\b', t))]
+    m = salat.METODE[ctx['metode']]
+    def jad(e):
+        lok = {'lat': e['lat'], 'lon': e['lon'], 'elev': e['elev'], 'tz': e['tz'], 'tz_label': tz_label(e['tz'])}
+        return {x['kunci']: x for x in F.jadwal_salat(d, lok, m, ctx['ihtiyat'], ctx['imsak'])['waktu']}
+    ja, jb = jad(a), jad(b)
+    def detik(s):
+        h, mi, *r = s.split(':')
+        return int(h) * 3600 + int(mi) * 60 + (int(r[0]) if r else 0)
+    kunci = minta or [k for k in ja if k != 'nisfuLail']
+    baris = []
+    for kk in kunci:
+        ha, hb = ja[kk]['hisab']['jam'], jb[kk]['hisab']['jam']
+        if not ha or not hb or ha == '-' or hb == '-':
+            baris.append([ja[kk]['nama'], ha or '—', hb or '—', '—'])
+            continue
+        sel = (detik(hb) - detik(ha)) - int((b['tz'] - a['tz']) * 3600)         # selisih saat sebenarnya (UTC), bukan jam dinding
+        baris.append([ja[kk]['nama'], ha, hb, f"{abs(sel) // 60:.0f} mnt {abs(sel) % 60:.0f} dtk, {b['nama']} {'lebih awal' if sel < 0 else 'lebih akhir'}" if sel else 'sama'])
+    if len(minta) == 1 and baris[0][3] not in ('—', 'sama'):
+        txt = f"Selisih **{ja[minta[0]]['nama']}** di **{a['nama']}** dan **{b['nama']}** pada {_fmt_tgl(d)}: **{baris[0][3].split(',')[0]}**; {baris[0][3].split(', ')[1]} dibanding {a['nama']}."
+    else:
+        txt = f"Perbandingan waktu salat **{a['nama']}** dan **{b['nama']}**, {_fmt_tgl(d)} (metode {m.name}; jam hisab sebelum ihtiyat):"
+    if a['tz'] != b['tz']:
+        txt += f"\n\nZona waktu berbeda ({tz_label(a['tz'])} dan {tz_label(b['tz'])}); selisih dihitung pada saat sebenarnya, sedangkan jam yang tertulis mengikuti zona masing-masing."
+    return _r(txt, 'banding_salat', {'intent': 'banding_salat'},
+              [{'tipe': 'tabel', 'judul': 'Perbandingan', 'kolom': ['Waktu', a['nama'], b['nama'], 'Selisih'], 'baris': baris}],
+              [{'teks': 'Salat & Kiblat', 'url': '/islamic/'}], ['app/persis (hisab, tanpa ihtiyat)'], [f"Jadwal salat di {a['nama']}", f"Arah kiblat di {b['nama']}"])
 
 
 KRIT_ART = {'mabims': 'kriteria-mabims', 'ummul': 'kriteria-ummul-qura', 'wujudul': 'wujudul-hilal', 'khgt': 'khgt'}
@@ -463,7 +766,7 @@ def jawab(pesan: str, context: dict | None = None, slots: dict | None = None, se
     t = re.sub(r'\b(\d{4}) (\d{1,2}) (\d{1,2})\b', r'\1-\2-\3', t) if re.search(r'\d{4}-\d{1,2}-\d{1,2}', bersih(pesan)) else t
     if re.search(r'\d{4}-\d{1,2}-\d{1,2}', bersih(pesan)):
         t += ' ' + re.search(r'\d{4}-\d{1,2}-\d{1,2}', bersih(pesan)).group(0)
-    kunci_lain = bool(re.search(r'\b(fase|puasa|kiblat|rasydulkiblat|salat|jadwal|apa|kapan|hijriah|ramadan|syawal|bantuan|gerhana|meteor)\b', t))
+    kunci_lain = bool(re.search(r'\b(fase|cuaca|weton|neptu|observasi|rekomendasi|puasa|kiblat|rasydulkiblat|salat|jadwal|apa|kapan|hijriah|ramadan|syawal|bantuan|gerhana|meteor)\b', t))
     ada_lok = cari_lokasi(pesan) is not None
     pendek = (len(toks) <= 4 or (ada_lok and len(toks) <= 8)) and bool(slots.get('intent')) and not kunci_lain
     lanjut = pendek and bool(re.search(r'\b(besok|lusa|kemarin|kalau|bagaimana|gimana|di|untuk)\b', t) or cari_lokasi(pesan) or _tgl_relatif(t, hari_ini)[0])
@@ -479,6 +782,11 @@ def jawab(pesan: str, context: dict | None = None, slots: dict | None = None, se
             r = _i_salat(t, pesan, ctx, slots, hari_ini, True)
             if r:
                 return r
+        if asal in ('cuaca', 'observasi'):
+            f = _i_cuaca if asal == 'cuaca' else _i_observasi
+            r = f(t + (' cuaca hari ini di' if asal == 'cuaca' else ' rekomendasi observasi langit'), pesan, ctx, slots, hari_ini, now_utc.replace(tzinfo=None), True)
+            if r:
+                return r
         if asal == 'kiblat':
             r = _i_kiblat(t + ' kiblat', pesan, ctx, slots, hari_ini, True)
             if r:
@@ -488,7 +796,10 @@ def jawab(pesan: str, context: dict | None = None, slots: dict | None = None, se
             if d:
                 return _ringkas_tanggal(d, ctx, 'tanggal')
     if not konsep:
-        for fn in (lambda: _i_awal_bulan(t, ctx, hari_ini, slots), lambda: _i_kiblat(t, pesan, ctx, slots, hari_ini, False),
+        for fn in (lambda: _i_banding_salat(t, pesan, ctx, hari_ini), lambda: _i_gerhana(t, pesan, ctx, slots, now_utc),
+                   lambda: _i_fase_berikut(t, ctx, now_utc), lambda: _i_tahun(t, ctx, hari_ini), lambda: _i_jumlah_hari(t, ctx, hari_ini), lambda: _i_cuaca(t, pesan, ctx, slots, hari_ini, now_utc.replace(tzinfo=None), False),
+                   lambda: _i_observasi(t, pesan, ctx, slots, hari_ini, now_utc.replace(tzinfo=None), False), lambda: _i_weton(t, ctx, hari_ini),
+                   lambda: _i_awal_bulan(t, ctx, hari_ini, slots), lambda: _i_kiblat(t, pesan, ctx, slots, hari_ini, False),
                    lambda: _i_salat(t, pesan, ctx, slots, hari_ini, False), lambda: _i_puasa(t, ctx, hari_ini),
                    lambda: _i_bulan(t, ctx, now_utc), lambda: _i_event(t), lambda: _i_konversi(t, ctx, hari_ini),
                    lambda: _i_hari_ini(t, ctx, hari_ini, now)):

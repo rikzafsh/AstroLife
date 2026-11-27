@@ -28,7 +28,7 @@ LUAR_NEGERI = {'makkah': (21.4225, 39.8262), 'mekah': (21.4225, 39.8262), 'mekka
 PERLU_PENUNJUK = {'sumber', 'tanjung', 'benteng', 'banda', 'seram', 'salak', 'tais', 'baros', 'maba', 'weda', 'talu', 'batu', 'pati',
                   'serang', 'rantau', 'metro', 'duri', 'baa', 'soe', 'raha', 'ende', 'liwa', 'koba', 'lebak', 'bima', 'buton', 'natuna', 'mesuji'}
 PENUNJUK = {'di', 'dari', 'untuk', 'ke', 'kota', 'kabupaten', 'kab', 'kalau', 'wilayah', 'daerah', 'lokasi', 'sekitar', 'dekat', 'area'}
-BUKAN_KOTA = {'sini', 'situ', 'sana', 'saya', 'aku', 'kami', 'kita', 'lokasi', 'pengaturan', 'rumah', 'hari', 'besok', 'lusa', 'kemarin',
+BUKAN_KOTA = {'tempatku', 'lokasiku', 'rumahku', 'disini', 'sekitarku', 'kotaku', 'daerahku', 'tempat', 'sini', 'situ', 'sana', 'saya', 'aku', 'kami', 'kita', 'lokasi', 'pengaturan', 'rumah', 'hari', 'besok', 'lusa', 'kemarin',
               'sekarang', 'nanti', 'tanggal', 'tahun', 'bulan', 'minggu', 'pekan', 'jam', 'berapa', 'ini', 'itu', 'indonesia', 'dunia',
               'mana', 'bumi', 'langit', 'yogyakarta_', 'setempat', 'tempat', 'kamu', 'anda', 'wib', 'wita', 'wit', 'islam', 'aplikasi',
               'astrolife', 'sini', 'pagi', 'siang', 'sore', 'malam', 'subuh', 'zuhur', 'asar', 'magrib', 'isya', 'imsak', 'duha', 'terbit',
@@ -39,7 +39,9 @@ BERHENTI = BUKAN_KOTA | {'jam', 'pada', 'saat', 'kalau', 'jika', 'bila', 'yaitu'
 @lru_cache(maxsize=1)
 def _muat():
     kota = {}                                        # kunci tanpa spasi -> daftar entri
-    for r in csv.DictReader(open(CSV, encoding='utf8'), delimiter=';'):
+    with open(CSV, encoding='utf8') as fh:
+        baris_csv = list(csv.DictReader(fh, delimiter=';'))
+    for r in baris_csv:
         nama = r['Kota_Kabupaten'].strip()
         kunci = bersih(nama).replace(' ', '')
         if kunci in TOLAK:
@@ -116,3 +118,38 @@ def cari_lokasi(teks: str):
 
 
 cari_kota = cari_lokasi                                   # nama lama
+
+
+def cari_semua_lokasi(teks: str) -> list:
+    """Semua kota yang dikenal (status ok) dalam teks, berurutan menurut kemunculan, tanpa duplikat. Untuk perbandingan dua lokasi."""
+    kota, _ = _muat()
+    t = _tok(teks)
+    ttxt = ' '.join(t)
+    hasil, i = [], 0
+    while i < len(t):
+        maju = 1
+        for n in (4, 3, 2, 1):
+            if i + n > len(t):
+                continue
+            kunci = ''.join(t[i:i + n])
+            if kunci not in kota:
+                continue
+            if kunci in PERLU_PENUNJUK and not any(x in PENUNJUK for x in t[max(0, i - 3):i]):
+                continue
+            if n == 1 and kunci in BUKAN_KOTA:
+                continue
+            daftar = kota[kunci]
+            if len(daftar) > 1:
+                cocok = [e for e in daftar if bersih(e['provinsi']) in ttxt]
+                if len(cocok) != 1:
+                    hasil.append({'status': 'ambigu', 'nama': daftar[0]['nama'], 'pilihan': [e['provinsi'] for e in daftar]})
+                    maju = n
+                    break
+                daftar = cocok
+            e = _entri(daftar[0])
+            if all(e['nama'] != x.get('nama') for x in hasil):
+                hasil.append(e)
+            maju = n
+            break
+        i += maju
+    return hasil
