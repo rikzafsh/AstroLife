@@ -30,7 +30,7 @@ def _float(v, nama, lo, hi, default=None):
     try:
         x = float(v)
     except (TypeError, ValueError):
-        raise InputError(f'{nama} harus berupa angka.')
+        raise InputError(f'{nama} harus berupa angka.') from None
     if not lo <= x <= hi:
         raise InputError(f'{nama} harus di antara {lo:g} dan {hi:g}.')
     return x
@@ -52,7 +52,7 @@ def parse_tanggal(s, default: date | None = None) -> date:
     try:
         return date.fromisoformat(str(s))
     except ValueError:
-        raise InputError('Format tanggal harus YYYY-MM-DD.')
+        raise InputError('Format tanggal harus YYYY-MM-DD.') from None
 
 
 def parse_metode(key) -> salat.PrayerMethod:

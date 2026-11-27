@@ -21,7 +21,7 @@ def convert():
             try:
                 return int(data[k])
             except (KeyError, TypeError, ValueError):
-                raise F.InputError(f'{nama} harus berupa bilangan bulat.')
+                raise F.InputError(f'{nama} harus berupa bilangan bulat.') from None
         hasil = F.konversi(data.get('source', 'masehi'), angka('year', 'Tahun'), angka('month', 'Bulan'), angka('day', 'Tanggal'),
                            int(data.get('epoch', 2) or 2), int(data.get('kabisat', 2) or 2))
         return jsonify({'status': 'success', **hasil})

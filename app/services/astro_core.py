@@ -11,7 +11,6 @@ Fungsi dasar astronomi yang dipakai bersama oleh calendar_service dan islamic_se
 Semua sudut dalam derajat, waktu dalam UT kecuali dinyatakan lain.
 """
 import math
-from datetime import date
 
 GREGORIAN_START_JDN = 2299161  # 15 Oktober 1582 (Gregorian) = 5 Oktober 1582 (Julian)
 

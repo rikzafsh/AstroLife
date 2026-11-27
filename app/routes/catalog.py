@@ -27,7 +27,7 @@ def parse_location(args):
     try:
         lat, lon = float(args.get('lat', d['lat'])), float(args.get('lon', d['lon']))
     except ValueError:
-        raise ValueError('Koordinat harus berupa angka.')
+        raise ValueError('Koordinat harus berupa angka.') from None
     if not (-90 <= lat <= 90 and -180 <= lon <= 180):
         raise ValueError('Koordinat di luar rentang.')
     sky = args.get('langit', 'pinggiran')
@@ -36,7 +36,7 @@ def parse_location(args):
     try:
         tz = float(args.get('tz')) if args.get('tz') else tz_from_lon(lon)
     except ValueError:
-        raise ValueError('tz harus berupa angka (jam).')
+        raise ValueError('tz harus berupa angka (jam).') from None
     if not -12 <= tz <= 14:
         raise ValueError('tz di luar rentang -12..+14.')
     return lat, lon, sky, tz

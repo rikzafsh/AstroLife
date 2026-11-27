@@ -31,7 +31,8 @@ Alternatif lewat terminal: `python -m catalog.generate 2026 2027` (set `ASTROLIF
 ```text
 astrolife/
 ├── app/
-│   ├── routes/            main (beranda, tentang), catalog, observation, calendar, islamic, bot
+│   ├── routes/            main (beranda, tentang, /api/kota), catalog, observation, calendar, islamic, bot
+│   ├── bot/               AstroBot: mesin (jawab), dasar, intent_kalender/salat/langit, kota, teks, pengetahuan, cuaca, kb/*.md
 │   ├── persis/            port persis-times-js (MIT): core (JD, ΔT, nutasi, Matahari VSOP87D), salat, kiblat, kalender, _data/
 │   ├── services/          astro_core, planner_service, weather_service, home_service, timezones, calendar_service, islamic_service (puasa), falak_service
 │   ├── templates/         halaman Jinja2
@@ -77,7 +78,7 @@ Tes cuaca memakai respons tiruan (tanpa internet). Tes khusus Skyfield dilewati 
 - Tes: `tests/test_pengaturan.py`.
 
 ## AstroBot
-- Mesin lokal di `app/bot/` (tanpa LLM/API luar): `teks.py` (normalisasi, sinonim ejaan, stemming ringan), `pengetahuan.py` (BM25 atas `app/bot/kb/*.md`; artikel tambahan dapat ditaruh di `data/knowledge_base`), `kota.py` + `kota_data.csv` (gazetir ±500 kota/kabupaten: titik acuan masjid, elevasi, zona waktu), `mesin.py` (intent + slot lanjutan).
+- Mesin lokal di `app/bot/` (tanpa LLM/API luar): `teks.py` (normalisasi, sinonim ejaan, stemming ringan), `pengetahuan.py` (BM25 atas `app/bot/kb/*.md`; artikel tambahan dapat ditaruh di `data/knowledge_base`), `kota.py` + `kota_data.csv` (gazetir ±500 kota/kabupaten: titik acuan masjid, elevasi, zona waktu), `mesin.py` (titik masuk `jawab()`: alur sapaan → lanjutan → intent → retrieval). Intent dipecah per tema: `intent_kalender.py`, `intent_salat.py`, `intent_langit.py`; `dasar.py` memuat konstanta, pembacaan konteks, pengambilan entitas (tanggal, hari relatif, lokasi), dan bentuk balasan `balas()`.
 - Pertanyaan operasional (jadwal salat, kiblat, rasydulqiblat, tanggal/konversi, awal bulan Hijriah per kriteria, puasa sunah, fase Bulan) dijawab dari hitungan aplikasi memakai Pengaturan; pertanyaan konsep dijawab dari artikel.
 - API: `POST /bot/api/chat` `{message, context:{lokasi,salat,hijriah}, slots}` → `{status, reply, intent, slots, cards, links, sources, suggestions}`; `GET /bot/api/artikel[/<id>]`.
 - Riwayat percakapan disimpan di localStorage peramban (`astrolife.bot.v1`); server tidak menyimpan pertanyaan.

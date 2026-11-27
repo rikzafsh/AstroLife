@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import math
 
-from .core import jdkm, kmjd, mod
+from .core import jdkm, mod
 
 HARI_H = ('Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Ahad')
 PASARAN = ('Legi', 'Pahing', 'Pon', 'Wage', 'Kliwon')

@@ -272,3 +272,10 @@ Empat baris, masing-masing satu tanggal ringkas dengan tombol rincian (`falak_se
 
 ## Cuaca otomatis di Katalog Event
 Tiap baris event mendatang menampilkan cuaca ringkas tanpa klik (awan, peluang hujan, kondisi pada waktu terbaik/puncak yang sama dengan tombol "Cuaca"). Satu panggilan `POST /observation/api/weather-batch` (maks. 300 event) memakai satu pengambilan prakiraan Open-Meteo yang dicache 1 jam. Hanya prakiraan per jam: event > ~15 hari ke depan ditulis "prakiraan belum tersedia", event yang sudah lewat tidak diberi cuaca, dan bila layanan mati tertulis "tidak tersedia". Klimatologi sengaja tidak dipakai di sini (lambat untuk banyak event); analisis lengkap tetap lewat tombol Cuaca.
+
+## Peta kode & konvensi (hasil pembersihan)
+- Komentar dan nama dalam bahasa Indonesia; setiap modul diawali docstring satu paragraf tentang tanggung jawabnya.
+- `app/bot/mesin.py` hanya mengatur alur (`jawab`, `_normalisasi`, `_jawab_lanjutan`, `_urutan_intent`); logika per tema ada di `intent_*.py`, bahan bersama di `dasar.py`. Urutan intent di `_urutan_intent` adalah urutan prioritas: yang lebih spesifik harus di atas.
+- `catalog/visibility.evaluate` memakai pembantu `_pilih_sampel_terbaik` dan `_alasan`; hasilnya dibandingkan dengan versi sebelum refaktor untuk 271 event × 4 lokasi (identik).
+- Kegagalan layanan cuaca dicatat lewat `logging` (bukan `print`).
+- Cek mutu yang dipakai: `ruff check . --select F,B,SIM` (tanpa temuan F), `vulture`, `radon cc`. Fungsi yang masih kompleks dan sengaja dibiarkan: `persis/*` (port persis-times-js, dijaga sama dengan sumber JS), `catalog/rarity.rarity` (aturan kelangkaan berurutan), `hukum_puasa`.

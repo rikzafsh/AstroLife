@@ -1,3 +1,4 @@
+"""Halaman utama: Beranda, Tentang Proyek, dan saran kota untuk menu Pengaturan."""
 from datetime import datetime
 
 from flask import Blueprint, current_app, jsonify, render_template, request

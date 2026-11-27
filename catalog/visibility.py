@@ -114,6 +114,44 @@ def _instrument(faint_mag, naked_limit: float, glare: float, twilight_loss: floa
     return chosen, eff_naked
 
 
+def _pilih_sampel_terbaik(rows: list, pref, solar: bool) -> tuple:
+    """Pilih sampel waktu yang dinilai dan keadaan langitnya -> (sampel, state).
+    Prioritas: (1) gerhana Matahari: saat Matahari di atas ufuk dan benda cukup tinggi; (2) saat event itu sendiri bila sudah
+    dapat diamati (langit lebih gelap dari -6°); (3) titik tertinggi di malam gelap, lalu senja, lalu siang, lalu yang terbaik seadanya."""
+    if solar:
+        usable = [r for r in rows if r['alt'] >= MIN_ALT and r['sun'] > 0]
+        best = pref if (pref and pref in usable) else max(usable or rows, key=lambda r: r['alt'])
+        return best, 'daylight' if usable else ('below_horizon' if best['alt'] < 0 else 'low')
+    if pref is not None and pref['alt'] >= PREF_MIN_ALT and pref['sun'] <= -6:
+        # Saat peristiwa itu sendiri dapat diamati: itulah waktu yang dinilai (bukan titik tertinggi di malam itu)
+        return pref, 'twilight' if pref['sun'] > -12 else ('visible' if pref['alt'] >= 15 else 'low')
+    dark = [r for r in rows if r['alt'] >= MIN_ALT and r['sun'] <= -12]
+    if dark:
+        best = max(dark, key=lambda r: r['alt'])
+        return best, 'visible' if best['alt'] >= 15 else 'low'
+    dusk = [r for r in rows if r['alt'] >= MIN_ALT and -12 < r['sun'] <= -6]
+    if dusk:
+        return max(dusk, key=lambda r: r['alt']), 'twilight'
+    up = [r for r in rows if r['alt'] >= MIN_ALT]
+    if up:
+        return max(up, key=lambda r: r['alt']), 'daylight'
+    best = max(rows, key=lambda r: r['alt'])
+    return best, 'low' if best['alt'] >= 0 and best['sun'] <= -6 else 'below_horizon'
+
+
+def _alasan(state: str, best: dict, solar: bool) -> str:
+    """Kalimat penjelasan untuk keadaan langit pada sampel terbaik."""
+    if state == 'below_horizon':
+        return 'Benda berada di bawah ufuk sepanjang jendela pengamatan dari lokasi ini.'
+    if state == 'low':
+        return f"Paling tinggi hanya {best['alt']:.0f}° di atas ufuk (batas praktis {MIN_ALT:.0f}°)."
+    if state == 'daylight':
+        return 'Terjadi saat langit masih terang' + ('.' if solar else '; hanya benda sangat terang yang mungkin terlihat, perlu bantuan alat.')
+    if state == 'twilight':
+        return 'Terlihat pada senja/fajar; langit belum sepenuhnya gelap, objek redup tersamarkan.'
+    return f"Ketinggian terbaik {best['alt']:.0f}° dengan langit gelap (Matahari {best['sun']:.0f}°)."
+
+
 def evaluate(ev: dict, lat: float, lon: float, naked_limit: float = DEFAULT_NAKED_LIMIT, tz: float = 7.0) -> dict:
     """Keterlihatan event di (lat, lon). Waktu keluaran (waktu_terbaik) dalam zona tz (jam)."""
     cat, kind = ev['category'], ev['kind']
@@ -163,31 +201,7 @@ def evaluate(ev: dict, lat: float, lon: float, naked_limit: float = DEFAULT_NAKE
         rows.append({'t': t, 'alt': alt_fn(t), 'sun': sun_alt(t, lat, lon)})
     pref = next((r for r in rows if r['t'] == t_pref), None) if not slow else None
 
-    # --- pemilihan sampel terbaik ---------------------------------------------------------------------------
-    if solar:
-        usable = [r for r in rows if r['alt'] >= MIN_ALT and r['sun'] > 0]
-        best = pref if (pref and pref in usable) else max(usable or rows, key=lambda r: r['alt'])
-        state = 'daylight' if usable else ('below_horizon' if best['alt'] < 0 else 'low')
-    elif pref is not None and pref['alt'] >= PREF_MIN_ALT and pref['sun'] <= -6:
-        # Saat peristiwa itu sendiri dapat diamati: itulah waktu yang dinilai (bukan titik tertinggi di malam itu)
-        best = pref
-        state = 'twilight' if pref['sun'] > -12 else ('visible' if pref['alt'] >= 15 else 'low')
-    else:
-        dark = [r for r in rows if r['alt'] >= MIN_ALT and r['sun'] <= -12]
-        dusk = [r for r in rows if r['alt'] >= MIN_ALT and -12 < r['sun'] <= -6]
-        if dark:
-            best = max(dark, key=lambda r: r['alt'])
-            state = 'visible' if best['alt'] >= 15 else 'low'
-        elif dusk:
-            best = max(dusk, key=lambda r: r['alt'])
-            state = 'twilight'
-        else:
-            up = [r for r in rows if r['alt'] >= MIN_ALT]
-            if up:
-                best, state = max(up, key=lambda r: r['alt']), 'daylight'
-            else:
-                best = max(rows, key=lambda r: r['alt'])
-                state = 'low' if best['alt'] >= 0 and best['sun'] <= -6 else 'below_horizon'
+    best, state = _pilih_sampel_terbaik(rows, pref, solar)
 
     # --- gangguan Bulan & alat -------------------------------------------------------------------------------
     moon_is_object = 'moon' in bodies
@@ -209,17 +223,7 @@ def evaluate(ev: dict, lat: float, lon: float, naked_limit: float = DEFAULT_NAKE
                sun_altitude=round(best['sun'], 1), moon_illumination_pct=round(illum * 100), moon_altitude=round(m_alt),
                moon_glare_mag=round(glare, 2), required_magnitude=faint_mag, effective_naked_limit=round(eff_naked, 2))
 
-    # --- keterangan --------------------------------------------------------------------------------------------
-    if state == 'below_horizon':
-        out['reason'] = 'Benda berada di bawah ufuk sepanjang jendela pengamatan dari lokasi ini.'
-    elif state == 'low':
-        out['reason'] = f"Paling tinggi hanya {best['alt']:.0f}° di atas ufuk (batas praktis {MIN_ALT:.0f}°)."
-    elif state == 'daylight':
-        out['reason'] = 'Terjadi saat langit masih terang' + ('.' if solar else '; hanya benda sangat terang yang mungkin terlihat, perlu bantuan alat.')
-    elif state == 'twilight':
-        out['reason'] = 'Terlihat pada senja/fajar; langit belum sepenuhnya gelap, objek redup tersamarkan.'
-    else:
-        out['reason'] = f"Ketinggian terbaik {best['alt']:.0f}° dengan langit gelap (Matahari {best['sun']:.0f}°)."
+    out['reason'] = _alasan(state, best, solar)
     if cat == 'okultasi':
         lo = out['local_occultation']
         out['notes'].append(

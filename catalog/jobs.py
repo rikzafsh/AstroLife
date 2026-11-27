@@ -8,7 +8,6 @@ import json
 import os
 import subprocess
 import sys
-import time
 from datetime import datetime
 from pathlib import Path
 
@@ -81,7 +80,7 @@ def validate(y0, y1, engine) -> tuple:
     try:
         y0, y1 = int(y0), int(y1)
     except (TypeError, ValueError):
-        raise ValueError('Tahun harus berupa angka.')
+        raise ValueError('Tahun harus berupa angka.') from None
     if not (MIN_YEAR <= y0 <= y1 <= MAX_YEAR):
         raise ValueError(f'Rentang tahun harus {MIN_YEAR}..{MAX_YEAR} dan tahun akhir >= tahun awal.')
     if y1 - y0 + 1 > MAX_SPAN:
@@ -103,7 +102,6 @@ def start(catalog_dir, y0, y1, engine=None, force=False) -> dict:
     catalog_dir.mkdir(parents=True, exist_ok=True)
     st = {'state': 'starting', 'engine_key': engine, 'year_from': y0, 'year_to': y1, 'done': 0, 'total': 0,
           'message': 'Memulai proses…', 'started_at': now_iso(), 'finished_at': None, 'error': None, 'log_tail': ''}
-    status_path(catalog_dir).write_text('{}', encoding='utf-8') if not status_path(catalog_dir).exists() else None
     write_status(catalog_dir, **st)
     cmd = [sys.executable, '-m', 'catalog.job_runner', str(y0), str(y1), '--dir', str(catalog_dir)] + (['--force'] if force else [])
     env = {**os.environ, 'ASTROLIFE_ENGINE': engine, 'PYTHONUNBUFFERED': '1', 'PYTHONPATH': str(ROOT)}

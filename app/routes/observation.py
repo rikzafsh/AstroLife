@@ -24,7 +24,7 @@ def _coords(data):
     try:
         lat, lon = float(data.get('lat', current_app.config['DEFAULT_LOCATION']['lat'])), float(data.get('lon', current_app.config['DEFAULT_LOCATION']['lon']))
     except (TypeError, ValueError):
-        raise ValueError('Koordinat harus berupa angka.')
+        raise ValueError('Koordinat harus berupa angka.') from None
     if not (-90 <= lat <= 90 and -180 <= lon <= 180):
         raise ValueError('Koordinat di luar rentang yang valid.')
     return lat, lon

@@ -30,8 +30,8 @@ PERLU_PENUNJUK = {'sumber', 'tanjung', 'benteng', 'banda', 'seram', 'salak', 'ta
 PENUNJUK = {'di', 'dari', 'untuk', 'ke', 'kota', 'kabupaten', 'kab', 'kalau', 'wilayah', 'daerah', 'lokasi', 'sekitar', 'dekat', 'area'}
 BUKAN_KOTA = {'tempatku', 'lokasiku', 'rumahku', 'disini', 'sekitarku', 'kotaku', 'daerahku', 'tempat', 'sini', 'situ', 'sana', 'saya', 'aku', 'kami', 'kita', 'lokasi', 'pengaturan', 'rumah', 'hari', 'besok', 'lusa', 'kemarin',
               'sekarang', 'nanti', 'tanggal', 'tahun', 'bulan', 'minggu', 'pekan', 'jam', 'berapa', 'ini', 'itu', 'indonesia', 'dunia',
-              'mana', 'bumi', 'langit', 'yogyakarta_', 'setempat', 'tempat', 'kamu', 'anda', 'wib', 'wita', 'wit', 'islam', 'aplikasi',
-              'astrolife', 'sini', 'pagi', 'siang', 'sore', 'malam', 'subuh', 'zuhur', 'asar', 'magrib', 'isya', 'imsak', 'duha', 'terbit',
+              'mana', 'bumi', 'langit', 'yogyakarta_', 'setempat', 'kamu', 'anda', 'wib', 'wita', 'wit', 'islam', 'aplikasi',
+              'astrolife', 'pagi', 'siang', 'sore', 'malam', 'subuh', 'zuhur', 'asar', 'magrib', 'isya', 'imsak', 'duha', 'terbit',
               'peta', 'kompas', 'ka\'bah', 'kabah', 'makkah_', 'menurut', 'dengan', 'dan', 'atau', 'yang', 'apa', 'bagaimana', 'cara'}
 BERHENTI = BUKAN_KOTA | {'jam', 'pada', 'saat', 'kalau', 'jika', 'bila', 'yaitu', 'adalah', 'dengan', 'menurut', 'tahun', 'metode'}
 
@@ -68,7 +68,7 @@ def _tok(teks):
     return re.findall(r"[a-z0-9']+", bersih(teks))
 
 
-def _entri(e, ambigu=None):
+def _entri(e):
     return {'status': 'ok', 'nama': e['nama'], 'provinsi': e['provinsi'], 'pusat': e['pusat'], 'lat': e['lat'], 'lon': e['lon'],
             'elev': e['elev'], 'tz': e['tz'], 'sumber': e['sumber']}
 

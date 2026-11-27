@@ -5,7 +5,7 @@ from __future__ import annotations
 import math
 
 from .core import Sun, delta_t, deg, jdkm, kmjd, mod, rad
-from .salat import METODE, NORMAL, PrayerMethod, WaktuSalat
+from .salat import METODE, PrayerMethod, WaktuSalat
 
 LAT_KABAH = 21.0 + 25.0 / 60.0 + 21.02 / 3600.0
 LON_KABAH = 39.0 + 49.0 / 60.0 + 34.27 / 3600.0

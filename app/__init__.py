@@ -1,3 +1,4 @@
+"""Pabrik aplikasi Flask AstroLife: mendaftarkan blueprint tiap modul dan variabel templat bersama."""
 from flask import Flask
 
 from config import Config

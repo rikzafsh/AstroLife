@@ -1,9 +1,12 @@
-Katalog Event: tampilkan cuaca ringkas otomatis pada tiap event
+Rapikan kode: pecah mesin AstroBot, hapus kode mati, perjelas fungsi panjang
 
-- Endpoint POST /observation/api/weather-batch: banyak event sekaligus, hanya prakiraan per jam (tanpa klimatologi)
-- Baris event menampilkan kondisi, awan, dan peluang hujan; event jauh/lewat/layanan mati ditandai jujur
-- Tombol Cuaca tetap untuk analisis rinci
-- Tes ditambah (batch normal dan layanan mati)
+- app/bot/mesin.py (830 baris) dipecah: mesin (alur), dasar, intent_kalender, intent_salat, intent_langit; fungsi diberi nama publik berbahasa Indonesia
+- jawab() diurai menjadi _normalisasi, _apakah_lanjutan, _jawab_lanjutan, _urutan_intent
+- catalog/visibility.evaluate: ekstrak _pilih_sampel_terbaik dan _alasan
+- hapus kode mati (kondisi "or True", "if False else None", variabel/impor tak terpakai, kunci kamus ganda, baris mubazir di jobs)
+- raise ... from None pada galat masukan; logging menggantikan print di weather_service; parse_hourly lebih jelas
+- docstring modul yang belum ada; README & knowledge.md diperbarui
+- perilaku tidak berubah: keluaran evaluate identik (271 event x 4 lokasi) dan 27 jawaban bot identik sebelum/sesudah
 
 Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_016uW7hyNHrdGrJ8wL2ymEgv

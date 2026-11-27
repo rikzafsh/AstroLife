@@ -9,7 +9,6 @@ from pathlib import Path
 
 from catalog import rarity as R
 from catalog import visibility as V
-from prototype.find_events import BODY_ID
 
 SKY_LIMITS = {'kota': 4.0, 'pinggiran': 5.0, 'gelap': 6.0}
 CATEGORY_LABEL = {'fase_bulan': 'Fase Bulan', 'konjungsi': 'Konjungsi', 'okultasi': 'Okultasi', 'gerhana_bulan': 'Gerhana Bulan',
@@ -37,6 +36,7 @@ def load(catalog_dir):
 
 @lru_cache(maxsize=2)
 def _read(path: str, mtime: float):
+    """`mtime` tidak dipakai di badan fungsi; ia hanya kunci cache agar berkas yang berubah dibaca ulang."""
     with open(path, encoding='utf-8') as f:
         return json.load(f)
 

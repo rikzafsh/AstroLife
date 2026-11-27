@@ -32,7 +32,7 @@ def wib_to_jd(y, m, d, h=0, mi=0) -> float:
 # Alat pencarian akar / minimum
 # ---------------------------------------------------------------------------
 def find_roots(f, t0, t1, step, max_abs=60.0):
-    out, a, fa = [], t0, f(t0)
+    out, fa = [], f(t0)
     t = t0
     while t < t1:
         t2 = min(t + step, t1)

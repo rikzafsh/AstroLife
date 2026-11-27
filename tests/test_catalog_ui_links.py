@@ -5,7 +5,6 @@ import os
 os.environ['ASTROLIFE_ENGINE'] = 'lite'
 
 import re
-import tempfile
 import unittest
 from datetime import datetime
 from pathlib import Path

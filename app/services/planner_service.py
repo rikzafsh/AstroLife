@@ -13,7 +13,7 @@ Faktor penalti (semuanya transparan dan dikembalikan sebagai 'breakdown'):
   siang    - pengamatan jatuh pada siang hari
 """
 import math
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from app.services import astro_core as ac
 from app.services.weather_service import fetch_hourly_forecast, get_weather_at

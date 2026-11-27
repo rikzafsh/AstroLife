@@ -6,7 +6,6 @@ dan nilai acuan hasil validasi November 2026 (WIB; lihat knowledge.md).
 import os
 os.environ['ASTROLIFE_ENGINE'] = 'lite'     # harus sebelum prototype.engine diimpor (abjad: test_catalog dimuat lebih dulu)
 
-import json
 import tempfile
 import unittest
 from datetime import datetime
@@ -14,10 +13,8 @@ from pathlib import Path
 
 import catalog.generate as G
 from app import create_app
-from catalog import events as C
 from catalog import rarity as R
 from catalog import visibility as V
-from prototype import find_events as F
 
 JKT = (-6.2088, 106.8456)
 YEAR_DIR = tempfile.TemporaryDirectory()

@@ -1,3 +1,4 @@
+"""Rute AstroBot: halaman obrolan dan API (chat, daftar/isi artikel, saran awal)."""
 from flask import Blueprint, jsonify, render_template, request
 
 from app.bot import ambil_artikel, daftar_artikel, jawab, saran_awal

@@ -11,6 +11,7 @@ Prakiraan cuaca untuk perencanaan pengamatan, memakai Open-Meteo (gratis, tanpa 
 
 Waktu masukan: datetime UTC (naive). Waktu lokal lokasi diambil dari utc_offset_seconds respons.
 """
+import logging
 import time
 from datetime import datetime, timedelta, date
 
@@ -24,6 +25,7 @@ FORECAST_DAYS = 16
 CACHE_TTL = 3600
 TIMEOUT = 8
 
+log = logging.getLogger(__name__)
 _cache = {}
 
 
@@ -54,27 +56,31 @@ def fetch_hourly_forecast(lat: float, lon: float):
             r.raise_for_status()
             return parse_hourly(r.json())
         except Exception as e:
-            print(f'[Warning] Open-Meteo forecast gagal: {e}')
+            log.warning('Open-Meteo forecast gagal: %s', e)
             return None
     return _cached(('fc',) + _loc_key(lat, lon), load)
 
 
 def parse_hourly(payload: dict):
+    """Respons Open-Meteo -> {'offset': detik, 'hours': {'YYYY-MM-DDTHH:00': {...}}}; None bila tidak ada data."""
     h = payload.get('hourly') or {}
     times = h.get('time') or []
     if not times:
         return None
+
+    def nilai(nama: str, i: int):
+        """Nilai variabel `nama` pada jam ke-i; None bila variabel/entri tidak ada (Open-Meteo kadang memotong larik)."""
+        arr = h.get(nama)
+        return arr[i] if arr and i < len(arr) else None
+
     hours = {}
     for i, t in enumerate(times):
-        def g(name):
-            arr = h.get(name)
-            return arr[i] if arr and i < len(arr) else None
         hours[t] = {
-            'temp_c': g('temperature_2m'), 'humidity_pct': g('relative_humidity_2m'),
-            'precipitation_prob': g('precipitation_probability'), 'precipitation_mm': g('precipitation'),
-            'cloud_cover_pct': g('cloud_cover'), 'cloud_low': g('cloud_cover_low'),
-            'cloud_mid': g('cloud_cover_mid'), 'cloud_high': g('cloud_cover_high'),
-            'visibility_m': g('visibility'),
+            'temp_c': nilai('temperature_2m', i), 'humidity_pct': nilai('relative_humidity_2m', i),
+            'precipitation_prob': nilai('precipitation_probability', i), 'precipitation_mm': nilai('precipitation', i),
+            'cloud_cover_pct': nilai('cloud_cover', i), 'cloud_low': nilai('cloud_cover_low', i),
+            'cloud_mid': nilai('cloud_cover_mid', i), 'cloud_high': nilai('cloud_cover_high', i),
+            'visibility_m': nilai('visibility', i),
         }
     return {'offset': int(payload.get('utc_offset_seconds', 0)), 'hours': hours}
 
@@ -103,7 +109,7 @@ def fetch_climatology(lat: float, lon: float, month: int, day: int, local_hour: 
                         samples.append((hr['cloud_cover'][i], hr['relative_humidity_2m'][i],
                                         hr['precipitation'][i], hr['temperature_2m'][i]))
             except Exception as e:
-                print(f'[Warning] Arsip cuaca {y} gagal: {e}')
+                log.warning('Arsip cuaca %s gagal: %s', y, e)
         samples = [s for s in samples if None not in s]
         if len(samples) < 5:
             return None

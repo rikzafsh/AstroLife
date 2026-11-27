@@ -1,5 +1,5 @@
 """Astronomi Islam: jadwal salat, arah kiblat, rasydulqiblat (dihitung app/persis), dan puasa sunah (Hijriah aritmetis)."""
-from datetime import date, datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone
 
 from flask import Blueprint, current_app, jsonify, render_template, request
 

@@ -65,6 +65,7 @@ def event_katalog(lat, lon, tz, now_utc, days=7, limit=5):
     """Event katalog yang dapat diamati (diberi skor). None bila katalog belum dibuat atau gagal."""
     try:
         from flask import current_app
+
         from catalog import service as S
         doc = S.load(current_app.config['CATALOG_DIR'])
         if doc is None:

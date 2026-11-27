@@ -181,7 +181,6 @@ class Moon:
     # ── terbit / transit / terbenam ──
     def terbit_terbenam(self, tgl, bln, thn, glon, glat, elev, tz, jenis: str, max_itr: int = 3) -> float:
         """Jam desimal (zona tz) Bulan 'RISE' | 'SET' | 'TRANSIT' (moonTransitRiseSet); 0 bila tidak terjadi pada tanggal itu."""
-        sn = self.sn
         jd00 = kmjd(tgl, bln, thn, tz, tz) - 1
         ttrs = 0.0
         for _ in range(3):
