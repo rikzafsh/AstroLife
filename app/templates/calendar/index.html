@@ -71,11 +71,13 @@
   const pil = (k) => AstroPrefs.get().hijriah.kriteria === k ? ' <span class="ui-chip !text-[10px] !py-0 ml-1" style="color:rgb(var(--sky-400))">pilihan Anda</span>' : '';
   const row = (a, b, c, aktif) => '<div class="p-3 rounded-xl border flex justify-between gap-4 ' + (aktif ? 'bg-sky-500/10 border-sky-500/50' : 'bg-slate-900/60 border-slate-800') + '"><span class="text-slate-400">' + a + '</span><span class="text-right text-ink font-semibold">' + esc(b) + (c ? '<br><span class="text-[11px] font-normal text-slate-400">' + esc(c) + '</span>' : '') + '</span></div>';
   const terbuka = new Set();
+  // Ejaan jyotisa memakai aksara Latin-Jawa Kuna (huruf bergaris/diakritik langka): font ini punya cakupan lebih luas bila terpasang
+  const FONT_AKSARA = "'Gentium Plus','Charis SIL','Noto Sans','DejaVu Sans','Segoe UI Historic',system-ui,sans-serif";
   const rinci = (a, b, c, aktif) => '<div class="flex justify-between gap-4 py-1 text-[13px] ' + (aktif ? 'text-ink font-semibold' : 'text-slate-300') + '"><span class="text-slate-400">' + esc(a) + (aktif ? ' <span class="ui-chip !text-[10px] !py-0 ml-1" style="color:rgb(var(--sky-400))">pilihan Anda</span>' : '') + '</span><span class="text-right">' + esc(b) + (c ? '<br><span class="text-[11px] font-normal text-slate-500">' + esc(c) + '</span>' : '') + '</span></div>';
   const kartu = (id, label, utama, sub, isi, aktif) => { const b = terbuka.has(id);
-    return '<div class="rounded-xl border ' + (aktif ? 'bg-sky-500/10 border-sky-500/50' : 'bg-slate-900/60 border-slate-800') + '"><div class="p-3 flex justify-between items-center gap-3"><div><div class="text-slate-400 text-xs">' + label + '</div><div class="text-ink font-semibold text-base">' + esc(utama) + '</div>' + (sub ? '<div class="text-[11px] text-slate-400">' + esc(sub) + '</div>' : '') + '</div>' +
+    return '<div class="rounded-xl border ' + (aktif ? 'bg-sky-500/10 border-sky-500/50' : 'bg-slate-900/60 border-slate-800') + '"><div class="p-3 flex justify-between items-center gap-3"><div><div class="text-slate-400 text-xs">' + label + '</div><div class="text-ink font-semibold text-base"' + (id === 'as' ? ' style="font-family:' + FONT_AKSARA + '"' : '') + '>' + esc(utama) + '</div>' + (sub ? '<div class="text-[11px] text-slate-400">' + esc(sub) + '</div>' : '') + '</div>' +
       '<button type="button" data-tgl="' + id + '" aria-expanded="' + b + '" aria-controls="rinci-' + id + '" class="ui-btn !px-2 !py-1 text-xs" title="Tampilkan/sembunyikan rincian"><span class="sr-only">Rincian ' + label + '</span><svg data-ikon width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition:transform .15s;' + (b ? 'transform:rotate(180deg)' : '') + '"><path d="m6 9 6 6 6-6"/></svg></button></div>' +
-      '<div id="rinci-' + id + '" class="px-3 pb-3 border-t border-slate-800/70 pt-2 ' + (b ? '' : 'hidden') + '">' + isi + '</div></div>'; };
+      '<div id="rinci-' + id + '" class="px-3 pb-3 border-t border-slate-800/70 pt-2 ' + (b ? '' : 'hidden') + '"' + (id === 'as' ? ' style="font-family:' + FONT_AKSARA + '"' : '') + '>' + isi + '</div></div>'; };
   function isiHariIni() { const t = new Date(); $('src').value = 'masehi'; $('d').value = t.getDate(); $('m').value = t.getMonth() + 1; $('y').value = t.getFullYear(); }
   async function konversi() {
     $('err').textContent = '';
@@ -89,16 +91,16 @@
       const aritAktif = pd.ah.aritmetis.find(x => x.aktif) || pd.ah.aritmetis[1];
       const dipilih = pk === 'aritmetis' ? { nama: 'Aritmetis tipe ' + aritAktif.nama.split(' ').pop(), teks: aritAktif.teks } : (pd.ah.kriteria.find(x => x.kunci === pk) || aritAktif);
       const lainKriteria = pd.ah.kriteria.filter(x => x.kunci !== pk);
-      const rincAH = '<div class="text-[11px] uppercase tracking-wide text-slate-500 mb-1">Kalender aritmetis (epoch sesuai pilihan di atas)</div>' +
+      const rincAH = '<div class="text-[11px] tracking-wide text-slate-500 mb-1">Kalender aritmetis (hisab urfi)</div>' +
         pd.ah.aritmetis.map(x => rinci(x.nama, x.teks, '', pk === 'aritmetis' && x.aktif)).join('') +
-        '<div class="text-[11px] uppercase tracking-wide text-slate-500 mt-2 mb-1">Kalender astronomis' + (pk === 'aritmetis' ? '' : ' (kriteria lain)') + '</div>' +
+        '<div class="text-[11px] tracking-wide text-slate-500 mt-2 mb-1">Kalender astronomis (hisab hakiki)</div>' +
         lainKriteria.map(x => rinci(x.nama, x.teks || '—', '')).join('');
       const rincAS = pd.as ? pd.as.rincian.map(x => rinci(x.nama, x.teks)).join('') : '';
       $('rows').innerHTML =
         kartu('ad', 'Masehi', pd.ad.ringkas, '', pd.ad.rincian.map(x => rinci(x.nama, x.teks)).join('')) +
-        kartu('ah', 'Hijriah', dipilih.teks, dipilih.nama + ' · ' + pd.ah.hari_pasaran, rincAH, true) +
+        kartu('ah', 'Hijriah', dipilih.teks, dipilih.nama, rincAH, true) +
         kartu('aj', 'Jawa Mataraman', pd.aj.ringkas, '', pd.aj.rincian.map(x => rinci(x.nama, x.teks, x.ket)).join('')) +
-        (pd.as ? kartu('as', 'Jawa Kuno (Saka)', pd.as.ringkas, 'š = śuklapakṣa · k = kṛṣṇapakṣa', rincAS) : '') +
+        (pd.as ? kartu('as', 'Jawa Kuno (Saka)', pd.as.ringkas, '', rincAS) : '') +
         row('Pawukon', w.hari + ' ' + w.pasaran + ' ' + w.sadwara + ' ' + w.wuku, 'neptu ' + w.neptu + ' (' + w.neptu_rincian + ') · wuku ke-' + w.wuku_no) +
         row('Julian Day (tengah malam)', j.jd.toFixed(1));
       document.querySelectorAll('#rows [data-tgl]').forEach(btn => btn.addEventListener('click', () => {

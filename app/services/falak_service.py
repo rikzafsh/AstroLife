@@ -8,6 +8,7 @@ from datetime import date, timedelta
 from app.persis import core, hisab, kalender, kiblat, salat
 from app.services import astro_core as ac
 from app.services import calendar_service as cs
+from app.services import ejaan_jyotisa as EJ
 from app.services.timezones import tz_from_lon, tz_label
 
 NAMA_WAKTU = (('imsak', 'Imsak'), ('subuh', 'Subuh'), ('syuruk', 'Syuruk (terbit)'), ('duha', 'Duha'), ('zuhur', 'Zuhur'),
@@ -190,7 +191,11 @@ def _tahunan(e, lok):
 WINDU_NAMA = ('Kuntara', 'Sengara', 'Sancaya', 'Adi')       # urutan windu ke-n mod 4 (terjangkar: tahun Jawa 1960 = windu Sancaya)
 _SING_HARI = {'Senin': 'nen', 'Selasa': 'sa', 'Rabu': 'bo', 'Kamis': 'mis', 'Jumat': 'jem', 'Sabtu': 'tu', 'Minggu': 'ha'}
 _SING_PASARAN = {'Legi': 'gi', 'Pahing': 'hing', 'Pon': 'pon', 'Wage': 'ge', 'Kliwon': 'won'}
-_SAKA_TAMPIL = {'Kartika': 'Karttika'}                      # ejaan menurut permintaan antarmuka Lab Kalender
+
+
+def _kapital(nama: str) -> str:
+    """Huruf pertama kapital (sebagian nama di daftar sumber JS ditulis huruf kecil)."""
+    return nama[:1].upper() + nama[1:]
 
 
 def tanggal_julian(cjdn: int) -> tuple:
@@ -219,33 +224,34 @@ def padanan(cjdn: int, out: dict, epoch: int, kabisat: int) -> dict:
     gy, gm, gd, _ = ac.from_jdn(cjdn, True)
     jy_, jm_, jd_ = tanggal_julian(cjdn)
     def mas(yy, mm, dd): return f"{dd} {bm[mm - 1]} {yy}"
-    hari = cs.HARI[ac.weekday_index(cjdn)]
     ad = {'ringkas': mas(y, m, d) + ' AD' + ('' if cal == 'Gregorian' else ' (Julian)'),
-          'rincian': [{'nama': 'Kalender Gregorian', 'teks': f"{hari}, {mas(gy, gm, gd)}" + (' (proleptik)' if cal != 'Gregorian' else '')},
-                      {'nama': 'Kalender Julian', 'teks': f"{hari}, {mas(jy_, jm_, jd_)}"}]}
+          'rincian': [{'nama': 'Kalender Gregorian', 'teks': mas(gy, gm, gd) + (' (proleptik)' if cal != 'Gregorian' else '')},
+                      {'nama': 'Kalender Julian', 'teks': mas(jy_, jm_, jd_)}]}
     arit = []
     for kab in (1, 2, 3, 4):
         h = kalender.cjdn_ke_hijri(cjdn, epoch, kab)
         arit.append({'kunci': f'aritmetis-{kab}', 'nama': f'Aritmetis tipe {"I" * kab if kab < 4 else "IV"}', 'teks': f"{h['tgl']} {h['nama_bulan']} {h['thn']} AH",
                      'aktif': kab == kabisat})
     ah = {'aritmetis': arit,
-          'kriteria': [{'kunci': k['kunci'], 'nama': k['nama'], 'teks': (k['teks'][:-2] + ' AH') if k['teks'] else None} for k in out['hijriah_kriteria']],
-          'hari_pasaran': f"{out['hijriah']['hari']} {out['hijriah']['pasaran']}"}
+          'kriteria': [{'kunci': k['kunci'], 'nama': k['nama'], 'teks': (k['teks'][:-2] + ' AH') if k['teks'] else None} for k in out['hijriah_kriteria']]}
     w = out['jawa']
     ku = kurup_jawa(w['tahun'])
     windu = WINDU_NAMA[((w['tahun'] - cs.JAWA_ALIP_BASE) // 8) % 4]
     aj = {'ringkas': f"{w['tanggal']} {w['bulan']} {w['tahun']} AJ",
-          'rincian': [{'nama': 'Nama tahun', 'teks': w['tahun_windu']}, {'nama': 'Nama windu', 'teks': windu}, {'nama': 'Kurup', 'teks': ku['nama'], 'ket': ku['dasar']}]}
+          'rincian': [{'nama': 'Nama tahun', 'teks': w['tahun_windu']}, {'nama': 'Nama windu', 'teks': windu}, {'nama': 'Kurup', 'teks': ku['nama']}]}
     jy = out.get('jyotisa')
     if jy:
-        pk = 'š' if jy['paksa_pendek'].lower().startswith('s') else 'k'
-        bulan = _SAKA_TAMPIL.get(jy['bulan_saka'], jy['bulan_saka'])
-        a_s = {'ringkas': f"{jy['tithi_paksa']}{pk} {bulan} {jy['tahun_saka']} AS",
-               'rincian': [{'nama': 'Tithi', 'teks': f"{jy['tithi']}, tithi ke-{jy['tithi_paksa']} paksa {jy['paksa']} (ke-{jy['tithi_no']} dari 30 dalam bulan sinodis)"},
-                           {'nama': 'Bulan Saka', 'teks': bulan}, {'nama': 'Nakshatra', 'teks': f"{jy['nakshatra']} (ke-{jy['nakshatra_no']})"},
-                           {'nama': 'Yoga', 'teks': jy['yoga']}, {'nama': 'Karana', 'teks': jy['karana']},
-                           {'nama': 'Rasi Matahari', 'teks': jy['rasi_matahari']}, {'nama': 'Fase Bulan', 'teks': jy['fase_bulan']},
-                           {'nama': 'Elongasi Bulan–Matahari', 'teks': f"{jy['elongasi']}°"}, {'nama': 'Ayanamsa (Lahiri)', 'teks': f"{jy['ayanamsa']}°"}]}
+        # Ejaan unsur jyotisa mengikuti JS (ejaan_jyotisa); š/k = singkatan śuklapakṣa/kṛṣṇapakṣa
+        paksa = EJ.PAKSA[0 if jy['tithi_no'] <= 15 else 1]
+        masa = EJ.MASA[jy['bulan_saka_no'] - 1]
+        a_s = {'ringkas': f"{jy['tithi_paksa']}{paksa[0].lower()} {masa} {jy['tahun_saka']} AS",
+               'rincian': [{'nama': 'Tithi', 'teks': f"{_kapital(EJ.TITHI[(jy['tithi_no'] - 1) % 15])} (ke-{jy['tithi_paksa']})"},
+                           {'nama': 'Paksa', 'teks': paksa},
+                           {'nama': 'Masa (bulan Saka)', 'teks': masa},
+                           {'nama': 'Nakshatra', 'teks': f"{_kapital(EJ.NAKSATRA[jy['nakshatra_no'] - 1])} (ke-{jy['nakshatra_no']})"},
+                           {'nama': 'Yoga', 'teks': f"{_kapital(EJ.YOGA[jy['yoga_no'] - 1])} (ke-{jy['yoga_no']})"},
+                           {'nama': 'Karana', 'teks': _kapital(EJ.nama_karana(jy['karana_no']))},
+                           {'nama': 'Rasi Matahari', 'teks': _kapital(EJ.RASI[jy['rasi_no'] - 1])}]}
     else:
         a_s = None
     return {'ad': ad, 'ah': ah, 'aj': aj, 'as': a_s}

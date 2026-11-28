@@ -105,12 +105,17 @@ class TesPadananRingkas(unittest.TestCase):
     def test_27_nov_2026(self):
         p = self.pad(source='masehi', year=2026, month=11, day=27)
         self.assertEqual(p['ad']['ringkas'], '27 November 2026 AD')
-        self.assertEqual(p['ad']['rincian'][1]['teks'], 'Jumat, 14 November 2026')      # selisih Julian–Gregorian 13 hari
+        self.assertEqual(p['ad']['rincian'][1]['teks'], '14 November 2026')      # selisih Julian–Gregorian 13 hari
         self.assertEqual(p['aj']['ringkas'], '16 Jumadilakir 1960 AJ')
         self.assertEqual({x['nama']: x['teks'] for x in p['aj']['rincian']}, {'Nama tahun': 'Bé', 'Nama windu': 'Sancaya', 'Kurup': 'Asapon'})
-        self.assertEqual(p['as']['ringkas'], '3k Karttika 1948 AS')
+        self.assertEqual(p['as']['ringkas'], '3k Kar̀t͟tika 1948 AS')   # ejaan JS
         self.assertEqual(p['ah']['kriteria'][-1]['teks'], '18 Jumadilakhir 1448 AH')     # KHGT
         self.assertEqual(len(p['ah']['aritmetis']), 4)
+        self.assertNotIn('hari_pasaran', p['ah'])
+        nama = [x['nama'] for x in p['as']['rincian']]
+        self.assertEqual(nama, ['Tithi', 'Paksa', 'Masa (bulan Saka)', 'Nakshatra', 'Yoga', 'Karana', 'Rasi Matahari'])   # tanpa fase/elongasi/ayanamsa
+        self.assertEqual([x['teks'] for x in p['as']['rincian']][1:3], ['Kr̥ṣṇa', 'Kar̀t͟tika'])
+        self.assertTrue(all('ket' not in x for x in p['aj']['rincian']))
         self.assertEqual(sum(x['aktif'] for x in p['ah']['aritmetis']), 1)
 
     def test_kurup_dan_sebelum_1582(self):
@@ -119,7 +124,7 @@ class TesPadananRingkas(unittest.TestCase):
         self.assertEqual(F.kurup_jawa(1867)['nama'], 'Asapon')
         p = self.pad(source='masehi', year=1500, month=3, day=1)
         self.assertEqual(p['ad']['ringkas'], '1 Maret 1500 AD (Julian)')
-        self.assertEqual(p['ad']['rincian'][0]['teks'], 'Minggu, 11 Maret 1500 (proleptik)')
+        self.assertEqual(p['ad']['rincian'][0]['teks'], '11 Maret 1500 (proleptik)')
         self.assertEqual(F.tanggal_julian(2299161), (1582, 10, 5))
 
 
